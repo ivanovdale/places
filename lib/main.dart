@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
 class MyApp extends StatelessWidget {
@@ -89,7 +89,6 @@ class MyFirstWidget extends StatelessWidget {
 }
 
 class MyFirstStatefulWidget extends StatefulWidget {
-
   MyFirstStatefulWidget({Key? key}) : super(key: key);
 
   @override
@@ -111,6 +110,23 @@ class _MyFirstStatefulWidgetState extends State<MyFirstStatefulWidget> {
       child: const Center(
         child: Text('Hello!'),
       ),
+    );
+  }
+
+  Object test() {
+    return context.runtimeType;
+  }
+
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My app widget',
+      home: MyFirstWidget(),
     );
   }
 }
