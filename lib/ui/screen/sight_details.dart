@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:places/domain/sight.dart';
-
 class SightDetails extends StatelessWidget {
-  Sight sight;
 
-  SightDetails(this.sight, {Key? key}) : super(key: key);
+  const SightDetails({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
