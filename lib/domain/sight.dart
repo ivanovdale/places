@@ -1,3 +1,12 @@
+/// Модель достопримечательности.
+///
+/// Имеет следующие поля:
+/// * [name] - название достопримечательности;
+/// * [lat] - географическая долгота точки;
+/// * [lon] - географическая широта точки;
+/// * [url] - путь до фотографии в интернете;
+/// * [details] - подробное описание места;
+/// * [type] - тип достопримечательности.
 class Sight {
   /// Название достопримечательности.
   String name;
@@ -15,9 +24,16 @@ class Sight {
   String details;
 
   /// Тип достопримечательности.
-  sightTypes type;
+  SightTypes type;
 
-  Sight(this.name, this.lat, this.lon, this.url, this.details, this.type);
+  Sight({
+    required this.name,
+    required this.lat,
+    required this.lon,
+    required this.url,
+    required this.details,
+    required this.type,
+  });
 }
 
-enum sightTypes {coffeeShop, park, museum}
+enum SightTypes { coffeeShop, park, museum }
