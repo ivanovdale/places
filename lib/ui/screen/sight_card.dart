@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 
+/// Виджет карточки достопримечательности.
+///
+/// Отображает краткую информацию о месте.
+///
+/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightCard extends StatelessWidget {
   /// Модель достопримечательности.
-  Sight sight;
+  final Sight sight;
 
-  SightCard(this.sight, {Key? key}) : super(key: key);
+  const SightCard(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: AspectRatio(
-        aspectRatio: 1.5,
+        aspectRatio: 3 / 2,
         child: Column(
           children: [
             Expanded(
@@ -61,7 +66,7 @@ class SightCard extends StatelessWidget {
             ),
             Expanded(
               child: SizedBox.expand(
-                child: Container(
+                child: DecoratedBox(
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(12),
