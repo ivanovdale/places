@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 
+/// Виджет для отображения подробностей достопримечательности.
 class SightDetails extends StatelessWidget {
-  const SightDetails({Key? key}) : super(key: key);
+  final Sight sight;
+
+  const SightDetails({Key? key, required this.sight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +58,7 @@ class SightDetails extends StatelessWidget {
                         left: 16.0,
                       ),
                       child: Text(
-                        'Пряности и радости',
+                        sight.name,
                         style: AppTypography.roboto24Regular
                             .copyWith(color: AppColors.oxfordBlue),
                       ),
@@ -70,7 +74,7 @@ class SightDetails extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'ресторан',
+                            sight.type.toString(),
                             style: AppTypography.roboto14Regular
                                 .copyWith(color: AppColors.oxfordBlue),
                           ),
@@ -82,7 +86,7 @@ class SightDetails extends StatelessWidget {
                           left: 16.0,
                         ),
                         child: Text(
-                          'закрыто до 09:00',
+                          '${AppStrings.closedTo} ${sight.workTimeFrom}',
                           style: AppTypography.roboto14Regular.copyWith(
                             color: AppColors.waterloo,
                             fontWeight: FontWeight.w400,
@@ -98,7 +102,7 @@ class SightDetails extends StatelessWidget {
                       right: 16.0,
                     ),
                     child: Text(
-                      'Пряный вкус радостной жизни вместе с шеф-поваром Изо Дзандзава, благодаря которой у гостей ресторана есть возможность выбирать из двух направлений: европейского и восточного',
+                      sight.details,
                       style: AppTypography.roboto14Regular.copyWith(
                         color: AppColors.oxfordBlue,
                         fontWeight: FontWeight.w400,

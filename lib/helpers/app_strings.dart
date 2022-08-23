@@ -5,4 +5,5 @@ class AppStrings {
   static const buildRouteText = 'построить маршрут';
   static const planText = 'Запланировать';
   static const toFavorites = 'В Избранное';
+  static const closedTo = 'закрыто до';
 }
