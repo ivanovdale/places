@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/helpers/app_colors.dart';
+import 'package:places/helpers/app_strings.dart';
+import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
@@ -15,16 +18,11 @@ class _SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 136,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         title: const Text(
-          'Список\nинтересных мест',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Roboto',
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
-          ),
+          AppStrings.sightListAppBarTitle,
+          style: AppTypography.roboto32Regular,
         ),
       ),
       body: SingleChildScrollView(

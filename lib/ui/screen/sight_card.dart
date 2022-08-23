@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_colors.dart';
+import 'package:places/helpers/app_typography.dart';
 
 /// Виджет карточки достопримечательности.
 ///
@@ -30,7 +32,7 @@ class SightCard extends StatelessWidget {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    color: Colors.blue,
+                    color: AppColors.blue,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,12 +42,8 @@ class SightCard extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
                           sight.type.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Roboto',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: AppTypography.roboto14Regular
+                              .copyWith(color: AppColors.white),
                         ),
                       ),
                       Padding(
@@ -56,7 +54,7 @@ class SightCard extends StatelessWidget {
                         child: Container(
                           width: 20,
                           height: 18,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ],
@@ -72,7 +70,7 @@ class SightCard extends StatelessWidget {
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),
                     ),
-                    color: Color.fromARGB(255, 245, 245, 245),
+                    color: AppColors.wildSand,
                   ),
                   child: Column(
                     children: [
@@ -87,10 +85,8 @@ class SightCard extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             sight.name,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 59, 62, 91),
-                              fontFamily: 'Roboto',
-                              fontSize: 16,
+                            style: AppTypography.roboto16Regular.copyWith(
+                              color: AppColors.oxfordBlue,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -105,10 +101,8 @@ class SightCard extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             sight.details,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 124, 126, 146),
-                              fontFamily: 'Roboto',
-                              fontSize: 14,
+                            style: AppTypography.roboto14Regular.copyWith(
+                              color: AppColors.waterloo,
                               fontWeight: FontWeight.w400,
                               overflow: TextOverflow.ellipsis,
                             ),
