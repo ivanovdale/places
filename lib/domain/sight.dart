@@ -6,7 +6,8 @@
 /// * [lon] - географическая широта точки;
 /// * [url] - путь до фотографии в интернете;
 /// * [details] - подробное описание места;
-/// * [type] - тип достопримечательности.
+/// * [type] - тип достопримечательности;
+/// * [workTimeFrom] - время работы "с".
 class Sight {
   /// Название достопримечательности.
   String name;
@@ -26,6 +27,9 @@ class Sight {
   /// Тип достопримечательности.
   SightTypes type;
 
+  /// Время работы "с". Например, 09:00.
+  String workTimeFrom;
+
   Sight({
     required this.name,
     required this.lat,
@@ -33,6 +37,7 @@ class Sight {
     required this.url,
     required this.details,
     required this.type,
+    required this.workTimeFrom,
   });
 }
 
