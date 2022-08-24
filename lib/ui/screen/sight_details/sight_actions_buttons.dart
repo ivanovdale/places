@@ -3,6 +3,9 @@ import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 
+/// Виджет для отображения кнопок для работы с достопримечательностью.
+///
+/// Предоставляет возможность запланировать поход в место и добавить его в список избранного.
 class SightActionsButtons extends StatelessWidget {
   const SightActionsButtons({Key? key}) : super(key: key);
 

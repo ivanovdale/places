@@ -3,7 +3,13 @@ import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_typography.dart';
 
+/// Виджет верхняя часть карточки достопримечательности.
+///
+/// Содержит картинку и тип места.
+///
+/// Имеет параметр [sight] - модель достопримечательности.
 class SightCardTop extends StatelessWidget {
+  /// Модель достопримечательности.
   final Sight sight;
 
   const SightCardTop({Key? key, required this.sight}) : super(key: key);

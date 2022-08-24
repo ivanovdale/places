@@ -4,6 +4,11 @@ import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 
+/// Виджет для отображения информации о достопримечательности.
+///
+/// Отображает название, тип, режим работы, описание места.
+///
+/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightInfo extends StatelessWidget {
   final Sight sight;
 

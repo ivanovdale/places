@@ -4,7 +4,14 @@ import 'package:places/ui/screen/sight_details/sight_details_bottom.dart';
 import 'package:places/ui/screen/sight_details/sight_details_top.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
+///
+/// Отображает картинку, название, тип, режим работы, описание места.
+/// Предоставляет возможность построить маршрут к этому месту.
+/// Также есть возможность запланировать поход в место и добавить его в список избранного.
+///
+/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightDetails extends StatelessWidget {
+  /// Модель достопримечательности.
   final Sight sight;
 
   const SightDetails({Key? key, required this.sight}) : super(key: key);

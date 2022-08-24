@@ -3,6 +3,8 @@ import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 
+/// Кнопка "Построить маршрут".
+/// Предоставляет возможность построить маршрут к достопримечательности.
 class BuildRouteButton extends StatelessWidget {
   const BuildRouteButton({Key? key}) : super(key: key);
 

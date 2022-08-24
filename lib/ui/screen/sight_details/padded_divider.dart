@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Разделитель в возможность задать его отступ и толщину.
 class PaddedDivider extends StatelessWidget {
   final double top;
   final double left;

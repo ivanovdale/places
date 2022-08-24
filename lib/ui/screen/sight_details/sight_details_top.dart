@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_colors.dart';
 
+/// Виджет для отображения верхней части подробностей достопримечательности.
+///
+/// Отображает картинку места и имеет кнопку "Назад".
 class SightDetailsTop extends StatelessWidget {
   const SightDetailsTop({Key? key}) : super(key: key);
 

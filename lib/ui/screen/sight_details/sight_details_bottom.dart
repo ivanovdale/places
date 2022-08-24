@@ -6,6 +6,13 @@ import 'package:places/ui/screen/sight_details/padded_divider.dart';
 import 'package:places/ui/screen/sight_details/sight_actions_buttons.dart';
 import 'package:places/ui/screen/sight_details/sight_info.dart';
 
+/// Виджет для отображения нижней части подробностей достопримечательности.
+///
+/// Отображает название, тип, режим работы, описание места.
+/// Предоставляет возможность построить маршрут к этому месту.
+/// Также есть возможность запланировать поход в место и добавить его в список избранного.
+///
+/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightDetailsBottom extends StatelessWidget {
   final Sight sight;
 
