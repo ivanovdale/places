@@ -107,38 +107,38 @@ class _SightCardBottom extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Padding(
+          const SizedBox(
+            height: 16,
+          ),
+          Container(
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
-              top: 16,
-              bottom: 2,
             ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                sight.name,
-                style: AppTypography.roboto16Regular.copyWith(
-                  color: AppColors.oxfordBlue,
-                  fontWeight: FontWeight.w500,
-                ),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              sight.name,
+              style: AppTypography.roboto16Regular.copyWith(
+                color: AppColors.oxfordBlue,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          Padding(
+          const SizedBox(
+            height: 2,
+          ),
+          Container(
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
             ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                sight.details,
-                style: AppTypography.roboto14Regular.copyWith(
-                  color: AppColors.waterloo,
-                  fontWeight: FontWeight.w400,
-                  overflow: TextOverflow.ellipsis,
-                ),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              sight.details,
+              style: AppTypography.roboto14Regular.copyWith(
+                color: AppColors.waterloo,
+                fontWeight: FontWeight.w400,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
