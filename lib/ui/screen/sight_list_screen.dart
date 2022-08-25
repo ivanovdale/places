@@ -16,8 +16,6 @@ class SightListScreen extends StatefulWidget {
 class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
-    final sightCardList = mocks.map(SightCard.new).toList();
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 136,
@@ -35,7 +33,7 @@ class _SightListScreenState extends State<SightListScreen> {
             left: 16,
           ),
           child: Column(
-            children: sightCardList,
+            children: mocks.map(SightCard.new).toList(),
           ),
         ),
       ),
