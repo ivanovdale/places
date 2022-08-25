@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:places/helpers/app_colors.dart';
+import 'package:places/helpers/app_strings.dart';
+import 'package:places/helpers/app_typography.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/screen/sight_card.dart';
 
+/// Список достопримечательностей.
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
 
@@ -13,39 +19,21 @@ class _SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 136,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
-        title: RichText(
-          text: const TextSpan(
-            text: 'С',
-            style: TextStyle(
-              color: Color.fromARGB(255, 76, 175, 80),
-              fontFamily: 'Roboto',
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-            ),
-            children: [
-              TextSpan(
-                text: 'писок\n',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 37, 40, 73),
-                ),
-              ),
-              TextSpan(
-                text: 'и',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 252, 221, 61),
-                ),
-                children: [
-                  TextSpan(
-                    text: 'нтересных мест',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 37, 40, 73),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+        title: const Text(
+          AppStrings.sightListAppBarTitle,
+          style: AppTypography.roboto32Regular,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 16,
+            left: 16,
+          ),
+          child: Column(
+            children: mocks.map(SightCard.new).toList(),
           ),
         ),
       ),
