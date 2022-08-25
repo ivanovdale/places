@@ -9,7 +9,6 @@ import 'package:places/helpers/app_typography.dart';
 ///
 /// Имеет параметр [sight] - модель достопримечательности.
 class SightCardBottom extends StatelessWidget {
-  /// Модель достопримечательности.
   final Sight sight;
 
   const SightCardBottom({Key? key, required this.sight}) : super(key: key);

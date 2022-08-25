@@ -9,7 +9,6 @@ import 'package:places/ui/screen/sight_card/sight_card_top.dart';
 ///
 /// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightCard extends StatelessWidget {
-  /// Модель достопримечательности.
   final Sight sight;
 
   const SightCard(this.sight, {Key? key}) : super(key: key);

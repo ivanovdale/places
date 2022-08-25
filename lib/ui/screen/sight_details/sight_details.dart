@@ -11,7 +11,6 @@ import 'package:places/ui/screen/sight_details/sight_details_top.dart';
 ///
 /// Обязательный параметр конструктора: [sight] - модель достопримечательности.
 class SightDetails extends StatelessWidget {
-  /// Модель достопримечательности.
   final Sight sight;
 
   const SightDetails({Key? key, required this.sight}) : super(key: key);
