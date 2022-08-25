@@ -17,15 +17,7 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 136,
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        title: const Text(
-          AppStrings.sightListAppBarTitle,
-          style: AppTypography.roboto32Regular,
-        ),
-      ),
+      appBar: const _CustomAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -36,6 +28,31 @@ class _SightListScreenState extends State<SightListScreen> {
             children: mocks.map(SightCard.new).toList(),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// AppBar с кастомной высотой.
+class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(152.0);
+
+  const _CustomAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 64,
+        bottom: 16,
+      ),
+      child: const Text(
+        AppStrings.sightListAppBarTitle,
+        style: AppTypography.roboto32Regular,
       ),
     );
   }
