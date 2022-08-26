@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_typography.dart';
+import 'package:places/ui/screen/components/loading_indicator.dart';
 
 /// Виджет карточки достопримечательности.
 ///
@@ -55,7 +56,7 @@ class _SightCardTop extends StatelessWidget {
         image: DecorationImage(
           image: Image.network(
             sight.url,
-            loadingBuilder: _imageLoadingIndicator,
+            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
           ).image,
           fit: BoxFit.cover,
         ),
@@ -155,23 +156,4 @@ class _SightCardBottom extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _imageLoadingIndicator(
-  BuildContext context,
-  Widget child,
-  ImageChunkEvent? loadingProgress,
-) {
-  if (loadingProgress == null) {
-    return child;
-  }
-
-  return Center(
-    child: CupertinoActivityIndicator.partiallyRevealed(
-      progress: loadingProgress.expectedTotalBytes != null
-          ? loadingProgress.cumulativeBytesLoaded /
-              loadingProgress.expectedTotalBytes!
-          : 0,
-    ),
-  );
 }

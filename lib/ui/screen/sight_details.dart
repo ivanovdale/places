@@ -4,6 +4,7 @@ import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/ui/screen/components/default_button.dart';
+import 'package:places/ui/screen/components/loading_indicator.dart';
 import 'package:places/ui/screen/components/padded_divider.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
@@ -23,15 +24,13 @@ class SightDetails extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const Expanded(
+          Expanded(
             flex: 360,
-            child: _SightDetailsTop(),
+            child: _SightDetailsTop(sight),
           ),
           Expanded(
             flex: 400,
-            child: _SightDetailsBottom(
-              sight: sight,
-            ),
+            child: _SightDetailsBottom(sight),
           ),
         ],
       ),
@@ -43,17 +42,20 @@ class SightDetails extends StatelessWidget {
 ///
 /// Отображает картинку места и имеет кнопку "Назад".
 class _SightDetailsTop extends StatelessWidget {
-  const _SightDetailsTop({Key? key}) : super(key: key);
+  final Sight sight;
+
+  const _SightDetailsTop(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: [
         // Здесь будет картинка места.
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: AppColors.lightBlueShade800,
+        Image.network(
+          sight.url,
+          fit: BoxFit.cover,
+          loadingBuilder: LoadingIndicator.imageLoadingBuilder,
         ),
         const Positioned(
           left: 16,
@@ -75,7 +77,7 @@ class _SightDetailsTop extends StatelessWidget {
 class _SightDetailsBottom extends StatelessWidget {
   final Sight sight;
 
-  const _SightDetailsBottom({Key? key, required this.sight}) : super(key: key);
+  const _SightDetailsBottom(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,7 @@ class _SightDetailsBottom extends StatelessWidget {
       color: AppColors.white,
       child: Column(
         children: [
-          _SightInfo(sight: sight),
+          _SightInfo(sight),
           Padding(
             padding: const EdgeInsets.only(
               top: 24.0,
@@ -127,7 +129,7 @@ class _SightDetailsBottom extends StatelessWidget {
 class _SightInfo extends StatelessWidget {
   final Sight sight;
 
-  const _SightInfo({Key? key, required this.sight}) : super(key: key);
+  const _SightInfo(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
