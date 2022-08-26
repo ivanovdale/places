@@ -1,3 +1,5 @@
+import 'package:places/helpers/app_strings.dart';
+
 /// Модель достопримечательности.
 ///
 /// Имеет следующие поля:
@@ -28,4 +30,15 @@ class Sight {
   });
 }
 
-enum SightTypes { coffeeShop, park, museum }
+enum SightTypes {
+  coffeeShop(AppStrings.coffeeShop),
+  park(AppStrings.park),
+  museum(AppStrings.museum);
+
+  const SightTypes(this.name);
+
+  final String name;
+
+  @override
+  String toString() => name;
+}

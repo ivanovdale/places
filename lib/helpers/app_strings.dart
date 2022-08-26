@@ -8,4 +8,9 @@ class AppStrings {
   static const planText = 'Запланировать';
   static const toFavourites = 'В Избранное';
   static const closedTo = 'закрыто до';
+
+  // Модель Sight. Типы достопримечательностей.
+  static const coffeeShop = 'кофейня';
+  static const park = 'парк';
+  static const museum = 'музей';
 }
