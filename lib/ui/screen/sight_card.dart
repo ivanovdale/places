@@ -46,9 +46,7 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
+    return DecoratedBox(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
@@ -61,7 +59,10 @@ class _SightCardTop extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              top: 16.0,
+            ),
             child: Text(
               sight.type.toString(),
               style: AppTypography.roboto14Regular
@@ -73,6 +74,7 @@ class _SightCardTop extends StatelessWidget {
               right: 18,
               top: 19,
             ),
+            // Здесь будет картинка.
             child: Container(
               width: 20,
               height: 18,
@@ -106,16 +108,16 @@ class _SightCardBottom extends StatelessWidget {
         color: AppColors.wildSand,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 16,
           ),
-          Container(
+          Padding(
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
             ),
-            alignment: Alignment.centerLeft,
             child: Text(
               sight.name,
               style: AppTypography.roboto16Regular.copyWith(
@@ -127,14 +129,15 @@ class _SightCardBottom extends StatelessWidget {
           const SizedBox(
             height: 2,
           ),
-          Container(
+          Padding(
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
+              bottom: 16,
             ),
-            alignment: Alignment.centerLeft,
             child: Text(
               sight.details,
+              maxLines: 4,
               style: AppTypography.roboto14Regular.copyWith(
                 color: AppColors.waterloo,
                 fontWeight: FontWeight.w400,

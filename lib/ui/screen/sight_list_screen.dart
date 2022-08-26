@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
@@ -43,7 +42,6 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.white,
       padding: const EdgeInsets.only(
         left: 16.0,
         right: 16.0,
