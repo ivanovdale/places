@@ -136,19 +136,21 @@ class _SightCardBottom extends StatelessWidget {
           const SizedBox(
             height: 2,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16,
-            ),
-            child: Text(
-              sight.details,
-              maxLines: 4,
-              style: AppTypography.roboto14Regular.copyWith(
-                color: AppColors.waterloo,
-                fontWeight: FontWeight.w400,
-                overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
+              child: Text(
+                sight.details,
+                maxLines: 2,
+                style: AppTypography.roboto14Regular.copyWith(
+                  color: AppColors.waterloo,
+                  fontWeight: FontWeight.w400,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
