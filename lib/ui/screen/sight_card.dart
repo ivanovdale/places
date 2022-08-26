@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_typography.dart';
@@ -47,12 +47,18 @@ class _SightCardTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        color: AppColors.blue,
+        image: DecorationImage(
+          image: Image.network(
+            sight.url,
+            loadingBuilder: _imageLoadingIndicator,
+          ).image,
+          fit: BoxFit.cover,
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,4 +155,23 @@ class _SightCardBottom extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _imageLoadingIndicator(
+  BuildContext context,
+  Widget child,
+  ImageChunkEvent? loadingProgress,
+) {
+  if (loadingProgress == null) {
+    return child;
+  }
+
+  return Center(
+    child: CupertinoActivityIndicator.partiallyRevealed(
+      progress: loadingProgress.expectedTotalBytes != null
+          ? loadingProgress.cumulativeBytesLoaded /
+              loadingProgress.expectedTotalBytes!
+          : 0,
+    ),
+  );
 }
