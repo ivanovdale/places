@@ -47,46 +47,47 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        image: DecorationImage(
-          image: Image.network(
-            sight.url,
-            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
-          ).image,
-          fit: BoxFit.cover,
-        ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(12.0),
+        topRight: Radius.circular(12.0),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              top: 16.0,
-            ),
-            child: Text(
-              sight.type.toString(),
-              style: AppTypography.roboto14Regular
-                  .copyWith(color: AppColors.white),
-            ),
+          Image.network(
+            sight.url,
+            fit: BoxFit.cover,
+            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              top: 19,
-            ),
-            // Здесь будет картинка.
-            child: Container(
-              width: 20,
-              height: 18,
-              color: AppColors.white,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  top: 16.0,
+                ),
+                child: Text(
+                  sight.type.toString(),
+                  style: AppTypography.roboto14Regular
+                      .copyWith(color: AppColors.white),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 18,
+                  top: 19,
+                ),
+                // Здесь будет картинка.
+                child: Container(
+                  width: 20,
+                  height: 18,
+                  color: AppColors.white,
+                ),
+              ),
+            ],
           ),
         ],
       ),
