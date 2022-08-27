@@ -13,4 +13,9 @@ class AppStrings {
   static const coffeeShop = 'кофейня';
   static const park = 'парк';
   static const museum = 'музей';
+
+  // VisitingScreen. Список посещённых мест/мест к посещению.
+  static const visitingScreenAppBarTitle = 'Избранное';
+  static const wantToVisit = 'Хочу посетить';
+  static const visited = 'Посетил';
 }

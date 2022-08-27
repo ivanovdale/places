@@ -16,6 +16,20 @@ class AppTypography {
     fontWeight: FontWeight.w700,
   );
 
+  static const roboto18Regular = TextStyle(
+    color: AppColors.black,
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const roboto18RegularSubtitle = TextStyle(
+    color: AppColors.black,
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
+
   static const roboto16Regular = TextStyle(
     color: AppColors.black,
     fontFamily: 'Roboto',
