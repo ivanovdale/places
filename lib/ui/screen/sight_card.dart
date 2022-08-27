@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_typography.dart';
+import 'package:places/ui/screen/components/loading_indicator.dart';
 
 /// Виджет карточки достопримечательности.
 ///
@@ -46,40 +47,47 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        color: AppColors.blue,
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(12.0),
+        topRight: Radius.circular(12.0),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              top: 16.0,
-            ),
-            child: Text(
-              sight.type.toString(),
-              style: AppTypography.roboto14Regular
-                  .copyWith(color: AppColors.white),
-            ),
+          Image.network(
+            sight.url,
+            fit: BoxFit.cover,
+            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              top: 19,
-            ),
-            // Здесь будет картинка.
-            child: Container(
-              width: 20,
-              height: 18,
-              color: AppColors.white,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  top: 16.0,
+                ),
+                child: Text(
+                  sight.type.toString(),
+                  style: AppTypography.roboto14Regular
+                      .copyWith(color: AppColors.white),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 18,
+                  top: 19,
+                ),
+                // Здесь будет картинка.
+                child: Container(
+                  width: 20,
+                  height: 18,
+                  color: AppColors.white,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -129,19 +137,21 @@ class _SightCardBottom extends StatelessWidget {
           const SizedBox(
             height: 2,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom: 16,
-            ),
-            child: Text(
-              sight.details,
-              maxLines: 4,
-              style: AppTypography.roboto14Regular.copyWith(
-                color: AppColors.waterloo,
-                fontWeight: FontWeight.w400,
-                overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
+              child: Text(
+                sight.details,
+                maxLines: 2,
+                style: AppTypography.roboto14Regular.copyWith(
+                  color: AppColors.waterloo,
+                  fontWeight: FontWeight.w400,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
