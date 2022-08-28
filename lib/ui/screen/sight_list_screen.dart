@@ -3,6 +3,7 @@ import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screen/components/custom_app_bar.dart';
+import 'package:places/ui/screen/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 /// Список достопримечательностей.
@@ -28,6 +29,7 @@ class _SightListScreenState extends State<SightListScreen> {
           bottom: 21,
         ),
       ),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
