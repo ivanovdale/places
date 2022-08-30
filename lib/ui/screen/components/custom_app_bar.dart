@@ -31,8 +31,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(toolbarHeight),
-      child: Container(
-        padding: padding,
+      child: Padding(
+        padding: padding ?? EdgeInsets.zero,
         child: centerTitle
             ? Center(
                 child: Text(
