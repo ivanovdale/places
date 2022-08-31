@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/screen/components/custom_app_bar.dart';
+import 'package:places/ui/screen/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 /// Список достопримечательностей.
@@ -16,7 +18,18 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const _CustomAppBar(),
+      appBar: const CustomAppBar(
+        title: AppStrings.sightListAppBarTitle,
+        titleTextStyle: AppTypography.roboto32Regular,
+        toolbarHeight: 141,
+        padding: EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          top: 64,
+          bottom: 21,
+        ),
+      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -27,30 +40,6 @@ class _SightListScreenState extends State<SightListScreen> {
             children: mocks.map(SightCard.new).toList(),
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// AppBar с кастомной высотой.
-class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => const Size.fromHeight(152.0);
-
-  const _CustomAppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 64,
-        bottom: 16,
-      ),
-      child: const Text(
-        AppStrings.sightListAppBarTitle,
-        style: AppTypography.roboto32Regular,
       ),
     );
   }

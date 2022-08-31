@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_colors.dart';
 
+/// Шрифты приложения.
 class AppTypography {
   static const roboto32Regular = TextStyle(
     color: AppColors.black,
@@ -14,6 +15,20 @@ class AppTypography {
     fontFamily: 'Roboto',
     fontSize: 24,
     fontWeight: FontWeight.w700,
+  );
+
+  static const roboto18Regular = TextStyle(
+    color: AppColors.black,
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const roboto18RegularSubtitle = TextStyle(
+    color: AppColors.black,
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
   );
 
   static const roboto16Regular = TextStyle(

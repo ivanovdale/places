@@ -9,7 +9,9 @@ import 'package:places/helpers/app_strings.dart';
 /// * [url] - путь до фотографии в интернете;
 /// * [details] - подробное описание места;
 /// * [type] - тип достопримечательности;
-/// * [workTimeFrom] - время работы "с". Например, 09:00.
+/// * [workTimeFrom] - время работы "с". Например, 09:00;
+/// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
+/// * [visited] - признак посещения.
 class Sight {
   String name;
   double lat;
@@ -18,6 +20,8 @@ class Sight {
   String details;
   SightTypes type;
   String workTimeFrom;
+  String? visitDate;
+  bool visited;
 
   Sight({
     required this.name,
@@ -27,6 +31,8 @@ class Sight {
     required this.details,
     required this.type,
     required this.workTimeFrom,
+    this.visitDate,
+    this.visited = false,
   });
 }
 
