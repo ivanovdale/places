@@ -106,14 +106,15 @@ class _VisitingTabBar extends StatelessWidget {
 /// Если список пуст, будет отображена соответствующая информация ([_BaseEmptyVisitingList]).
 ///
 /// Имеет поля, которые необходимо переопределить в потомках:
-/// * [showVisitedSights] - признак отображения посещенных/планируемых к посещению мест. True - для посещенных, False - для планируемых.
+/// * [listOfSightCards] - список достопримечательностей (посещенных/планируемых к посещению);
 /// * [emptyVisitingList] - виджет для отображения пустого списка.
 ///
 /// Имеет параметры
 /// * [listOfSights] - список достопримечательностей.
 abstract class _BaseVisitingSightList extends StatelessWidget {
-  abstract final bool showVisitedSights;
-  abstract final Widget emptyVisitingList;
+  abstract final _BaseEmptyVisitingList emptyVisitingList;
+  abstract final List<BaseSightCard> listOfSightCards;
+
   final List<Sight> listOfSights;
 
   const _BaseVisitingSightList(
@@ -127,15 +128,7 @@ abstract class _BaseVisitingSightList extends StatelessWidget {
         ? emptyVisitingList
         : SingleChildScrollView(
             child: Column(
-              children: listOfSights
-                  .map((sight) => showVisitedSights
-                      ? VisitedSightCard(
-                          sight,
-                        )
-                      : ToVisitSightCard(
-                          sight,
-                        ))
-                  .toList(),
+              children: listOfSightCards,
             ),
           );
   }
@@ -146,20 +139,24 @@ abstract class _BaseVisitingSightList extends StatelessWidget {
 /// Если список пуст, будет отображена соответствующая информация ([_EmptyToVisitSightList]).
 ///
 /// Переопределяет поля:
-/// * [showVisitedSights] - отображать планируемые к посещению;
+/// * [listOfSightCards] - список достопримечательностей (планируемых к посещению);
 /// * [emptyVisitingList] - виджет для отображения пустого списка.
+///
+/// Имеет параметры
+/// * [listOfSights] - список достопримечательностей.
 class _ToVisitSightList extends _BaseVisitingSightList {
   @override
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  bool get showVisitedSights => false;
+  late final List<ToVisitSightCard> listOfSightCards;
 
   _ToVisitSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyToVisitSightList();
+    listOfSightCards = listOfSights.map(ToVisitSightCard.new).toList();
   }
 }
 
@@ -168,20 +165,24 @@ class _ToVisitSightList extends _BaseVisitingSightList {
 /// Если список пуст, будет отображена соответствующая информация ([_EmptyVisitedSightList]).
 ///
 /// Переопределяет поля:
-/// * [showVisitedSights] - отображать посещенные;
+/// * [listOfSightCards] - список достопримечательностей (посещённых);
 /// * [emptyVisitingList] - виджет для отображения пустого списка.
+///
+/// Имеет параметры
+/// * [listOfSights] - список достопримечательностей.
 class _VisitedSightList extends _BaseVisitingSightList {
   @override
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  bool get showVisitedSights => true;
+  late final List<VisitedSightCard> listOfSightCards;
 
   _VisitedSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyVisitedSightList();
+    listOfSightCards = listOfSights.map(VisitedSightCard.new).toList();
   }
 }
 
