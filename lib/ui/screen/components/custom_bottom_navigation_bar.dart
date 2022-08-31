@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 
 /// Кастомный BottomNavigationBar.
 class CustomBottomNavigationBar extends StatelessWidget {
+  static const double _itemIconSize = 24.0;
+
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
 
   @override
@@ -20,21 +23,37 @@ class CustomBottomNavigationBar extends StatelessWidget {
         showSelectedLabels: false,
         selectedItemColor: AppColors.oxfordBlue,
         unselectedItemColor: AppColors.oxfordBlue,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.event_note),
+            icon: Image.asset(
+              AppAssets.itemListIcon,
+              height: _itemIconSize,
+              width: _itemIconSize,
+            ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
+            icon: Image.asset(
+              AppAssets.itemMapIcon,
+              height: _itemIconSize,
+              width: _itemIconSize,
+            ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Image.asset(
+              AppAssets.itemHeartFullIcon,
+              height: _itemIconSize,
+              width: _itemIconSize,
+            ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Image.asset(
+              AppAssets.itemSettingsIcon,
+              height: _itemIconSize,
+              width: _itemIconSize,
+            ),
             label: '',
           ),
         ],
