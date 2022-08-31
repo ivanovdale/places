@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_colors.dart';
 
+/// Шрифты приложения.
 class AppTypography {
   static const roboto32Regular = TextStyle(
     color: AppColors.black,
