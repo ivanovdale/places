@@ -17,12 +17,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
       ),
       child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        elevation: 3,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        selectedItemColor: AppColors.oxfordBlue,
-        unselectedItemColor: AppColors.oxfordBlue,
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(

@@ -78,15 +78,10 @@ class _VisitingTabBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
       ),
       child: TabBar(
-        labelStyle: AppTypography.roboto14Regular.copyWith(
-          color: AppColors.white,
-        ),
-        unselectedLabelColor: AppColors.waterlooInactive,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(40), // Creates border
           color: AppColors.oxfordBlue,
         ),
-        indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 0.0,
         tabs: const [
           Tab(
