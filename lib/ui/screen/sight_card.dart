@@ -1,37 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/ui/screen/components/loading_indicator.dart';
 
-/// Виджет карточки достопримечательности.
+/// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
-/// Отображает краткую информацию о месте.
+/// Имеет поля, которые необходимо переопределить в потомках:
+/// * [actionsAssets] - список действий с карточкой.
+/// * [showDetails] - признак отображения детальной информации (краткого описания) места.
 ///
-/// Имеет параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-/// * [showDetails] - отображать детали места (если стоит false, то будет отображена информация о будущем/произошедшем посещении);
-/// * [enableToFavouritesButton] - признак отображения кнопки добавления в избранное;
-/// * [enableRemoveFromFavouritesButton] - признак отображения кнопки удаления из избранного;
-/// * [enableCalendarButton] - признак отображения картинки календаря (запланировано к посещению);
-/// * [enableShareButton] - признак отображения кнопки "поделиться".
-class SightCard extends StatelessWidget {
+/// Параметры:
+/// * [sight] - модель достопримечательности.
+abstract class BaseSightCard extends StatelessWidget {
   final Sight sight;
-  final bool showDetails;
-  final bool enableToFavouritesButton;
-  final bool enableRemoveFromFavouritesButton;
-  final bool enableCalendarButton;
-  final bool enableShareButton;
+  abstract final bool showDetails;
+  abstract final List<String> actionsAssets;
 
-  const SightCard(
+  const BaseSightCard(
     this.sight, {
     Key? key,
-    this.showDetails = true,
-    this.enableToFavouritesButton = true,
-    this.enableRemoveFromFavouritesButton = false,
-    this.enableCalendarButton = false,
-    this.enableShareButton = false,
   }) : super(key: key);
 
   @override
@@ -45,11 +35,7 @@ class SightCard extends StatelessWidget {
             Expanded(
               child: _SightCardTop(
                 sight,
-                enableToFavouritesButton: enableToFavouritesButton,
-                enableRemoveFromFavouritesButton:
-                    enableRemoveFromFavouritesButton,
-                enableCalendarButton: enableCalendarButton,
-                enableShareButton: enableShareButton,
+                actionsAssets,
               ),
             ),
             Expanded(
@@ -65,31 +51,99 @@ class SightCard extends StatelessWidget {
   }
 }
 
+/// Виджет карточки достопримечательности. Наследуется от [BaseSightCard].
+///
+/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 1 элемент - кнопка добавления в избранное.
+/// Также переопределяет поле [showDetails] - для отображения детальной информации о достопримечательности.
+///
+/// Отображает краткую информацию о месте.
+///
+/// Параметры:
+/// * [sight] - модель достопримечательности (обязательный);
+class SightCard extends BaseSightCard {
+  @override
+  final List<String> actionsAssets = [AppAssets.toFavourites];
+
+  @override
+  bool get showDetails => true;
+
+  SightCard(
+    Sight sight, {
+    Key? key,
+  }) : super(
+          sight,
+          key: key,
+        );
+}
+
+/// Виджет карточки достопримечательности, которую планируется посетить. Наследуется от [BaseSightCard].
+///
+/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+/// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
+///
+/// Имеет параметры:
+/// * [sight] - модель достопримечательности (обязательный);
+class ToVisitSightCard extends BaseSightCard {
+  @override
+  final List<String> actionsAssets = [
+    AppAssets.calendar,
+    AppAssets.removeFromFavourites,
+  ];
+
+  @override
+  bool get showDetails => false;
+
+  ToVisitSightCard(
+    Sight sight, {
+    Key? key,
+  }) : super(
+          sight,
+          key: key,
+        );
+}
+
+/// Виджет карточки посещённой достопримечательности. Наследуется от [BaseSightCard].
+///
+/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+///
+/// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
+///
+/// Имеет параметры:
+/// * [sight] - модель достопримечательности (обязательный);
+class VisitedSightCard extends BaseSightCard {
+  @override
+  final List<String> actionsAssets = [
+    AppAssets.share,
+    AppAssets.removeFromFavourites,
+  ];
+
+  @override
+  bool get showDetails => false;
+
+  VisitedSightCard(
+    Sight sight, {
+    Key? key,
+  }) : super(
+          sight,
+          key: key,
+        );
+}
+
 /// Виджет верхняя часть карточки достопримечательности.
 ///
 /// Содержит картинку и тип места.
 ///
 /// Имеет параметры:
 /// * [sight] - модель достопримечательности;
-/// * [enableToFavouritesButton] - признак отображения кнопки добавления в избранное;
-/// * [enableRemoveFromFavouritesButton] - признак отображения кнопки удаления из избранного;
-/// * [enableCalendarButton] - признак отображения картинки календаря (запланировано к посещению);
-/// * [enableShareButton] - признак отображения кнопки "поделиться".
+/// * [actionsAssets] - список действий с карточкой.
 class _SightCardTop extends StatelessWidget {
-  final bool enableToFavouritesButton;
-  final bool enableRemoveFromFavouritesButton;
-  final bool enableCalendarButton;
-  final bool enableShareButton;
-
   final Sight sight;
+  final List<String> actionsAssets;
 
   const _SightCardTop(
-    this.sight, {
+    this.sight,
+    this.actionsAssets, {
     Key? key,
-    required this.enableToFavouritesButton,
-    required this.enableRemoveFromFavouritesButton,
-    required this.enableCalendarButton,
-    required this.enableShareButton,
   }) : super(key: key);
 
   @override
@@ -128,13 +182,7 @@ class _SightCardTop extends StatelessWidget {
                   top: 19,
                 ),
                 // Действия с карточкой.
-                child: _SightActions(
-                  enableToFavouritesButton: enableToFavouritesButton,
-                  enableRemoveFromFavouritesButton:
-                      enableRemoveFromFavouritesButton,
-                  enableCalendarButton: enableCalendarButton,
-                  enableShareButton: enableShareButton,
-                ),
+                child: _SightActions(actionsAssets),
               ),
             ],
           ),
@@ -146,70 +194,27 @@ class _SightCardTop extends StatelessWidget {
 
 /// Список кнопок для работы с карточкой.
 ///
-/// Имеет параметры:
-/// * [enableToFavouritesButton] - признак отображения кнопки добавления в избранное;
-/// * [enableRemoveFromFavouritesButton] - признак отображения кнопки удаления из избранного;
-/// * [enableCalendarButton] - признак отображения картинки календаря (запланировано к посещению);
-/// * [enableShareButton] - признак отображения кнопки "поделиться".
+/// Параметр:
+/// * [actionsAssets] - список действий с карточкой.
 class _SightActions extends StatelessWidget {
-  final bool enableToFavouritesButton;
-  final bool enableRemoveFromFavouritesButton;
-  final bool enableCalendarButton;
-  final bool enableShareButton;
+  final List<String> actionsAssets;
 
-  const _SightActions({
+  const _SightActions(
+    this.actionsAssets, {
     Key? key,
-    required this.enableToFavouritesButton,
-    required this.enableRemoveFromFavouritesButton,
-    required this.enableCalendarButton,
-    required this.enableShareButton,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        // Картинка лайка.
-        if (enableToFavouritesButton)
-          Container(
-            margin: const EdgeInsets.only(
-              left: 23.0,
-            ),
-            width: 20,
-            height: 18,
-            color: AppColors.white,
+      children: actionsAssets.map((asset) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 18.0,
           ),
-        // Картинка календаря.
-        if (enableCalendarButton)
-          Container(
-            margin: const EdgeInsets.only(
-              left: 23.0,
-            ),
-            width: 20,
-            height: 18,
-            color: AppColors.waterloo,
-          ),
-        // Картинка "поделиться".
-        if (enableShareButton)
-          Container(
-            margin: const EdgeInsets.only(
-              left: 23.0,
-            ),
-            width: 20,
-            height: 18,
-            color: AppColors.martinique,
-          ),
-        // Картинка удаления из избранного.
-        if (enableRemoveFromFavouritesButton)
-          Container(
-            margin: const EdgeInsets.only(
-              left: 23.0,
-            ),
-            width: 20,
-            height: 18,
-            color: AppColors.fruitSalad,
-          ),
-      ],
+          child: Image.asset(asset),
+        );
+      }).toList(),
     );
   }
 }
