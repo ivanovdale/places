@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
@@ -7,6 +9,9 @@ import 'package:places/ui/screen/components/custom_app_bar.dart';
 import 'package:places/ui/screen/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
+/// Виджет для отображения списка посещенных/планируемых к посещению мест.
+///
+/// Имеет TabBar для переключения между списками.
 class VisitingScreen extends StatelessWidget {
   const VisitingScreen({Key? key}) : super(key: key);
 
@@ -32,14 +37,20 @@ class VisitingScreen extends StatelessWidget {
             horizontal: 16.0,
           ),
           child: Column(
-            children: const [
-              _VisitingTabBar(),
+            children: [
+              const _VisitingTabBar(),
               Expanded(
                 child: TabBarView(children: [
-                  _VisitingList(),
-                  _VisitingList(
-                    visited: true,
-                  ),
+                  _ToVisitSightList(mocks
+                      .where(
+                        (element) => !element.visited,
+                      )
+                      .toList()),
+                  _VisitedSightList(mocks
+                      .where(
+                        (element) => element.visited,
+                      )
+                      .toList()),
                 ]),
               ),
             ],
@@ -90,57 +101,103 @@ class _VisitingTabBar extends StatelessWidget {
   }
 }
 
-/// Список посещенных/планируемых к посещению мест.
+/// Абстрактный класс [_BaseVisitingSightList]. Список посещенных/планируемых к посещению мест.
 ///
-/// Если список пуст, будет отображена соответствующая информация.
+/// Если список пуст, будет отображена соответствующая информация ([_BaseEmptyVisitingList]).
 ///
-/// Имеет признак [visited] - место посещено.
-class _VisitingList extends StatelessWidget {
-  final bool visited;
+/// Имеет поля, которые необходимо переопределить в потомках:
+/// * [showVisitedSights] - признак отображения посещенных/планируемых к посещению мест. True - для посещенных, False - для планируемых.
+/// * [emptyVisitingList] - виджет для отображения пустого списка.
+///
+/// Имеет параметры
+/// * [listOfSights] - список достопримечательностей.
+abstract class _BaseVisitingSightList extends StatelessWidget {
+  abstract final bool showVisitedSights;
+  abstract final Widget emptyVisitingList;
+  final List<Sight> listOfSights;
 
-  const _VisitingList({
+  const _BaseVisitingSightList(
+    this.listOfSights, {
     Key? key,
-    this.visited = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return mocks
-            .where(
-              (element) => visited ? element.visited : !element.visited,
-            )
-            .isEmpty
-        ? _EmptyVisitingList(showEmptyVisited: visited)
+    return listOfSights.isEmpty
+        ? emptyVisitingList
         : SingleChildScrollView(
             child: Column(
-              children: mocks
-                  .where(
-                    (element) => visited ? element.visited : !element.visited,
-                  )
-                  .map((sight) => SightCard(
-                        sight,
-                        showDetails: false,
-                        enableToFavouritesButton: false,
-                        enableRemoveFromFavouritesButton: true,
-                        enableCalendarButton: !visited,
-                        enableShareButton: visited,
-                      ))
+              children: listOfSights
+                  .map((sight) => showVisitedSights
+                      ? VisitedSightCard(
+                          sight,
+                        )
+                      : ToVisitSightCard(
+                          sight,
+                        ))
                   .toList(),
             ),
           );
   }
 }
 
+/// Список планируемых к посещению мест. Наследуется от [_BaseVisitingSightList].
+///
+/// Если список пуст, будет отображена соответствующая информация ([_EmptyToVisitSightList]).
+///
+/// Переопределяет поля:
+/// * [showVisitedSights] - отображать планируемые к посещению;
+/// * [emptyVisitingList] - виджет для отображения пустого списка.
+class _ToVisitSightList extends _BaseVisitingSightList {
+  @override
+  late final _BaseEmptyVisitingList emptyVisitingList;
+
+  @override
+  bool get showVisitedSights => false;
+
+  _ToVisitSightList(
+    List<Sight> listOfSights, {
+    Key? key,
+  }) : super(listOfSights, key: key) {
+    emptyVisitingList = const _EmptyToVisitSightList();
+  }
+}
+
+/// Список посещенных мест. Наследуется от [_BaseVisitingSightList].
+///
+/// Если список пуст, будет отображена соответствующая информация ([_EmptyVisitedSightList]).
+///
+/// Переопределяет поля:
+/// * [showVisitedSights] - отображать посещенные;
+/// * [emptyVisitingList] - виджет для отображения пустого списка.
+class _VisitedSightList extends _BaseVisitingSightList {
+  @override
+  late final _BaseEmptyVisitingList emptyVisitingList;
+
+  @override
+  bool get showVisitedSights => true;
+
+  _VisitedSightList(
+    List<Sight> listOfSights, {
+    Key? key,
+  }) : super(listOfSights, key: key) {
+    emptyVisitingList = const _EmptyVisitedSightList();
+  }
+}
+
 /// Отображает информацию о пустом списке мест.
 ///
-/// Имеет параметры:
-/// * [showEmptyVisited] - признак отображения списка посещенных мест.
-class _EmptyVisitingList extends StatelessWidget {
-  final bool showEmptyVisited;
+/// Имеет поля, которые необходимо переопределить в потомках:
+/// * [emptyInfo] - информация об отсутсвии записей;
+/// * [emptyIconPath] - иконка пустого списка.
+abstract class _BaseEmptyVisitingList extends StatelessWidget {
+  static const double _iconSize = 64.0;
 
-  const _EmptyVisitingList({
+  abstract final String emptyInfo;
+  abstract final String emptyIconPath;
+
+  const _BaseEmptyVisitingList({
     Key? key,
-    this.showEmptyVisited = false,
   }) : super(key: key);
 
   @override
@@ -148,11 +205,10 @@ class _EmptyVisitingList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Здесь будет картинка либо для понравившихся мест, либо для посещенных мест.
-        Container(
-          width: 64,
-          height: 64,
-          color: AppColors.waterlooInactive,
+        Image.asset(
+          emptyIconPath,
+          height: _iconSize,
+          width: _iconSize,
         ),
         const SizedBox(
           height: 24,
@@ -166,9 +222,7 @@ class _EmptyVisitingList extends StatelessWidget {
           height: 8,
         ),
         Text(
-          showEmptyVisited
-              ? AppStrings.infoFinishRoute
-              : AppStrings.infoMarkLikedPlaces,
+          emptyInfo,
           style: AppTypography.roboto14Regular.copyWith(
             color: AppColors.waterlooInactive,
             fontWeight: FontWeight.w400,
@@ -179,4 +233,30 @@ class _EmptyVisitingList extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Отображает информацию о пустом списке планируемых к посещению мест.
+class _EmptyToVisitSightList extends _BaseEmptyVisitingList {
+  @override
+  String get emptyIconPath => AppAssets.addNewCard;
+
+  @override
+  String get emptyInfo => AppStrings.infoMarkLikedPlaces;
+
+  const _EmptyToVisitSightList({
+    Key? key,
+  }) : super(key: key);
+}
+
+/// Отображает информацию о пустом списке посещенных мест.
+class _EmptyVisitedSightList extends _BaseEmptyVisitingList {
+  @override
+  String get emptyIconPath => AppAssets.route;
+
+  @override
+  String get emptyInfo => AppStrings.infoFinishRoute;
+
+  const _EmptyVisitedSightList({
+    Key? key,
+  }) : super(key: key);
 }
