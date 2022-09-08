@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
@@ -23,7 +22,7 @@ class VisitingScreen extends StatelessWidget {
         appBar: CustomAppBar(
           title: AppStrings.visitingScreenAppBarTitle,
           titleTextStyle: AppTypography.roboto18RegularSubtitle.copyWith(
-            color: AppColors.martinique,
+            color: Theme.of(context).primaryColorDark,
           ),
           centerTitle: true,
           toolbarHeight: 56.0,
@@ -74,13 +73,13 @@ class _VisitingTabBar extends StatelessWidget {
         bottom: 30.0,
       ),
       decoration: BoxDecoration(
-        color: AppColors.wildSand,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(40),
       ),
       child: TabBar(
         indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(40), // Creates border
-          color: AppColors.oxfordBlue,
+          borderRadius: BorderRadius.circular(40),
+          color: Theme.of(context).primaryColor,
         ),
         indicatorWeight: 0.0,
         tabs: const [
@@ -212,7 +211,7 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
         Text(
           AppStrings.empty,
           style: AppTypography.roboto18RegularSubtitle
-              .copyWith(color: AppColors.waterlooInactive),
+              .copyWith(color: Theme.of(context).colorScheme.secondary.withOpacity(0.56)),
         ),
         const SizedBox(
           height: 8,
@@ -220,7 +219,7 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
         Text(
           emptyInfo,
           style: AppTypography.roboto14Regular.copyWith(
-            color: AppColors.waterlooInactive,
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
             fontWeight: FontWeight.w400,
             height: 1.2,
           ),

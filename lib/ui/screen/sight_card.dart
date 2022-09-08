@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/ui/screen/components/loading_indicator.dart';
@@ -173,7 +172,7 @@ class _SightCardTop extends StatelessWidget {
                 child: Text(
                   sight.type.toString(),
                   style: AppTypography.roboto14Regular
-                      .copyWith(color: AppColors.white),
+                      .copyWith(color: Theme.of(context).backgroundColor),
                 ),
               ),
               Padding(
@@ -239,12 +238,12 @@ class _SightCardBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),
         ),
-        color: AppColors.wildSand,
+        color: Theme.of(context).colorScheme.secondaryContainer,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +259,7 @@ class _SightCardBottom extends StatelessWidget {
             child: Text(
               sight.name,
               style: AppTypography.roboto16Regular.copyWith(
-                color: AppColors.oxfordBlue,
+                color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -304,7 +303,7 @@ class _SightDetailsInfo extends StatelessWidget {
         sight.details,
         maxLines: 2,
         style: AppTypography.roboto14Regular.copyWith(
-          color: AppColors.waterloo,
+          color: Theme.of(context).colorScheme.secondary,
           fontWeight: FontWeight.w400,
           overflow: TextOverflow.ellipsis,
         ),
@@ -339,7 +338,9 @@ class _SightVisitingInfo extends StatelessWidget {
                 : '${AppStrings.planToVisit} ${sight.visitDate}',
             maxLines: 2,
             style: AppTypography.roboto14Regular.copyWith(
-              color: sight.visited ? AppColors.waterloo : AppColors.fruitSalad,
+              color: sight.visited
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -347,7 +348,7 @@ class _SightVisitingInfo extends StatelessWidget {
           Text(
             '${AppStrings.closedTo} ${sight.workTimeFrom}',
             style: AppTypography.roboto14Regular.copyWith(
-              color: AppColors.waterloo,
+              color: Theme.of(context).colorScheme.secondary,
               fontWeight: FontWeight.w400,
             ),
           ),

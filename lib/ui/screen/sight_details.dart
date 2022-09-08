@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
 import 'package:places/ui/screen/components/default_button.dart';
@@ -81,42 +80,39 @@ class _SightDetailsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.white,
-      child: Column(
-        children: [
-          _SightInfo(sight),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 24.0,
-              left: 16.0,
-              right: 16.0,
+    return Column(
+      children: [
+        _SightInfo(sight),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 24.0,
+            left: 16.0,
+            right: 16.0,
+          ),
+          child: DefaultButton(
+            text: AppStrings.buildRouteText,
+            textStyle: AppTypography.roboto14Regular.copyWith(
+              color: Theme.of(context).backgroundColor,
             ),
-            child: DefaultButton(
-              text: AppStrings.buildRouteText,
-              textStyle: AppTypography.roboto14Regular.copyWith(
-                color: AppColors.white,
-              ),
-              color: AppColors.fruitSalad,
-              height: 48,
-              // Картинка кнопки - пока что это просто белый контейнер.
-              buttonLabel: Container(
-                width: 20,
-                height: 22,
-                color: AppColors.white,
-              ),
+            color: Theme.of(context).colorScheme.primary,
+            height: 48,
+            // Картинка кнопки - пока что это просто белый контейнер.
+            buttonLabel: Container(
+              width: 20,
+              height: 22,
+              color: Theme.of(context).backgroundColor,
             ),
           ),
-          const PaddedDivider(
-            top: 24,
-            left: 16,
-            right: 16,
-            bottom: 19,
-            thickness: 0.8,
-          ),
-          const _SightActionsButtons(),
-        ],
-      ),
+        ),
+        const PaddedDivider(
+          top: 24,
+          left: 16,
+          right: 16,
+          bottom: 19,
+          thickness: 0.8,
+        ),
+        const _SightActionsButtons(),
+      ],
     );
   }
 }
@@ -145,7 +141,7 @@ class _SightInfo extends StatelessWidget {
             child: Text(
               sight.name,
               style: AppTypography.roboto24Regular
-                  .copyWith(color: AppColors.oxfordBlue),
+                  .copyWith(color: Theme.of(context).primaryColor),
             ),
           ),
         ),
@@ -161,7 +157,7 @@ class _SightInfo extends StatelessWidget {
                 child: Text(
                   sight.type.toString(),
                   style: AppTypography.roboto14Regular
-                      .copyWith(color: AppColors.oxfordBlue),
+                      .copyWith(color: Theme.of(context).primaryColor),
                 ),
               ),
             ),
@@ -173,7 +169,7 @@ class _SightInfo extends StatelessWidget {
               child: Text(
                 '${AppStrings.closedTo} ${sight.workTimeFrom}',
                 style: AppTypography.roboto14Regular.copyWith(
-                  color: AppColors.waterloo,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -189,7 +185,7 @@ class _SightInfo extends StatelessWidget {
           child: Text(
             sight.details,
             style: AppTypography.roboto14Regular.copyWith(
-              color: AppColors.oxfordBlue,
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -232,7 +228,7 @@ class ToPlanButton extends StatelessWidget {
         Container(
           width: 22,
           height: 19,
-          color: AppColors.waterlooInactive,
+          color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
         ),
         const SizedBox(
           width: 9,
@@ -240,7 +236,7 @@ class ToPlanButton extends StatelessWidget {
         Text(
           AppStrings.planText,
           style: AppTypography.roboto14Regular.copyWith(
-            color: AppColors.waterlooInactive,
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -261,7 +257,7 @@ class _ToFavouritesButton extends StatelessWidget {
         Container(
           width: 20,
           height: 18,
-          color: AppColors.oxfordBlue,
+          color: Theme.of(context).primaryColor,
         ),
         const SizedBox(
           width: 9,
@@ -269,7 +265,7 @@ class _ToFavouritesButton extends StatelessWidget {
         Text(
           AppStrings.toFavourites,
           style: AppTypography.roboto14Regular.copyWith(
-            color: AppColors.oxfordBlue,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -287,14 +283,14 @@ class _BackButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: AppColors.white,
+        color: Theme.of(context).backgroundColor,
       ),
       width: 32,
       height: 32,
-      child: const Icon(
+      child: Icon(
         Icons.arrow_back_ios_new_rounded,
         size: 15.0,
-        color: AppColors.martinique,
+        color: Theme.of(context).primaryColorDark,
       ),
     );
   }

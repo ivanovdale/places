@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
 
 /// Кастомный BottomNavigationBar.
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -11,9 +10,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: AppColors.waterlooInactive, width: 3),
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+            width: 3,
+          ),
         ),
       ),
       child: BottomNavigationBar(
