@@ -172,7 +172,7 @@ class _SightCardTop extends StatelessWidget {
                 child: Text(
                   sight.type.toString(),
                   style: AppTypography.roboto14Regular
-                      .copyWith(color: Theme.of(context).backgroundColor),
+                      .copyWith(color: Theme.of(context).colorScheme.onSecondary),
                 ),
               ),
               Padding(

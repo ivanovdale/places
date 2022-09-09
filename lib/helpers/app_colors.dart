@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const black = Colors.black;
   static const white = Colors.white;
-  static const blue = Colors.blue;
+  static const shark = Color(0xff1A1A20);
+  static const charade = Color(0xff21222C);
   static const martinique = Color(0xff252849);
   static const oxfordBlue = Color(0xff3B3E5B);
   static const waterloo = Color(0xff7C7E92);

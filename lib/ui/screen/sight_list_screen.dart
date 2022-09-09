@@ -18,11 +18,12 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: AppStrings.sightListAppBarTitle,
-        titleTextStyle: AppTypography.roboto32Regular,
+        titleTextStyle: AppTypography.roboto32Regular
+            .copyWith(color: Theme.of(context).primaryColorDark),
         toolbarHeight: 141,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 16.0,
           right: 16.0,
           top: 64,

@@ -6,60 +6,94 @@ import 'package:places/helpers/app_typography.dart';
 final lightTheme = ThemeData(
   tabBarTheme: _lightTabBarTheme,
   bottomNavigationBarTheme: _lightBottomNavigationBarTheme,
-  backgroundColor: AppColors.white,
   primaryColor: AppColors.oxfordBlue,
   primaryColorDark: AppColors.martinique,
   colorScheme: const ColorScheme(
+    // Не используется
     background: AppColors.white,
-    onPrimary: AppColors.white,
-    onBackground: AppColors.black,
+    onPrimary: AppColors.oxfordBlue,
+    // Не используется
+    onBackground: AppColors.white,
+    // Не используется
     onError: AppColors.white,
     onSecondary: AppColors.white,
-    onSurface: AppColors.black,
-    error: AppColors.black,
+    // Не используется
+    onSurface: AppColors.white,
+    // Не используется
+    error: AppColors.white,
     primary: AppColors.fruitSalad,
-    primaryContainer: AppColors.blue,
+    // Не используется
+    primaryContainer: AppColors.white,
     secondary: AppColors.waterloo,
-    // TODO(daniiliv): Сделать для темной темы.
     secondaryContainer: AppColors.wildSand,
+    // Не используется
     surface: AppColors.white,
+    // Не используется
     brightness: Brightness.light,
   ),
 );
 
 /// Настройки для тёмной темы.
-final darkTheme = ThemeData();
-
-final _lightTabBarTheme = TabBarTheme(
-  labelStyle: AppTypography.roboto14Regular.copyWith(
-    color: AppColors.white,
+final darkTheme = ThemeData(
+  tabBarTheme: _darkTabBarTheme,
+  bottomNavigationBarTheme: _darkBottomNavigationBarTheme,
+  scaffoldBackgroundColor: AppColors.charade,
+  primaryColor: AppColors.white,
+  primaryColorDark: AppColors.white,
+  colorScheme: const ColorScheme(
+    // Не используется
+    background: AppColors.white,
+    onPrimary: AppColors.waterloo,
+    // Не используется
+    onBackground: AppColors.white,
+    // Не используется
+    onError: AppColors.white,
+    onSecondary: AppColors.white,
+    // Не используется
+    onSurface: AppColors.white,
+    // Не используется
+    error: AppColors.white,
+    primary: AppColors.fruitSalad,
+    // Не используется
+    primaryContainer: AppColors.white,
+    secondary: AppColors.waterloo,
+    secondaryContainer: AppColors.shark,
+    // Не используется
+    surface: AppColors.white,
+    // Не используется
+    brightness: Brightness.light,
   ),
-  unselectedLabelColor: AppColors.waterloo.withOpacity(0.56),
+);
+
+/// Общие настройки TabBar.
+const _generalTabBarTheme = TabBarTheme(
+  labelStyle: AppTypography.roboto14Regular,
   indicatorSize: TabBarIndicatorSize.tab,
 );
 
-final _darkTabBarTheme = TabBarTheme(
-  labelStyle: AppTypography.roboto14Regular.copyWith(
-    color: AppColors.white,
-  ),
+/// Настройки TabBar для светлой темы.
+final _lightTabBarTheme = _generalTabBarTheme.copyWith(
   unselectedLabelColor: AppColors.waterloo.withOpacity(0.56),
-  indicatorSize: TabBarIndicatorSize.tab,
 );
 
-const _lightBottomNavigationBarTheme = BottomNavigationBarThemeData(
-  selectedItemColor: AppColors.oxfordBlue,
-  unselectedItemColor: AppColors.oxfordBlue,
+/// Настройки TabBar для тёмной темы.
+final _darkTabBarTheme = _generalTabBarTheme.copyWith(
+  labelColor: AppColors.oxfordBlue,
+  unselectedLabelColor: AppColors.waterloo,
+);
+
+/// Общие настройки BottomNavigationBar.
+const _generalBottomNavigationBarTheme = BottomNavigationBarThemeData(
   showSelectedLabels: false,
   showUnselectedLabels: false,
   elevation: 3,
   type: BottomNavigationBarType.fixed,
 );
 
-const _darkBottomNavigationBarTheme = BottomNavigationBarThemeData(
-  selectedItemColor: AppColors.oxfordBlue,
-  unselectedItemColor: AppColors.oxfordBlue,
-  showSelectedLabels: false,
-  showUnselectedLabels: false,
-  elevation: 3,
-  type: BottomNavigationBarType.fixed,
+/// Настройки BottomNavigationBar для светлой темы.
+const _lightBottomNavigationBarTheme = _generalBottomNavigationBarTheme;
+
+/// Настройки BottomNavigationBar для тёмной темы.
+final _darkBottomNavigationBarTheme = _generalBottomNavigationBarTheme.copyWith(
+  backgroundColor: AppColors.charade,
 );

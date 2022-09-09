@@ -92,7 +92,7 @@ class _SightDetailsBottom extends StatelessWidget {
           child: DefaultButton(
             text: AppStrings.buildRouteText,
             textStyle: AppTypography.roboto14Regular.copyWith(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.onSecondary,
             ),
             color: Theme.of(context).colorScheme.primary,
             height: 48,
@@ -100,7 +100,7 @@ class _SightDetailsBottom extends StatelessWidget {
             buttonLabel: Container(
               width: 20,
               height: 22,
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),
         ),
@@ -157,7 +157,7 @@ class _SightInfo extends StatelessWidget {
                 child: Text(
                   sight.type.toString(),
                   style: AppTypography.roboto14Regular
-                      .copyWith(color: Theme.of(context).primaryColor),
+                      .copyWith(color: Theme.of(context).colorScheme.onPrimary),
                 ),
               ),
             ),
@@ -283,7 +283,7 @@ class _BackButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       width: 32,
       height: 32,
