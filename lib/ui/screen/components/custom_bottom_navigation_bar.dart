@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/helpers/app_assets.dart';
@@ -37,6 +38,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: '',
           );
         }).toList(),
+        onTap: (itemIndex) {
+          if (kDebugMode) {
+            print('${_itemAssets[itemIndex].split('/')[2].replaceAll('.svg', '')} in bottom nav. bar pressed.');
+          }
+        },
       ),
     );
   }
