@@ -280,17 +280,22 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      width: 32,
+    return SizedBox(
       height: 32,
-      child: Icon(
-        Icons.arrow_back_ios_new_rounded,
-        size: 15.0,
-        color: Theme.of(context).primaryColorDark,
+      width: 32,
+      child: TextButton(
+        onPressed: () => print('Sight details screen: back button pressed.'),
+        style: TextButton.styleFrom(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          size: 15.0,
+          color: Theme.of(context).primaryColorDark,
+        ),
       ),
     );
   }
