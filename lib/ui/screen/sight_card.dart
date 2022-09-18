@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -171,8 +173,9 @@ class _SightCardTop extends StatelessWidget {
                 ),
                 child: Text(
                   sight.type.toString(),
-                  style: AppTypography.roboto14Regular
-                      .copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                  style: AppTypography.roboto14Regular.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
               ),
               Padding(
@@ -211,7 +214,15 @@ class _SightActions extends StatelessWidget {
           padding: const EdgeInsets.only(
             left: 18.0,
           ),
-          child: Image.asset(asset),
+          child: InkWell(
+            child: SvgPicture.asset(asset),
+            onTap: () {
+              // TODO(daniiliv): Здесь будет реальный вызов.
+              if (kDebugMode) {
+                print('"${asset.split('/')[2].replaceAll('.svg', '')}" button pressed.');
+              }
+            },
+          ),
         );
       }).toList(),
     );

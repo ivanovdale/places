@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// AppBar с кастомными параметрами.
 ///
-/// Можно задать:
+/// Имеет параметры:
 /// * [title] - заголовок AppBar;
 /// * [titleTextStyle] - стиль заголовка;
 /// * [centerTitle] - признак центрирования заголовка;

@@ -210,8 +210,9 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
         ),
         Text(
           AppStrings.empty,
-          style: AppTypography.roboto18RegularSubtitle
-              .copyWith(color: Theme.of(context).colorScheme.secondary.withOpacity(0.56)),
+          style: AppTypography.roboto18RegularSubtitle.copyWith(
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+          ),
         ),
         const SizedBox(
           height: 8,
@@ -246,7 +247,7 @@ class _EmptyToVisitSightList extends _BaseEmptyVisitingList {
 /// Отображает информацию о пустом списке посещенных мест.
 class _EmptyVisitedSightList extends _BaseEmptyVisitingList {
   @override
-  String get emptyIconPath => AppAssets.route;
+  String get emptyIconPath => AppAssets.emptyRoute;
 
   @override
   String get emptyInfo => AppStrings.infoFinishRoute;

@@ -5,7 +5,7 @@ class AppStrings {
 
   // SightDetails. Детальная информация о достопримечательности.
   static const buildRouteText = 'построить маршрут';
-  static const planText = 'Запланировать';
+  static const toPlanText = 'Запланировать';
   static const toFavourites = 'В Избранное';
   static const closedTo = 'закрыто до';
 

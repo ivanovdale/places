@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
-import 'package:places/ui/screen/components/default_button.dart';
+import 'package:places/ui/screen/components/custom_elevated_button.dart';
+import 'package:places/ui/screen/components/custom_text_button.dart';
 import 'package:places/ui/screen/components/loading_indicator.dart';
 import 'package:places/ui/screen/components/padded_divider.dart';
 
@@ -50,7 +54,7 @@ class _SightDetailsTop extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Здесь будет картинка места.
+        // TODO(daniiliv): Здесь будет картинка места.
         Image.network(
           sight.url,
           fit: BoxFit.cover,
@@ -83,32 +87,19 @@ class _SightDetailsBottom extends StatelessWidget {
     return Column(
       children: [
         _SightInfo(sight),
-        Padding(
-          padding: const EdgeInsets.only(
+        const Padding(
+          padding: EdgeInsets.only(
             top: 24.0,
             left: 16.0,
             right: 16.0,
           ),
-          child: DefaultButton(
-            text: AppStrings.buildRouteText,
-            textStyle: AppTypography.roboto14Regular.copyWith(
-              color: Theme.of(context).colorScheme.onSecondary,
-            ),
-            color: Theme.of(context).colorScheme.primary,
-            height: 48,
-            // Картинка кнопки - пока что это просто белый контейнер.
-            buttonLabel: Container(
-              width: 20,
-              height: 22,
-              color: Theme.of(context).colorScheme.onSecondary,
-            ),
-          ),
+          child: _BuildRouteButton(),
         ),
         const PaddedDivider(
           top: 24,
           left: 16,
           right: 16,
-          bottom: 19,
+          bottom: 16,
           thickness: 0.8,
         ),
         const _SightActionsButtons(),
@@ -195,6 +186,32 @@ class _SightInfo extends StatelessWidget {
   }
 }
 
+/// Кнопка "Построить маршрут".
+class _BuildRouteButton extends StatelessWidget {
+  const _BuildRouteButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomElevatedButton(
+      AppStrings.buildRouteText,
+      textStyle: AppTypography.roboto14Regular.copyWith(
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      height: 48,
+      // Картинка кнопки - пока что это просто белый контейнер.
+      buttonLabel: SvgPicture.asset(
+        AppAssets.route,
+        width: 24,
+        height: 24,
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
+    );
+  }
+}
+
 /// Виджет для отображения кнопок для работы с достопримечательностью.
 ///
 /// Предоставляет возможность запланировать поход в место и добавить его в список избранного.
@@ -206,7 +223,7 @@ class _SightActionsButtons extends StatelessWidget {
     return Row(
       children: const [
         Expanded(
-          child: ToPlanButton(),
+          child: _ToPlanButton(),
         ),
         Expanded(
           child: _ToFavouritesButton(),
@@ -217,30 +234,23 @@ class _SightActionsButtons extends StatelessWidget {
 }
 
 /// Кнопка "Запланировать" поход в указанное место.
-class ToPlanButton extends StatelessWidget {
-  const ToPlanButton({Key? key}) : super(key: key);
+class _ToPlanButton extends StatelessWidget {
+  const _ToPlanButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 22,
-          height: 19,
-          color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
-        ),
-        const SizedBox(
-          width: 9,
-        ),
-        Text(
-          AppStrings.planText,
-          style: AppTypography.roboto14Regular.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
+    return CustomTextButton(
+      AppStrings.toPlanText,
+      textStyle: AppTypography.roboto14Regular.copyWith(
+        color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+        fontWeight: FontWeight.w400,
+      ),
+      buttonLabel: SvgPicture.asset(
+        AppAssets.calendar,
+        width: 24,
+        height: 24,
+        color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+      ),
     );
   }
 }
@@ -251,25 +261,20 @@ class _ToFavouritesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 20,
-          height: 18,
-          color: Theme.of(context).primaryColor,
-        ),
-        const SizedBox(
-          width: 9,
-        ),
-        Text(
-          AppStrings.toFavourites,
-          style: AppTypography.roboto14Regular.copyWith(
-            color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
+    final buttonColor = Theme.of(context).primaryColor;
+
+    return CustomTextButton(
+      AppStrings.toFavourites,
+      textStyle: AppTypography.roboto14Regular.copyWith(
+        color: buttonColor,
+        fontWeight: FontWeight.w400,
+      ),
+      buttonLabel: SvgPicture.asset(
+        AppAssets.toFavourites,
+        width: 24,
+        height: 24,
+        color: buttonColor,
+      ),
     );
   }
 }
@@ -283,13 +288,21 @@ class _BackButton extends StatelessWidget {
     return SizedBox(
       height: 32,
       width: 32,
-      child: TextButton(
-        onPressed: () => print('Sight details screen: back button pressed.'),
+      child: ElevatedButton(
+        // TODO(daniiliv): Здесь будет вызов реальной функции.
+        onPressed: () {
+          if (kDebugMode) {
+            print('"Back" button pressed.');
+          }
+        },
         style: TextButton.styleFrom(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          elevation: 0,
+          enableFeedback: true,
+          padding: EdgeInsets.zero,
         ),
         child: Icon(
           Icons.arrow_back_ios_new_rounded,
