@@ -270,7 +270,7 @@ class _ToFavouritesButton extends StatelessWidget {
         fontWeight: FontWeight.w400,
       ),
       buttonLabel: SvgPicture.asset(
-        AppAssets.toFavourites,
+        AppAssets.heart,
         width: 24,
         height: 24,
         color: buttonColor,

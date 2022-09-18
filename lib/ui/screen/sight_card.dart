@@ -63,7 +63,7 @@ abstract class BaseSightCard extends StatelessWidget {
 /// * [sight] - модель достопримечательности (обязательный);
 class SightCard extends BaseSightCard {
   @override
-  final List<String> actionsAssets = [AppAssets.toFavourites];
+  final List<String> actionsAssets = [AppAssets.heart];
 
   @override
   bool get showDetails => true;
@@ -88,7 +88,7 @@ class ToVisitSightCard extends BaseSightCard {
   @override
   final List<String> actionsAssets = [
     AppAssets.calendar,
-    AppAssets.removeFromFavourites,
+    AppAssets.close,
   ];
 
   @override
@@ -115,7 +115,7 @@ class VisitedSightCard extends BaseSightCard {
   @override
   final List<String> actionsAssets = [
     AppAssets.share,
-    AppAssets.removeFromFavourites,
+    AppAssets.close,
   ];
 
   @override

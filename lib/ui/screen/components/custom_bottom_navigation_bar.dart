@@ -7,10 +7,10 @@ import 'package:places/helpers/app_assets.dart';
 class CustomBottomNavigationBar extends StatelessWidget {
   static const double _itemIconSize = 24.0;
   static const _itemAssets = [
-    AppAssets.itemListIcon,
-    AppAssets.itemMapIcon,
-    AppAssets.itemHeartFullIcon,
-    AppAssets.itemSettingsIcon,
+    AppAssets.list,
+    AppAssets.map,
+    AppAssets.heart,
+    AppAssets.settings,
   ];
 
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
