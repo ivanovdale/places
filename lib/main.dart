@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/screen/res/themes.dart';
-import 'package:places/ui/screen/sight_card.dart';
-import 'package:places/ui/screen/sight_details.dart';
-import 'package:places/ui/screen/sight_list_screen.dart';
-import 'package:places/ui/screen/visiting_screen.dart';
+import 'package:places/ui/screens/res/themes.dart';
+import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/screens/sight_details.dart';
+import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/visiting_screen.dart';
 
 const bool isDarkTheme = false;
 
@@ -19,7 +19,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: isDarkTheme ? darkTheme : lightTheme,
-      home:  SightListScreen(),
+      home:  SightDetails(mocks.first),
     );
   }
 }

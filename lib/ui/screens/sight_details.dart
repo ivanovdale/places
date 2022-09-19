@@ -5,10 +5,10 @@ import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
-import 'package:places/ui/screen/components/custom_elevated_button.dart';
-import 'package:places/ui/screen/components/custom_text_button.dart';
-import 'package:places/ui/screen/components/loading_indicator.dart';
-import 'package:places/ui/screen/components/padded_divider.dart';
+import 'package:places/ui/screens/components/custom_elevated_button.dart';
+import 'package:places/ui/screens/components/custom_text_button.dart';
+import 'package:places/ui/screens/components/loading_indicator.dart';
+import 'package:places/ui/screens/components/padded_divider.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
 ///
