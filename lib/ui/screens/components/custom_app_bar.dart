@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 /// Имеет параметры:
 /// * [title] - заголовок AppBar;
 /// * [titleTextStyle] - стиль заголовка;
-/// * [centerTitle] - признак центрирования заголовка;
 /// * [toolbarHeight] - высота рабочей области;
-/// * [padding] - отступ.
+/// * [padding] - отступ;
+/// * [centerTitle] - признак центрирования заголовка.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final TextStyle? titleTextStyle;
@@ -29,25 +29,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(toolbarHeight),
-      child: Padding(
+    return AppBar(
+      title: Padding(
         padding: padding ?? EdgeInsets.zero,
-        child: centerTitle
-            ? Center(
-                child: Text(
-                  title,
-                  style: titleTextStyle,
-                ),
-              )
-            : ConstrainedBox(
-                constraints: const BoxConstraints.expand(),
-                child: Text(
-                  title,
-                  style: titleTextStyle,
-                ),
-              ),
+        child: Text(title),
       ),
+      titleTextStyle: titleTextStyle,
+      toolbarHeight: toolbarHeight,
+      centerTitle: centerTitle,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0,
     );
   }
 }

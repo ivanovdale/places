@@ -26,9 +26,6 @@ class VisitingScreen extends StatelessWidget {
           ),
           centerTitle: true,
           toolbarHeight: 56.0,
-          padding: const EdgeInsets.only(
-            top: 24.0,
-          ),
         ),
         bottomNavigationBar: const CustomBottomNavigationBar(),
         body: Padding(
