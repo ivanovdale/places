@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 /// * [width] - ширина;
 /// * [height] - высота;
 /// * [buttonLabel] - виджет-лейбл кнопки;
-/// * [textStyle] - стиль текста кнопки.
+/// * [textStyle] - стиль текста кнопки;
+/// * [onPressed] - коллбэк после нажатия кнопки.
 class CustomElevatedButton extends StatelessWidget {
   final String text;
   final Color? backgroundColor;
@@ -17,6 +18,7 @@ class CustomElevatedButton extends StatelessWidget {
   final double? height;
   final Widget? buttonLabel;
   final TextStyle? textStyle;
+  final Function()? onPressed;
 
   const CustomElevatedButton(
     this.text, {
@@ -26,6 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.height,
     this.buttonLabel,
     this.textStyle,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -35,11 +38,12 @@ class CustomElevatedButton extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         // TODO(daniiliv): Здесь будет вызов реальной функции.
-        onPressed: () {
-          if (kDebugMode) {
-            print('"$text" button pressed.');
-          }
-        },
+        onPressed: onPressed ??
+            () {
+              if (kDebugMode) {
+                print('"$text" button pressed.');
+              }
+            },
         style: TextButton.styleFrom(
           backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(

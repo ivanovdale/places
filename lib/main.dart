@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/sight_card.dart';
 import 'package:places/ui/screens/sight_details.dart';
@@ -19,7 +20,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: isDarkTheme ? darkTheme : lightTheme,
-      home:  SightDetails(mocks.first),
+      home:  FiltersScreen(),
     );
   }
 }

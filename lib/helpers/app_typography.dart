@@ -44,4 +44,11 @@ class AppTypography {
     fontSize: 14,
     fontWeight: FontWeight.w700,
   );
+
+  static const roboto12Regular = TextStyle(
+    color: AppColors.black,
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+  );
 }

@@ -7,38 +7,48 @@ import 'package:flutter/material.dart';
 /// * [titleTextStyle] - стиль заголовка;
 /// * [toolbarHeight] - высота рабочей области;
 /// * [padding] - отступ;
-/// * [centerTitle] - признак центрирования заголовка.
+/// * [centerTitle] - признак центрирования заголовка;
+/// * [leading] - левая кнопка на AppBar;
+/// * [actions] - кнопки в правой части AppBar.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
   final TextStyle? titleTextStyle;
   final double toolbarHeight;
   final EdgeInsetsGeometry? padding;
   final bool centerTitle;
+  final Widget? leading;
+  final List<Widget>? actions;
 
   @override
   Size get preferredSize => Size.fromHeight(toolbarHeight);
 
   const CustomAppBar({
     Key? key,
-    required this.title,
+    this.title,
     this.titleTextStyle,
     required this.toolbarHeight,
     this.padding,
     this.centerTitle = false,
+    this.leading,
+    this.actions,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Padding(
-        padding: padding ?? EdgeInsets.zero,
-        child: Text(title),
-      ),
+      title: title != null
+          ? Padding(
+              padding: padding ?? EdgeInsets.zero,
+              child: Text(title!),
+            )
+          : null,
       titleTextStyle: titleTextStyle,
       toolbarHeight: toolbarHeight,
       centerTitle: centerTitle,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
+      leading: leading,
+      actions: actions,
     );
   }
 }

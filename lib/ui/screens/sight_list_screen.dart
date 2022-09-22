@@ -22,9 +22,9 @@ class _SightListScreenState extends State<SightListScreen> {
         title: AppStrings.sightListAppBarTitle,
         titleTextStyle: AppTypography.roboto32Regular
             .copyWith(color: Theme.of(context).primaryColorDark),
-        toolbarHeight: 132,
+        toolbarHeight: 128,
         padding: const EdgeInsets.only(
-          top: 44,
+          top: 40,
           bottom: 16,
         ),
       ),

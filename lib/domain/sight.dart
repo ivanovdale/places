@@ -1,11 +1,13 @@
+import 'package:places/domain/coordinate_point.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
+
 
 /// Модель достопримечательности.
 ///
 /// Имеет следующие поля:
 /// * [name] - название достопримечательности;
-/// * [lat] - географическая долгота точки;
-/// * [lon] - географическая широта точки;
+/// * [coordinatePoint] - географические координаты точки;
 /// * [url] - путь до фотографии в интернете;
 /// * [details] - подробное описание места;
 /// * [type] - тип достопримечательности;
@@ -14,8 +16,7 @@ import 'package:places/helpers/app_strings.dart';
 /// * [visited] - признак посещения.
 class Sight {
   String name;
-  double lat;
-  double lon;
+  CoordinatePoint coordinatePoint;
   String url;
   String details;
   SightTypes type;
@@ -25,8 +26,7 @@ class Sight {
 
   Sight({
     required this.name,
-    required this.lat,
-    required this.lon,
+    required this.coordinatePoint,
     required this.url,
     required this.details,
     required this.type,
@@ -37,13 +37,17 @@ class Sight {
 }
 
 enum SightTypes {
-  coffeeShop(AppStrings.coffeeShop),
-  park(AppStrings.park),
-  museum(AppStrings.museum);
+  hotel(AppStrings.hotel, AppAssets.hotel),
+  restaurant(AppStrings.restaurant, AppAssets.restaurant),
+  particularPlace(AppStrings.particularPlace, AppAssets.particularPlace),
+  park(AppStrings.park, AppAssets.park),
+  museum(AppStrings.museum, AppAssets.museum),
+  coffeeShop(AppStrings.coffeeShop, AppAssets.coffeeShop);
 
-  const SightTypes(this.name);
+  const SightTypes(this.name, this.imagePath);
 
   final String name;
+  final String imagePath;
 
   @override
   String toString() => name;

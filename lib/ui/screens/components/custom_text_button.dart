@@ -6,49 +6,58 @@ import 'package:flutter/material.dart';
 /// Имеет параметры:
 /// * [text] - текст кнопки (обязательный);
 /// * [textStyle] - стиль текста кнопки;
-/// * [buttonLabel] - виджет-лейбл кнопки.
+/// * [buttonLabel] - виджет-лейбл кнопки;
+/// * [padding] - отступ для кнопки;
+/// * [onPressed] - коллбэк после нажатия кнопки.
 class CustomTextButton extends StatelessWidget {
   final String text;
   final TextStyle? textStyle;
   final Widget? buttonLabel;
+  final EdgeInsetsGeometry? padding;
+  final Function()? onPressed;
 
   const CustomTextButton(
     this.text, {
     Key? key,
     this.buttonLabel,
     this.textStyle,
+    this.padding,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       // TODO(daniiliv): Здесь будет вызов реальной функции.
-      onPressed: () {
-        if (kDebugMode) {
-          print('"$text" button pressed.');
-        }
-      },
+      onPressed: onPressed ??
+          () {
+            if (kDebugMode) {
+              print('"$text" button pressed.');
+            }
+          },
       style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        alignment: Alignment.topCenter,
+        padding: padding ?? EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minimumSize: const Size.fromHeight(24),
-
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          buttonLabel ?? const SizedBox(),
-          const SizedBox(
-            width: 9,
-          ),
-          Text(
-            text,
-            style: textStyle,
-          ),
-        ],
-      ),
+      child: buttonLabel != null
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buttonLabel!,
+                const SizedBox(
+                  width: 9,
+                ),
+                Text(
+                  text,
+                  style: textStyle,
+                ),
+              ],
+            )
+          : Text(
+              text,
+              style: textStyle,
+            ),
     );
   }
 }
