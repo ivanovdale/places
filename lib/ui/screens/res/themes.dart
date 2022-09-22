@@ -12,7 +12,6 @@ final lightTheme = ThemeData(
     // Не используется
     background: AppColors.white,
     onPrimary: AppColors.oxfordBlue,
-    // Не используется
     onBackground: AppColors.white,
     // Не используется
     onError: AppColors.white,
@@ -44,7 +43,6 @@ final darkTheme = ThemeData(
     // Не используется
     background: AppColors.white,
     onPrimary: AppColors.waterloo,
-    // Не используется
     onBackground: AppColors.white,
     // Не используется
     onError: AppColors.white,
@@ -53,7 +51,7 @@ final darkTheme = ThemeData(
     onSurface: AppColors.white,
     // Не используется
     error: AppColors.white,
-    primary: AppColors.fruitSalad,
+    primary: AppColors.pastelGreen,
     // Не используется
     primaryContainer: AppColors.white,
     secondary: AppColors.waterloo,

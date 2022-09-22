@@ -191,8 +191,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
     final calculatedDistance = sqrt(dx * dx + dy * dy);
 
-    return calculatedDistance >= radiusFrom &&
-        calculatedDistance <= radiusTo;
+    return calculatedDistance >= radiusFrom && calculatedDistance <= radiusTo;
   }
 }
 
@@ -240,8 +239,9 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
       ),
       child: CustomElevatedButton(
         '${AppStrings.show} ($numberOfFilteredPlaces)',
-        textStyle: AppTypography.roboto14Regular
-            .copyWith(color: Theme.of(context).scaffoldBackgroundColor),
+        textStyle: AppTypography.roboto14Regular.copyWith(
+          color: Theme.of(context).colorScheme.background,
+        ),
         height: 48,
       ),
     );
@@ -399,8 +399,10 @@ class _CategoriesFilters extends StatelessWidget {
                 ),
                 child: Text(
                   (listOfFilters[index]['name'] as String).capitalize(),
-                  style: AppTypography.roboto12Regular
-                      .copyWith(fontWeight: FontWeight.w400),
+                  style: AppTypography.roboto12Regular.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).colorScheme.background,
+                  ),
                 ),
               ),
             ],
@@ -480,7 +482,8 @@ class _DistanceFilterSlider extends StatelessWidget {
     return SliderTheme(
       data: SliderThemeData(
         trackHeight: 2,
-        thumbColor: Theme.of(context).scaffoldBackgroundColor,
+        thumbColor: Theme.of(context).colorScheme.background,
+        tickMarkShape: SliderTickMarkShape.noTickMark,
       ),
       child: RangeSlider(
         inactiveColor:
