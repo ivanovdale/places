@@ -34,4 +34,9 @@ class AppStrings {
   static const categories = 'категории';
   static const distance = 'Расстояние';
   static const show = 'показать';
+
+  // SettingsScreen. Экран настроек темы.
+  static const settings = 'Настройки';
+  static const darkTheme = 'Тёмная тема';
+  static const watchTutorial = 'Смотреть туториал';
 }
