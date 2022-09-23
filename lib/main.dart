@@ -34,7 +34,8 @@ class _AppState extends State<App> {
 
     return MaterialApp(
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const SettingsScreen(),
+      home: const FiltersScreen(),
     );
   }
 }
+

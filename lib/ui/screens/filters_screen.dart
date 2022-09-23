@@ -386,12 +386,8 @@ class _CategoriesFilters extends StatelessWidget {
         itemBuilder: (context, index) {
           return Column(
             children: [
-              InkWell(
-                onTap: () => dataStorage.setCategoriesFilters(index),
-                child: _FilterCircle(
-                  imagePath: listOfFilters[index]['imagePath'] as String,
-                  selected: listOfFilters[index]['selected'] as bool,
-                ),
+              _FilterCircle(
+                filterItemIndex: index,
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -401,7 +397,7 @@ class _CategoriesFilters extends StatelessWidget {
                   (listOfFilters[index]['name'] as String).capitalize(),
                   style: AppTypography.roboto12Regular.copyWith(
                     fontWeight: FontWeight.w400,
-                    color: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -415,32 +411,44 @@ class _CategoriesFilters extends StatelessWidget {
 
 /// Круглая картинка категории с пометкой активации фильтра.
 class _FilterCircle extends StatelessWidget {
-  final String imagePath;
-  final bool selected;
+  final int filterItemIndex;
 
   const _FilterCircle({
     Key? key,
-    required this.imagePath,
-    required this.selected,
+    required this.filterItemIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final dataStorage = _InheritedFiltersScreenState.of(context);
+    final listOfFilters = dataStorage.listOfCategoriesFilters;
+    final imagePath = listOfFilters[filterItemIndex]['imagePath'] as String;
+    final selected = listOfFilters[filterItemIndex]['selected'] as bool;
+
     return Stack(
       children: [
-        ClipOval(
-          child: Container(
-            height: 64,
-            width: 64,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.16),
-            ),
-            child: SvgPicture.asset(
-              imagePath,
-              height: 32,
-              width: 32,
-              color: Theme.of(context).colorScheme.primary,
+        Material(
+          borderRadius: BorderRadius.circular(50),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          type: MaterialType.transparency,
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => dataStorage.setCategoriesFilters(filterItemIndex),
+            child: ClipOval(
+              child: Container(
+                height: 64,
+                width: 64,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.16),
+                ),
+                child: SvgPicture.asset(
+                  imagePath,
+                  height: 32,
+                  width: 32,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
           ),
         ),

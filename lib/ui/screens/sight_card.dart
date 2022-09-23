@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +6,6 @@ import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
-import 'package:places/ui/screens/components/loading_indicator.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
@@ -31,21 +31,34 @@ abstract class BaseSightCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: AspectRatio(
         aspectRatio: 3 / 2,
-        child: Column(
-          children: [
-            Expanded(
-              child: _SightCardTop(
-                sight,
-                actionsAssets,
-              ),
+        child: Material(
+          borderRadius: BorderRadius.circular(12),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          type: MaterialType.transparency,
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              if (kDebugMode) {
+                print('SightCard tapped.');
+              }
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: _SightCardTop(
+                    sight,
+                    actionsAssets,
+                  ),
+                ),
+                Expanded(
+                  child: _SightCardBottom(
+                    sight,
+                    showDetails: showDetails,
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: _SightCardBottom(
-                sight,
-                showDetails: showDetails,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -157,10 +170,11 @@ class _SightCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            sight.url,
+          Ink.image(
             fit: BoxFit.cover,
-            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
+            image: CachedNetworkImageProvider(
+              sight.url,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,7 +233,9 @@ class _SightActions extends StatelessWidget {
             onTap: () {
               // TODO(daniiliv): Здесь будет реальный вызов.
               if (kDebugMode) {
-                print('"${asset.split('/')[2].replaceAll('.svg', '')}" button pressed.');
+                print(
+                  '"${asset.split('/')[2].replaceAll('.svg', '')}" button pressed.',
+                );
               }
             },
           ),
@@ -256,38 +272,40 @@ class _SightCardBottom extends StatelessWidget {
         ),
         color: Theme.of(context).colorScheme.secondaryContainer,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
+      child: Ink(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 16,
             ),
-            child: Text(
-              sight.name,
-              style: AppTypography.roboto16Regular.copyWith(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+              ),
+              child: Text(
+                sight.name,
+                style: AppTypography.roboto16Regular.copyWith(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          // Показывать информацию о достопримечательности.
-          if (showDetails)
-            Expanded(
-              child: _SightDetailsInfo(sight),
-            )
-          else
-            Expanded(
-              child: _SightVisitingInfo(sight),
+            const SizedBox(
+              height: 2,
             ),
-        ],
+            // Показывать информацию о достопримечательности.
+            if (showDetails)
+              Expanded(
+                child: _SightDetailsInfo(sight),
+              )
+            else
+              Expanded(
+                child: _SightVisitingInfo(sight),
+              ),
+          ],
+        ),
       ),
     );
   }
