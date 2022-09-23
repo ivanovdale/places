@@ -5,10 +5,10 @@ import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/helpers/app_typography.dart';
+import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
 import 'package:places/ui/screens/components/loading_indicator.dart';
-import 'package:places/ui/screens/components/padded_divider.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
 ///
@@ -95,11 +95,13 @@ class _SightDetailsBottom extends StatelessWidget {
           ),
           child: _BuildRouteButton(),
         ),
-        const PaddedDivider(
-          top: 24,
-          left: 16,
-          right: 16,
-          bottom: 8,
+        const CustomDivider(
+          padding: EdgeInsets.only(
+            top: 24,
+            left: 16,
+            right: 16,
+            bottom: 8,
+          ),
           thickness: 0.8,
         ),
         const _SightActionsButtons(),
