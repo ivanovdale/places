@@ -231,6 +231,9 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
     final dataStorage = _InheritedFiltersScreenState.of(context);
     final numberOfFilteredPlaces = dataStorage.numberOfFilteredPlaces;
 
+    final theme = Theme.of(context);
+    final backgroundColor = theme.colorScheme.background;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -239,10 +242,15 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
       ),
       child: CustomElevatedButton(
         '${AppStrings.show} ($numberOfFilteredPlaces)',
-        textStyle: AppTypography.roboto14Regular.copyWith(
-          color: Theme.of(context).colorScheme.background,
+        textStyle: theme.textTheme.bodyText2?.copyWith(
+          color: backgroundColor,
         ),
         height: 48,
+        onPressed: () {
+          if (kDebugMode) {
+            print('"${AppStrings.show}" button pressed.');
+          }
+        },
       ),
     );
   }
@@ -260,6 +268,10 @@ class _DistanceFilterText extends StatelessWidget {
     final valueFrom = dataStorage.distanceFrom;
     final valueTo = dataStorage.distanceTo;
 
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary;
+    final themeBodyText1 = theme.textTheme.bodyText1;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -271,17 +283,13 @@ class _DistanceFilterText extends StatelessWidget {
         children: [
           Text(
             AppStrings.distance,
-            style: AppTypography.roboto16Regular.copyWith(
-              color: Theme.of(context).primaryColorDark,
-              fontWeight: FontWeight.w400,
-            ),
+            style: themeBodyText1,
           ),
           const Spacer(),
           Text(
             'от $valueFrom до $valueTo км',
-            style: AppTypography.roboto16Regular.copyWith(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.w400,
+            style: themeBodyText1?.copyWith(
+              color: secondaryColor,
             ),
           ),
         ],
@@ -342,6 +350,9 @@ class _CategoriesText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary.withOpacity(0.56);
+
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -351,9 +362,8 @@ class _CategoriesText extends StatelessWidget {
         ),
         child: Text(
           AppStrings.categories,
-          style: AppTypography.roboto12Regular.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
-            fontWeight: FontWeight.w400,
+          style: theme.textTheme.caption?.copyWith(
+            color: secondaryColor,
           ),
         ),
       ),
@@ -395,10 +405,7 @@ class _CategoriesFilters extends StatelessWidget {
                 ),
                 child: Text(
                   (listOfFilters[index]['name'] as String).capitalize(),
-                  style: AppTypography.roboto12Regular.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ),
             ],
@@ -425,6 +432,9 @@ class _FilterCircle extends StatelessWidget {
     final imagePath = listOfFilters[filterItemIndex]['imagePath'] as String;
     final selected = listOfFilters[filterItemIndex]['selected'] as bool;
 
+    final theme = Theme.of(context);
+    final colorSchemePrimaryColor = theme.colorScheme.primary;
+
     return Stack(
       children: [
         Material(
@@ -440,13 +450,13 @@ class _FilterCircle extends StatelessWidget {
                 width: 64,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.16),
+                  color: colorSchemePrimaryColor.withOpacity(0.16),
                 ),
                 child: SvgPicture.asset(
                   imagePath,
                   height: 32,
                   width: 32,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: colorSchemePrimaryColor,
                 ),
               ),
             ),
@@ -459,12 +469,12 @@ class _FilterCircle extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: Theme.of(context).primaryColor,
+                color: theme.primaryColor,
               ),
               child: Icon(
                 Icons.done,
                 size: 16,
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: theme.scaffoldBackgroundColor,
               ),
             ),
           )
@@ -487,15 +497,17 @@ class _DistanceFilterSlider extends StatelessWidget {
     final valueFrom = dataStorage.distanceFrom;
     final valueTo = dataStorage.distanceTo;
 
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return SliderTheme(
       data: SliderThemeData(
         trackHeight: 2,
-        thumbColor: Theme.of(context).colorScheme.background,
+        thumbColor: colorScheme.background,
         tickMarkShape: SliderTickMarkShape.noTickMark,
       ),
       child: RangeSlider(
-        inactiveColor:
-            Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+        inactiveColor: colorScheme.secondary.withOpacity(0.56),
         divisions: 99,
         min: 0.1,
         max: 10,

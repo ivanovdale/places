@@ -14,7 +14,7 @@ class CustomTextButton extends StatelessWidget {
   final TextStyle? textStyle;
   final Widget? buttonLabel;
   final EdgeInsetsGeometry? padding;
-  final Function()? onPressed;
+  final VoidCallback? onPressed;
 
   const CustomTextButton(
     this.text, {

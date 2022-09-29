@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
@@ -20,8 +19,7 @@ class _SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.sightListAppBarTitle,
-        titleTextStyle: AppTypography.roboto32Regular
-            .copyWith(color: Theme.of(context).primaryColorDark),
+        titleTextStyle: Theme.of(context).textTheme.headline4,
         toolbarHeight: 128,
         padding: const EdgeInsets.only(
           top: 40,

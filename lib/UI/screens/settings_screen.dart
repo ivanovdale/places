@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 // TODO(daniiliv): Воспользуемся глобальной переменной на время, пока нет DI.
 import 'package:places/main.dart' show isDarkModeEnabled, changeNotifier;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
-
-
 
 /// Отображает переключатель тёмной/светлой темы. Позволяет перейти на экран онбординга.
 class SettingsScreen extends StatelessWidget {
@@ -19,9 +16,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.settings,
-        titleTextStyle: AppTypography.roboto18RegularSubtitle.copyWith(
-          color: Theme.of(context).primaryColorDark,
-        ),
+        titleTextStyle: Theme.of(context).textTheme.subtitle1,
         centerTitle: true,
         toolbarHeight: 56,
       ),
@@ -85,17 +80,13 @@ class _DarkModeSetting extends StatefulWidget {
 
 /// Хранит состояние переключателя тёмной темы.
 class _DarkModeSettingState extends State<_DarkModeSetting> {
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
           AppStrings.darkTheme,
-          style: AppTypography.roboto16Regular.copyWith(
-            color: Theme.of(context).primaryColorDark,
-            fontWeight: FontWeight.w400,
-          ),
+          style: Theme.of(context).textTheme.bodyText1,
         ),
         const Spacer(),
         CupertinoSwitch(
@@ -116,21 +107,20 @@ class _WatchTutorialInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Text(
           AppStrings.watchTutorial,
-          style: AppTypography.roboto16Regular.copyWith(
-            color: Theme.of(context).primaryColorDark,
-            fontWeight: FontWeight.w400,
-          ),
+          style: theme.textTheme.bodyText1,
         ),
         const Spacer(),
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: Icon(
             Icons.info_outline,
-            color: Theme.of(context).colorScheme.primary,
+            color: theme.colorScheme.primary,
           ),
         ),
       ],

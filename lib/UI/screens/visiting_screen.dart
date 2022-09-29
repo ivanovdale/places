@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
@@ -21,9 +20,7 @@ class VisitingScreen extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           title: AppStrings.visitingScreenAppBarTitle,
-          titleTextStyle: AppTypography.roboto18RegularSubtitle.copyWith(
-            color: Theme.of(context).primaryColorDark,
-          ),
+          titleTextStyle: Theme.of(context).textTheme.subtitle1,
           centerTitle: true,
           toolbarHeight: 56.0,
         ),
@@ -63,6 +60,8 @@ class _VisitingTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: 40,
       margin: const EdgeInsets.only(
@@ -70,13 +69,13 @@ class _VisitingTabBar extends StatelessWidget {
         bottom: 30.0,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: theme.colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(40),
       ),
       child: TabBar(
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
-          color: Theme.of(context).primaryColor,
+          color: theme.primaryColor,
         ),
         indicatorWeight: 0.0,
         tabs: const [
@@ -194,6 +193,10 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final secondaryColor = theme.colorScheme.secondary.withOpacity(0.56);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -207,8 +210,8 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
         ),
         Text(
           AppStrings.empty,
-          style: AppTypography.roboto18RegularSubtitle.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+          style: textTheme.subtitle1?.copyWith(
+            color: secondaryColor,
           ),
         ),
         const SizedBox(
@@ -216,9 +219,8 @@ abstract class _BaseEmptyVisitingList extends StatelessWidget {
         ),
         Text(
           emptyInfo,
-          style: AppTypography.roboto14Regular.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
-            fontWeight: FontWeight.w400,
+          style: textTheme.bodyText2?.copyWith(
+            color: secondaryColor,
             height: 1.2,
           ),
           textAlign: TextAlign.center,

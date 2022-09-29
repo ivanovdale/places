@@ -18,7 +18,7 @@ class CustomElevatedButton extends StatelessWidget {
   final double? height;
   final Widget? buttonLabel;
   final TextStyle? textStyle;
-  final Function()? onPressed;
+  final VoidCallback? onPressed;
 
   const CustomElevatedButton(
     this.text, {

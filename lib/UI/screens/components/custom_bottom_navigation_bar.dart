@@ -17,11 +17,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+            color: theme.colorScheme.secondary.withOpacity(0.56),
             width: 3,
           ),
         ),
@@ -33,7 +35,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               itemAsset,
               height: _itemIconSize,
               width: _itemIconSize,
-              color: Theme.of(context).primaryColorDark,
+              color: theme.primaryColorDark,
             ),
             label: '',
           );

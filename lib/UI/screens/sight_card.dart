@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
@@ -162,6 +161,9 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onSecondaryColor = theme.colorScheme.onSecondary;
+
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(12.0),
@@ -187,8 +189,8 @@ class _SightCardTop extends StatelessWidget {
                 ),
                 child: Text(
                   sight.type.toString(),
-                  style: AppTypography.roboto14Regular.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondary,
+                  style: theme.textTheme.bodyText2?.copyWith(
+                    color: onSecondaryColor,
                   ),
                 ),
               ),
@@ -264,13 +266,15 @@ class _SightCardBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),
         ),
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: theme.colorScheme.secondaryContainer,
       ),
       child: Ink(
         child: Column(
@@ -286,10 +290,7 @@ class _SightCardBottom extends StatelessWidget {
               ),
               child: Text(
                 sight.name,
-                style: AppTypography.roboto16Regular.copyWith(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: theme.textTheme.button,
               ),
             ),
             const SizedBox(
@@ -322,6 +323,9 @@ class _SightDetailsInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16,
@@ -331,9 +335,8 @@ class _SightDetailsInfo extends StatelessWidget {
       child: Text(
         sight.details,
         maxLines: 2,
-        style: AppTypography.roboto14Regular.copyWith(
-          color: Theme.of(context).colorScheme.secondary,
-          fontWeight: FontWeight.w400,
+        style: theme.textTheme.bodyText2?.copyWith(
+          color: secondaryColor,
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -352,6 +355,11 @@ class _SightVisitingInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final secondaryColor = theme.colorScheme.secondary;
+    final themeBodyText2 = theme.textTheme.bodyText2;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -366,19 +374,17 @@ class _SightVisitingInfo extends StatelessWidget {
                 ? '${AppStrings.placeVisited} ${sight.visitDate}'
                 : '${AppStrings.planToVisit} ${sight.visitDate}',
             maxLines: 2,
-            style: AppTypography.roboto14Regular.copyWith(
+            style: themeBodyText2?.copyWith(
               color: sight.visited
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w400,
+                  ? colorScheme.secondary
+                  : colorScheme.primary,
             ),
           ),
           const Spacer(),
           Text(
             '${AppStrings.closedTo} ${sight.workTimeFrom}',
-            style: AppTypography.roboto14Regular.copyWith(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.w400,
+            style: themeBodyText2?.copyWith(
+              color: secondaryColor,
             ),
           ),
         ],

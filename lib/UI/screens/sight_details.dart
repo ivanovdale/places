@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
@@ -122,6 +121,13 @@ class _SightInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final themeBodyText2 = theme.textTheme.bodyText2;
+    final onPrimaryColor = colorScheme.onPrimary;
+    final secondaryColor = colorScheme.secondary;
+    final primaryColor = theme.primaryColor;
+
     return Column(
       children: [
         Align(
@@ -133,8 +139,7 @@ class _SightInfo extends StatelessWidget {
             ),
             child: Text(
               sight.name,
-              style: AppTypography.roboto24Regular
-                  .copyWith(color: Theme.of(context).primaryColor),
+              style: theme.textTheme.headline5,
             ),
           ),
         ),
@@ -149,8 +154,9 @@ class _SightInfo extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   sight.type.toString(),
-                  style: AppTypography.roboto14Regular
-                      .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                  style: themeBodyText2?.copyWith(
+                    color: onPrimaryColor,
+                  ),
                 ),
               ),
             ),
@@ -161,9 +167,8 @@ class _SightInfo extends StatelessWidget {
               ),
               child: Text(
                 '${AppStrings.closedTo} ${sight.workTimeFrom}',
-                style: AppTypography.roboto14Regular.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontWeight: FontWeight.w400,
+                style: themeBodyText2?.copyWith(
+                  color: secondaryColor,
                 ),
               ),
             ),
@@ -177,9 +182,8 @@ class _SightInfo extends StatelessWidget {
           ),
           child: Text(
             sight.details,
-            style: AppTypography.roboto14Regular.copyWith(
-              color: Theme.of(context).primaryColor,
-              fontWeight: FontWeight.w400,
+            style: themeBodyText2?.copyWith(
+              color: primaryColor,
             ),
           ),
         ),
@@ -196,20 +200,30 @@ class _BuildRouteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final onSecondaryColor = colorScheme.onSecondary;
+
     return CustomElevatedButton(
       AppStrings.buildRouteText,
-      textStyle: AppTypography.roboto14Regular.copyWith(
-        color: Theme.of(context).colorScheme.onSecondary,
+      textStyle: theme.textTheme.bodyText2?.copyWith(
+        color: onSecondaryColor,
       ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: colorScheme.primary,
       height: 48,
       // Картинка кнопки - пока что это просто белый контейнер.
       buttonLabel: SvgPicture.asset(
         AppAssets.route,
         width: 24,
         height: 24,
-        color: Theme.of(context).colorScheme.onSecondary,
+        color: onSecondaryColor,
       ),
+      // TODO(daniiliv): Здесь будет вызов реальной функции.
+      onPressed: () {
+        if (kDebugMode) {
+          print('"${AppStrings.buildRouteText}" button pressed.');
+        }
+      },
     );
   }
 }
@@ -241,18 +255,26 @@ class _ToPlanButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary.withOpacity(0.56);
+
     return CustomTextButton(
       AppStrings.toPlanText,
-      textStyle: AppTypography.roboto14Regular.copyWith(
-        color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
-        fontWeight: FontWeight.w400,
+      textStyle: theme.textTheme.bodyText2?.copyWith(
+        color: secondaryColor,
       ),
       buttonLabel: SvgPicture.asset(
         AppAssets.calendar,
         width: 24,
         height: 24,
-        color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+        color: secondaryColor,
       ),
+      // TODO(daniiliv): Здесь будет вызов реальной функции.
+      onPressed: () {
+        if (kDebugMode) {
+          print('"${AppStrings.toPlanText}" button pressed.');
+        }
+      },
     );
   }
 }
@@ -263,13 +285,13 @@ class _ToFavouritesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = Theme.of(context).primaryColor;
+    final theme = Theme.of(context);
+    final buttonColor = theme.primaryColor;
 
     return CustomTextButton(
       AppStrings.toFavourites,
-      textStyle: AppTypography.roboto14Regular.copyWith(
+      textStyle: theme.textTheme.bodyText2?.copyWith(
         color: buttonColor,
-        fontWeight: FontWeight.w400,
       ),
       buttonLabel: SvgPicture.asset(
         AppAssets.heart,
@@ -277,6 +299,12 @@ class _ToFavouritesButton extends StatelessWidget {
         height: 24,
         color: buttonColor,
       ),
+      // TODO(daniiliv): Здесь будет вызов реальной функции.
+      onPressed: () {
+        if (kDebugMode) {
+          print('"${AppStrings.toFavourites}" button pressed.');
+        }
+      },
     );
   }
 }
@@ -287,6 +315,8 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       height: 32,
       width: 32,
@@ -298,7 +328,7 @@ class _BackButton extends StatelessWidget {
           }
         },
         style: TextButton.styleFrom(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: theme.scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -309,7 +339,7 @@ class _BackButton extends StatelessWidget {
         child: Icon(
           Icons.arrow_back_ios_new_rounded,
           size: 15.0,
-          color: Theme.of(context).primaryColorDark,
+          color: theme.primaryColorDark,
         ),
       ),
     );
