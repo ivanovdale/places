@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
-import 'package:places/ui/screen/components/loading_indicator.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
@@ -29,21 +30,34 @@ abstract class BaseSightCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: AspectRatio(
         aspectRatio: 3 / 2,
-        child: Column(
-          children: [
-            Expanded(
-              child: _SightCardTop(
-                sight,
-                actionsAssets,
-              ),
+        child: Material(
+          borderRadius: BorderRadius.circular(12),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          type: MaterialType.transparency,
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              if (kDebugMode) {
+                print('SightCard tapped.');
+              }
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: _SightCardTop(
+                    sight,
+                    actionsAssets,
+                  ),
+                ),
+                Expanded(
+                  child: _SightCardBottom(
+                    sight,
+                    showDetails: showDetails,
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: _SightCardBottom(
-                sight,
-                showDetails: showDetails,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -61,7 +75,7 @@ abstract class BaseSightCard extends StatelessWidget {
 /// * [sight] - модель достопримечательности (обязательный);
 class SightCard extends BaseSightCard {
   @override
-  final List<String> actionsAssets = [AppAssets.toFavourites];
+  final List<String> actionsAssets = [AppAssets.heart];
 
   @override
   bool get showDetails => true;
@@ -86,7 +100,7 @@ class ToVisitSightCard extends BaseSightCard {
   @override
   final List<String> actionsAssets = [
     AppAssets.calendar,
-    AppAssets.removeFromFavourites,
+    AppAssets.close,
   ];
 
   @override
@@ -113,7 +127,7 @@ class VisitedSightCard extends BaseSightCard {
   @override
   final List<String> actionsAssets = [
     AppAssets.share,
-    AppAssets.removeFromFavourites,
+    AppAssets.close,
   ];
 
   @override
@@ -147,6 +161,9 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onSecondaryColor = theme.colorScheme.onSecondary;
+
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(12.0),
@@ -155,10 +172,11 @@ class _SightCardTop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            sight.url,
+          Ink.image(
             fit: BoxFit.cover,
-            loadingBuilder: LoadingIndicator.imageLoadingBuilder,
+            image: CachedNetworkImageProvider(
+              sight.url,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,8 +189,9 @@ class _SightCardTop extends StatelessWidget {
                 ),
                 child: Text(
                   sight.type.toString(),
-                  style: AppTypography.roboto14Regular
-                      .copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                  style: theme.textTheme.bodyText2?.copyWith(
+                    color: onSecondaryColor,
+                  ),
                 ),
               ),
               Padding(
@@ -211,7 +230,17 @@ class _SightActions extends StatelessWidget {
           padding: const EdgeInsets.only(
             left: 18.0,
           ),
-          child: Image.asset(asset),
+          child: InkWell(
+            child: SvgPicture.asset(asset),
+            onTap: () {
+              // TODO(daniiliv): Здесь будет реальный вызов.
+              if (kDebugMode) {
+                print(
+                  '"${asset.split('/')[2].replaceAll('.svg', '')}" button pressed.',
+                );
+              }
+            },
+          ),
         );
       }).toList(),
     );
@@ -237,46 +266,47 @@ class _SightCardBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),
         ),
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: theme.colorScheme.secondaryContainer,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
+      child: Ink(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 16,
             ),
-            child: Text(
-              sight.name,
-              style: AppTypography.roboto16Regular.copyWith(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+              ),
+              child: Text(
+                sight.name,
+                style: theme.textTheme.button,
               ),
             ),
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          // Показывать информацию о достопримечательности.
-          if (showDetails)
-            Expanded(
-              child: _SightDetailsInfo(sight),
-            )
-          else
-            Expanded(
-              child: _SightVisitingInfo(sight),
+            const SizedBox(
+              height: 2,
             ),
-        ],
+            // Показывать информацию о достопримечательности.
+            if (showDetails)
+              Expanded(
+                child: _SightDetailsInfo(sight),
+              )
+            else
+              Expanded(
+                child: _SightVisitingInfo(sight),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -293,6 +323,9 @@ class _SightDetailsInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16,
@@ -302,9 +335,8 @@ class _SightDetailsInfo extends StatelessWidget {
       child: Text(
         sight.details,
         maxLines: 2,
-        style: AppTypography.roboto14Regular.copyWith(
-          color: Theme.of(context).colorScheme.secondary,
-          fontWeight: FontWeight.w400,
+        style: theme.textTheme.bodyText2?.copyWith(
+          color: secondaryColor,
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -323,6 +355,11 @@ class _SightVisitingInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final secondaryColor = theme.colorScheme.secondary;
+    final themeBodyText2 = theme.textTheme.bodyText2;
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -337,19 +374,17 @@ class _SightVisitingInfo extends StatelessWidget {
                 ? '${AppStrings.placeVisited} ${sight.visitDate}'
                 : '${AppStrings.planToVisit} ${sight.visitDate}',
             maxLines: 2,
-            style: AppTypography.roboto14Regular.copyWith(
+            style: themeBodyText2?.copyWith(
               color: sight.visited
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w400,
+                  ? colorScheme.secondary
+                  : colorScheme.primary,
             ),
           ),
           const Spacer(),
           Text(
             '${AppStrings.closedTo} ${sight.workTimeFrom}',
-            style: AppTypography.roboto14Regular.copyWith(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.w400,
+            style: themeBodyText2?.copyWith(
+              color: secondaryColor,
             ),
           ),
         ],

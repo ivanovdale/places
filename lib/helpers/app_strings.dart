@@ -5,7 +5,7 @@ class AppStrings {
 
   // SightDetails. Детальная информация о достопримечательности.
   static const buildRouteText = 'построить маршрут';
-  static const planText = 'Запланировать';
+  static const toPlanText = 'Запланировать';
   static const toFavourites = 'В Избранное';
   static const closedTo = 'закрыто до';
 
@@ -13,6 +13,9 @@ class AppStrings {
   static const coffeeShop = 'кофейня';
   static const park = 'парк';
   static const museum = 'музей';
+  static const hotel = 'отель';
+  static const restaurant = 'ресторан';
+  static const particularPlace = 'особое место';
 
   // SightCard. Карточка места.
   static const planToVisit = 'Запланировано на';
@@ -25,4 +28,15 @@ class AppStrings {
   static const empty = 'Пусто';
   static const infoMarkLikedPlaces = 'Отмечайте понравившиеся\nместа и они появятся здесь.';
   static const infoFinishRoute = 'Завершите маршрут,\nчтобы место попало сюда.';
+
+  // FiltersScreen. Экран фильтров интересных мест.
+  static const clear = 'Очистить';
+  static const categories = 'категории';
+  static const distance = 'Расстояние';
+  static const show = 'показать';
+
+  // SettingsScreen. Экран настроек темы.
+  static const settings = 'Настройки';
+  static const darkTheme = 'Тёмная тема';
+  static const watchTutorial = 'Смотреть туториал';
 }

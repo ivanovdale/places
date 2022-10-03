@@ -1,18 +1,27 @@
 /// Хранилище путей ресурсов приложения.
 class AppAssets {
   // CustomBottomNavigationBar
-  static const itemListIcon = 'assets/icons/list.png';
-  static const itemMapIcon = 'assets/icons/map.png';
-  static const itemHeartFullIcon = 'assets/icons/heart_full.png';
-  static const itemSettingsIcon = 'assets/icons/settings.png';
+  static const list = 'assets/icons/list.svg';
+  static const map = 'assets/icons/map.svg';
+  static const heart = 'assets/icons/heart.svg';
+  static const heartFilled = 'assets/icons/heart_filled.svg';
+  static const settings = 'assets/icons/settings.svg';
 
   // Иконки для карточки достопримечательности - SightCard
-  static const removeFromFavourites = 'assets/icons/removeFromFavourites.png';
-  static const share = 'assets/icons/share.png';
-  static const calendar = 'assets/icons/calendar.png';
-  static const toFavourites = 'assets/icons/toFavourites.png';
+  static const close = 'assets/icons/close.svg';
+  static const share = 'assets/icons/share.svg';
+  static const calendar = 'assets/icons/calendar.svg';
+  static const route = 'assets/icons/route.svg';
 
   // Иконки для пустых списков посещенных/планируемых к посещению мест.
   static const addNewCard = 'assets/icons/addNewCard.png';
-  static const route = 'assets/icons/route.png';
+  static const emptyRoute = 'assets/icons/emptyRoute.png';
+
+  // Иконки для типов достопримечательностей.
+  static const coffeeShop = 'assets/icons/coffee_shop.svg';
+  static const park = 'assets/icons/park.svg';
+  static const museum = 'assets/icons/museum.svg';
+  static const hotel = 'assets/icons/hotel.svg';
+  static const restaurant = 'assets/icons/restaurant.svg';
+  static const particularPlace = 'assets/icons/particular_place.svg';
 }
