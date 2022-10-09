@@ -7,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/helpers/app_typography.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
@@ -331,12 +330,12 @@ class _ClearButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedFiltersScreenState.of(context);
+    final theme = Theme.of(context);
 
     return CustomTextButton(
       AppStrings.clear,
-      textStyle: AppTypography.roboto16Regular.copyWith(
-        color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.w500,
+      textStyle: theme.textTheme.button?.copyWith(
+        color: theme.colorScheme.primary,
       ),
       padding: const EdgeInsets.only(right: 16.0),
       onPressed: dataStorage.resetAllFilters,

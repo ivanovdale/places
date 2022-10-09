@@ -17,20 +17,20 @@ import 'package:places/helpers/app_strings.dart';
 class Sight {
   String name;
   CoordinatePoint coordinatePoint;
-  String url;
+  String? url;
   String details;
   SightTypes type;
-  String workTimeFrom;
+  String? workTimeFrom;
   String? visitDate;
   bool visited;
 
   Sight({
     required this.name,
     required this.coordinatePoint,
-    required this.url,
+    this.url,
     required this.details,
     required this.type,
-    required this.workTimeFrom,
+    this.workTimeFrom,
     this.visitDate,
     this.visited = false,
   });

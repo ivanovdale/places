@@ -55,7 +55,7 @@ class _SightDetailsTop extends StatelessWidget {
       children: [
         // TODO(daniiliv): Здесь будет картинка места.
         Image.network(
-          sight.url,
+          sight.url ?? '',
           fit: BoxFit.cover,
           loadingBuilder: LoadingIndicator.imageLoadingBuilder,
         ),

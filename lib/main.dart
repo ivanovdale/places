@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/add_sight_screen.dart';
+import 'package:places/UI/screens/sight_category_selection_screen.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
@@ -9,7 +11,7 @@ import 'package:places/ui/screens/sight_list_screen.dart';
 import 'package:places/ui/screens/visiting_screen.dart';
 
 /// Признак использования тёмной темы в приложении.
-bool isDarkModeEnabled = false;
+bool isDarkModeEnabled = true;
 
 /// Для оповещения приложения, что нужно обновить экран.
 final ChangeNotifier changeNotifier = ChangeNotifier();
@@ -34,7 +36,7 @@ class _AppState extends State<App> {
 
     return MaterialApp(
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const FiltersScreen(),
+      home: const SightListScreen(),
     );
   }
 }

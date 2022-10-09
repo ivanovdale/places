@@ -163,6 +163,8 @@ class _SightCardTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final onSecondaryColor = theme.colorScheme.onSecondary;
+    /// Картинка по умолчанию.
+    const defaultImageUrl = 'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -175,7 +177,7 @@ class _SightCardTop extends StatelessWidget {
           Ink.image(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
-              sight.url,
+              sight.url ?? defaultImageUrl,
             ),
           ),
           Row(
@@ -268,7 +270,8 @@ class _SightCardBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return DecoratedBox(
+    return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(12),

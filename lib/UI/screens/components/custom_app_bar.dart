@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 /// * [padding] - отступ;
 /// * [centerTitle] - признак центрирования заголовка;
 /// * [leading] - левая кнопка на AppBar;
+/// * [leadingWidth] - ширина пространства для левой кнопки;
 /// * [actions] - кнопки в правой части AppBar.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -17,6 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsetsGeometry? padding;
   final bool centerTitle;
   final Widget? leading;
+  final double? leadingWidth;
   final List<Widget>? actions;
 
   @override
@@ -30,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.padding,
     this.centerTitle = false,
     this.leading,
+    this.leadingWidth,
     this.actions,
   }) : super(key: key);
 
@@ -48,6 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       leading: leading,
+      leadingWidth: leadingWidth,
       actions: actions,
     );
   }
