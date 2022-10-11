@@ -4,10 +4,10 @@ import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/mocks.dart';
+import 'package:places/mocks.dart' as mocked;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
-import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/screens/components/sight_card.dart';
 
 /// Экран списка достопримечательностей.
 class SightListScreen extends StatefulWidget {
@@ -21,6 +21,8 @@ class SightListScreen extends StatefulWidget {
 ///
 /// Обновляет список при добавлении нового места.
 class _SightListScreenState extends State<SightListScreen> {
+  List<Sight> get mocks => mocked.mocks;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,10 @@ class _SightListScreenState extends State<SightListScreen> {
         ),
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
-      body: const _SightListBody(),
+      body: _InheritedSightListScreenState(
+        data: this,
+        child: const _SightListBody(),
+      ),
       floatingActionButton: _AddNewPlaceButton(
         onPressed: () => openAddSightScreen(context),
       ),
@@ -55,8 +60,32 @@ class _SightListScreenState extends State<SightListScreen> {
 
     if (newSight != null) {
       mocks.add(newSight);
+
       setState(() {});
     }
+  }
+}
+
+/// Прокидывает данные [data] вниз по дереву.
+/// Всегда оповещает дочерние виджеты о перерисовке.
+class _InheritedSightListScreenState extends InheritedWidget {
+  final _SightListScreenState data;
+
+  const _InheritedSightListScreenState({
+    Key? key,
+    required Widget child,
+    required this.data,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_InheritedSightListScreenState old) {
+    return true;
+  }
+
+  static _SightListScreenState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedSightListScreenState>() as _InheritedSightListScreenState)
+        .data;
   }
 }
 
@@ -68,6 +97,9 @@ class _SightListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dataStorage = _InheritedSightListScreenState.of(context);
+    final mocks = dataStorage.mocks;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(

@@ -5,7 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/screens/components/sight_card.dart';
 import 'package:places/ui/screens/sight_details.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
 import 'package:places/ui/screens/visiting_screen.dart';
