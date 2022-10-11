@@ -382,7 +382,7 @@ abstract class _BaseCoordinateTextField extends StatelessWidget {
 
   /// Валидирует поля ввода, позволяя вводить только десятичные числа.
   String? coordinatePointValidator(String? value) {
-    final digitsAndDots = RegExp(r'^(?=\D*(?:\d\D*){1,12}$)\d+(?:\.\d{1,4})?$');
+    final digitsAndDots = RegExp(r'^(?=\D*(?:\d\D*){1,10}$)\d+(?:\.\d{1,7})?$');
 
     if (value == null || value.isEmpty || !digitsAndDots.hasMatch(value)) {
       return AppStrings.coordinatesValidationMessage;

@@ -1,7 +1,8 @@
 /// Строковые константы приложения.
 class AppStrings {
   // SightListScreen. Список достопримечательностей.
-  static const sightListAppBarTitle = 'Список\nинтересных мест';
+  static const sightListAppBarTitle = 'Список интересных мест';
+  static const sightListAppBarTitleWithLineBreak = 'Список\nинтересных мест';
 
   // SightDetails. Детальная информация о достопримечательности.
   static const buildRouteText = 'построить маршрут';
@@ -54,6 +55,13 @@ class AppStrings {
   static const create = 'создать';
   static const save = 'сохранить';
   static const coordinatesValidationMessage = 'Введите координаты точки';
+
+  // SightSearchScreen. Экран поиска достопримечательностей.
+  static const search = 'Поиск';
+  static const searchedByYou = 'вы искали';
+  static const clearHistory = 'Очистить историю';
+  static const nothingFound = 'Ничего не найдено.';
+  static const searchAdvice = 'Попробуйте изменить параметры поиска';
 
   // Общие строковые константы.
   static const newPlace = 'новое место';

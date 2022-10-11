@@ -34,12 +34,12 @@ class VisitingScreen extends StatelessWidget {
               const _VisitingTabBar(),
               Expanded(
                 child: TabBarView(children: [
-                  _ToVisitSightList(mocks
+                  _ToVisitSightList(sights
                       .where(
                         (element) => !element.visited,
                       )
                       .toList()),
-                  _VisitedSightList(mocks
+                  _VisitedSightList(sights
                       .where(
                         (element) => element.visited,
                       )

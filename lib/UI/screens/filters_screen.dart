@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/mocks.dart';
+import 'package:places/mocks.dart' as mocked;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
@@ -21,7 +18,7 @@ const maxRangeValue = 10.0;
 const applianceDistanceFilterDelayInMillis = 500;
 
 /// Значение по умолчанию для всех фильтров по категории места.
-const allCategoriesFiltersActivated = false;
+const areAllCategoriesFiltersActivated = true;
 
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
@@ -50,8 +47,19 @@ class _InheritedFiltersScreenState extends InheritedWidget {
 /// Расстояние может быть задано в некотором диапазоне.
 /// Показывает количество мест после фильтрации.
 /// Позволяет очистить все фильтры сразу.
+///
+/// В конструктор могут быть переданы фильтры, которые нужно активировать при отрисовке экрана.
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({Key? key}) : super(key: key);
+  final List<String>? selectedSightTypes;
+  final double? distanceFrom;
+  final double? distanceTo;
+
+  const FiltersScreen({
+    Key? key,
+    this.selectedSightTypes,
+    this.distanceFrom,
+    this.distanceTo,
+  }) : super(key: key);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -67,21 +75,11 @@ class FiltersScreen extends StatefulWidget {
 /// * [distanceFrom] - нижняя граница расстояния до места;
 /// * [distanceTo] - верхняя граница расстояния до места.
 class _FiltersScreenState extends State<FiltersScreen> {
-  // TODO(daniiliv): Координаты пользователя. Потом заменятся реальными координатами.
-  final CoordinatePoint _userCoordinates =
-      CoordinatePoint(lat: 30.304772, lon: 59.909876);
-
-  /// Список категорий на основании перечисления типов мест.
-  List<Map> listOfCategoriesFilters = SightTypes.values
-      .map((sightType) => {
-            'name': sightType.name,
-            'imagePath': sightType.imagePath,
-            'selected': allCategoriesFiltersActivated,
-          })
-      .toList();
+  /// Список категорий на основании перечисления типов мест. Содержит флаг, выбрана ли категория.
+  late List<Map<String, Object>> listOfCategoriesFilters;
   late int numberOfFilteredPlaces;
-  double distanceFrom = minRangeValue;
-  double distanceTo = maxRangeValue;
+  late double distanceFrom;
+  late double distanceTo;
 
   /// Таймер, откладывающий применение фильтров при использовании слайдера.
   Timer? _debounce;
@@ -89,6 +87,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     super.initState();
+    initializeAllFilters();
     setNumberOfFilteredPlaces();
   }
 
@@ -107,6 +106,31 @@ class _FiltersScreenState extends State<FiltersScreen> {
         body: _FiltersBody(),
       ),
     );
+  }
+
+  /// Выполняет инициализацию фильтров.
+  void initializeAllFilters() {
+    // Задать радиус по умолчанию, если он не передан в конструктор.
+    distanceFrom = widget.distanceFrom ?? minRangeValue;
+    distanceTo = widget.distanceTo ?? maxRangeValue;
+
+    listOfCategoriesFilters = SightTypes.values.map((sightType) {
+      var isCurrentSightTypeSelected = areAllCategoriesFiltersActivated;
+
+      // Если заданы выбранные категории, то необходимо их отметить как выбранные.
+      final areSightTypesSelected = widget.selectedSightTypes != null;
+      if (areSightTypesSelected) {
+        isCurrentSightTypeSelected =
+            widget.selectedSightTypes?.contains(sightType.name) as bool;
+      }
+
+      // Возвращаемый элемент мапы. Имя типа места, путь до картинки, признак выбора фильтра.
+      return <String, Object>{
+        'name': sightType.name,
+        'imagePath': sightType.imagePath,
+        'selected': isCurrentSightTypeSelected,
+      };
+    }).toList();
   }
 
   /// Задаёт фильтр по расстоянию до места на основании нижней [valueFrom] и
@@ -138,11 +162,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
     });
   }
 
-  /// Сбрасывает все фильтры до значений по умолчанию.
+  /// Сбрасывает все фильтры.
   void resetAllFilters() {
     setState(() {
       for (final item in listOfCategoriesFilters) {
-        item['selected'] = allCategoriesFiltersActivated;
+        item['selected'] = false;
       }
       distanceFrom = minRangeValue;
       distanceTo = maxRangeValue;
@@ -155,42 +179,28 @@ class _FiltersScreenState extends State<FiltersScreen> {
     numberOfFilteredPlaces = getFilteredByCategoriesAndRadiusPlacesNumber();
   }
 
-  /// Возвращает количество мест после фильтрации по категории и расстоянию.
-  int getFilteredByCategoriesAndRadiusPlacesNumber() {
-    final selectedCategoriesFilters = listOfCategoriesFilters
+  /// Возвращает выбранные категории.
+  List<String> getSelectedCategoriesFilters() {
+    return listOfCategoriesFilters
         .where((categoriesFilter) => categoriesFilter['selected'] as bool)
         .toList()
         .map((categoriesFilter) => categoriesFilter['name'] as String)
         .toList();
+  }
 
-    return mocks
+  /// Возвращает количество мест после фильтрации по категории и расстоянию.
+  int getFilteredByCategoriesAndRadiusPlacesNumber() {
+    final selectedCategoriesFilters = getSelectedCategoriesFilters();
+
+    return mocked.sights
         .where((sight) => selectedCategoriesFilters.contains(sight.type.name))
-        .where((sight) => arePointInsideRadius(
-              sight.coordinatePoint,
-              _userCoordinates,
+        .where((sight) => sight.coordinatePoint.isPointInsideRadius(
+              mocked.userCoordinates,
               distanceFrom,
               distanceTo,
             ))
         .toList()
         .length;
-  }
-
-  /// Возвращает признак, находится ли точка [checkPoint] внутри окружности
-  /// с нижней границей [radiusFrom] и верхней [radiusTo]. Центр окружности [centerPoint].
-  bool arePointInsideRadius(
-    CoordinatePoint checkPoint,
-    CoordinatePoint centerPoint,
-    double radiusFrom,
-    double radiusTo,
-  ) {
-    const ky = 40000 / 360;
-    final kx = cos(pi * centerPoint.lat / 180.0) * ky;
-    final dx = (centerPoint.lon - checkPoint.lon).abs() * kx;
-    final dy = (centerPoint.lat - checkPoint.lat).abs() * ky;
-
-    final calculatedDistance = sqrt(dx * dx + dy * dy);
-
-    return calculatedDistance >= radiusFrom && calculatedDistance <= radiusTo;
   }
 }
 
@@ -231,7 +241,9 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
     final numberOfFilteredPlaces = dataStorage.numberOfFilteredPlaces;
 
     final theme = Theme.of(context);
-    final backgroundColor = theme.colorScheme.background;
+    final colorScheme = theme.colorScheme;
+    final buttonTextColor = colorScheme.background;
+    final buttonBackgroundColor = colorScheme.primary;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -242,16 +254,29 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
       child: CustomElevatedButton(
         '${AppStrings.show} ($numberOfFilteredPlaces)',
         textStyle: theme.textTheme.bodyText2?.copyWith(
-          color: backgroundColor,
+          color: buttonTextColor,
         ),
+        backgroundColor: buttonBackgroundColor,
         height: 48,
-        onPressed: () {
-          if (kDebugMode) {
-            print('"${AppStrings.show}" button pressed.');
-          }
-        },
+        onPressed: () => applyFilters(context),
       ),
     );
+  }
+
+  /// Возвращает выбранные фильтры на предыдущий экран, где они будут применены.
+  void applyFilters(BuildContext context) {
+    final dataStorage = _InheritedFiltersScreenState.of(context);
+    final selectedCategories = dataStorage.getSelectedCategoriesFilters();
+    final distanceFrom = dataStorage.distanceFrom;
+    final distanceTo = dataStorage.distanceTo;
+
+    final selectedFilters = {
+      'categories': selectedCategories,
+      'distanceFrom': distanceFrom,
+      'distanceTo': distanceTo,
+    };
+
+    Navigator.of(context).pop(selectedFilters);
   }
 }
 
@@ -307,9 +332,7 @@ class _BackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        if (kDebugMode) {
-          print('"Back" button pressed.');
-        }
+        Navigator.of(context).pop();
       },
       icon: Padding(
         padding: const EdgeInsets.only(left: 16.0),
