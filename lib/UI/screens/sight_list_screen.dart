@@ -14,6 +14,7 @@ import 'package:places/mocks.dart' as mocked;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screens/components/sight_card.dart';
+import 'package:places/utils/work_with_places_mixin.dart';
 
 /// Экран списка достопримечательностей.
 class SightListScreen extends StatefulWidget {
@@ -27,9 +28,9 @@ class SightListScreen extends StatefulWidget {
 ///
 /// Обновляет список при добавлении нового места.
 /// Хранит в себе значения фильтров.
-class _SightListScreenState extends State<SightListScreen> {
+class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
   late List<Sight> sights;
-  late List<String> categories;
+  late List<Map<String, Object>> sightTypeFilters;
   late double distanceFrom;
   late double distanceTo;
 
@@ -66,11 +67,26 @@ class _SightListScreenState extends State<SightListScreen> {
     distanceTo = maxRangeValue;
 
     // Категории по умолчанию.
-    categories = SightTypes.values.map((sightType) => sightType.name).toList();
+    sightTypeFilters = SightTypes.values.map((sightType) {
+      return <String, Object>{
+        'name': sightType.name,
+        'imagePath': sightType.imagePath,
+        'selected': true,
+      };
+    }).toList();
 
+    final range = {
+      'distanceFrom': distanceFrom,
+      'distanceTo': distanceTo,
+    };
     // Фильтрация мест на основании инициализированных фильтров.
     // TODO(daniiliv): Пока в качестве источника данных - моковые данные.
-    sights = getFilteredSights(mocked.sights, categories, distanceFrom, distanceTo);
+    sights = getFilteredByTypeAndRadiusSights(
+      mocked.sights,
+      sightTypeFilters,
+      mocked.userCoordinates,
+      range,
+    );
   }
 
   /// Открывает экран добавления достопримечательности.
@@ -86,9 +102,20 @@ class _SightListScreenState extends State<SightListScreen> {
 
     if (newSight != null) {
       mocked.sights.add(newSight);
+
+      final range = {
+        'distanceFrom': distanceFrom,
+        'distanceTo': distanceTo,
+      };
+
       // Обновить новый список мест в сооветствии с фильтрами.
       // TODO(daniiliv): В качестве источника фильтрации используем моковые данные.
-      sights = getFilteredSights(mocked.sights, categories, distanceFrom, distanceTo);
+      sights = getFilteredByTypeAndRadiusSights(
+        mocked.sights,
+        sightTypeFilters,
+        mocked.userCoordinates,
+        range,
+      );
 
       setState(() {});
     }
@@ -96,47 +123,39 @@ class _SightListScreenState extends State<SightListScreen> {
 
   /// Применяет переданные фильтры к списку мест.
   void applyFilters(
-    List<String> selectedCategories,
+    List<Map<String, Object>> selectedSightTypes,
     double distanceFrom,
     double distanceTo,
   ) {
+    final range = {
+      'distanceFrom': distanceFrom,
+      'distanceTo': distanceTo,
+    };
     // TODO(daniiliv): В качестве списка, к которому применяются фильтры, пока что устанавливаем моковые данные.
-    sights = getFilteredSights(mocked.sights, selectedCategories, distanceFrom, distanceTo);
+    sights = getFilteredByTypeAndRadiusSights(
+      mocked.sights,
+      selectedSightTypes,
+      mocked.userCoordinates,
+      range,
+    );
 
     setState(() {});
   }
 
-  /// Возвращает отфильтрованный список мест.
-  List<Sight> getFilteredSights(
-    List<Sight> sights,
-    List<String> selectedCategories,
-    double distanceFrom,
-    double distanceTo,
-  ) {
-    return sights
-        .where((sight) => selectedCategories.contains(sight.type.name))
-        .where((sight) => sight.coordinatePoint.isPointInsideRadius(
-              mocked.userCoordinates,
-              distanceFrom,
-              distanceTo,
-            ))
-        .toList();
-  }
-
   /// Сохраняет переданные фильтры в виджете-состоянии.
   void saveFilters(
-    List<String> selectedCategories,
+    List<Map<String, Object>> sightTypeFilters,
     double distanceFrom,
     double distanceTo,
   ) {
-    categories = selectedCategories;
+    this.sightTypeFilters = sightTypeFilters;
     this.distanceFrom = distanceFrom;
     this.distanceTo = distanceTo;
   }
 }
 
 /// Прокидывает данные [data] вниз по дереву.
-/// Всегда оповещает дочерние виджеты о перерисовке.
+/// Оповещает дочерние виджеты о перерисовке при изменении списка достопримечательностей.
 class _InheritedSightListScreenState extends InheritedWidget {
   final _SightListScreenState data;
 
@@ -197,10 +216,16 @@ class _SightListBody extends StatelessWidget {
 
   /// Открывает экран поиска достопримечательностей.
   void navigateToSightSearchScreen(BuildContext context) {
+    final dataStorage = _InheritedSightListScreenState.of(context);
+
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => const SightSearchScreen(),
+        builder: (context) => SightSearchScreen(
+          sightTypeFilters: dataStorage.sightTypeFilters,
+          distanceFrom: dataStorage.distanceFrom,
+          distanceTo: dataStorage.distanceTo,
+        ),
       ),
     );
   }
@@ -237,7 +262,7 @@ class _FilterButton extends StatelessWidget {
       context,
       MaterialPageRoute<Map<String, Object>>(
         builder: (context) => FiltersScreen(
-          selectedSightTypes: dataStorage.categories,
+          sightTypeFilters: dataStorage.sightTypeFilters,
           distanceFrom: dataStorage.distanceFrom,
           distanceTo: dataStorage.distanceTo,
         ),
@@ -245,13 +270,14 @@ class _FilterButton extends StatelessWidget {
     );
 
     if (selectedFilters != null) {
-      final categories = selectedFilters['categories'] as List<String>;
+      final sightTypeFilters =
+          selectedFilters['sightTypeFilters'] as List<Map<String, Object>>;
       final distanceFrom = selectedFilters['distanceFrom'] as double;
       final distanceTo = selectedFilters['distanceTo'] as double;
 
       dataStorage
-        ..saveFilters(categories, distanceFrom, distanceTo)
-        ..applyFilters(categories, distanceFrom, distanceTo);
+        ..saveFilters(sightTypeFilters, distanceFrom, distanceTo)
+        ..applyFilters(sightTypeFilters, distanceFrom, distanceTo);
     }
   }
 }

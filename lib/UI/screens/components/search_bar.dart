@@ -3,17 +3,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 
-// TODO(daniiliv): doka
+/// Поисковая строка.
 class SearchBar extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final Widget? suffixIcon;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
 
   const SearchBar({
     Key? key,
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
+    this.focusNode,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -54,6 +58,8 @@ class SearchBar extends StatelessWidget {
           ),
         ),
         textAlignVertical: TextAlignVertical.center,
+        focusNode: focusNode,
+        controller: controller,
       ),
     );
   }

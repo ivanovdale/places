@@ -16,10 +16,10 @@ import 'package:places/ui/screens/components/loading_indicator.dart';
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
 /// Обязательный параметр конструктора: [sight] - модель достопримечательности.
-class SightDetails extends StatelessWidget {
+class SightDetailsScreen extends StatelessWidget {
   final Sight sight;
 
-  const SightDetails(this.sight, {Key? key}) : super(key: key);
+  const SightDetailsScreen(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +50,16 @@ class _SightDetailsTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Картинка по умолчанию.
+    const defaultImageUrl =
+        'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
+
     return Stack(
       fit: StackFit.expand,
       children: [
         // TODO(daniiliv): Здесь будет картинка места.
         Image.network(
-          sight.url ?? '',
+          sight.url ?? defaultImageUrl,
           fit: BoxFit.cover,
           loadingBuilder: LoadingIndicator.imageLoadingBuilder,
         ),
@@ -83,28 +87,30 @@ class _SightDetailsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _SightInfo(sight),
-        const Padding(
-          padding: EdgeInsets.only(
-            top: 24.0,
-            left: 16.0,
-            right: 16.0,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _SightInfo(sight),
+          const Padding(
+            padding: EdgeInsets.only(
+              top: 24.0,
+              left: 16.0,
+              right: 16.0,
+            ),
+            child: _BuildRouteButton(),
           ),
-          child: _BuildRouteButton(),
-        ),
-        const CustomDivider(
-          padding: EdgeInsets.only(
-            top: 24,
-            left: 16,
-            right: 16,
-            bottom: 8,
+          const CustomDivider(
+            padding: EdgeInsets.only(
+              top: 24,
+              left: 16,
+              right: 16,
+              bottom: 8,
+            ),
+            thickness: 0.8,
           ),
-          thickness: 0.8,
-        ),
-        const _SightActionsButtons(),
-      ],
+          const _SightActionsButtons(),
+        ],
+      ),
     );
   }
 }
@@ -129,6 +135,7 @@ class _SightInfo extends StatelessWidget {
     final primaryColor = theme.primaryColor;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -323,9 +330,7 @@ class _BackButton extends StatelessWidget {
       child: ElevatedButton(
         // TODO(daniiliv): Здесь будет вызов реальной функции.
         onPressed: () {
-          if (kDebugMode) {
-            print('"Back" button pressed.');
-          }
+          Navigator.pop(context);
         },
         style: TextButton.styleFrom(
           backgroundColor: theme.scaffoldBackgroundColor,

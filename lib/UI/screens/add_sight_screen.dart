@@ -4,7 +4,8 @@ import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/UI/screens/sight_category_selection_screen.dart';
+import 'package:places/UI/screens/components/label_field_text.dart';
+import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -103,15 +104,15 @@ class _AddSightBodyState extends State<_AddSightBody> {
     );
 
     return SingleChildScrollView(
-      child: _InheritedAddSightBodyState(
-        data: this,
-        child: Form(
-          key: _formKey,
+      child: Form(
+        key: _formKey,
+        child: _InheritedAddSightBodyState(
+          data: this,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              _CategoryLabel(),
-              _CategorySelectionField(),
+              _SightTypeLabel(),
+              _SightTypeSelectionField(),
               _PaddedDivider(),
               _NameLabel(padding: defaultLabelPadding),
               _NameTextField(),
@@ -169,13 +170,13 @@ class _AddSightBodyState extends State<_AddSightBody> {
 }
 
 /// Заголовок поля "Категория".
-class _CategoryLabel extends StatelessWidget {
-  const _CategoryLabel({Key? key}) : super(key: key);
+class _SightTypeLabel extends StatelessWidget {
+  const _SightTypeLabel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const _LabelFieldText(
-      AppStrings.category,
+    return const LabelFieldText(
+      AppStrings.sightType,
       padding: EdgeInsets.only(
         left: 16.0,
         top: 24.0,
@@ -195,7 +196,7 @@ class _NameLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _LabelFieldText(
+    return LabelFieldText(
       AppStrings.name,
       padding: padding,
     );
@@ -213,7 +214,7 @@ class _DescriptionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _LabelFieldText(
+    return LabelFieldText(
       AppStrings.description,
       padding: padding,
     );
@@ -230,7 +231,7 @@ class _LatitudeLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     const padding = EdgeInsets.only(left: 16.0, top: 24, bottom: 12);
 
-    return const _LabelFieldText(
+    return const LabelFieldText(
       AppStrings.latitude,
       padding: padding,
     );
@@ -247,38 +248,9 @@ class _LongitudeLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     const padding = EdgeInsets.only(left: 8.0, top: 24, bottom: 12);
 
-    return const _LabelFieldText(
+    return const LabelFieldText(
       AppStrings.longitude,
       padding: padding,
-    );
-  }
-}
-
-/// Произвольный заголовок для поля ввода.
-///
-/// Нужно задать [labelText] - имя заголовка и при необходимости [padding] - отступ для заголовка.
-class _LabelFieldText extends StatelessWidget {
-  final String labelText;
-  final EdgeInsets? padding;
-
-  const _LabelFieldText(
-    this.labelText, {
-    Key? key,
-    this.padding,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: Text(
-        labelText,
-        style: theme.textTheme.caption?.copyWith(
-          color: theme.colorScheme.secondary.withOpacity(0.56),
-        ),
-      ),
     );
   }
 }
@@ -590,8 +562,8 @@ class _CustomTextFormField extends StatelessWidget {
 }
 
 /// Поле выбора категории достопримечательности.
-class _CategorySelectionField extends StatelessWidget {
-  const _CategorySelectionField({Key? key}) : super(key: key);
+class _SightTypeSelectionField extends StatelessWidget {
+  const _SightTypeSelectionField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -618,7 +590,7 @@ class _CategorySelectionField extends StatelessWidget {
               style: selectionFieldTextStyle,
             ),
             const Spacer(),
-            const _CategorySelectionButton(),
+            const _SightTypeSelectionButton(),
           ],
         ),
       ),
@@ -632,7 +604,7 @@ class _CategorySelectionField extends StatelessWidget {
     final selectedSightType = await Navigator.push(
       context,
       MaterialPageRoute<SightTypes>(
-        builder: (context) => const SightCategorySelectionScreen(),
+        builder: (context) => const SightTypeSelectionScreen(),
       ),
     );
 
@@ -666,8 +638,8 @@ class _CancelButton extends StatelessWidget {
 }
 
 /// Кнопка для выбора категории достопримечательности.
-class _CategorySelectionButton extends StatelessWidget {
-  const _CategorySelectionButton({Key? key}) : super(key: key);
+class _SightTypeSelectionButton extends StatelessWidget {
+  const _SightTypeSelectionButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -708,6 +680,9 @@ class _MarkOnMapButton extends StatelessWidget {
 class _CreateButton extends StatelessWidget {
   /// Тип достопримечательности по умолчанию.
   SightTypes get _defaultSightType => SightTypes.particularPlace;
+
+  /// Режим работы места по умолчанию.
+  String get _defaultWorkTimeFrom => '9:00';
 
   const _CreateButton({Key? key}) : super(key: key);
 
@@ -752,6 +727,7 @@ class _CreateButton extends StatelessWidget {
         ),
         type: dataStorage.selectedSightType ?? _defaultSightType,
         details: dataStorage._descriptionController.text,
+        workTimeFrom: _defaultWorkTimeFrom,
       );
       Navigator.of(context).pop(newSight);
     }

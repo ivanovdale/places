@@ -8,68 +8,68 @@ import 'package:places/helpers/app_strings.dart';
 import 'package:places/utils/string_extension.dart';
 
 /// Экран выбора категории достопримечательности.
-class SightCategorySelectionScreen extends StatelessWidget {
-  const SightCategorySelectionScreen({Key? key}) : super(key: key);
+class SightTypeSelectionScreen extends StatelessWidget {
+  const SightTypeSelectionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: AppStrings.category.capitalize(),
+        title: AppStrings.sightType.capitalize(),
         titleTextStyle: Theme.of(context).textTheme.subtitle1,
         centerTitle: true,
         toolbarHeight: 56,
         leading: const _BackButton(),
       ),
-      body: const _SightCategorySelectionBody(),
+      body: const _SightTypeSelectionBody(),
     );
   }
 }
 
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedSightCategorySelectionBodyStateState extends InheritedWidget {
-  final _SightCategorySelectionBodyState data;
+class _InheritedSightTypeSelectionBodyState extends InheritedWidget {
+  final _SightTypeSelectionBodyState data;
 
-  const _InheritedSightCategorySelectionBodyStateState({
+  const _InheritedSightTypeSelectionBodyState({
     Key? key,
     required Widget child,
     required this.data,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSightCategorySelectionBodyStateState old) {
+  bool updateShouldNotify(_InheritedSightTypeSelectionBodyState old) {
     return true;
   }
 
-  static _SightCategorySelectionBodyState of(BuildContext context) {
+  static _SightTypeSelectionBodyState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-                _InheritedSightCategorySelectionBodyStateState>()
-            as _InheritedSightCategorySelectionBodyStateState)
+                _InheritedSightTypeSelectionBodyState>()
+            as _InheritedSightTypeSelectionBodyState)
         .data;
   }
 }
 
 /// Выбор категории достопримечательности.
-class _SightCategorySelectionBody extends StatefulWidget {
-  const _SightCategorySelectionBody({Key? key}) : super(key: key);
+class _SightTypeSelectionBody extends StatefulWidget {
+  const _SightTypeSelectionBody({Key? key}) : super(key: key);
 
   @override
-  State<_SightCategorySelectionBody> createState() =>
-      _SightCategorySelectionBodyState();
+  State<_SightTypeSelectionBody> createState() =>
+      _SightTypeSelectionBodyState();
 }
 
 /// Состояние выбора категории достопримечательности. Хранит текущую выбранную категорию.
-class _SightCategorySelectionBodyState
-    extends State<_SightCategorySelectionBody> {
+class _SightTypeSelectionBodyState
+    extends State<_SightTypeSelectionBody> {
   SightTypes? currentSightType;
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedSightCategorySelectionBodyStateState(
+    return _InheritedSightTypeSelectionBodyState(
       data: this,
-      child: const _CategoriesList(),
+      child: const _SightTypesList(),
     );
   }
 
@@ -82,8 +82,8 @@ class _SightCategorySelectionBodyState
 }
 
 /// Список категорий достопримечательности.
-class _CategoriesList extends StatelessWidget {
-  const _CategoriesList({
+class _SightTypesList extends StatelessWidget {
+  const _SightTypesList({
     Key? key,
   }) : super(key: key);
 
@@ -121,7 +121,7 @@ class _SightTypeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage =
-        _InheritedSightCategorySelectionBodyStateState.of(context);
+        _InheritedSightTypeSelectionBodyState.of(context);
     final currentSightType = dataStorage.currentSightType;
     final theme = Theme.of(context);
     final itemName = item.name;
@@ -176,7 +176,7 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage =
-        _InheritedSightCategorySelectionBodyStateState.of(context);
+        _InheritedSightTypeSelectionBodyState.of(context);
     final currentSightType = dataStorage.currentSightType;
 
     // Логика изменения цвета кнопки в зависимости от выбранной категории.

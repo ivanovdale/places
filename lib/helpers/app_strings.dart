@@ -32,7 +32,7 @@ class AppStrings {
 
   // FiltersScreen. Экран фильтров интересных мест.
   static const clear = 'Очистить';
-  static const categories = 'категории';
+  static const sightTypes = 'категории';
   static const distance = 'Расстояние';
   static const show = 'показать';
 
@@ -41,10 +41,10 @@ class AppStrings {
   static const darkTheme = 'Тёмная тема';
   static const watchTutorial = 'Смотреть туториал';
 
-  // AddSightScreen, SightCategorySelectionScreen.
+  // AddSightScreen, SightTypeSelectionScreen.
   // Экран добавления достопримечательности. Экран выбора категории достопримечательности.
   static const cancel = 'Отмена';
-  static const category = 'категория';
+  static const sightType = 'категория';
   static const unselected = 'Не выбрано';
   static const name = 'название';
   static const latitude = 'широта';
@@ -61,7 +61,7 @@ class AppStrings {
   static const searchedByYou = 'вы искали';
   static const clearHistory = 'Очистить историю';
   static const nothingFound = 'Ничего не найдено.';
-  static const searchAdvice = 'Попробуйте изменить параметры поиска';
+  static const searchAdvice = 'Попробуйте изменить параметры\nпоиска';
 
   // Общие строковые константы.
   static const newPlace = 'новое место';
