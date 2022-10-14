@@ -38,7 +38,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const SightListScreen(),
+      home: const VisitingScreen(),
     );
   }
 }
