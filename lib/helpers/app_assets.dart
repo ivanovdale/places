@@ -24,4 +24,8 @@ class AppAssets {
   static const hotel = 'assets/icons/hotel.svg';
   static const restaurant = 'assets/icons/restaurant.svg';
   static const particularPlace = 'assets/icons/particular_place.svg';
+
+  // Иконки для поля поиска достопримечательности - SightBar.
+  static const search = 'assets/icons/search.svg';
+  static const filter = 'assets/icons/filter.svg';
 }

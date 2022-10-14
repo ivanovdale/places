@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 /// * [height] - высота;
 /// * [buttonLabel] - виджет-лейбл кнопки;
 /// * [textStyle] - стиль текста кнопки;
-/// * [onPressed] - коллбэк после нажатия кнопки.
+/// * [onPressed] - коллбэк после нажатия кнопки;
+/// * [BorderRadiusGeometry] - скругление кнопки.
+/// * [gradient] - градиент цвета кнопки.
 class CustomElevatedButton extends StatelessWidget {
   final String text;
   final Color? backgroundColor;
@@ -19,6 +21,8 @@ class CustomElevatedButton extends StatelessWidget {
   final Widget? buttonLabel;
   final TextStyle? textStyle;
   final VoidCallback? onPressed;
+  final BorderRadiusGeometry? borderRadius;
+  final Gradient? gradient;
 
   const CustomElevatedButton(
     this.text, {
@@ -29,11 +33,17 @@ class CustomElevatedButton extends StatelessWidget {
     this.buttonLabel,
     this.textStyle,
     this.onPressed,
+    this.borderRadius,
+    this.gradient,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: borderRadius ?? BorderRadius.circular(12),
+      ),
       height: height,
       width: width,
       child: ElevatedButton(
@@ -45,11 +55,11 @@ class CustomElevatedButton extends StatelessWidget {
               }
             },
         style: TextButton.styleFrom(
-          backgroundColor: backgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          backgroundColor: backgroundColor ?? Colors.transparent,
           elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: borderRadius ?? BorderRadius.circular(12),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

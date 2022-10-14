@@ -1,7 +1,7 @@
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
 
-final List<Sight> mocks = [
+final List<Sight> sights = [
   Sight(
     name: 'Кофейня Sibaristica',
     coordinatePoint: CoordinatePoint(
@@ -104,3 +104,7 @@ final List<Sight> mocks = [
     visitDate: '7 сент. 2022',
   ),
 ];
+
+// Координаты пользователя.
+final CoordinatePoint userCoordinates =
+    CoordinatePoint(lat: 30.304772, lon: 59.909876);

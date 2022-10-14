@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
-/// Разделитель с возможностью задать его отступ [padding] и толщину [thickness].
+/// Разделитель с возможностью задать его отступ [padding],
+/// толщину [thickness], цвет [color], высоту [height].
 class CustomDivider extends StatelessWidget {
   final EdgeInsets? padding;
   final double? thickness;
+  final Color? color;
+  final double? height;
 
   const CustomDivider({
     Key? key,
     this.padding,
-    required this.thickness,
+    this.thickness,
+    this.color,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -17,6 +22,8 @@ class CustomDivider extends StatelessWidget {
       padding: padding ?? EdgeInsets.zero,
       child: Divider(
         thickness: thickness ?? 1.0,
+        color: color,
+        height: height,
       ),
     );
   }
