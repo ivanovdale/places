@@ -9,7 +9,7 @@ import 'package:places/helpers/app_strings.dart';
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
 /// Имеет поля, которые необходимо переопределить в потомках:
-/// * [actionsAssets] - список действий с карточкой.
+/// * [actions] - список действий с карточкой. Список мап, содержащих картинку и коллбэк.
 /// * [showDetails] - признак отображения детальной информации (краткого описания) места.
 ///
 /// Параметры:
@@ -17,7 +17,7 @@ import 'package:places/helpers/app_strings.dart';
 abstract class BaseSightCard extends StatelessWidget {
   final Sight sight;
   abstract final bool showDetails;
-  abstract final List<String> actionsAssets;
+  abstract final List<Map<String, Object?>> actions;
 
   const BaseSightCard(
     this.sight, {
@@ -46,7 +46,7 @@ abstract class BaseSightCard extends StatelessWidget {
                 Expanded(
                   child: _SightCardTop(
                     sight,
-                    actionsAssets,
+                    actions,
                   ),
                 ),
                 Expanded(
@@ -66,7 +66,7 @@ abstract class BaseSightCard extends StatelessWidget {
 
 /// Виджет карточки достопримечательности. Наследуется от [BaseSightCard].
 ///
-/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 1 элемент - кнопка добавления в избранное.
+/// Переопределяет поле [actions] - в списке кнопок карточки 1 элемент - кнопка добавления в избранное.
 /// Также переопределяет поле [showDetails] - для отображения детальной информации о достопримечательности.
 ///
 /// Отображает краткую информацию о месте.
@@ -75,7 +75,11 @@ abstract class BaseSightCard extends StatelessWidget {
 /// * [sight] - модель достопримечательности (обязательный);
 class SightCard extends BaseSightCard {
   @override
-  final List<String> actionsAssets = [AppAssets.heart];
+  final List<Map<String, Object?>> actions = [
+    {
+      'icon': AppAssets.heart,
+    },
+  ];
 
   @override
   bool get showDetails => true;
@@ -91,55 +95,81 @@ class SightCard extends BaseSightCard {
 
 /// Виджет карточки достопримечательности, которую планируется посетить. Наследуется от [BaseSightCard].
 ///
-/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
 /// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
 ///
 /// Имеет параметры:
 /// * [sight] - модель достопримечательности (обязательный);
 class ToVisitSightCard extends BaseSightCard {
+  final VoidCallback? onCalendarPressed;
+  final VoidCallback? onDeletePressed;
+
   @override
-  final List<String> actionsAssets = [
-    AppAssets.calendar,
-    AppAssets.close,
-  ];
+  late final List<Map<String, Object?>> actions;
 
   @override
   bool get showDetails => false;
 
   ToVisitSightCard(
     Sight sight, {
+    this.onCalendarPressed,
+    this.onDeletePressed,
     Key? key,
   }) : super(
           sight,
           key: key,
-        );
+        ) {
+    actions = [
+      {
+        'icon': AppAssets.calendar,
+        'voidCallback': onCalendarPressed,
+      },
+      {
+        'icon': AppAssets.close,
+        'voidCallback': onDeletePressed,
+      },
+    ];
+  }
 }
 
 /// Виджет карточки посещённой достопримечательности. Наследуется от [BaseSightCard].
 ///
-/// Переопределяет поле [actionsAssets] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
 ///
 /// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
 /// * [sight] - модель достопримечательности (обязательный);
 class VisitedSightCard extends BaseSightCard {
+  final VoidCallback? onSharePressed;
+  final VoidCallback? onDeletePressed;
+
   @override
-  final List<String> actionsAssets = [
-    AppAssets.share,
-    AppAssets.close,
-  ];
+  late final List<Map<String, Object?>> actions;
 
   @override
   bool get showDetails => false;
 
   VisitedSightCard(
     Sight sight, {
+    this.onSharePressed,
+    this.onDeletePressed,
     Key? key,
   }) : super(
           sight,
           key: key,
-        );
+        ) {
+    actions = [
+      {
+        'icon': AppAssets.share,
+        'voidCallback': onSharePressed,
+      },
+      {
+        'icon': AppAssets.close,
+        'voidCallback': onDeletePressed,
+      },
+    ];
+  }
 }
 
 /// Виджет верхняя часть карточки достопримечательности.
@@ -148,14 +178,14 @@ class VisitedSightCard extends BaseSightCard {
 ///
 /// Имеет параметры:
 /// * [sight] - модель достопримечательности;
-/// * [actionsAssets] - список действий с карточкой.
+/// * [actions] - список действий с карточкой.
 class _SightCardTop extends StatelessWidget {
   final Sight sight;
-  final List<String> actionsAssets;
+  final List<Map<String, Object?>> actions;
 
   const _SightCardTop(
     this.sight,
-    this.actionsAssets, {
+    this.actions, {
     Key? key,
   }) : super(key: key);
 
@@ -163,8 +193,10 @@ class _SightCardTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final onSecondaryColor = theme.colorScheme.onSecondary;
+
     /// Картинка по умолчанию.
-    const defaultImageUrl = 'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
+    const defaultImageUrl =
+        'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -202,7 +234,7 @@ class _SightCardTop extends StatelessWidget {
                   top: 19,
                 ),
                 // Действия с карточкой.
-                child: _SightActions(actionsAssets),
+                child: _SightActions(actions),
               ),
             ],
           ),
@@ -215,33 +247,34 @@ class _SightCardTop extends StatelessWidget {
 /// Список кнопок для работы с карточкой.
 ///
 /// Параметр:
-/// * [actionsAssets] - список действий с карточкой.
+/// * [actions] - список действий с карточкой.
 class _SightActions extends StatelessWidget {
-  final List<String> actionsAssets;
+  final List<Map<String, Object?>> actions;
 
   const _SightActions(
-    this.actionsAssets, {
+    this.actions, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: actionsAssets.map((asset) {
+      children: actions.map((action) {
         return Padding(
           padding: const EdgeInsets.only(
             left: 18.0,
           ),
           child: InkWell(
-            child: SvgPicture.asset(asset),
-            onTap: () {
-              // TODO(daniiliv): Здесь будет реальный вызов.
-              if (kDebugMode) {
-                print(
-                  '"${asset.split('/')[2].replaceAll('.svg', '')}" button pressed.',
-                );
-              }
-            },
+            child: SvgPicture.asset(action['icon'] as String),
+            onTap: (action['voidCallback'] as VoidCallback?) ??
+                () {
+                  // TODO(daniiliv): Здесь будет реальный вызов.
+                  if (kDebugMode) {
+                    print(
+                      '"${(action['icon'] as String).split('/')[2].replaceAll('.svg', '')}" button pressed.',
+                    );
+                  }
+                },
           ),
         );
       }).toList(),
@@ -378,9 +411,8 @@ class _SightVisitingInfo extends StatelessWidget {
                 : '${AppStrings.planToVisit} ${sight.visitDate}',
             maxLines: 2,
             style: themeBodyText2?.copyWith(
-              color: sight.visited
-                  ? colorScheme.secondary
-                  : colorScheme.primary,
+              color:
+                  sight.visited ? colorScheme.secondary : colorScheme.primary,
             ),
           ),
           const Spacer(),

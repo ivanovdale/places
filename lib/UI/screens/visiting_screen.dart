@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/components/sight_card.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/mocks.dart';
+import 'package:places/mocks.dart' as mocked;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
-import 'package:places/ui/screens/components/sight_card.dart';
 
 /// Виджет для отображения списка посещенных/планируемых к посещению мест.
 ///
 /// Имеет TabBar для переключения между списками.
-class VisitingScreen extends StatelessWidget {
+class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<VisitingScreen> createState() => _VisitingScreenState();
+}
+
+/// Состояние экрана списка посещенных/планируемых к посещению мест.
+///
+/// Хранит список посещённых/планируемых к посещению мест.
+class _VisitingScreenState extends State<VisitingScreen> {
+  late final List<Sight> toVisitSights;
+  late final List<Sight> visitedSights;
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +44,72 @@ class VisitingScreen extends StatelessWidget {
             children: [
               const _VisitingTabBar(),
               Expanded(
-                child: TabBarView(children: [
-                  _ToVisitSightList(sights
-                      .where(
-                        (element) => !element.visited,
-                      )
-                      .toList()),
-                  _VisitedSightList(sights
-                      .where(
-                        (element) => element.visited,
-                      )
-                      .toList()),
-                ]),
+                child: _InheritedVisitingScreenState(
+                  data: this,
+                  child: TabBarView(children: [
+                    _ToVisitSightList(toVisitSights),
+                    _VisitedSightList(visitedSights),
+                  ]),
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    toVisitSights = mocked.sights
+        .where(
+          (element) => !element.visited,
+        )
+        .toList();
+
+    visitedSights = mocked.sights
+        .where(
+          (element) => element.visited,
+        )
+        .toList();
+  }
+
+  /// Удаляет достопримечательность из списка планируемых к посещению.
+  void deleteSightFromToVisitList(Sight sight) {
+    setState(() {
+      toVisitSights.remove(sight);
+    });
+  }
+
+  /// Удаляет достопримечательность из списка посещенных.
+  void deleteSightFromVisitedList(Sight sight) {
+    setState(() {
+      visitedSights.remove(sight);
+    });
+  }
+}
+
+/// Прокидывает данные [data] вниз по дереву.
+/// Всегда оповещает дочерние виджеты о перерисовке.
+class _InheritedVisitingScreenState extends InheritedWidget {
+  final _VisitingScreenState data;
+
+  const _InheritedVisitingScreenState({
+    Key? key,
+    required Widget child,
+    required this.data,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_InheritedVisitingScreenState old) {
+    return true;
+  }
+
+  static _VisitingScreenState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedVisitingScreenState>() as _InheritedVisitingScreenState)
+        .data;
   }
 }
 
@@ -103,7 +162,7 @@ class _VisitingTabBar extends StatelessWidget {
 /// * [listOfSights] - список достопримечательностей.
 abstract class _BaseVisitingSightList extends StatelessWidget {
   abstract final _BaseEmptyVisitingList emptyVisitingList;
-  abstract final List<BaseSightCard> listOfSightCards;
+  abstract final List<Widget> listOfSightCards;
 
   final List<Sight> listOfSights;
 
@@ -122,6 +181,9 @@ abstract class _BaseVisitingSightList extends StatelessWidget {
             ),
           );
   }
+
+  /// Удаляет достопримечательность из списка.
+  void deleteSightFromList(Sight sight, BuildContext context);
 }
 
 /// Список планируемых к посещению мест. Наследуется от [_BaseVisitingSightList].
@@ -139,14 +201,26 @@ class _ToVisitSightList extends _BaseVisitingSightList {
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  late final List<ToVisitSightCard> listOfSightCards;
+  late final List<Widget> listOfSightCards;
 
   _ToVisitSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyToVisitSightList();
-    listOfSightCards = listOfSights.map(ToVisitSightCard.new).toList();
+    listOfSightCards = listOfSights.map((sight) {
+      return Builder(builder: (context) {
+        return ToVisitSightCard(
+          sight,
+          onDeletePressed: () => deleteSightFromList(sight, context),
+        );
+      });
+    }).toList();
+  }
+
+  @override
+  void deleteSightFromList(Sight sight, BuildContext context) {
+    _InheritedVisitingScreenState.of(context).deleteSightFromToVisitList(sight);
   }
 }
 
@@ -165,14 +239,26 @@ class _VisitedSightList extends _BaseVisitingSightList {
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  late final List<VisitedSightCard> listOfSightCards;
+  late final List<Widget> listOfSightCards;
 
   _VisitedSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyVisitedSightList();
-    listOfSightCards = listOfSights.map(VisitedSightCard.new).toList();
+    listOfSightCards = listOfSights.map((sight) {
+      return Builder(builder: (context) {
+        return VisitedSightCard(
+          sight,
+          onDeletePressed: () => deleteSightFromList(sight, context),
+        );
+      });
+    }).toList();
+  }
+
+  @override
+  void deleteSightFromList(Sight sight, BuildContext context) {
+    _InheritedVisitingScreenState.of(context).deleteSightFromVisitedList(sight);
   }
 }
 
