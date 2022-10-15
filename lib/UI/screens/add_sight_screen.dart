@@ -688,11 +688,16 @@ class _NewPhotoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 16.0),
-      child: RoundedCachedNetworkImage(
-        url: photoUrl,
-        canDelete: true,
-        size: 72,
-        onDelete: () => deletePhotoFromList(context),
+      child: Dismissible(
+        key: ObjectKey(this),
+        direction: DismissDirection.up,
+        onDismissed: (direction) => deletePhotoFromList(context),
+        child: RoundedCachedNetworkImage(
+          url: photoUrl,
+          canDelete: true,
+          size: 72,
+          onDelete: () => deletePhotoFromList(context),
+        ),
       ),
     );
   }
