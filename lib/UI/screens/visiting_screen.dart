@@ -62,6 +62,8 @@ class _VisitingScreenState extends State<VisitingScreen> {
   @override
   void initState() {
     super.initState();
+
+    // TODO(daniiliv): Инициализация мест из моковых данных.
     toVisitSights = mocked.sights
         .where(
           (element) => !element.visited,
@@ -86,6 +88,26 @@ class _VisitingScreenState extends State<VisitingScreen> {
   void deleteSightFromVisitedList(Sight sight) {
     setState(() {
       visitedSights.remove(sight);
+    });
+  }
+
+  /// Вставляет нужную карточку места  по заданному индексу.
+  void insertIntoToVisitSightList(int destinationIndex, int sightIndex) {
+    setState(() {
+      final sight = toVisitSights[sightIndex];
+      toVisitSights
+        ..removeAt(sightIndex)
+        ..insert(destinationIndex, sight);
+    });
+  }
+
+  /// Вставляет нужную карточку места по заданному индексу.
+  void insertIntoVisitedSightList(int destinationIndex, int sightIndex) {
+    setState(() {
+      final sight = visitedSights[sightIndex];
+      visitedSights
+        ..removeAt(sightIndex)
+        ..insert(destinationIndex, sight);
     });
   }
 }
@@ -155,16 +177,15 @@ class _VisitingTabBar extends StatelessWidget {
 /// Если список пуст, будет отображена соответствующая информация ([_BaseEmptyVisitingList]).
 ///
 /// Имеет поля, которые необходимо переопределить в потомках:
-/// * [listOfSightCards] - список достопримечательностей (посещенных/планируемых к посещению);
 /// * [emptyVisitingList] - виджет для отображения пустого списка.
+/// * [sightCardType] - тип карточки достопримечательности.
 ///
 /// Имеет параметры
 /// * [listOfSights] - список достопримечательностей.
-abstract class _BaseVisitingSightList extends StatelessWidget {
-  abstract final _BaseEmptyVisitingList emptyVisitingList;
-  abstract final List<Widget> listOfSightCards;
-
+abstract class _BaseVisitingSightList extends StatefulWidget {
   final List<Sight> listOfSights;
+  abstract final _BaseEmptyVisitingList emptyVisitingList;
+  abstract final Type sightCardType;
 
   const _BaseVisitingSightList(
     this.listOfSights, {
@@ -172,18 +193,211 @@ abstract class _BaseVisitingSightList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_BaseVisitingSightList> createState() => _BaseVisitingSightListState();
+
+  /// Удаляет достопримечательность из списка.
+  void deleteSightFromList(Sight sight, BuildContext context);
+
+  /// Вставляет нужную карточку места по заданному индексу.
+  void insertIntoSightList(
+    int destinationIndex,
+    int sightIndex,
+    BuildContext context,
+  );
+}
+
+/// Состояние списка мест.
+///
+/// Содержит в себе скроллконтроллер для прокрутки списка в момент перетаскивания места.
+class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
+  final ScrollController _scrollController = ScrollController();
+  bool isDragged = false;
+
+  @override
   Widget build(BuildContext context) {
-    return listOfSights.isEmpty
-        ? emptyVisitingList
+    return widget.listOfSights.isEmpty
+        ? widget.emptyVisitingList
         : SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
-              children: listOfSightCards,
+              children: [
+                for (var index = 0; index < widget.listOfSights.length; index++)
+                  Builder(builder: (context) {
+                    final sightCard =
+                        getSightCard(widget.listOfSights[index], context);
+
+                    return DragTarget<int>(
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        widget.insertIntoSightList(index, data, context);
+                      },
+                      builder: (
+                        context,
+                        candidateData,
+                        rejectedData,
+                      ) {
+                        return Listener(
+                          // Возможность скроллинга в момент перетаскивания карточки.
+                          onPointerMove: isDragged
+                              ? scrollSightCardsWhenCardDragged
+                              : null,
+                          child: _DraggableSightCard(
+                            sightCard: sightCard,
+                            index: index,
+                            candidateData: candidateData,
+                            onDragStarted: () => isDragged = true,
+                            onDragEnd: (details) => isDragged = false,
+                          ),
+                        );
+                      },
+                    );
+                  }),
+              ],
             ),
           );
   }
 
-  /// Удаляет достопримечательность из списка.
-  void deleteSightFromList(Sight sight, BuildContext context);
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  /// Возвращает карточку места в зависимости от типа поля sightCardType.
+  BaseSightCard getSightCard(Sight sight, BuildContext context) {
+    return widget.sightCardType == ToVisitSightCard
+        ? ToVisitSightCard(
+            sight,
+            key: GlobalKey(),
+            onDeletePressed: () => widget.deleteSightFromList(sight, context),
+          )
+        : VisitedSightCard(
+            sight,
+            key: GlobalKey(),
+            onDeletePressed: () => widget.deleteSightFromList(sight, context),
+          );
+  }
+
+  /// Делает скролл вверх или вниз в зависимости от того, в какую область перетаскивается карточка места.
+  void scrollSightCardsWhenCardDragged(PointerMoveEvent event) {
+    const scrollArea = 300;
+
+    if (event.position.dy > MediaQuery.of(context).size.height - scrollArea) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+
+      /// Скролл вверх при перетаскивании.
+    } else if (event.position.dy < scrollArea) {
+      _scrollController.animateTo(
+        _scrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+}
+
+/// Карточка места с возможностью перетаскивания.
+class _DraggableSightCard extends StatelessWidget {
+  final VoidCallback? onDragStarted;
+  final Function(DraggableDetails)? onDragEnd;
+  final BaseSightCard sightCard;
+  final int index;
+  final List<int?> candidateData;
+
+  const _DraggableSightCard({
+    Key? key,
+    this.onDragStarted,
+    this.onDragEnd,
+    required this.sightCard,
+    required this.index,
+    required this.candidateData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LongPressDraggable(
+      data: index,
+      child: _SightCardWithHoverAbility(
+        sightCard: sightCard,
+        candidateData: candidateData,
+      ),
+      childWhenDragging: const SizedBox(
+        height: 50,
+      ),
+      onDragStarted: onDragStarted,
+      onDragEnd: onDragEnd,
+      feedback: _SightCardWhenDragged(sightCard: sightCard),
+    );
+  }
+}
+
+/// Карточка места с подсветкой в момент, когда над ней происходит перетаскивание другой карточки.
+/// Идентифицирует о возможности сделать дроп в эту область.
+class _SightCardWithHoverAbility extends StatelessWidget {
+  final BaseSightCard sightCard;
+  final List<int?> candidateData;
+
+  const _SightCardWithHoverAbility({
+    Key? key,
+    required this.sightCard,
+    required this.candidateData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        boxShadow: [
+          if (candidateData.isNotEmpty)
+            BoxShadow(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 0.5,
+              offset: const Offset(0, -7),
+              blurStyle: BlurStyle.inner,
+            )
+          else
+            const BoxShadow(color: Colors.transparent),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: sightCard,
+    );
+  }
+}
+
+/// Карточка места в момент перетаскивания.
+class _SightCardWhenDragged extends StatelessWidget {
+  final BaseSightCard sightCard;
+
+  const _SightCardWhenDragged({
+    Key? key,
+    required this.sightCard,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.4),
+            spreadRadius: 5,
+            blurRadius: 7,
+          ),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      height: 254,
+      child: sightCard,
+    );
+  }
 }
 
 /// Список планируемых к посещению мест. Наследуется от [_BaseVisitingSightList].
@@ -191,8 +405,8 @@ abstract class _BaseVisitingSightList extends StatelessWidget {
 /// Если список пуст, будет отображена соответствующая информация ([_EmptyToVisitSightList]).
 ///
 /// Переопределяет поля:
-/// * [listOfSightCards] - список достопримечательностей (планируемых к посещению);
-/// * [emptyVisitingList] - виджет для отображения пустого списка.
+/// * [emptyVisitingList] - виджет для отображения пустого списка;
+/// * [sightCardType] - тип карточки достопримечательности.
 ///
 /// Имеет параметры
 /// * [listOfSights] - список достопримечательностей.
@@ -201,26 +415,29 @@ class _ToVisitSightList extends _BaseVisitingSightList {
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  late final List<Widget> listOfSightCards;
+  late final Type sightCardType;
 
   _ToVisitSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyToVisitSightList();
-    listOfSightCards = listOfSights.map((sight) {
-      return Builder(builder: (context) {
-        return ToVisitSightCard(
-          sight,
-          onDeletePressed: () => deleteSightFromList(sight, context),
-        );
-      });
-    }).toList();
+    sightCardType = ToVisitSightCard;
   }
 
   @override
   void deleteSightFromList(Sight sight, BuildContext context) {
     _InheritedVisitingScreenState.of(context).deleteSightFromToVisitList(sight);
+  }
+
+  @override
+  void insertIntoSightList(
+    int destinationIndex,
+    int sightIndex,
+    BuildContext context,
+  ) {
+    _InheritedVisitingScreenState.of(context)
+        .insertIntoToVisitSightList(destinationIndex, sightIndex);
   }
 }
 
@@ -229,8 +446,8 @@ class _ToVisitSightList extends _BaseVisitingSightList {
 /// Если список пуст, будет отображена соответствующая информация ([_EmptyVisitedSightList]).
 ///
 /// Переопределяет поля:
-/// * [listOfSightCards] - список достопримечательностей (посещённых);
-/// * [emptyVisitingList] - виджет для отображения пустого списка.
+/// * [emptyVisitingList] - виджет для отображения пустого списка;
+/// * [sightCardType] - тип карточки достопримечательности.
 ///
 /// Имеет параметры
 /// * [listOfSights] - список достопримечательностей.
@@ -239,26 +456,29 @@ class _VisitedSightList extends _BaseVisitingSightList {
   late final _BaseEmptyVisitingList emptyVisitingList;
 
   @override
-  late final List<Widget> listOfSightCards;
+  late final Type sightCardType;
 
   _VisitedSightList(
     List<Sight> listOfSights, {
     Key? key,
   }) : super(listOfSights, key: key) {
     emptyVisitingList = const _EmptyVisitedSightList();
-    listOfSightCards = listOfSights.map((sight) {
-      return Builder(builder: (context) {
-        return VisitedSightCard(
-          sight,
-          onDeletePressed: () => deleteSightFromList(sight, context),
-        );
-      });
-    }).toList();
+    sightCardType = VisitedSightCard;
   }
 
   @override
   void deleteSightFromList(Sight sight, BuildContext context) {
     _InheritedVisitingScreenState.of(context).deleteSightFromVisitedList(sight);
+  }
+
+  @override
+  void insertIntoSightList(
+    int destinationIndex,
+    int sightIndex,
+    BuildContext context,
+  ) {
+    _InheritedVisitingScreenState.of(context)
+        .insertIntoVisitedSightList(destinationIndex, sightIndex);
   }
 }
 
