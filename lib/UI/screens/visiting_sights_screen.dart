@@ -143,7 +143,9 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
                 for (var index = 0; index < widget.listOfSights.length; index++)
                   Stack(
                     children: [
-                      const _BackgroundOnDismiss(),
+                      _BackgroundOnDismiss(
+                        isDraggingActive: isDragged,
+                      ),
                       Dismissible(
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) => widget.deleteSightFromList(
@@ -177,8 +179,8 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
                                 sightCard: sightCard,
                                 index: index,
                                 candidateData: candidateData,
-                                onDragStarted: () => isDragged = true,
-                                onDragEnd: (details) => isDragged = false,
+                                onDragStarted: onDragStarted,
+                                onDragEnd: onDragEnd,
                               ),
                             );
                           },
@@ -230,6 +232,22 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
       );
+    }
+  }
+
+  /// Устанавливает состояние - началось перетаскивание элемента.
+  void onDragStarted() {
+    setState(() {
+      isDragged = true;
+    });
+  }
+
+  /// Устанавливает состояние - завершилось перетаскивание элемента.
+  void onDragEnd(DraggableDetails details) {
+    if (details.wasAccepted) {
+      setState(() {
+        isDragged = false;
+      });
     }
   }
 }
@@ -334,44 +352,51 @@ class _SightCardWhenDragged extends StatelessWidget {
 
 /// Задний фон, когда происходит свайп карточки влево для удаления.
 class _BackgroundOnDismiss extends StatelessWidget {
-  const _BackgroundOnDismiss({Key? key}) : super(key: key);
+  final bool isDraggingActive;
+
+  const _BackgroundOnDismiss({
+    Key? key,
+    required this.isDraggingActive,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      alignment: Alignment.centerRight,
-      height: 238,
-      width: double.infinity,
-      margin: const EdgeInsets.only(
-        bottom: 16,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.flamingo,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.only(right: 16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            AppAssets.delete,
-            width: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              AppStrings.delete,
-              style: theme.textTheme.caption!.copyWith(
-                fontWeight: FontWeight.w500,
-                color: theme.colorScheme.onSecondary,
-              ),
+    return !isDraggingActive
+        ? Container(
+            alignment: Alignment.centerRight,
+            height: 238,
+            width: double.infinity,
+            margin: const EdgeInsets.only(
+              bottom: 16,
             ),
-          ),
-        ],
-      ),
-    );
+            decoration: BoxDecoration(
+              color: AppColors.flamingo,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  AppAssets.delete,
+                  width: 24,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    AppStrings.delete,
+                    style: theme.textTheme.caption!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: theme.colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 

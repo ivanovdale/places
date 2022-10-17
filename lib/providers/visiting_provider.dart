@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart' as mocked;
 
+/// Вьюмодель для экрана планируемых к посещению/посещённых мест.
 class VisitingProvider extends ChangeNotifier {
   // TODO(daniiliv): Инициализация мест из моковых данных.
   List<Sight> toVisitSights = mocked.sights
