@@ -3,6 +3,7 @@ import 'package:places/UI/screens/add_sight_screen.dart';
 import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/UI/screens/sight_search_screen.dart';
 import 'package:places/mocks.dart';
+import 'package:places/providers/bottom_bar_provider.dart';
 import 'package:places/providers/visiting_provider.dart';
 import 'package:places/ui/screens/sight_filters_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
@@ -21,8 +22,11 @@ final ChangeNotifier changeNotifier = ChangeNotifier();
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => VisitingProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => VisitingProvider()),
+        ChangeNotifierProvider(create: (context) => BottomBarProvider()),
+      ],
       child: const App(),
     ),
   );
@@ -45,7 +49,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const VisitingSightsScreen(),
+      home: const SightListScreen(),
     );
   }
 }

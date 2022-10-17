@@ -2,10 +2,13 @@
 class AppAssets {
   // CustomBottomNavigationBar
   static const list = 'assets/icons/list.svg';
+  static const listFilled = 'assets/icons/list_filled.svg';
   static const map = 'assets/icons/map.svg';
+  static const mapFilled = 'assets/icons/map_filled.svg';
   static const heart = 'assets/icons/heart.svg';
   static const heartFilled = 'assets/icons/heart_filled.svg';
   static const settings = 'assets/icons/settings.svg';
+  static const settingsFilled = 'assets/icons/settings_filled.svg';
 
   // Иконки для карточки достопримечательности - SightCard
   static const close = 'assets/icons/close.svg';
