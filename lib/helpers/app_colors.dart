@@ -13,6 +13,7 @@ class AppColors {
   static const pastelGreen = Color(0xff6ADA6F);
   static const fruitSalad = Color(0xff4CAF50);
   static const brightSun = Color(0xffFCDD3D);
+  static const flamingo = Color(0xffEF4343);
 
   static final lightBlueShade800 = Colors.lightBlue.shade800;
 

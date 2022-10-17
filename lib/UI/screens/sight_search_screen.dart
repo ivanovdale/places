@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
@@ -7,6 +6,7 @@ import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_icon_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
+import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
@@ -591,20 +591,10 @@ class _SightFoundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      // Use here borderRadius
+    return RoundedCachedNetworkImage(
+      size: 56,
       borderRadius: BorderRadius.circular(12),
-      child: Material(
-        child: Ink.image(
-          padding: EdgeInsets.zero,
-          fit: BoxFit.cover,
-          width: 56,
-          height: 56,
-          image: CachedNetworkImageProvider(
-            sight.url ?? defaultImageUrl,
-          ),
-        ),
-      ),
+      url: sight.url ?? defaultImageUrl,
     );
   }
 }

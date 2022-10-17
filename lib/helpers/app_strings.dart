@@ -29,6 +29,7 @@ class AppStrings {
   static const empty = 'Пусто';
   static const infoMarkLikedPlaces = 'Отмечайте понравившиеся\nместа и они появятся здесь.';
   static const infoFinishRoute = 'Завершите маршрут,\nчтобы место попало сюда.';
+  static const delete = 'Удалить';
 
   // FiltersScreen. Экран фильтров интересных мест.
   static const clear = 'Очистить';

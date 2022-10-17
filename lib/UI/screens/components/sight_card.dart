@@ -32,9 +32,7 @@ abstract class BaseSightCard extends StatelessWidget {
         aspectRatio: 3 / 2,
         child: Material(
           borderRadius: BorderRadius.circular(12),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          type: MaterialType.transparency,
-          color: Colors.transparent,
+          clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {
               if (kDebugMode) {
@@ -198,48 +196,42 @@ class _SightCardTop extends StatelessWidget {
     const defaultImageUrl =
         'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(12.0),
-        topRight: Radius.circular(12.0),
-      ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Ink.image(
-            fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(
-              sight.url ?? defaultImageUrl,
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Ink.image(
+          fit: BoxFit.cover,
+          image: CachedNetworkImageProvider(
+            sight.url ?? defaultImageUrl,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                top: 16.0,
+              ),
+              child: Text(
+                sight.type.toString(),
+                style: theme.textTheme.bodyText2?.copyWith(
+                  color: onSecondaryColor,
+                ),
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  top: 16.0,
-                ),
-                child: Text(
-                  sight.type.toString(),
-                  style: theme.textTheme.bodyText2?.copyWith(
-                    color: onSecondaryColor,
-                  ),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 18,
+                top: 19,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 18,
-                  top: 19,
-                ),
-                // Действия с карточкой.
-                child: _SightActions(actions),
-              ),
-            ],
-          ),
-        ],
-      ),
+              // Действия с карточкой.
+              child: _SightActions(actions),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -306,21 +298,15 @@ class _SightCardBottom extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(12),
-          bottomRight: Radius.circular(12),
-        ),
         color: theme.colorScheme.secondaryContainer,
       ),
       child: Ink(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 16,
-            ),
             Padding(
               padding: const EdgeInsets.only(
+                top: 16,
                 left: 16,
                 right: 16,
               ),

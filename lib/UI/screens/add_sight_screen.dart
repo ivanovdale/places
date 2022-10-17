@@ -5,10 +5,12 @@ import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
+import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/replace_comma_formatter.dart';
 import 'package:places/utils/string_extension.dart';
 
@@ -96,6 +98,9 @@ class _AddSightBodyState extends State<_AddSightBody> {
   final _formKey = GlobalKey<FormState>();
   SightTypes? selectedSightType;
 
+  /// Список добавляемых фото.
+  late List<String> _newPhotoList = [];
+
   @override
   Widget build(BuildContext context) {
     const defaultLabelPadding = EdgeInsets.only(
@@ -111,6 +116,7 @@ class _AddSightBodyState extends State<_AddSightBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
+              _PhotoCarousel(),
               _SightTypeLabel(),
               _SightTypeSelectionField(),
               _PaddedDivider(),
@@ -131,6 +137,9 @@ class _AddSightBodyState extends State<_AddSightBody> {
   @override
   void initState() {
     super.initState();
+
+    // TODO(daniiliv): инициализация списка добавляемых фото моковыми данными.
+    _newPhotoList = mocked.photoCarouselOnAddSightScreen;
 
     // Для обновления SuffixIcon в TextField.
     _nameFocusNode.addListener(() {
@@ -165,6 +174,20 @@ class _AddSightBodyState extends State<_AddSightBody> {
   void setSelectedSightType(SightTypes selectedSightType) {
     setState(() {
       this.selectedSightType = selectedSightType;
+    });
+  }
+
+  /// Добавляет новое фото в список добавляемых фото.
+  void addPhotoToList(String photoUrl) {
+    setState(() {
+      _newPhotoList.add(photoUrl);
+    });
+  }
+
+  /// Удаляет фото из списка добавляемых фото.
+  void deletePhotoFromList(int index) {
+    setState(() {
+      _newPhotoList.removeAt(index);
     });
   }
 }
@@ -614,6 +637,77 @@ class _SightTypeSelectionField extends StatelessWidget {
   }
 }
 
+/// Прокручиваемый список добавляемых фотографий.
+///
+/// Позволяет добавить/удалить фотографии из списка.
+class _PhotoCarousel extends StatelessWidget {
+  const _PhotoCarousel({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final dataStorage = _InheritedAddSightBodyState.of(context);
+
+    var currentPhotoIndex = 0;
+    final newPhotoList = dataStorage._newPhotoList;
+    List<Widget> newPhotoCardList;
+    newPhotoCardList = newPhotoList
+        .map((photoUrl) {
+          return _NewPhotoCard(
+            photoUrl: photoUrl,
+            index: currentPhotoIndex++,
+          );
+        })
+        .cast<Widget>()
+        .toList()
+      ..insert(0, const _AddNewPhotoButton());
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, top: 24),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: newPhotoCardList,
+        ),
+      ),
+    );
+  }
+}
+
+/// Карточка добавляемой фотографии.
+class _NewPhotoCard extends StatelessWidget {
+  final String photoUrl;
+  final int index;
+
+  const _NewPhotoCard({
+    Key? key,
+    required this.photoUrl,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Dismissible(
+        key: ObjectKey(this),
+        direction: DismissDirection.up,
+        onDismissed: (direction) => deletePhotoFromList(context),
+        child: RoundedCachedNetworkImage(
+          url: photoUrl,
+          canDelete: true,
+          size: 72,
+          onDelete: () => deletePhotoFromList(context),
+        ),
+      ),
+    );
+  }
+
+  /// Удаляет фото из списка добавляемых фото.
+  void deletePhotoFromList(BuildContext context) {
+    _InheritedAddSightBodyState.of(context).deletePhotoFromList(index);
+  }
+}
+
 /// Кнопка отмены добавления нового места.
 class _CancelButton extends StatelessWidget {
   const _CancelButton({Key? key}) : super(key: key);
@@ -634,6 +728,46 @@ class _CancelButton extends StatelessWidget {
         Navigator.of(context).pop();
       },
     );
+  }
+}
+
+/// Кнопка добавления новой фотографии.
+class _AddNewPhotoButton extends StatelessWidget {
+  const _AddNewPhotoButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorSchemePrimaryColor = theme.colorScheme.primary;
+
+    return GestureDetector(
+      onTap: () => addPhotoToList(context),
+      child: Container(
+        width: 72,
+        height: 72,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: colorSchemePrimaryColor.withOpacity(0.48),
+            width: 2,
+          ),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 45,
+          color: colorSchemePrimaryColor,
+        ),
+      ),
+    );
+  }
+
+  /// Добавляет новое фото в список добавляемых фото.
+  void addPhotoToList(BuildContext context) {
+    // TODO(daniiliv): *Как будто сработал image picker*.
+    const newPhotoUrl = mocked.newPhotoOnAddSightScreen;
+
+    _InheritedAddSightBodyState.of(context).addPhotoToList(newPhotoUrl);
   }
 }
 

@@ -108,3 +108,15 @@ final List<Sight> sights = [
 // Координаты пользователя.
 final CoordinatePoint userCoordinates =
     CoordinatePoint(lat: 30.304772, lon: 59.909876);
+
+// Список добавляемых изображений места.
+final List<String> photoCarouselOnAddSightScreen = [
+  'https://cdn-irec.r-99.com/sites/default/files/imagecache/copyright1/user-images/771233/euxApskGZrOgQ6Wpmwrxww.jpg',
+  'https://visit-primorye.ru/upload/resize_cache/webp/upload/medialibrary/92f/image_30_06_21_11_59.webp',
+  'https://visit-primorye.ru/upload/resize_cache/webp/iblock/1b6/image_30_06_21_11_59_5.webp',
+  'https://visit-primorye.ru/upload/resize_cache/webp/iblock/56b/image_30_06_21_11_59_3.webp',
+];
+
+// Новое изображение места.
+const String newPhotoOnAddSightScreen =
+    'https://visit-primorye.ru/upload/resize_cache/webp/iblock/3c6/1_2.webp';
