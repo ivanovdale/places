@@ -28,4 +28,7 @@ class AppAssets {
   // Иконки для поля поиска достопримечательности - SightBar.
   static const search = 'assets/icons/search.svg';
   static const filter = 'assets/icons/filter.svg';
+
+  // Иконка удаления - VisitingSightsScreen.
+  static const delete = 'assets/icons/delete.svg';
 }

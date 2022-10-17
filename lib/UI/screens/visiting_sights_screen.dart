@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/sight_card.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/providers/visiting_provider.dart';
 import 'package:places/ui/screens/components/custom_app_bar.dart';
@@ -35,8 +37,7 @@ class VisitingSightsScreen extends StatelessWidget {
               const _VisitingTabBar(),
               Expanded(
                 child: Consumer<VisitingProvider>(
-                  builder: (context, viewModel, child) =>
-                      TabBarView(children: [
+                  builder: (context, viewModel, child) => TabBarView(children: [
                     _ToVisitSightList(viewModel),
                     _VisitedSightList(viewModel),
                   ]),
@@ -140,38 +141,51 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
             child: Column(
               children: [
                 for (var index = 0; index < widget.listOfSights.length; index++)
-                  Builder(builder: (context) {
-                    final sightCard =
-                        getSightCard(widget.listOfSights[index], context);
+                  Stack(
+                    children: [
+                      const _BackgroundOnDismiss(),
+                      Dismissible(
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) => widget.deleteSightFromList(
+                          widget.listOfSights[index],
+                          context,
+                        ),
+                        key: ObjectKey(widget.listOfSights[index]),
+                        child: DragTarget<int>(
+                          onWillAccept: (data) {
+                            return true;
+                          },
+                          onAccept: (data) {
+                            widget.insertIntoSightList(index, data, context);
+                          },
+                          builder: (
+                            context,
+                            candidateData,
+                            rejectedData,
+                          ) {
+                            final sightCard = getSightCard(
+                              widget.listOfSights[index],
+                              context,
+                            );
 
-                    return DragTarget<int>(
-                      onWillAccept: (data) {
-                        return true;
-                      },
-                      onAccept: (data) {
-                        widget.insertIntoSightList(index, data, context);
-                      },
-                      builder: (
-                        context,
-                        candidateData,
-                        rejectedData,
-                      ) {
-                        return Listener(
-                          // Возможность скроллинга в момент перетаскивания карточки.
-                          onPointerMove: isDragged
-                              ? scrollSightCardsWhenCardDragged
-                              : null,
-                          child: _DraggableSightCard(
-                            sightCard: sightCard,
-                            index: index,
-                            candidateData: candidateData,
-                            onDragStarted: () => isDragged = true,
-                            onDragEnd: (details) => isDragged = false,
-                          ),
-                        );
-                      },
-                    );
-                  }),
+                            return Listener(
+                              // Возможность скроллинга в момент перетаскивания карточки.
+                              onPointerMove: isDragged
+                                  ? scrollSightCardsWhenCardDragged
+                                  : null,
+                              child: _DraggableSightCard(
+                                sightCard: sightCard,
+                                index: index,
+                                candidateData: candidateData,
+                                onDragStarted: () => isDragged = true,
+                                onDragEnd: (details) => isDragged = false,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           );
@@ -184,7 +198,7 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
   }
 
   /// Возвращает карточку места в зависимости от типа поля sightCardType.
-  BaseSightCard getSightCard(Sight sight, BuildContext context) {
+  Widget getSightCard(Sight sight, BuildContext context) {
     return widget.sightCardType == ToVisitSightCard
         ? ToVisitSightCard(
             sight,
@@ -224,7 +238,7 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
 class _DraggableSightCard extends StatelessWidget {
   final VoidCallback? onDragStarted;
   final Function(DraggableDetails)? onDragEnd;
-  final BaseSightCard sightCard;
+  final Widget sightCard;
   final int index;
   final List<int?> candidateData;
 
@@ -258,7 +272,7 @@ class _DraggableSightCard extends StatelessWidget {
 /// Карточка места с подсветкой в момент, когда над ней происходит перетаскивание другой карточки.
 /// Идентифицирует о возможности сделать дроп в эту область.
 class _SightCardWithHoverAbility extends StatelessWidget {
-  final BaseSightCard sightCard;
+  final Widget sightCard;
   final List<int?> candidateData;
 
   const _SightCardWithHoverAbility({
@@ -292,7 +306,7 @@ class _SightCardWithHoverAbility extends StatelessWidget {
 
 /// Карточка места в момент перетаскивания.
 class _SightCardWhenDragged extends StatelessWidget {
-  final BaseSightCard sightCard;
+  final Widget sightCard;
 
   const _SightCardWhenDragged({
     Key? key,
@@ -314,6 +328,49 @@ class _SightCardWhenDragged extends StatelessWidget {
       ),
       height: 254,
       child: sightCard,
+    );
+  }
+}
+
+/// Задний фон, когда происходит свайп карточки влево для удаления.
+class _BackgroundOnDismiss extends StatelessWidget {
+  const _BackgroundOnDismiss({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      alignment: Alignment.centerRight,
+      height: 238,
+      width: double.infinity,
+      margin: const EdgeInsets.only(
+        bottom: 16,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.flamingo,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            AppAssets.delete,
+            width: 24,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              AppStrings.delete,
+              style: theme.textTheme.caption!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: theme.colorScheme.onSecondary,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

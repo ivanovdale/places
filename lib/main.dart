@@ -20,10 +20,12 @@ bool isDarkModeEnabled = false;
 final ChangeNotifier changeNotifier = ChangeNotifier();
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => VisitingProvider(),
-    child: const App(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => VisitingProvider(),
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatefulWidget {
