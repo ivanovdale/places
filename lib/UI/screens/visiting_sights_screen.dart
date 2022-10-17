@@ -3,26 +3,16 @@ import 'package:places/UI/screens/components/sight_card.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/mocks.dart' as mocked;
+import 'package:places/providers/visiting_provider.dart';
 import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
+import 'package:provider/provider.dart';
 
 /// Виджет для отображения списка посещенных/планируемых к посещению мест.
 ///
 /// Имеет TabBar для переключения между списками.
-class VisitingScreen extends StatefulWidget {
-  const VisitingScreen({Key? key}) : super(key: key);
-
-  @override
-  State<VisitingScreen> createState() => _VisitingScreenState();
-}
-
-/// Состояние экрана списка посещенных/планируемых к посещению мест.
-///
-/// Хранит список посещённых/планируемых к посещению мест.
-class _VisitingScreenState extends State<VisitingScreen> {
-  late final List<Sight> toVisitSights;
-  late final List<Sight> visitedSights;
+class VisitingSightsScreen extends StatelessWidget {
+  const VisitingSightsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +34,11 @@ class _VisitingScreenState extends State<VisitingScreen> {
             children: [
               const _VisitingTabBar(),
               Expanded(
-                child: _InheritedVisitingScreenState(
-                  data: this,
-                  child: TabBarView(children: [
-                    _ToVisitSightList(toVisitSights),
-                    _VisitedSightList(visitedSights),
+                child: Consumer<VisitingProvider>(
+                  builder: (context, viewModel, child) =>
+                      TabBarView(children: [
+                    _ToVisitSightList(viewModel),
+                    _VisitedSightList(viewModel),
                   ]),
                 ),
               ),
@@ -57,81 +47,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // TODO(daniiliv): Инициализация мест из моковых данных.
-    toVisitSights = mocked.sights
-        .where(
-          (element) => !element.visited,
-        )
-        .toList();
-
-    visitedSights = mocked.sights
-        .where(
-          (element) => element.visited,
-        )
-        .toList();
-  }
-
-  /// Удаляет достопримечательность из списка планируемых к посещению.
-  void deleteSightFromToVisitList(Sight sight) {
-    setState(() {
-      toVisitSights.remove(sight);
-    });
-  }
-
-  /// Удаляет достопримечательность из списка посещенных.
-  void deleteSightFromVisitedList(Sight sight) {
-    setState(() {
-      visitedSights.remove(sight);
-    });
-  }
-
-  /// Вставляет нужную карточку места  по заданному индексу.
-  void insertIntoToVisitSightList(int destinationIndex, int sightIndex) {
-    setState(() {
-      final sight = toVisitSights[sightIndex];
-      toVisitSights
-        ..removeAt(sightIndex)
-        ..insert(destinationIndex, sight);
-    });
-  }
-
-  /// Вставляет нужную карточку места по заданному индексу.
-  void insertIntoVisitedSightList(int destinationIndex, int sightIndex) {
-    setState(() {
-      final sight = visitedSights[sightIndex];
-      visitedSights
-        ..removeAt(sightIndex)
-        ..insert(destinationIndex, sight);
-    });
-  }
-}
-
-/// Прокидывает данные [data] вниз по дереву.
-/// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedVisitingScreenState extends InheritedWidget {
-  final _VisitingScreenState data;
-
-  const _InheritedVisitingScreenState({
-    Key? key,
-    required Widget child,
-    required this.data,
-  }) : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedVisitingScreenState old) {
-    return true;
-  }
-
-  static _VisitingScreenState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedVisitingScreenState>() as _InheritedVisitingScreenState)
-        .data;
   }
 }
 
@@ -182,14 +97,17 @@ class _VisitingTabBar extends StatelessWidget {
 ///
 /// Имеет параметры
 /// * [listOfSights] - список достопримечательностей.
+/// * [viewModel] - вьюмодель для работы со списком мест.
 abstract class _BaseVisitingSightList extends StatefulWidget {
   final List<Sight> listOfSights;
   abstract final _BaseEmptyVisitingList emptyVisitingList;
   abstract final Type sightCardType;
+  final VisitingProvider viewModel;
 
-  const _BaseVisitingSightList(
-    this.listOfSights, {
+  const _BaseVisitingSightList({
     Key? key,
+    required this.listOfSights,
+    required this.viewModel,
   }) : super(key: key);
 
   @override
@@ -418,16 +336,20 @@ class _ToVisitSightList extends _BaseVisitingSightList {
   late final Type sightCardType;
 
   _ToVisitSightList(
-    List<Sight> listOfSights, {
+    VisitingProvider viewModel, {
     Key? key,
-  }) : super(listOfSights, key: key) {
+  }) : super(
+          listOfSights: viewModel.toVisitSights,
+          viewModel: viewModel,
+          key: key,
+        ) {
     emptyVisitingList = const _EmptyToVisitSightList();
     sightCardType = ToVisitSightCard;
   }
 
   @override
   void deleteSightFromList(Sight sight, BuildContext context) {
-    _InheritedVisitingScreenState.of(context).deleteSightFromToVisitList(sight);
+    viewModel.deleteSightFromToVisitList(sight);
   }
 
   @override
@@ -436,8 +358,7 @@ class _ToVisitSightList extends _BaseVisitingSightList {
     int sightIndex,
     BuildContext context,
   ) {
-    _InheritedVisitingScreenState.of(context)
-        .insertIntoToVisitSightList(destinationIndex, sightIndex);
+    viewModel.insertIntoToVisitSightList(destinationIndex, sightIndex);
   }
 }
 
@@ -459,16 +380,20 @@ class _VisitedSightList extends _BaseVisitingSightList {
   late final Type sightCardType;
 
   _VisitedSightList(
-    List<Sight> listOfSights, {
+    VisitingProvider viewModel, {
     Key? key,
-  }) : super(listOfSights, key: key) {
+  }) : super(
+          listOfSights: viewModel.visitedSights,
+          viewModel: viewModel,
+          key: key,
+        ) {
     emptyVisitingList = const _EmptyVisitedSightList();
     sightCardType = VisitedSightCard;
   }
 
   @override
   void deleteSightFromList(Sight sight, BuildContext context) {
-    _InheritedVisitingScreenState.of(context).deleteSightFromVisitedList(sight);
+    viewModel.deleteSightFromVisitedList(sight);
   }
 
   @override
@@ -477,8 +402,7 @@ class _VisitedSightList extends _BaseVisitingSightList {
     int sightIndex,
     BuildContext context,
   ) {
-    _InheritedVisitingScreenState.of(context)
-        .insertIntoVisitedSightList(destinationIndex, sightIndex);
+    viewModel.insertIntoVisitedSightList(destinationIndex, sightIndex);
   }
 }
 
