@@ -21,36 +21,13 @@ const applianceDistanceFilterDelayInMillis = 500;
 /// Значение по умолчанию для всех фильтров по категории места.
 const areAllSightTypeFiltersActivated = true;
 
-/// Прокидывает данные [data] вниз по дереву.
-/// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedFiltersScreenState extends InheritedWidget {
-  final _FiltersScreenState data;
-
-  const _InheritedFiltersScreenState({
-    Key? key,
-    required Widget child,
-    required this.data,
-  }) : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedFiltersScreenState old) {
-    return true;
-  }
-
-  static _FiltersScreenState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedFiltersScreenState>() as _InheritedFiltersScreenState)
-        .data;
-  }
-}
-
 /// Отображает возможные фильтры мест - категория места и расстояние до места.
 /// Расстояние может быть задано в некотором диапазоне.
 /// Показывает количество мест после фильтрации.
 /// Позволяет очистить все фильтры сразу.
 ///
 /// В конструктор могут быть переданы фильтры, которые нужно активировать при отрисовке экрана.
-class FiltersScreen extends StatefulWidget {
+class SightFiltersScreen extends StatefulWidget {
   /// Список фильтров по категории мест.
   /// Содержит имя категории, флаг активирован или не активирован, путь к картинке,
   /// обозначающей категорию;
@@ -58,7 +35,7 @@ class FiltersScreen extends StatefulWidget {
   final double? distanceFrom;
   final double? distanceTo;
 
-  const FiltersScreen({
+  const SightFiltersScreen({
     Key? key,
     this.sightTypeFilters,
     this.distanceFrom,
@@ -66,7 +43,7 @@ class FiltersScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FiltersScreenState createState() => _FiltersScreenState();
+  _SightFiltersScreenState createState() => _SightFiltersScreenState();
 }
 
 /// Состояние экрана фильтров мест.
@@ -78,7 +55,8 @@ class FiltersScreen extends StatefulWidget {
 /// * [filteredSightsNumber] - количество мест после фильтрации;
 /// * [distanceFrom] - нижняя граница расстояния до места;
 /// * [distanceTo] - верхняя граница расстояния до места.
-class _FiltersScreenState extends State<FiltersScreen> with WorkWithPlaces {
+class _SightFiltersScreenState extends State<SightFiltersScreen>
+    with WorkWithPlaces {
   /// Список фильтров по категории мест.
   /// Содержит имя категории, флаг активирован или не активирован, путь к картинке,
   /// обозначающей категорию;
@@ -201,6 +179,29 @@ class _FiltersScreenState extends State<FiltersScreen> with WorkWithPlaces {
       mocked.userCoordinates,
       range,
     ).length;
+  }
+}
+
+/// Прокидывает данные [data] вниз по дереву.
+/// Всегда оповещает дочерние виджеты о перерисовке.
+class _InheritedFiltersScreenState extends InheritedWidget {
+  final _SightFiltersScreenState data;
+
+  const _InheritedFiltersScreenState({
+    Key? key,
+    required Widget child,
+    required this.data,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_InheritedFiltersScreenState old) {
+    return true;
+  }
+
+  static _SightFiltersScreenState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedFiltersScreenState>() as _InheritedFiltersScreenState)
+        .data;
   }
 }
 

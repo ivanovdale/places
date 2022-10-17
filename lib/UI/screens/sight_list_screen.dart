@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:places/UI/screens/add_sight_screen.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
-import 'package:places/UI/screens/filters_screen.dart';
+import 'package:places/UI/screens/sight_filters_screen.dart';
 import 'package:places/UI/screens/sight_search_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
@@ -261,7 +261,7 @@ class _FilterButton extends StatelessWidget {
     final selectedFilters = await Navigator.push(
       context,
       MaterialPageRoute<Map<String, Object>>(
-        builder: (context) => FiltersScreen(
+        builder: (context) => SightFiltersScreen(
           sightTypeFilters: dataStorage.sightTypeFilters,
           distanceFrom: dataStorage.distanceFrom,
           distanceTo: dataStorage.distanceTo,
