@@ -27,7 +27,8 @@ class AppStrings {
   static const wantToVisit = 'Хочу посетить';
   static const visited = 'Посетил';
   static const empty = 'Пусто';
-  static const infoMarkLikedPlaces = 'Отмечайте понравившиеся\nместа и они появятся здесь.';
+  static const infoMarkLikedPlaces =
+      'Отмечайте понравившиеся\nместа и они появятся здесь.';
   static const infoFinishRoute = 'Завершите маршрут,\nчтобы место попало сюда.';
   static const delete = 'Удалить';
 
@@ -63,6 +64,19 @@ class AppStrings {
   static const clearHistory = 'Очистить историю';
   static const nothingFound = 'Ничего не найдено.';
   static const searchAdvice = 'Попробуйте изменить параметры\nпоиска';
+
+  // OnboardingScreen. Экран онбординга.
+  static const welcomeInfo = 'Добро пожаловать\nв Путеводитель';
+  static const findAndLikePlacesInfo =
+      'Ищи новые локации и сохраняй\nсамые любимые.';
+  static const getRouteAndGoInfo = 'Построй маршрут\nи отправляйся в путь';
+  static const reachPointFastAndComfortableInfo =
+      'Достигай цели максимально\nбыстро и комфортно.';
+  static const addPlacesYouFoundInfo = 'Добавляй места,\nкоторые нашёл сам';
+  static const shareAndHelpUsInfo =
+      'Делись самыми интересными\nи помоги нам стать лучше!';
+  static const skip = 'Пропустить';
+  static const start = 'на старт';
 
   // Общие строковые константы.
   static const newPlace = 'новое место';

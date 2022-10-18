@@ -34,4 +34,9 @@ class AppAssets {
 
   // Иконка удаления - VisitingSightsScreen.
   static const delete = 'assets/icons/delete.svg';
+
+  // Иконки для экрана онбординга - OnboardingScreen.
+  static const welcome = 'assets/icons/welcome.svg';
+  static const backpack = 'assets/icons/backpack.svg';
+  static const tap = 'assets/icons/tap.svg';
 }
