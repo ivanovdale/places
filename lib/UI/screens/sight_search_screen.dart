@@ -594,7 +594,7 @@ class _SightFoundImage extends StatelessWidget {
     return RoundedCachedNetworkImage(
       size: 56,
       borderRadius: BorderRadius.circular(12),
-      url: sight.url ?? defaultImageUrl,
+      url: sight.photoUrlList?[0] ?? defaultImageUrl,
     );
   }
 }

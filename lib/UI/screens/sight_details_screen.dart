@@ -44,32 +44,133 @@ class SightDetailsScreen extends StatelessWidget {
 /// Виджет для отображения верхней части подробностей достопримечательности.
 ///
 /// Отображает картинку места и имеет кнопку "Назад".
-class _SightDetailsTop extends StatelessWidget {
+class _SightDetailsTop extends StatefulWidget {
   final Sight sight;
 
   const _SightDetailsTop(this.sight, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    /// Картинка по умолчанию.
-    const defaultImageUrl =
-        'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
+  State<_SightDetailsTop> createState() => _SightDetailsTopState();
+}
 
+/// Состояние верхней части подробностей достопримечательности.
+///
+/// Содержит контроллер для скроллинга галлереи.
+class _SightDetailsTopState extends State<_SightDetailsTop> {
+  final PageController _pageController = PageController();
+  int _activePage = 0;
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // TODO(daniiliv): Здесь будет картинка места.
-        CachedNetworkImage(
-          imageUrl: sight.url ?? defaultImageUrl,
+        _PhotoGallery(
+          sight: widget.sight,
+          controller: _pageController,
+          onPageChanged: setActivePage,
+        ),
+        _PageIndicator(
+          length: widget.sight.photoUrlList?.length ?? 0,
+          controller: _pageController,
+          activePage: _activePage,
+        ),
+        const _BackButton(),
+      ],
+    );
+  }
+
+  /// Устанавливает активную страницу.
+  void setActivePage(int page) {
+    setState(() {
+      _activePage = page;
+    });
+  }
+}
+
+/// Галерея фотографии достопримечательности.
+class _PhotoGallery extends StatelessWidget {
+  /// Картинка по умолчанию.
+  static const defaultImageUrl =
+      'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
+
+  final Function(int)? onPageChanged;
+  final PageController controller;
+  final Sight sight;
+
+  const _PhotoGallery({
+    Key? key,
+    this.onPageChanged,
+    required this.controller,
+    required this.sight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: controller,
+      onPageChanged: onPageChanged,
+      itemCount: sight.photoUrlList?.length,
+      itemBuilder: (context, index) {
+        return CachedNetworkImage(
+          imageUrl: sight.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
           progressIndicatorBuilder: LoadingIndicator.progressIndicatorBuilder,
-        ),
-        const Positioned(
-          left: 16,
-          top: 36,
-          child: _BackButton(),
-        ),
-      ],
+        );
+      },
+    );
+  }
+}
+
+/// Индикатор прокрутки галлереи.
+class _PageIndicator extends StatelessWidget {
+  final int length;
+  final PageController controller;
+  final int activePage;
+
+  const _PageIndicator({
+    Key? key,
+    required this.length,
+    required this.controller,
+    required this.activePage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return length > 1
+        ? Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 12,
+            child: Row(
+              children: List<Widget>.generate(
+                length,
+                (index) => InkWell(
+                  onTap: () => indicatorOnTap(index),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / length,
+                    decoration: BoxDecoration(
+                      color: activePage == index
+                          ? Theme.of(context).primaryColorDark
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        // Не отображать индикатор фотографий, если количество фото меньше 2.
+        : const SizedBox.shrink();
+  }
+
+  /// Устанавливает текущую фотографию галлереи.
+  void indicatorOnTap(int index) {
+    controller.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
     );
   }
 }
@@ -325,27 +426,31 @@ class _BackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SizedBox(
-      height: 32,
-      width: 32,
-      child: ElevatedButton(
-        // TODO(daniiliv): Здесь будет вызов реальной функции.
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        style: TextButton.styleFrom(
-          backgroundColor: theme.scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+    return Positioned(
+      left: 16,
+      top: 36,
+      child: SizedBox(
+        height: 32,
+        width: 32,
+        child: ElevatedButton(
+          // TODO(daniiliv): Здесь будет вызов реальной функции.
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0,
+            enableFeedback: true,
+            padding: EdgeInsets.zero,
           ),
-          elevation: 0,
-          enableFeedback: true,
-          padding: EdgeInsets.zero,
-        ),
-        child: Icon(
-          Icons.arrow_back_ios_new_rounded,
-          size: 15.0,
-          color: theme.primaryColorDark,
+          child: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            size: 15.0,
+            color: theme.primaryColorDark,
+          ),
         ),
       ),
     );

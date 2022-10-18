@@ -204,7 +204,7 @@ class _SightListBody extends StatelessWidget {
               top: 20,
             ),
             itemCount: sights.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               return SightCard(sights[index]);
             },
           ),
