@@ -199,10 +199,20 @@ class _SightCardTop extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Ink.image(
-          fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(
-            sight.url ?? defaultImageUrl,
+        CachedNetworkImage(
+          imageUrl: sight.url ?? defaultImageUrl,
+          imageBuilder: (context, imageProvider) {
+            return Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            );
+          },
+          placeholder: (context, url) => const Center(
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(),
+            ),
           ),
         ),
         Row(
