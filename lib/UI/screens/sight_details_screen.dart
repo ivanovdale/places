@@ -1,13 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
-import 'package:places/ui/screens/components/loading_indicator.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
 ///
@@ -58,10 +59,10 @@ class _SightDetailsTop extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         // TODO(daniiliv): Здесь будет картинка места.
-        Image.network(
-          sight.url ?? defaultImageUrl,
+        CachedNetworkImage(
+          imageUrl: sight.url ?? defaultImageUrl,
           fit: BoxFit.cover,
-          loadingBuilder: LoadingIndicator.imageLoadingBuilder,
+          progressIndicatorBuilder: LoadingIndicator.progressIndicatorBuilder,
         ),
         const Positioned(
           left: 16,
