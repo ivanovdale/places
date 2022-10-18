@@ -27,14 +27,8 @@ class SightDetailsScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            flex: 360,
-            child: _SightDetailsTop(sight),
-          ),
-          Expanded(
-            flex: 400,
-            child: _SightDetailsBottom(sight),
-          ),
+          _SightDetailsTop(sight),
+          _SightDetailsBottom(sight),
         ],
       ),
     );
@@ -55,28 +49,31 @@ class _SightDetailsTop extends StatefulWidget {
 
 /// Состояние верхней части подробностей достопримечательности.
 ///
-/// Содержит контроллер для скроллинга галлереи.
+/// Содержит контроллер для скроллинга галлереи и номер активной фотографии.
 class _SightDetailsTopState extends State<_SightDetailsTop> {
   final PageController _pageController = PageController();
   int _activePage = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        _PhotoGallery(
-          sight: widget.sight,
-          controller: _pageController,
-          onPageChanged: setActivePage,
-        ),
-        _PageIndicator(
-          length: widget.sight.photoUrlList?.length ?? 0,
-          controller: _pageController,
-          activePage: _activePage,
-        ),
-        const _BackButton(),
-      ],
+    return Expanded(
+      flex: 360,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _PhotoGallery(
+            sight: widget.sight,
+            controller: _pageController,
+            onPageChanged: setActivePage,
+          ),
+          _PageIndicator(
+            length: widget.sight.photoUrlList?.length ?? 0,
+            controller: _pageController,
+            activePage: _activePage,
+          ),
+          const _BackButton(),
+        ],
+      ),
     );
   }
 
@@ -189,29 +186,32 @@ class _SightDetailsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _SightInfo(sight),
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 24.0,
-              left: 16.0,
-              right: 16.0,
+    return Expanded(
+      flex: 400,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _SightInfo(sight),
+            const Padding(
+              padding: EdgeInsets.only(
+                top: 24.0,
+                left: 16.0,
+                right: 16.0,
+              ),
+              child: _BuildRouteButton(),
             ),
-            child: _BuildRouteButton(),
-          ),
-          const CustomDivider(
-            padding: EdgeInsets.only(
-              top: 24,
-              left: 16,
-              right: 16,
-              bottom: 8,
+            const CustomDivider(
+              padding: EdgeInsets.only(
+                top: 24,
+                left: 16,
+                right: 16,
+                bottom: 8,
+              ),
+              thickness: 0.8,
             ),
-            thickness: 0.8,
-          ),
-          const _SightActionsButtons(),
-        ],
+            const _SightActionsButtons(),
+          ],
+        ),
       ),
     );
   }
