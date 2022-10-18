@@ -134,62 +134,46 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.listOfSights.isEmpty
-        ? widget.emptyVisitingList
-        : SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                for (var index = 0; index < widget.listOfSights.length; index++)
-                  Stack(
-                    children: [
-                      _BackgroundOnDismiss(
-                        isDraggingActive: isDragged,
-                      ),
-                      Dismissible(
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (direction) => widget.deleteSightFromList(
-                          widget.listOfSights[index],
-                          context,
-                        ),
-                        key: ObjectKey(widget.listOfSights[index]),
-                        child: DragTarget<int>(
-                          onWillAccept: (data) {
-                            return true;
-                          },
-                          onAccept: (data) {
-                            widget.insertIntoSightList(index, data, context);
-                          },
-                          builder: (
-                            context,
-                            candidateData,
-                            rejectedData,
-                          ) {
-                            final sightCard = getSightCard(
-                              widget.listOfSights[index],
-                              context,
-                            );
+    final listOfSights = widget.listOfSights;
 
-                            return Listener(
-                              // Возможность скроллинга в момент перетаскивания карточки.
-                              onPointerMove: isDragged
-                                  ? scrollSightCardsWhenCardDragged
-                                  : null,
-                              child: _DraggableSightCard(
-                                sightCard: sightCard,
-                                index: index,
-                                candidateData: candidateData,
-                                onDragStarted: onDragStarted,
-                                onDragEnd: onDragEnd,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+    return listOfSights.isEmpty
+        ? widget.emptyVisitingList
+        : ListView.builder(
+            controller: _scrollController,
+            itemCount: listOfSights.length,
+            itemBuilder: (context, index) {
+              final sightCard = getSightCard(
+                listOfSights[index],
+                context,
+              );
+
+              return Stack(
+                children: [
+                  _BackgroundOnDismiss(
+                    isDraggingActive: isDragged,
                   ),
-              ],
-            ),
+                  Dismissible(
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) => widget.deleteSightFromList(
+                      listOfSights[index],
+                      context,
+                    ),
+                    key: ObjectKey(listOfSights[index]),
+                    child: _DraggableSightCardWithDragTargetOption(
+                      index: index,
+                      sightCard: sightCard,
+                      isDragged: isDragged,
+                      onDragStarted: onDragStarted,
+                      onDragEnd: onDragEnd,
+                      onAccept: (data) =>
+                          widget.insertIntoSightList(index, data, context),
+                      scrollSightCardsWhenCardDragged:
+                          scrollSightCardsWhenCardDragged,
+                    ),
+                  ),
+                ],
+              );
+            },
           );
   }
 
@@ -249,6 +233,55 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
         isDragged = false;
       });
     }
+  }
+}
+
+/// Перетаскиваемая карточка места с возможностью перетаскивать на неё другие карточки для сортировки списка мест.
+class _DraggableSightCardWithDragTargetOption extends StatelessWidget {
+  final int index;
+  final Widget sightCard;
+  final bool isDragged;
+  final VoidCallback? onDragStarted;
+  final Function(DraggableDetails) onDragEnd;
+  final Function(int)? onAccept;
+  final Function(PointerMoveEvent)? scrollSightCardsWhenCardDragged;
+
+  const _DraggableSightCardWithDragTargetOption({
+    Key? key,
+    required this.index,
+    this.onAccept,
+    required this.sightCard,
+    required this.isDragged,
+    this.onDragStarted,
+    required this.onDragEnd,
+    this.scrollSightCardsWhenCardDragged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<int>(
+      onWillAccept: (data) {
+        return true;
+      },
+      onAccept: onAccept,
+      builder: (
+        context,
+        candidateData,
+        rejectedData,
+      ) {
+        return Listener(
+          // Возможность скроллинга в момент перетаскивания карточки.
+          onPointerMove: isDragged ? scrollSightCardsWhenCardDragged : null,
+          child: _DraggableSightCard(
+            sightCard: sightCard,
+            index: index,
+            candidateData: candidateData,
+            onDragStarted: onDragStarted,
+            onDragEnd: onDragEnd,
+          ),
+        );
+      },
+    );
   }
 }
 

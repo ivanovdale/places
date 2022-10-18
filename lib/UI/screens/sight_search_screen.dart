@@ -269,7 +269,7 @@ class _SearchHistory extends StatelessWidget {
 
     // Не показывать историю поиска, если она пуста, или если начат поиск достопримечательностей.
     return searchHistory.isEmpty || isSearchInProgress
-        ? const SizedBox()
+        ? const SizedBox.shrink()
         : const _SearchHistoryList();
   }
 }
@@ -283,15 +283,12 @@ class _SearchHistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            _SearchedByYouLabel(),
-            _SearchHistoryItems(),
-            _ClearSearchHistoryButton(),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          _SearchedByYouLabel(),
+          _SearchHistoryItems(),
+        ],
       ),
     );
   }
@@ -322,16 +319,33 @@ class _SearchHistoryItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataStorage = _InheritedSightSearchBodyState.of(context);
     final searchHistory = dataStorage._searchHistory;
+    List<Widget> listOfItems;
+    listOfItems = searchHistory
+        .map((searchString) => _SearchItem(
+              itemName: searchString,
+            ))
+        .cast<Widget>()
+        .toList()
+      ..add(
+        const _ClearSearchHistoryButton(), // Кнопка очистки истории в конце списка.
+      );
 
-    return Column(
-      children: searchHistory.map((searchItem) {
-        final isLastItem = searchHistory.last == searchItem;
+    final itemCount = listOfItems.length;
 
-        return _SearchItem(
-          itemName: searchItem,
-          isLastItem: isLastItem,
-        );
-      }).toList(),
+    return Expanded(
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: itemCount,
+        itemBuilder: (context, index) {
+          return listOfItems[index];
+        },
+        separatorBuilder: (context, index) {
+          // Не отрисовывать разделитель для последнего элемента.
+          return (index != itemCount - 2)
+              ? const _SearchHistoryItemDivider()
+              : const SizedBox.shrink();
+        },
+      ),
     );
   }
 }
@@ -342,42 +356,28 @@ class _SearchHistoryItems extends StatelessWidget {
 /// Позволяет удалить элемент из списка истории поиска.
 class _SearchItem extends StatelessWidget {
   final String itemName;
-  final bool isLastItem;
 
   const _SearchItem({
     Key? key,
     required this.itemName,
-    this.isLastItem = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 24.0,
+        right: 8.0,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                _HistorySearchItemTextButton(
-                  itemName: itemName,
-                ),
-                const Spacer(),
-                _DeleteHistorySearchItemFromListButton(
-                  itemName: itemName,
-                ),
-              ],
-            ),
-            // Не отрисовывать разделитель для последнего элемента списка.
-            if (isLastItem)
-              const SizedBox()
-            else
-              const _SearchHistoryItemDivider(),
-          ],
-        ),
+      child: Row(
+        children: [
+          _HistorySearchItemTextButton(
+            itemName: itemName,
+          ),
+          const Spacer(),
+          _DeleteHistorySearchItemFromListButton(
+            itemName: itemName,
+          ),
+        ],
       ),
     );
   }
@@ -419,16 +419,18 @@ class _ClearSearchHistoryButton extends StatelessWidget {
     final theme = Theme.of(context);
     final dataStorage = _InheritedSightSearchBodyState.of(context);
 
-    return CustomTextButton(
-      AppStrings.clearHistory,
-      textStyle: theme.textTheme.button?.copyWith(
-        color: theme.colorScheme.primary,
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: CustomTextButton(
+        AppStrings.clearHistory,
+        textStyle: theme.textTheme.button?.copyWith(
+          color: theme.colorScheme.primary,
+        ),
+        padding: const EdgeInsets.only(
+          top: 28,
+        ),
+        onPressed: dataStorage.deleteAllItemsFromSet,
       ),
-      padding: const EdgeInsets.only(
-        top: 28,
-        left: 16,
-      ),
-      onPressed: dataStorage.deleteAllItemsFromSet,
     );
   }
 }
@@ -498,27 +500,25 @@ class _SightsFoundList extends StatelessWidget {
 
     // Не показывать список найденных достопримечательностей, если ещё не начат их поиск.
     return !isSearchInProgress
-        ? const SizedBox()
+        ? const SizedBox.shrink()
 
         // Отобразить список найденных достопримечательностей, если они были найдены.
         : sightsFoundList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 43,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: sightsFoundList.map((sightFoundItem) {
-                      final isLastItem = sightsFoundList.last == sightFoundItem;
-
-                      return _SightsFoundItem(
-                        sight: sightFoundItem,
-                        isLastItem: isLastItem,
-                      );
-                    }).toList(),
+            ? Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 43,
                   ),
+                  children: sightsFoundList.map((sightFoundItem) {
+                    final isLastItem = sightsFoundList.last == sightFoundItem;
+
+                    return _SightsFoundItem(
+                      sight: sightFoundItem,
+                      isLastItem: isLastItem,
+                    );
+                  }).toList(),
                 ),
               )
             // Отобразить информацию, что достопримечательности не найдены.

@@ -661,13 +661,12 @@ class _PhotoCarousel extends StatelessWidget {
         .toList()
       ..insert(0, const _AddNewPhotoButton());
 
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(left: 16.0, top: 24),
-      child: SingleChildScrollView(
+      height: 100,
+      child: ListView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: newPhotoCardList,
-        ),
+        children: newPhotoCardList,
       ),
     );
   }

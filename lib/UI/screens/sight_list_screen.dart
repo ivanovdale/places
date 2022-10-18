@@ -197,17 +197,16 @@ class _SightListBody extends StatelessWidget {
           suffixIcon: const _FilterButton(),
         ),
         Expanded(
-          child: Padding(
+          child: ListView.builder(
             padding: const EdgeInsets.only(
               right: 16,
               left: 16,
               top: 20,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: sights.map(SightCard.new).toList(),
-              ),
-            ),
+            itemCount: sights.length,
+            itemBuilder: (context, index) {
+              return SightCard(sights[index]);
+            },
           ),
         ),
       ],
