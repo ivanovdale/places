@@ -188,30 +188,21 @@ class _SightDetailsBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 400,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _SightInfo(sight),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 24.0,
-                left: 16.0,
-                right: 16.0,
-              ),
-              child: _BuildRouteButton(),
+      child: Column(
+        children: [
+          _SightInfo(sight),
+          const _BuildRouteButton(),
+          const CustomDivider(
+            padding: EdgeInsets.only(
+              top: 24,
+              left: 16,
+              right: 16,
+              bottom: 8,
             ),
-            const CustomDivider(
-              padding: EdgeInsets.only(
-                top: 24,
-                left: 16,
-                right: 16,
-                bottom: 8,
-              ),
-              thickness: 0.8,
-            ),
-            const _SightActionsButtons(),
-          ],
-        ),
+            thickness: 0.8,
+          ),
+          const _SightActionsButtons(),
+        ],
       ),
     );
   }
@@ -239,64 +230,129 @@ class _SightInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 24.0,
-              left: 16.0,
-            ),
-            child: Text(
-              sight.name,
-              style: theme.textTheme.headline5,
-            ),
+        _SightName(
+          sightName: sight.name,
+          textStyle: theme.textTheme.headline5!,
+        ),
+        _SightDetailsInfo(
+          sightType: sight.type.toString(),
+          workTime: sight.workTimeFrom ?? '',
+          sightTypeTextStyle: themeBodyText2!.copyWith(
+            color: onPrimaryColor,
+          ),
+          workTimeTextStyle: themeBodyText2.copyWith(
+            color: secondaryColor,
           ),
         ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 2.0,
-                left: 16.0,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  sight.type.toString(),
-                  style: themeBodyText2?.copyWith(
-                    color: onPrimaryColor,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 2.0,
-                left: 16.0,
-              ),
-              child: Text(
-                '${AppStrings.closedTo} ${sight.workTimeFrom}',
-                style: themeBodyText2?.copyWith(
-                  color: secondaryColor,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 24.0,
-            left: 16.0,
-            right: 16.0,
-          ),
-          child: Text(
-            sight.details,
-            style: themeBodyText2?.copyWith(
-              color: primaryColor,
-            ),
+        _SightDescription(
+          description: sight.details,
+          textStyle: themeBodyText2.copyWith(
+            color: primaryColor,
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Название достопримечательности.
+class _SightName extends StatelessWidget {
+  final String sightName;
+  final TextStyle textStyle;
+
+  const _SightName({
+    Key? key,
+    required this.sightName,
+    required this.textStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+      ),
+      child: Text(
+        sightName,
+        style: textStyle,
+      ),
+    );
+  }
+}
+
+/// Информация о достопримечательности.
+class _SightDetailsInfo extends StatelessWidget {
+  final String sightType;
+  final TextStyle sightTypeTextStyle;
+  final TextStyle workTimeTextStyle;
+  final String workTime;
+
+  const _SightDetailsInfo({
+    Key? key,
+    required this.sightType,
+    required this.sightTypeTextStyle,
+    required this.workTime,
+    required this.workTimeTextStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        top: 2,
+      ),
+      child: Row(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              sightType,
+              style: sightTypeTextStyle,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+            ),
+            child: Text(
+              '${AppStrings.closedTo} $workTime',
+              style: workTimeTextStyle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Описание достопримечательности.
+class _SightDescription extends StatelessWidget {
+  final String description;
+  final TextStyle textStyle;
+
+  const _SightDescription({
+    Key? key,
+    required this.description,
+    required this.textStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 90,
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      child: SingleChildScrollView(
+        child: Text(
+          description,
+          style: textStyle,
+        ),
+      ),
     );
   }
 }
@@ -313,26 +369,33 @@ class _BuildRouteButton extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final onSecondaryColor = colorScheme.onSecondary;
 
-    return CustomElevatedButton(
-      AppStrings.buildRouteText,
-      textStyle: theme.textTheme.bodyText2?.copyWith(
-        color: onSecondaryColor,
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+        right: 16.0,
       ),
-      backgroundColor: colorScheme.primary,
-      height: 48,
-      // Картинка кнопки - пока что это просто белый контейнер.
-      buttonLabel: SvgPicture.asset(
-        AppAssets.route,
-        width: 24,
-        height: 24,
-        color: onSecondaryColor,
+      child: CustomElevatedButton(
+        AppStrings.buildRouteText,
+        textStyle: theme.textTheme.bodyText2?.copyWith(
+          color: onSecondaryColor,
+        ),
+        backgroundColor: colorScheme.primary,
+        height: 48,
+        // Картинка кнопки - пока что это просто белый контейнер.
+        buttonLabel: SvgPicture.asset(
+          AppAssets.route,
+          width: 24,
+          height: 24,
+          color: onSecondaryColor,
+        ),
+        // TODO(daniiliv): Здесь будет вызов реальной функции.
+        onPressed: () {
+          if (kDebugMode) {
+            print('"${AppStrings.buildRouteText}" button pressed.');
+          }
+        },
       ),
-      // TODO(daniiliv): Здесь будет вызов реальной функции.
-      onPressed: () {
-        if (kDebugMode) {
-          print('"${AppStrings.buildRouteText}" button pressed.');
-        }
-      },
     );
   }
 }
