@@ -6,9 +6,11 @@ import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:places/providers/sight_details_provider.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
+import 'package:provider/provider.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
 ///
@@ -25,11 +27,14 @@ class SightDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _SightDetailsTop(sight),
-          _SightDetailsBottom(sight),
-        ],
+      body: ChangeNotifierProvider(
+        create: (context) => SightDetailsProvider(),
+        child: Column(
+          children: [
+            _SightDetailsTop(sight),
+            _SightDetailsBottom(sight),
+          ],
+        ),
       ),
     );
   }
@@ -38,50 +43,34 @@ class SightDetailsScreen extends StatelessWidget {
 /// Виджет для отображения верхней части подробностей достопримечательности.
 ///
 /// Отображает картинку места и имеет кнопку "Назад".
-class _SightDetailsTop extends StatefulWidget {
+class _SightDetailsTop extends StatelessWidget {
   final Sight sight;
 
   const _SightDetailsTop(this.sight, {Key? key}) : super(key: key);
 
   @override
-  State<_SightDetailsTop> createState() => _SightDetailsTopState();
-}
-
-/// Состояние верхней части подробностей достопримечательности.
-///
-/// Содержит контроллер для скроллинга галлереи и номер активной фотографии.
-class _SightDetailsTopState extends State<_SightDetailsTop> {
-  final PageController _pageController = PageController();
-  int _activePage = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 360,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          _PhotoGallery(
-            sight: widget.sight,
-            controller: _pageController,
-            onPageChanged: setActivePage,
-          ),
-          _PageIndicator(
-            length: widget.sight.photoUrlList?.length ?? 0,
-            controller: _pageController,
-            activePage: _activePage,
-          ),
-          const _BackButton(),
-        ],
+      child: Consumer<SightDetailsProvider>(
+        builder: (context, viewModel, child) => Stack(
+          fit: StackFit.expand,
+          children: [
+            _PhotoGallery(
+              sight: sight,
+              controller: viewModel.pageController,
+              onPageChanged: viewModel.setActivePage,
+            ),
+            _PageIndicator(
+              length: sight.photoUrlList?.length ?? 0,
+              controller: viewModel.pageController,
+              activePage: viewModel.activePage,
+            ),
+            const _BackButton(),
+          ],
+        ),
       ),
     );
-  }
-
-  /// Устанавливает активную страницу.
-  void setActivePage(int page) {
-    setState(() {
-      _activePage = page;
-    });
   }
 }
 
