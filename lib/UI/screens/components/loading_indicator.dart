@@ -1,21 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
+/// Индикатор загрузки картинки.
 class LoadingIndicator {
-  static Widget imageLoadingBuilder(
+  static Widget progressIndicatorBuilder(
     BuildContext context,
-    Widget child,
-    ImageChunkEvent? loadingProgress,
+    String url,
+    DownloadProgress downloadProgress,
   ) {
-    if (loadingProgress == null) {
-      return child;
-    }
-
     return Center(
       child: CupertinoActivityIndicator.partiallyRevealed(
-        progress: loadingProgress.expectedTotalBytes != null
-            ? loadingProgress.cumulativeBytesLoaded /
-                loadingProgress.expectedTotalBytes!
-            : 0,
+        progress: downloadProgress.progress ?? 0,
       ),
     );
   }

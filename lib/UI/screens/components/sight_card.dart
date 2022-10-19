@@ -200,7 +200,7 @@ class _SightCardTop extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          imageUrl: sight.url ?? defaultImageUrl,
+          imageUrl: sight.photoUrlList?[0] ?? defaultImageUrl,
           imageBuilder: (context, imageProvider) {
             return Ink.image(
               image: imageProvider,

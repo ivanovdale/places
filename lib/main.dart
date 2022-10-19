@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/add_sight_screen.dart';
+import 'package:places/UI/screens/onboarding_screen.dart';
 import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/UI/screens/sight_search_screen.dart';
 import 'package:places/mocks.dart';
@@ -49,7 +50,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const SightListScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }

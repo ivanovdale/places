@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/onboarding_screen.dart';
 import 'package:places/helpers/app_strings.dart';
+
 // TODO(daniiliv): Воспользуемся глобальной переменной на время, пока нет DI.
 import 'package:places/main.dart' show isDarkModeEnabled, changeNotifier;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
@@ -118,12 +120,21 @@ class _WatchTutorialInfo extends StatelessWidget {
         const Spacer(),
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
-          child: Icon(
-            Icons.info_outline,
+          child: IconButton(
+            icon: const Icon(Icons.info_outline),
             color: theme.colorScheme.primary,
+            onPressed: () => goToOnboardingScreen(context),
           ),
         ),
       ],
+    );
+  }
+
+  /// Выполняет переход на страницу онбординга.
+  void goToOnboardingScreen(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(builder: (context) => const OnboardingScreen()),
     );
   }
 }

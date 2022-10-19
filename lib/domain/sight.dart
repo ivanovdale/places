@@ -2,13 +2,12 @@ import 'package:places/domain/coordinate_point.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 
-
 /// Модель достопримечательности.
 ///
 /// Имеет следующие поля:
 /// * [name] - название достопримечательности;
 /// * [coordinatePoint] - географические координаты точки;
-/// * [url] - путь до фотографии в интернете;
+/// * [photoUrlList] - пути до фотографии в интернете;
 /// * [details] - подробное описание места;
 /// * [type] - тип достопримечательности;
 /// * [workTimeFrom] - время работы "с". Например, 09:00;
@@ -17,7 +16,7 @@ import 'package:places/helpers/app_strings.dart';
 class Sight {
   String name;
   CoordinatePoint coordinatePoint;
-  String? url;
+  List<String>? photoUrlList;
   String details;
   SightTypes type;
   String? workTimeFrom;
@@ -27,12 +26,12 @@ class Sight {
   Sight({
     required this.name,
     required this.coordinatePoint,
-    this.url,
     required this.details,
     required this.type,
     this.workTimeFrom,
     this.visitDate,
     this.visited = false,
+    this.photoUrlList,
   });
 }
 
