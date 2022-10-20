@@ -37,15 +37,6 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppStrings.sightListAppBarTitleWithLineBreak,
-        titleTextStyle: Theme.of(context).textTheme.headline4,
-        toolbarHeight: 128,
-        padding: const EdgeInsets.only(
-          top: 40,
-          bottom: 16,
-        ),
-      ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: _InheritedSightListScreenState(
         data: this,
@@ -189,28 +180,102 @@ class _SightListBody extends StatelessWidget {
     final dataStorage = _InheritedSightListScreenState.of(context);
     final sights = dataStorage.sights;
 
+    return CustomScrollView(
+      slivers: [
+        const _SliverAppBar(),
+        _SliverSightList(
+          sights: sights,
+        ),
+      ],
+    );
+  }
+}
+
+/// Кастомный аппбар на сливере.
+class _SliverAppBar extends StatelessWidget {
+  const _SliverAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverPersistentHeader(
+      pinned: true,
+      delegate: _CustomAppBarDelegate(expandedHeight: 245),
+    );
+  }
+}
+
+/// Делегат кастомного аппбара.
+///
+/// По умолчанию аппбар состоит из крупного заголовка и строки поиска мест.
+/// При сужении аппбара строка поиска мест становится невидимой, заголовок аппбара уменьшается.
+class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final double expandedHeight;
+
+  @override
+  double get maxExtent => expandedHeight;
+
+  @override
+  double get minExtent => 150;
+
+  const _CustomAppBarDelegate({
+    required this.expandedHeight,
+  });
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    // Вычисление значений параметров аппбара в зависимости от того, начал ли аппбар сужаться.
+    final isScrollStarted = shrinkOffset > 0;
+    final theme = Theme.of(context);
+    final title = isScrollStarted
+        ? AppStrings.sightListAppBarTitle
+        : AppStrings.sightListAppBarTitleWithLineBreak;
+    final titleTextStyle =
+        isScrollStarted ? theme.textTheme.subtitle1 : theme.textTheme.headline4;
+    final centerTitle = isScrollStarted;
+
     return Column(
       children: [
-        SearchBar(
-          readOnly: true,
-          onTap: () => navigateToSightSearchScreen(context),
-          suffixIcon: const _FilterButton(),
+        Expanded(
+          flex: 2,
+          child: CustomAppBar(
+            title: title,
+            titleTextStyle: titleTextStyle,
+            centerTitle: centerTitle,
+            toolbarHeight: 128,
+            padding: EdgeInsets.only(
+              // При сужении аппбара убираются отступы у аппбара.
+              top: isScrollStarted ? 0 : 40,
+              bottom: isScrollStarted ? 0 : 16,
+            ),
+          ),
         ),
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(
-              right: 16,
-              left: 16,
-              top: 20,
+          child: Opacity(
+            // При сужении аппбара строка поиска становится невидимой.
+            opacity: 1 - shrinkOffset / expandedHeight,
+            child: SearchBar(
+              readOnly: true,
+              // Не обрабатывать нажатия, когда строка поиска уже скрыта.
+              onTap: isScrollStarted
+                  ? null
+                  : () => navigateToSightSearchScreen(context),
+              suffixIcon: _FilterButton(
+                isButtonDisabled: isScrollStarted,
+              ),
             ),
-            itemCount: sights.length,
-            itemBuilder: (_, index) {
-              return SightCard(sights[index]);
-            },
           ),
         ),
       ],
     );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 
   /// Открывает экран поиска достопримечательностей.
@@ -230,11 +295,41 @@ class _SightListBody extends StatelessWidget {
   }
 }
 
+/// Список достопримечательностей на сливере.
+class _SliverSightList extends StatelessWidget {
+  final List<Sight> sights;
+
+  const _SliverSightList({
+    Key? key,
+    required this.sights,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        childCount: sights.length,
+        (_, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SightCard(sights[index]),
+          );
+        },
+      ),
+    );
+  }
+}
+
 /// Кнопка фильтрации достопримечательностей.
 ///
 /// Открывает экран фильтрации, после закрытия которого применяются выбранные фильтры и обновляется текущий экран.
 class _FilterButton extends StatelessWidget {
-  const _FilterButton({Key? key}) : super(key: key);
+  final bool isButtonDisabled;
+
+  const _FilterButton({
+    Key? key,
+    this.isButtonDisabled = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +342,8 @@ class _FilterButton extends StatelessWidget {
         color: theme.colorScheme.primary,
       ),
       color: theme.primaryColorDark,
-      onPressed: () => navigateToFiltersScreen(context),
+      onPressed:
+          isButtonDisabled ? null : () => navigateToFiltersScreen(context),
     );
   }
 

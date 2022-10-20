@@ -6,9 +6,11 @@ import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:places/providers/sight_details_provider.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
+import 'package:provider/provider.dart';
 
 /// Виджет для отображения подробностей достопримечательности.
 ///
@@ -25,51 +27,73 @@ class SightDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _SightDetailsTop(sight),
-          _SightDetailsBottom(sight),
-        ],
+      resizeToAvoidBottomInset: false,
+      body: ChangeNotifierProvider(
+        create: (context) => SightDetailsProvider(),
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (_, innerBoxIsScrolled) {
+              return [
+                _SliverSightPhotos(sight),
+              ];
+            },
+            body: _SliverSightDetails(sight),
+          ),
+        ),
       ),
     );
   }
 }
 
-/// Виджет для отображения верхней части подробностей достопримечательности.
+/// Сливер фотографий достопримечательности.
 ///
-/// Отображает картинку места и имеет кнопку "Назад".
-class _SightDetailsTop extends StatefulWidget {
+/// Сворачивается при скроллинге.
+class _SliverSightPhotos extends StatelessWidget {
   final Sight sight;
 
-  const _SightDetailsTop(this.sight, {Key? key}) : super(key: key);
-
-  @override
-  State<_SightDetailsTop> createState() => _SightDetailsTopState();
-}
-
-/// Состояние верхней части подробностей достопримечательности.
-///
-/// Содержит контроллер для скроллинга галлереи и номер активной фотографии.
-class _SightDetailsTopState extends State<_SightDetailsTop> {
-  final PageController _pageController = PageController();
-  int _activePage = 0;
+  const _SliverSightPhotos(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 360,
-      child: Stack(
+    return SliverPersistentHeader(
+      delegate: _SightPhotosDelegate(sight),
+    );
+  }
+}
+
+/// Делегат для отображения фотографий достопримечательности.
+///
+/// Отображает картинки места и имеет кнопку "Назад".
+class _SightPhotosDelegate extends SliverPersistentHeaderDelegate {
+  final Sight sight;
+
+  @override
+  double get maxExtent => 360;
+
+  @override
+  double get minExtent => 0;
+
+  const _SightPhotosDelegate(this.sight);
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Consumer<SightDetailsProvider>(
+      builder: (context, viewModel, child) => Stack(
         fit: StackFit.expand,
         children: [
           _PhotoGallery(
-            sight: widget.sight,
-            controller: _pageController,
-            onPageChanged: setActivePage,
+            sight: sight,
+            controller: viewModel.pageController,
+            onPageChanged: viewModel.setActivePage,
           ),
           _PageIndicator(
-            length: widget.sight.photoUrlList?.length ?? 0,
-            controller: _pageController,
-            activePage: _activePage,
+            length: sight.photoUrlList?.length ?? 0,
+            controller: viewModel.pageController,
+            activePage: viewModel.activePage,
           ),
           const _BackButton(),
         ],
@@ -77,11 +101,9 @@ class _SightDetailsTopState extends State<_SightDetailsTop> {
     );
   }
 
-  /// Устанавливает активную страницу.
-  void setActivePage(int page) {
-    setState(() {
-      _activePage = page;
-    });
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
 
@@ -179,40 +201,28 @@ class _PageIndicator extends StatelessWidget {
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
 /// Обязательный параметр конструктора: [sight] - модель достопримечательности.
-class _SightDetailsBottom extends StatelessWidget {
+class _SliverSightDetails extends StatelessWidget {
   final Sight sight;
 
-  const _SightDetailsBottom(this.sight, {Key? key}) : super(key: key);
+  const _SliverSightDetails(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 400,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _SightInfo(sight),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 24.0,
-                left: 16.0,
-                right: 16.0,
-              ),
-              child: _BuildRouteButton(),
-            ),
-            const CustomDivider(
-              padding: EdgeInsets.only(
-                top: 24,
-                left: 16,
-                right: 16,
-                bottom: 8,
-              ),
-              thickness: 0.8,
-            ),
-            const _SightActionsButtons(),
-          ],
+    return Column(
+      children: [
+        _SightInfo(sight),
+        const _BuildRouteButton(),
+        const CustomDivider(
+          padding: EdgeInsets.only(
+            top: 24,
+            left: 16,
+            right: 16,
+            bottom: 8,
+          ),
+          thickness: 0.8,
         ),
-      ),
+        const _SightActionsButtons(),
+      ],
     );
   }
 }
@@ -239,64 +249,135 @@ class _SightInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 24.0,
-              left: 16.0,
-            ),
-            child: Text(
-              sight.name,
-              style: theme.textTheme.headline5,
-            ),
+        _SightName(
+          sight.name,
+          textStyle: theme.textTheme.headline5!,
+        ),
+        _SightDetailsInfo(
+          sight.type.toString(),
+          workTime: sight.workTimeFrom ?? '',
+          sightTypeTextStyle: themeBodyText2!.copyWith(
+            color: onPrimaryColor,
+          ),
+          workTimeTextStyle: themeBodyText2.copyWith(
+            color: secondaryColor,
           ),
         ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 2.0,
-                left: 16.0,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  sight.type.toString(),
-                  style: themeBodyText2?.copyWith(
-                    color: onPrimaryColor,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 2.0,
-                left: 16.0,
-              ),
-              child: Text(
-                '${AppStrings.closedTo} ${sight.workTimeFrom}',
-                style: themeBodyText2?.copyWith(
-                  color: secondaryColor,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 24.0,
-            left: 16.0,
-            right: 16.0,
-          ),
-          child: Text(
-            sight.details,
-            style: themeBodyText2?.copyWith(
-              color: primaryColor,
-            ),
+        _SightDescription(
+          sight.details,
+          textStyle: themeBodyText2.copyWith(
+            color: primaryColor,
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Название достопримечательности.
+class _SightName extends StatelessWidget {
+  final String text;
+  final TextStyle textStyle;
+
+  const _SightName(
+    this.text, {
+    Key? key,
+    required this.textStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+      ),
+      child: Text(
+        text,
+        style: textStyle,
+      ),
+    );
+  }
+}
+
+/// Информация о достопримечательности.
+class _SightDetailsInfo extends StatelessWidget {
+  final String text;
+  final TextStyle sightTypeTextStyle;
+  final TextStyle workTimeTextStyle;
+  final String workTime;
+
+  const _SightDetailsInfo(
+    this.text, {
+    Key? key,
+    required this.sightTypeTextStyle,
+    required this.workTime,
+    required this.workTimeTextStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        top: 2,
+      ),
+      child: Row(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              text,
+              style: sightTypeTextStyle,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+            ),
+            child: Text(
+              '${AppStrings.closedTo} $workTime',
+              style: workTimeTextStyle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Описание достопримечательности.
+class _SightDescription extends StatelessWidget {
+  final String text;
+  final TextStyle textStyle;
+
+  const _SightDescription(
+    this.text, {
+    Key? key,
+    required this.textStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      height: 90,
+      child: CustomScrollView(slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Text(
+                text,
+                style: textStyle,
+              ),
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }
@@ -313,26 +394,33 @@ class _BuildRouteButton extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final onSecondaryColor = colorScheme.onSecondary;
 
-    return CustomElevatedButton(
-      AppStrings.buildRouteText,
-      textStyle: theme.textTheme.bodyText2?.copyWith(
-        color: onSecondaryColor,
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 24.0,
+        left: 16.0,
+        right: 16.0,
       ),
-      backgroundColor: colorScheme.primary,
-      height: 48,
-      // Картинка кнопки - пока что это просто белый контейнер.
-      buttonLabel: SvgPicture.asset(
-        AppAssets.route,
-        width: 24,
-        height: 24,
-        color: onSecondaryColor,
+      child: CustomElevatedButton(
+        AppStrings.buildRouteText,
+        textStyle: theme.textTheme.bodyText2?.copyWith(
+          color: onSecondaryColor,
+        ),
+        backgroundColor: colorScheme.primary,
+        height: 48,
+        // Картинка кнопки - пока что это просто белый контейнер.
+        buttonLabel: SvgPicture.asset(
+          AppAssets.route,
+          width: 24,
+          height: 24,
+          color: onSecondaryColor,
+        ),
+        // TODO(daniiliv): Здесь будет вызов реальной функции.
+        onPressed: () {
+          if (kDebugMode) {
+            print('"${AppStrings.buildRouteText}" button pressed.');
+          }
+        },
       ),
-      // TODO(daniiliv): Здесь будет вызов реальной функции.
-      onPressed: () {
-        if (kDebugMode) {
-          print('"${AppStrings.buildRouteText}" button pressed.');
-        }
-      },
     );
   }
 }
