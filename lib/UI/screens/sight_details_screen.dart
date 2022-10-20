@@ -27,12 +27,13 @@ class SightDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ChangeNotifierProvider(
         create: (context) => SightDetailsProvider(),
-        child: Column(
-          children: [
-            _SightDetailsTop(sight),
-            _SightDetailsBottom(sight),
+        child: CustomScrollView(
+          slivers: [
+            _SliverSightPhotos(sight),
+            _SliverSightDetails(sight),
           ],
         ),
       ),
@@ -40,37 +41,65 @@ class SightDetailsScreen extends StatelessWidget {
   }
 }
 
-/// Виджет для отображения верхней части подробностей достопримечательности.
+/// Сливер фотографий достопримечательности.
 ///
-/// Отображает картинку места и имеет кнопку "Назад".
-class _SightDetailsTop extends StatelessWidget {
+/// Сворачивается при скроллинге.
+class _SliverSightPhotos extends StatelessWidget {
   final Sight sight;
 
-  const _SightDetailsTop(this.sight, {Key? key}) : super(key: key);
+  const _SliverSightPhotos(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 360,
-      child: Consumer<SightDetailsProvider>(
-        builder: (context, viewModel, child) => Stack(
-          fit: StackFit.expand,
-          children: [
-            _PhotoGallery(
-              sight: sight,
-              controller: viewModel.pageController,
-              onPageChanged: viewModel.setActivePage,
-            ),
-            _PageIndicator(
-              length: sight.photoUrlList?.length ?? 0,
-              controller: viewModel.pageController,
-              activePage: viewModel.activePage,
-            ),
-            const _BackButton(),
-          ],
-        ),
+    return SliverPersistentHeader(
+      delegate: _SightPhotosDelegate(sight),
+    );
+  }
+}
+
+/// Делегат для отображения фотографий достопримечательности.
+///
+/// Отображает картинки места и имеет кнопку "Назад".
+class _SightPhotosDelegate extends SliverPersistentHeaderDelegate {
+  final Sight sight;
+
+  @override
+  double get maxExtent => 360;
+
+  @override
+  double get minExtent => 0;
+
+  const _SightPhotosDelegate(this.sight);
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Consumer<SightDetailsProvider>(
+      builder: (context, viewModel, child) => Stack(
+        fit: StackFit.expand,
+        children: [
+          _PhotoGallery(
+            sight: sight,
+            controller: viewModel.pageController,
+            onPageChanged: viewModel.setActivePage,
+          ),
+          _PageIndicator(
+            length: sight.photoUrlList?.length ?? 0,
+            controller: viewModel.pageController,
+            activePage: viewModel.activePage,
+          ),
+          const _BackButton(),
+        ],
       ),
     );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
 
@@ -168,15 +197,14 @@ class _PageIndicator extends StatelessWidget {
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
 /// Обязательный параметр конструктора: [sight] - модель достопримечательности.
-class _SightDetailsBottom extends StatelessWidget {
+class _SliverSightDetails extends StatelessWidget {
   final Sight sight;
 
-  const _SightDetailsBottom(this.sight, {Key? key}) : super(key: key);
+  const _SliverSightDetails(this.sight, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 400,
+    return SliverFillRemaining(
       child: Column(
         children: [
           _SightInfo(sight),
@@ -220,11 +248,11 @@ class _SightInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SightName(
-          sightName: sight.name,
+          sight.name,
           textStyle: theme.textTheme.headline5!,
         ),
         _SightDetailsInfo(
-          sightType: sight.type.toString(),
+          sight.type.toString(),
           workTime: sight.workTimeFrom ?? '',
           sightTypeTextStyle: themeBodyText2!.copyWith(
             color: onPrimaryColor,
@@ -234,7 +262,7 @@ class _SightInfo extends StatelessWidget {
           ),
         ),
         _SightDescription(
-          description: sight.details,
+          sight.details,
           textStyle: themeBodyText2.copyWith(
             color: primaryColor,
           ),
@@ -246,12 +274,12 @@ class _SightInfo extends StatelessWidget {
 
 /// Название достопримечательности.
 class _SightName extends StatelessWidget {
-  final String sightName;
+  final String text;
   final TextStyle textStyle;
 
-  const _SightName({
+  const _SightName(
+    this.text, {
     Key? key,
-    required this.sightName,
     required this.textStyle,
   }) : super(key: key);
 
@@ -263,7 +291,7 @@ class _SightName extends StatelessWidget {
         left: 16.0,
       ),
       child: Text(
-        sightName,
+        text,
         style: textStyle,
       ),
     );
@@ -272,14 +300,14 @@ class _SightName extends StatelessWidget {
 
 /// Информация о достопримечательности.
 class _SightDetailsInfo extends StatelessWidget {
-  final String sightType;
+  final String text;
   final TextStyle sightTypeTextStyle;
   final TextStyle workTimeTextStyle;
   final String workTime;
 
-  const _SightDetailsInfo({
+  const _SightDetailsInfo(
+    this.text, {
     Key? key,
-    required this.sightType,
     required this.sightTypeTextStyle,
     required this.workTime,
     required this.workTimeTextStyle,
@@ -297,7 +325,7 @@ class _SightDetailsInfo extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              sightType,
+              text,
               style: sightTypeTextStyle,
             ),
           ),
@@ -318,27 +346,27 @@ class _SightDetailsInfo extends StatelessWidget {
 
 /// Описание достопримечательности.
 class _SightDescription extends StatelessWidget {
-  final String description;
+  final String text;
   final TextStyle textStyle;
 
-  const _SightDescription({
+  const _SightDescription(
+    this.text, {
     Key? key,
-    required this.description,
     required this.textStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
       padding: const EdgeInsets.only(
         top: 24.0,
         left: 16.0,
         right: 16.0,
       ),
+      height: 90,
       child: SingleChildScrollView(
         child: Text(
-          description,
+          text,
           style: textStyle,
         ),
       ),
