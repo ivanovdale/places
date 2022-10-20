@@ -31,11 +31,13 @@ class SightDetailsScreen extends StatelessWidget {
       body: ChangeNotifierProvider(
         create: (context) => SightDetailsProvider(),
         child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              _SliverSightPhotos(sight),
-              _SliverSightDetails(sight),
-            ],
+          child: NestedScrollView(
+            headerSliverBuilder: (_, innerBoxIsScrolled) {
+              return [
+                _SliverSightPhotos(sight),
+              ];
+            },
+            body: _SliverSightDetails(sight),
           ),
         ),
       ),
@@ -206,23 +208,21 @@ class _SliverSightDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Column(
-        children: [
-          _SightInfo(sight),
-          const _BuildRouteButton(),
-          const CustomDivider(
-            padding: EdgeInsets.only(
-              top: 24,
-              left: 16,
-              right: 16,
-              bottom: 8,
-            ),
-            thickness: 0.8,
+    return Column(
+      children: [
+        _SightInfo(sight),
+        const _BuildRouteButton(),
+        const CustomDivider(
+          padding: EdgeInsets.only(
+            top: 24,
+            left: 16,
+            right: 16,
+            bottom: 8,
           ),
-          const _SightActionsButtons(),
-        ],
-      ),
+          thickness: 0.8,
+        ),
+        const _SightActionsButtons(),
+      ],
     );
   }
 }
@@ -366,12 +366,18 @@ class _SightDescription extends StatelessWidget {
         right: 16.0,
       ),
       height: 90,
-      child: SingleChildScrollView(
-        child: Text(
-          text,
-          style: textStyle,
+      child: CustomScrollView(slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Text(
+                text,
+                style: textStyle,
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
