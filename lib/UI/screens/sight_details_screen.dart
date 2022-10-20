@@ -30,11 +30,13 @@ class SightDetailsScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: ChangeNotifierProvider(
         create: (context) => SightDetailsProvider(),
-        child: CustomScrollView(
-          slivers: [
-            _SliverSightPhotos(sight),
-            _SliverSightDetails(sight),
-          ],
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              _SliverSightPhotos(sight),
+              _SliverSightDetails(sight),
+            ],
+          ),
         ),
       ),
     );
