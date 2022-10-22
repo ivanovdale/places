@@ -853,6 +853,7 @@ class _CreateButton extends StatelessWidget {
 
     if (isDataValid) {
       final newSight = Sight(
+        id: mocked.sights.last.id + 1,
         name: dataStorage._nameController.text,
         coordinatePoint: CoordinatePoint(
           lat: double.parse(dataStorage._latitudeController.text),

@@ -5,6 +5,7 @@ import 'package:places/helpers/app_strings.dart';
 /// Модель достопримечательности.
 ///
 /// Имеет следующие поля:
+/// * [id] - идентификатор;
 /// * [name] - название достопримечательности;
 /// * [coordinatePoint] - географические координаты точки;
 /// * [photoUrlList] - пути до фотографии в интернете;
@@ -14,6 +15,7 @@ import 'package:places/helpers/app_strings.dart';
 /// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
 /// * [visited] - признак посещения.
 class Sight {
+  int id;
   String name;
   CoordinatePoint coordinatePoint;
   List<String>? photoUrlList;
@@ -24,6 +26,7 @@ class Sight {
   bool visited;
 
   Sight({
+    required this.id,
     required this.name,
     required this.coordinatePoint,
     required this.details,

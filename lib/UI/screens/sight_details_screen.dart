@@ -6,6 +6,7 @@ import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:places/mocks.dart' as mocked;
 import 'package:places/providers/sight_details_provider.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 import 'package:places/ui/screens/components/custom_elevated_button.dart';
@@ -18,14 +19,16 @@ import 'package:provider/provider.dart';
 /// Предоставляет возможность построить маршрут к этому месту.
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
-/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
+/// Обязательный параметр конструктора: [sightId] - идентификатор достопримечательности.
 class SightDetailsScreen extends StatelessWidget {
-  final Sight sight;
+  final int sightId;
 
-  const SightDetailsScreen(this.sight, {Key? key}) : super(key: key);
+  const SightDetailsScreen(this.sightId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final sight = mocked.sights.firstWhere((sight) => sight.id == sightId);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ChangeNotifierProvider(
