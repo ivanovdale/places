@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/settings_screen.dart';
-import 'package:places/UI/screens/sight_list_screen.dart';
-import 'package:places/UI/screens/visiting_sights_screen.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_router.dart';
 
 /// Хранит текущую выбранную вкладку.
 class BottomBarProvider extends ChangeNotifier {
@@ -11,22 +9,22 @@ class BottomBarProvider extends ChangeNotifier {
     {
       'icon': AppAssets.list,
       'activeIcon': AppAssets.listFilled,
-      'screen': const SightListScreen(),
+      'routeName': AppRouter.sightList,
     },
     {
       'icon': AppAssets.map,
       'activeIcon': AppAssets.mapFilled,
-      'screen': const SightListScreen(), // Пока экрана нет.
+      'routeName': AppRouter.sightList, // Пока экрана нет.
     },
     {
       'icon': AppAssets.heart,
       'activeIcon': AppAssets.heartFilled,
-      'screen': const VisitingSightsScreen(),
+      'routeName': AppRouter.visitingSights,
     },
     {
       'icon': AppAssets.settings,
       'activeIcon': AppAssets.settingsFilled,
-      'screen': const SettingsScreen(),
+      'routeName': AppRouter.settings,
     },
   ];
 
@@ -38,11 +36,9 @@ class BottomBarProvider extends ChangeNotifier {
     int index,
     BuildContext context,
   ) {
-    Navigator.pushReplacement(
+    Navigator.pushReplacementNamed(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => items[index]['screen'] as Widget,
-      ),
+      items[index]['routeName'] as String,
     );
 
     selectedIndex = index;

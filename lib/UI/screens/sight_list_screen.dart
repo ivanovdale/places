@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:places/UI/screens/add_sight_screen.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/sight_filters_screen.dart';
-import 'package:places/UI/screens/sight_search_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/ui/screens/components/custom_app_bar.dart';
@@ -84,11 +83,9 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
   ///
   /// Если была создана новая достопримечательность, добавляет её в список моковых достопримечательностей и обновляет экран.
   Future<void> openAddSightScreen(BuildContext context) async {
-    final newSight = await Navigator.push(
+    final newSight = await Navigator.pushNamed<Sight?>(
       context,
-      MaterialPageRoute<Sight?>(
-        builder: (context) => const AddSightScreen(),
-      ),
+      AppRouter.addSight,
     );
 
     if (newSight != null) {
@@ -282,15 +279,14 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   void navigateToSightSearchScreen(BuildContext context) {
     final dataStorage = _InheritedSightListScreenState.of(context);
 
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => SightSearchScreen(
-          sightTypeFilters: dataStorage.sightTypeFilters,
-          distanceFrom: dataStorage.distanceFrom,
-          distanceTo: dataStorage.distanceTo,
-        ),
-      ),
+      AppRouter.sightSearch,
+      arguments: {
+        'sightTypeFilters': dataStorage.sightTypeFilters,
+        'distanceFrom': dataStorage.distanceFrom,
+        'distanceTo': dataStorage.distanceTo,
+      },
     );
   }
 }
@@ -353,15 +349,14 @@ class _FilterButton extends StatelessWidget {
   Future<void> navigateToFiltersScreen(BuildContext context) async {
     final dataStorage = _InheritedSightListScreenState.of(context);
 
-    final selectedFilters = await Navigator.push(
+    final selectedFilters = await Navigator.pushNamed<Map<String, Object>>(
       context,
-      MaterialPageRoute<Map<String, Object>>(
-        builder: (context) => SightFiltersScreen(
-          sightTypeFilters: dataStorage.sightTypeFilters,
-          distanceFrom: dataStorage.distanceFrom,
-          distanceTo: dataStorage.distanceTo,
-        ),
-      ),
+      AppRouter.sightFilters,
+      arguments: {
+        'sightTypeFilters': dataStorage.sightTypeFilters,
+        'distanceFrom': dataStorage.distanceFrom,
+        'distanceTo': dataStorage.distanceTo,
+      },
     );
 
     if (selectedFilters != null) {

@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/add_sight_screen.dart';
-import 'package:places/UI/screens/onboarding_screen.dart';
-import 'package:places/UI/screens/sight_type_selection_screen.dart';
-import 'package:places/UI/screens/sight_search_screen.dart';
-import 'package:places/UI/screens/splash_screen.dart';
-import 'package:places/mocks.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/providers/bottom_bar_provider.dart';
 import 'package:places/providers/visiting_provider.dart';
-import 'package:places/ui/screens/sight_filters_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
-import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/screens/components/sight_card.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:places/ui/screens/sight_list_screen.dart';
-import 'package:places/ui/screens/visiting_sights_screen.dart';
 import 'package:provider/provider.dart';
 
 /// Признак использования тёмной темы в приложении.
@@ -49,9 +38,10 @@ class _AppState extends State<App> {
     });
 
     return MaterialApp(
+      initialRoute: AppRouter.root,
+      onGenerateRoute: AppRouter.generateRoute,
       debugShowCheckedModeBanner: false,
       theme: isDarkModeEnabled ? darkTheme : lightTheme,
-      home: const SplashScreen(),
     );
   }
 }

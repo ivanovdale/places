@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/UI/screens/onboarding_screen.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
+import 'package:places/helpers/app_router.dart';
 
 /// Сплэш-экран с лого приложения.
 class SplashScreen extends StatefulWidget {
@@ -52,12 +51,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Переход на экран онбординга.
   void _navigateToNext() {
-    if (kDebugMode) {
-      print('Переход на следующий экран');
-    }
-    Navigator.pushReplacement(
+    Navigator.pushReplacementNamed(
       context,
-      MaterialPageRoute<void>(builder: (context) => const OnboardingScreen()),
+      AppRouter.onboarding,
     );
   }
 }

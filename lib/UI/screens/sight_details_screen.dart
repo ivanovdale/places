@@ -13,7 +13,7 @@ import 'package:places/ui/screens/components/custom_elevated_button.dart';
 import 'package:places/ui/screens/components/custom_text_button.dart';
 import 'package:provider/provider.dart';
 
-/// Виджет для отображения подробностей достопримечательности.
+/// Экран подробностей достопримечательности.
 ///
 /// Отображает картинку, название, тип, режим работы, описание места.
 /// Предоставляет возможность построить маршрут к этому месту.

@@ -8,13 +8,15 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
-import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/work_with_places_mixin.dart';
 
+/// Экран поиска достопримечательностей.
+///
 /// Отображает поле поиска достопримечательностей, историю поиска, найденные достопримечательности.
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
@@ -567,11 +569,12 @@ class _SightsFoundItem extends StatelessWidget {
     final dataStorage = _InheritedSightSearchBodyState.of(context);
     dataStorage._searchHistory.add(sight.name);
 
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => SightDetailsScreen(sight.id),
-      ),
+      AppRouter.sightDetails,
+      arguments: {
+        'id': sight.id,
+      },
     );
   }
 }
