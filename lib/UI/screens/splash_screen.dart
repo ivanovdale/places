@@ -8,15 +8,9 @@ import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 
 /// Сплэш-экран с лого приложения.
-///
-/// Параметр [isInitialized] - отвечает за то, готово ли приложение
-/// к дальнейшей работе для перехода на следующий экран.
 class SplashScreen extends StatefulWidget {
-  final Future<bool> isInitialized;
-
   const SplashScreen({
     Key? key,
-    required this.isInitialized,
   }) : super(key: key);
 
   @override
@@ -46,7 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    widget.isInitialized.then(
+
+    // Дожидаемся инициализации приложения для перехода на следующий экран.
+    Future.delayed(
+      const Duration(seconds: 2),
+      () => true,
+    ).then(
       (value) => _navigateToNext(),
     );
   }
