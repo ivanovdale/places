@@ -39,4 +39,7 @@ class AppAssets {
   static const welcome = 'assets/icons/welcome.svg';
   static const backpack = 'assets/icons/backpack.svg';
   static const tap = 'assets/icons/tap.svg';
+
+  // Лого загрузки - SplashScreen.
+  static const appLogo = 'assets/icons/app_logo.svg';
 }
