@@ -6,9 +6,9 @@ import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
-import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/replace_comma_formatter.dart';
@@ -624,11 +624,9 @@ class _SightTypeSelectionField extends StatelessWidget {
   Future<void> selectSightTypeFromListOnNewScreen(BuildContext context) async {
     final dataStorage = _InheritedAddSightBodyState.of(context);
 
-    final selectedSightType = await Navigator.push(
+    final selectedSightType = await Navigator.pushNamed<SightTypes>(
       context,
-      MaterialPageRoute<SightTypes>(
-        builder: (context) => const SightTypeSelectionScreen(),
-      ),
+      AppRouter.sightTypeSelection,
     );
 
     if (selectedSightType != null) {
@@ -853,6 +851,7 @@ class _CreateButton extends StatelessWidget {
 
     if (isDataValid) {
       final newSight = Sight(
+        id: mocked.sights.last.id + 1,
         name: dataStorage._nameController.text,
         coordinatePoint: CoordinatePoint(
           lat: double.parse(dataStorage._latitudeController.text),

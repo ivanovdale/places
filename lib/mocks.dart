@@ -3,6 +3,7 @@ import 'package:places/domain/sight.dart';
 
 final List<Sight> sights = [
   Sight(
+    id: 1,
     name: 'Кофейня Sibaristica',
     coordinatePoint: CoordinatePoint(
       lat: 30.283861,
@@ -22,6 +23,7 @@ final List<Sight> sights = [
     visitDate: '1 сент. 2022',
   ),
   Sight(
+    id: 2,
     name: 'Остров Новая Голландия',
     coordinatePoint: CoordinatePoint(
       lat: 30.287104,
@@ -37,6 +39,7 @@ final List<Sight> sights = [
     visitDate: '5 сент. 2022',
   ),
   Sight(
+    id: 3,
     name: 'Bolshecoffee roasters',
     coordinatePoint: CoordinatePoint(
       lat: 30.353768,
@@ -53,6 +56,7 @@ final List<Sight> sights = [
     visited: true,
   ),
   Sight(
+    id: 4,
     name: 'Государственный Эрмитаж',
     coordinatePoint: CoordinatePoint(
       lat: 30.314566,
@@ -69,6 +73,7 @@ final List<Sight> sights = [
     visited: true,
   ),
   Sight(
+    id: 5,
     name: 'Исаакиевский собор',
     coordinatePoint: CoordinatePoint(
       lat: 30.306274,
@@ -84,6 +89,7 @@ final List<Sight> sights = [
     visitDate: '10 сент. 2022',
   ),
   Sight(
+    id: 6,
     name: 'Эрарта',
     coordinatePoint: CoordinatePoint(
       lat: 30.251621,
@@ -100,6 +106,7 @@ final List<Sight> sights = [
     visited: true,
   ),
   Sight(
+    id: 7,
     name: 'Парк 300-летия Санкт-Петербурга',
     coordinatePoint: CoordinatePoint(
       lat: 30.230737,

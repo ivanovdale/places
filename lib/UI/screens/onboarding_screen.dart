@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/UI/screens/sight_list_screen.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 
 /// Список с данными для страниц онбординга.
@@ -75,12 +75,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
 
-  /// Выполняет переход на главную страницу.
+  /// Выполняет переход на главную страницу, если стек экранов пуст.
   void goToSightListScreen(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(builder: (context) => const SightListScreen()),
-    );
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRouter.sightList,
+      );
+    }
   }
 }
 

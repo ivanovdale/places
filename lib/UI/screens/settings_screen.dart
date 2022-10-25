@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/onboarding_screen.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 
 // TODO(daniiliv): Воспользуемся глобальной переменной на время, пока нет DI.
@@ -9,6 +9,8 @@ import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/ui/screens/components/custom_divider.dart';
 
+/// Экран настроек.
+///
 /// Отображает переключатель тёмной/светлой темы. Позволяет перейти на экран онбординга.
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -132,9 +134,6 @@ class _WatchTutorialInfo extends StatelessWidget {
 
   /// Выполняет переход на страницу онбординга.
   void goToOnboardingScreen(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(builder: (context) => const OnboardingScreen()),
-    );
+    Navigator.pushNamed(context, AppRouter.onboarding);
   }
 }

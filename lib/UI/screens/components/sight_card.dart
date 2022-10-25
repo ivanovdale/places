@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
@@ -34,11 +35,7 @@ abstract class BaseSightCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () {
-              if (kDebugMode) {
-                print('SightCard tapped.');
-              }
-            },
+            onTap: () => _navigateToSightDetailsScreen(context, sight),
             child: Column(
               children: [
                 Expanded(
@@ -58,6 +55,15 @@ abstract class BaseSightCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  /// Переход на экран детализации достопримечательности.
+  void _navigateToSightDetailsScreen(BuildContext context, Sight sight) {
+    Navigator.pushNamed(
+      context,
+      AppRouter.sightDetails,
+      arguments: {'id': sight.id},
     );
   }
 }

@@ -10,7 +10,7 @@ import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
-/// Виджет для отображения списка посещенных/планируемых к посещению мест.
+/// Экран списка посещенных/планируемых к посещению мест.
 ///
 /// Имеет TabBar для переключения между списками.
 class VisitingSightsScreen extends StatelessWidget {

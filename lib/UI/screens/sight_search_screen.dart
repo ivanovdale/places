@@ -8,13 +8,15 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
-import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
+import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/work_with_places_mixin.dart';
 
+/// Экран поиска достопримечательностей.
+///
 /// Отображает поле поиска достопримечательностей, историю поиска, найденные достопримечательности.
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
@@ -146,7 +148,7 @@ class _SightSearchBodyState extends State<_SightSearchBody>
         Future.delayed(
           const Duration(milliseconds: 500),
           () {
-            applyAllFilters(_searchString);
+            _applyAllFilters(_searchString);
             setState(() {
               _searchInProgress = false;
             });
@@ -166,30 +168,30 @@ class _SightSearchBodyState extends State<_SightSearchBody>
   }
 
   /// Очищает поле поиска
-  void clearSearchText() {
+  void _clearSearchText() {
     _searchController.clear();
   }
 
   /// Удаляет элемент из списка истории поиска по его имени.
-  void deleteItemFromSet(String itemName) {
+  void _deleteItemFromSet(String itemName) {
     _searchHistory.removeWhere((searchItem) => searchItem == itemName);
     setState(() {});
   }
 
   /// Удаляет все элементы из списка истории поиска.
-  void deleteAllItemsFromSet() {
+  void _deleteAllItemsFromSet() {
     _searchHistory.clear();
     setState(() {});
   }
 
   /// Заполняет поле поиска переданной строкой.
-  void fillSearchFieldWithItem(String itemName) {
+  void _fillSearchFieldWithItem(String itemName) {
     _searchController.text = itemName;
     setState(() {});
   }
 
   /// Применяет фильтрацию по всем текущим параметрам.
-  void applyAllFilters(String searchString) {
+  void _applyAllFilters(String searchString) {
     final range = {
       'distanceFrom': widget.distanceFrom,
       'distanceTo': widget.distanceTo,
@@ -227,7 +229,7 @@ class _SearchBar extends StatelessWidget {
       suffixIcon: IconButton(
         icon: const Icon(Icons.cancel),
         color: theme.primaryColorDark,
-        onPressed: dataStorage.clearSearchText,
+        onPressed: dataStorage._clearSearchText,
       ),
     );
   }
@@ -398,15 +400,15 @@ class _DeleteHistorySearchItemFromListButton extends StatelessWidget {
     final secondaryColor = theme.colorScheme.secondary;
 
     return CustomIconButton(
-      onPressed: () => deleteItemFromSet(context),
+      onPressed: () => _deleteItemFromSet(context),
       icon: Icons.close,
       color: secondaryColor.withOpacity(0.56),
     );
   }
 
   /// Вызывает функцию из стейта экрана, которая удаляет элемент из списка истории поиска.
-  void deleteItemFromSet(BuildContext context) {
-    _InheritedSightSearchBodyState.of(context).deleteItemFromSet(itemName);
+  void _deleteItemFromSet(BuildContext context) {
+    _InheritedSightSearchBodyState.of(context)._deleteItemFromSet(itemName);
   }
 }
 
@@ -429,7 +431,7 @@ class _ClearSearchHistoryButton extends StatelessWidget {
         padding: const EdgeInsets.only(
           top: 28,
         ),
-        onPressed: dataStorage.deleteAllItemsFromSet,
+        onPressed: dataStorage._deleteAllItemsFromSet,
       ),
     );
   }
@@ -457,14 +459,14 @@ class _HistorySearchItemTextButton extends StatelessWidget {
         color: secondaryColor,
       ),
       alignment: Alignment.centerLeft,
-      onPressed: () => fillSearchFieldWithItem(context),
+      onPressed: () => _fillSearchFieldWithItem(context),
     );
   }
 
   /// Заполняет поле поиска заданным элементом.
-  void fillSearchFieldWithItem(BuildContext context) {
+  void _fillSearchFieldWithItem(BuildContext context) {
     _InheritedSightSearchBodyState.of(context)
-        .fillSearchFieldWithItem(itemName);
+        ._fillSearchFieldWithItem(itemName);
   }
 }
 
@@ -540,7 +542,7 @@ class _SightsFoundItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => navigateToSightDetailsScreen(context, sight),
+      onTap: () => _navigateToSightDetailsScreen(context, sight),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -561,17 +563,18 @@ class _SightsFoundItem extends StatelessWidget {
     );
   }
 
-  /// Переход на экран детализации достопримечательности.
-  void navigateToSightDetailsScreen(BuildContext context, Sight sight) {
+  /// Сохранение места в истории поиска и переход на экран детализации достопримечательности.
+  void _navigateToSightDetailsScreen(BuildContext context, Sight sight) {
     // Сохранить переход в истории поиска.
     final dataStorage = _InheritedSightSearchBodyState.of(context);
     dataStorage._searchHistory.add(sight.name);
 
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => SightDetailsScreen(sight),
-      ),
+      AppRouter.sightDetails,
+      arguments: {
+        'id': sight.id,
+      },
     );
   }
 }
