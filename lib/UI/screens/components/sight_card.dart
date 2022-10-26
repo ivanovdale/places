@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
@@ -35,7 +35,7 @@ abstract class BaseSightCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => _navigateToSightDetailsScreen(context, sight),
+            onTap: () => _showSightDetailsBottomSheet(context, sight),
             child: Column(
               children: [
                 Expanded(
@@ -58,12 +58,13 @@ abstract class BaseSightCard extends StatelessWidget {
     );
   }
 
-  /// Переход на экран детализации достопримечательности.
-  void _navigateToSightDetailsScreen(BuildContext context, Sight sight) {
-    Navigator.pushNamed(
-      context,
-      AppRouter.sightDetails,
-      arguments: {'id': sight.id},
+  /// Показывает боттомшит детализации достопримечательности.
+  void _showSightDetailsBottomSheet(BuildContext context, Sight sight) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => SightDetailsScreen(sight.id),
     );
   }
 }

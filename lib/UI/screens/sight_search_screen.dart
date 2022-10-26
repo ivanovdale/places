@@ -8,9 +8,9 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
+import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/work_with_places_mixin.dart';
@@ -542,7 +542,7 @@ class _SightsFoundItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _navigateToSightDetailsScreen(context, sight),
+      onTap: () => _showSightDetailsBottomSheet(context, sight),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -563,18 +563,17 @@ class _SightsFoundItem extends StatelessWidget {
     );
   }
 
-  /// Сохранение места в истории поиска и переход на экран детализации достопримечательности.
-  void _navigateToSightDetailsScreen(BuildContext context, Sight sight) {
+  /// Сохранение места в истории поиска и открытие боттомшита детализации достопримечательности.
+  void _showSightDetailsBottomSheet(BuildContext context, Sight sight) {
     // Сохранить переход в истории поиска.
     final dataStorage = _InheritedSightSearchBodyState.of(context);
     dataStorage._searchHistory.add(sight.name);
 
-    Navigator.pushNamed(
-      context,
-      AppRouter.sightDetails,
-      arguments: {
-        'id': sight.id,
-      },
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => SightDetailsScreen(sight.id),
     );
   }
 }
