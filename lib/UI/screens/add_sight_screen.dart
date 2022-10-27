@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
@@ -8,6 +10,7 @@ import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/domain/coordinate_point.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
@@ -119,7 +122,7 @@ class _AddSightBodyState extends State<_AddSightBody> {
               _PhotoCarousel(),
               _SightTypeLabel(),
               _SightTypeSelectionField(),
-              _PaddedDivider(),
+              _SightTypePaddedDivider(),
               _NameLabel(padding: defaultLabelPadding),
               _NameTextField(),
               _MapTextFields(),
@@ -759,8 +762,13 @@ class _AddNewPhotoButton extends StatelessWidget {
     );
   }
 
-  /// Добавляет новое фото в список добавляемых фото.
+  /// Открывает диалог для добавления нового фото в список добавляемых фото.
   void addPhotoToList(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const _PhotoPicker(),
+    );
     // TODO(daniiliv): *Как будто сработал image picker*.
     const newPhotoUrl = mocked.newPhotoOnAddSightScreen;
 
@@ -866,9 +874,154 @@ class _CreateButton extends StatelessWidget {
   }
 }
 
-/// Разделитель с заданной толщиной и отступами.
-class _PaddedDivider extends StatelessWidget {
-  const _PaddedDivider({Key? key}) : super(key: key);
+/// Позволяет выбрать фото из камеры, галереи или файлов.
+class _PhotoPicker extends StatelessWidget {
+  /// Действия добавления фотографии.
+  List<Map<String, String>> get actions => [
+        {
+          'icon': AppAssets.camera,
+          'text': AppStrings.camera,
+        },
+        {
+          'icon': AppAssets.photo,
+          'text': AppStrings.photo,
+        },
+        {
+          'icon': AppAssets.file,
+          'text': AppStrings.file,
+        },
+      ];
+
+  const _PhotoPicker({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onBackgroundColor = theme.colorScheme.onBackground;
+
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      alignment: Alignment.bottomCenter,
+      insetPadding: EdgeInsets.zero,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _AddPhotoActions(actions: actions),
+            const SizedBox(
+              height: 8,
+            ),
+            CustomElevatedButton(
+              AppStrings.cancel,
+              backgroundColor: onBackgroundColor,
+              height: 48,
+              textStyle: theme.textTheme.bodyText2!.copyWith(
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.primary,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Возможные действия для добавления фото.
+class _AddPhotoActions extends StatelessWidget {
+  final List<Map<String, String>> actions;
+
+  const _AddPhotoActions({
+    Key? key,
+    required this.actions,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onBackgroundColor = theme.colorScheme.onBackground;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: onBackgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: actions
+            .map((action) => _ActionItem(
+                  text: action['text']!,
+                  iconAsset: action['icon']!,
+                  isLastItem: action['text'] == actions.last['text'],
+                ))
+            .toList(),
+      ),
+    );
+  }
+}
+
+/// Действие добавления новой фотографии.
+class _ActionItem extends StatelessWidget {
+  final String text;
+  final String iconAsset;
+  final bool isLastItem;
+
+  const _ActionItem({
+    Key? key,
+    required this.text,
+    required this.iconAsset,
+    required this.isLastItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final secondaryColor = theme.colorScheme.secondary;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: () {
+            if (kDebugMode) {
+              print('$text button pressed.');
+            }
+          },
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                iconAsset,
+                height: 24,
+                color: secondaryColor,
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Text(
+                text,
+                style: theme.textTheme.bodyText1!.copyWith(
+                  color: secondaryColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Для последнего элемента не добавляем разделитель.
+        if (!isLastItem) const _AddPhotoActionPaddedDivider(),
+      ],
+    );
+  }
+}
+
+/// Разделитель для типа достопримечательности с заданной толщиной и отступами.
+class _SightTypePaddedDivider extends StatelessWidget {
+  const _SightTypePaddedDivider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -881,6 +1034,23 @@ class _PaddedDivider extends StatelessWidget {
         bottom: 24,
       ),
       color: Theme.of(context).colorScheme.secondary.withOpacity(0.56),
+    );
+  }
+}
+
+/// Разделитель для действия добавления фото с заданной толщиной и отступами.
+class _AddPhotoActionPaddedDivider extends StatelessWidget {
+  const _AddPhotoActionPaddedDivider({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDivider(
+      thickness: 0.8,
+      padding: const EdgeInsets.only(
+        top: 13,
+        bottom: 13,
+      ),
+      color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
     );
   }
 }
