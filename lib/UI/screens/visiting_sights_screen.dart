@@ -115,7 +115,7 @@ abstract class _BaseVisitingSightList extends StatefulWidget {
   State<_BaseVisitingSightList> createState() => _BaseVisitingSightListState();
 
   /// Удаляет достопримечательность из списка.
-  void deleteSightFromList(Sight sight, BuildContext context);
+  void deleteSightFromList(Sight sight);
 
   /// Вставляет нужную карточку места по заданному индексу.
   void insertIntoSightList(
@@ -123,6 +123,34 @@ abstract class _BaseVisitingSightList extends StatefulWidget {
     int sightIndex,
     BuildContext context,
   );
+
+  /// Отображает пикер для выбора даты.
+  void showToVisitDatePicker(BuildContext context) {
+    showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 100)),
+      initialDate: DateTime.now(),
+      builder: (context, child) {
+        final theme = Theme.of(context);
+        final primaryColor = theme.primaryColor;
+        final primaryColorDark = theme.primaryColorDark;
+        final scaffoldColor = theme.scaffoldBackgroundColor;
+
+        return Theme(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(
+              primary: primaryColor,
+              onPrimary: scaffoldColor,
+              onSurface: primaryColorDark,
+            ),
+            dialogBackgroundColor: scaffoldColor,
+          ),
+          child: child!,
+        );
+      },
+    );
+  }
 }
 
 /// Состояние списка мест.
@@ -156,7 +184,6 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) => widget.deleteSightFromList(
                       listOfSights[index],
-                      context,
                     ),
                     key: ObjectKey(listOfSights[index]),
                     child: _DraggableSightCardWithDragTargetOption(
@@ -189,12 +216,13 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
         ? ToVisitSightCard(
             sight,
             key: GlobalKey(),
-            onDeletePressed: () => widget.deleteSightFromList(sight, context),
+            onDeletePressed: () => widget.deleteSightFromList(sight),
+            onCalendarPressed: () => widget.showToVisitDatePicker(context),
           )
         : VisitedSightCard(
             sight,
             key: GlobalKey(),
-            onDeletePressed: () => widget.deleteSightFromList(sight, context),
+            onDeletePressed: () => widget.deleteSightFromList(sight),
           );
   }
 
@@ -463,7 +491,7 @@ class _ToVisitSightList extends _BaseVisitingSightList {
   }
 
   @override
-  void deleteSightFromList(Sight sight, BuildContext context) {
+  void deleteSightFromList(Sight sight) {
     viewModel.deleteSightFromToVisitList(sight);
   }
 
@@ -507,7 +535,7 @@ class _VisitedSightList extends _BaseVisitingSightList {
   }
 
   @override
-  void deleteSightFromList(Sight sight, BuildContext context) {
+  void deleteSightFromList(Sight sight) {
     viewModel.deleteSightFromVisitedList(sight);
   }
 
