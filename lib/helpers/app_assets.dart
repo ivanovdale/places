@@ -42,4 +42,9 @@ class AppAssets {
 
   // Лого загрузки - SplashScreen.
   static const appLogo = 'assets/icons/app_logo.svg';
+
+  // Иконки для экрана добавления новой достопримечательности - AddSightScreen.
+  static const camera = 'assets/icons/camera.svg';
+  static const photo = 'assets/icons/photo.svg';
+  static const file = 'assets/icons/file.svg';
 }

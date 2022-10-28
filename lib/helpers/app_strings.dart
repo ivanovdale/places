@@ -57,6 +57,9 @@ class AppStrings {
   static const create = 'создать';
   static const save = 'сохранить';
   static const coordinatesValidationMessage = 'Введите координаты точки';
+  static const camera = 'Камера';
+  static const photo = 'Фотография';
+  static const file = 'Файл';
 
   // SightSearchScreen. Экран поиска достопримечательностей.
   static const search = 'Поиск';

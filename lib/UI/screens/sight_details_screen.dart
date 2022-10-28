@@ -29,18 +29,25 @@ class SightDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final sight = mocked.sights.firstWhere((sight) => sight.id == sightId);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: ChangeNotifierProvider(
-        create: (context) => SightDetailsProvider(),
-        child: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (_, innerBoxIsScrolled) {
-              return [
-                _SliverSightPhotos(sight),
-              ];
-            },
-            body: _SliverSightDetails(sight),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      builder: (_, scrollController) => ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        child: Scaffold(
+          bottomSheet: ChangeNotifierProvider(
+            create: (context) => SightDetailsProvider(),
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                _SliverAppBarSightPhotos(sight),
+                _SliverSightDetails(sight),
+              ],
+            ),
           ),
         ),
       ),
@@ -50,63 +57,41 @@ class SightDetailsScreen extends StatelessWidget {
 
 /// Сливер фотографий достопримечательности.
 ///
+/// Отображает картинки места и имеет кнопку "Закрыть".
 /// Сворачивается при скроллинге.
-class _SliverSightPhotos extends StatelessWidget {
+class _SliverAppBarSightPhotos extends StatelessWidget {
   final Sight sight;
 
-  const _SliverSightPhotos(this.sight, {Key? key}) : super(key: key);
+  const _SliverAppBarSightPhotos(this.sight);
 
   @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      delegate: _SightPhotosDelegate(sight),
-    );
-  }
-}
-
-/// Делегат для отображения фотографий достопримечательности.
-///
-/// Отображает картинки места и имеет кнопку "Назад".
-class _SightPhotosDelegate extends SliverPersistentHeaderDelegate {
-  final Sight sight;
-
-  @override
-  double get maxExtent => 360;
-
-  @override
-  double get minExtent => 0;
-
-  const _SightPhotosDelegate(this.sight);
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Consumer<SightDetailsProvider>(
-      builder: (context, viewModel, child) => Stack(
-        fit: StackFit.expand,
-        children: [
-          _PhotoGallery(
-            sight: sight,
-            controller: viewModel.pageController,
-            onPageChanged: viewModel.setActivePage,
+    return SliverAppBar(
+      expandedHeight: 360,
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Consumer<SightDetailsProvider>(
+          builder: (context, viewModel, child) => Stack(
+            alignment: Alignment.center,
+            children: [
+              _PhotoGallery(
+                sight: sight,
+                controller: viewModel.pageController,
+                onPageChanged: viewModel.setActivePage,
+              ),
+              _PageIndicator(
+                length: sight.photoUrlList?.length ?? 0,
+                controller: viewModel.pageController,
+                activePage: viewModel.activePage,
+              ),
+              const _CloseButton(),
+              const _SwipeDownButton(),
+            ],
           ),
-          _PageIndicator(
-            length: sight.photoUrlList?.length ?? 0,
-            controller: viewModel.pageController,
-            activePage: viewModel.activePage,
-          ),
-          const _BackButton(),
-        ],
+        ),
       ),
     );
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }
 
@@ -211,21 +196,26 @@ class _SliverSightDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _SightInfo(sight),
-        const _BuildRouteButton(),
-        const CustomDivider(
-          padding: EdgeInsets.only(
-            top: 24,
-            left: 16,
-            right: 16,
-            bottom: 8,
-          ),
-          thickness: 0.8,
+    return SliverFillRemaining(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _SightInfo(sight),
+            const _BuildRouteButton(),
+            const CustomDivider(
+              padding: EdgeInsets.only(
+                top: 24,
+                left: 16,
+                right: 16,
+                bottom: 8,
+              ),
+              thickness: 0.8,
+            ),
+            const _SightActionsButtons(),
+          ],
         ),
-        const _SightActionsButtons(),
-      ],
+      ),
     );
   }
 }
@@ -250,6 +240,7 @@ class _SightInfo extends StatelessWidget {
     final primaryColor = theme.primaryColor;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SightName(
@@ -369,18 +360,12 @@ class _SightDescription extends StatelessWidget {
         right: 16.0,
       ),
       height: 90,
-      child: CustomScrollView(slivers: [
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              Text(
-                text,
-                style: textStyle,
-              ),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Text(
+          text,
+          style: textStyle,
         ),
-      ]),
+      ),
     );
   }
 }
@@ -509,39 +494,41 @@ class _ToFavouritesButton extends StatelessWidget {
   }
 }
 
-/// Кнопка "Вернуться назад" в список.
-class _BackButton extends StatelessWidget {
-  const _BackButton({Key? key}) : super(key: key);
+/// Кнопка "Закрыть" боттомшит.
+class _CloseButton extends StatelessWidget {
+  const _CloseButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Positioned(
-      left: 16,
-      top: 36,
-      child: SizedBox(
-        height: 32,
-        width: 32,
-        child: ElevatedButton(
-          // TODO(daniiliv): Здесь будет вызов реальной функции.
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: theme.scaffoldBackgroundColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 0,
-            enableFeedback: true,
-            padding: EdgeInsets.zero,
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 15.0,
-            color: theme.primaryColorDark,
-          ),
+      right: 10,
+      top: 6,
+      child: IconButton(
+        icon: const Icon(
+          Icons.cancel,
+          size: 40,
+        ),
+        color: Theme.of(context).colorScheme.onBackground,
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
+  }
+}
+
+/// Кнопка скрытия боттомшита.
+class _SwipeDownButton extends StatelessWidget {
+  const _SwipeDownButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 12,
+      child: Container(
+        width: 40,
+        height: 4,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).colorScheme.onBackground,
         ),
       ),
     );
