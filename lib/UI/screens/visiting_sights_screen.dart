@@ -10,6 +10,9 @@ import 'package:places/ui/screens/components/custom_app_bar.dart';
 import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
+/// Время посещения места по умолчанию.
+const int visitingHourByDefault = 12;
+
 /// Экран списка посещенных/планируемых к посещению мест.
 ///
 /// Имеет TabBar для переключения между списками.
@@ -123,34 +126,6 @@ abstract class _BaseVisitingSightList extends StatefulWidget {
     int sightIndex,
     BuildContext context,
   );
-
-  /// Отображает пикер для выбора даты.
-  void showToVisitDatePicker(BuildContext context) {
-    showDatePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 100)),
-      initialDate: DateTime.now(),
-      builder: (context, child) {
-        final theme = Theme.of(context);
-        final primaryColor = theme.primaryColor;
-        final primaryColorDark = theme.primaryColorDark;
-        final scaffoldColor = theme.scaffoldBackgroundColor;
-
-        return Theme(
-          data: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(
-              primary: primaryColor,
-              onPrimary: scaffoldColor,
-              onSurface: primaryColorDark,
-            ),
-            dialogBackgroundColor: scaffoldColor,
-          ),
-          child: child!,
-        );
-      },
-    );
-  }
 }
 
 /// Состояние списка мест.
@@ -172,7 +147,6 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
             itemBuilder: (context, index) {
               final sightCard = getSightCard(
                 listOfSights[index],
-                context,
               );
 
               return Stack(
@@ -211,13 +185,13 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
   }
 
   /// Возвращает карточку места в зависимости от типа поля sightCardType.
-  Widget getSightCard(Sight sight, BuildContext context) {
+  Widget getSightCard(Sight sight) {
     return widget.sightCardType == ToVisitSightCard
         ? ToVisitSightCard(
             sight,
             key: GlobalKey(),
             onDeletePressed: () => widget.deleteSightFromList(sight),
-            onCalendarPressed: () => widget.showToVisitDatePicker(context),
+            onCalendarPressed: () => showToVisitDateTimePicker(sight.id),
           )
         : VisitedSightCard(
             sight,
@@ -261,6 +235,164 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
         isDragged = false;
       });
     }
+  }
+
+  /// Отображает пикеры для выбора даты и времени посещения места.
+  /// Записывает выбранные дату и время.
+  Future<void> showToVisitDateTimePicker(int id) async {
+    // Вытащим сохранённую дату посещения из модели достопримечательности.
+    // Необходима при редактировании уже сохранённой даты посещения.
+    final savedToVisitDate = widget.viewModel.toVisitSights
+        .firstWhere((sight) => sight.id == id)
+        .visitDate;
+
+    final pickedDate = await showToVisitDatePicker(savedToVisitDate);
+    if (pickedDate != null) {
+      final pickedTime = await showToVisitTimePicker(savedToVisitDate);
+
+      final pickedDateTime = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime?.hour ?? visitingHourByDefault, // По умолчанию
+        pickedTime?.minute ?? 0,
+      );
+
+      widget.viewModel.updateToVisitSightDateTime(id, pickedDateTime);
+    }
+  }
+
+  /// Отображает пикер для выбора даты.
+  Future<DateTime?> showToVisitDatePicker(DateTime? savedToVisitDate) async {
+    // Если дата посещения не задана и она находится в прошлом, то выберем сегодняшнюю.
+    final currentDateTime = DateTime.now();
+    var initialDate = currentDateTime;
+    if (savedToVisitDate != null && savedToVisitDate.isAfter(DateTime.now())) {
+      initialDate = savedToVisitDate;
+    }
+
+    final pickedDate = showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 100)),
+      initialDate: initialDate,
+      builder: (context, child) {
+        return _ConfiguredDatePicker(child: child!);
+      },
+    );
+
+    return pickedDate;
+  }
+
+  /// Отображает пикер для выбора времени.
+  Future<TimeOfDay?> showToVisitTimePicker(DateTime? savedToVisitDate) async {
+    // Если не задано сохранённое время посещения, то установить текущее время.
+    final initialTime = savedToVisitDate != null
+        ? TimeOfDay(
+            hour: savedToVisitDate.hour,
+            minute: savedToVisitDate.minute,
+          )
+        : TimeOfDay.now();
+
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (context, child) {
+        return _ConfiguredTimePicker(
+          child: child!,
+        );
+      },
+    );
+
+    return pickedTime;
+  }
+}
+
+/// Пикер даты с кастомизированными цветами.
+class _ConfiguredDatePicker extends StatelessWidget {
+  final Widget child;
+
+  const _ConfiguredDatePicker({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+    final primaryColorDark = theme.primaryColorDark;
+    final scaffoldColor = theme.scaffoldBackgroundColor;
+
+    return Theme(
+      data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: primaryColor,
+          onPrimary: scaffoldColor,
+          onSurface: primaryColorDark,
+        ),
+        dialogBackgroundColor: scaffoldColor,
+      ),
+      child: child,
+    );
+  }
+}
+
+/// Пикер времени с кастомизированными цветами.
+class _ConfiguredTimePicker extends StatelessWidget {
+  final Widget child;
+
+  const _ConfiguredTimePicker({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColorDark = theme.primaryColorDark;
+    final primaryColor = theme.primaryColor;
+    final scaffoldColor = theme.scaffoldBackgroundColor;
+    final secondaryColor = theme.colorScheme.secondary;
+    final onBackgroundColor = theme.colorScheme.onBackground;
+    final secondaryContainerColor = theme.colorScheme.secondaryContainer;
+
+    return Theme(
+      data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: onBackgroundColor, // Enabled AM/PM text
+          onSurface: secondaryContainerColor, // Disabled AM/PM text
+          surface: secondaryColor, // Border AM/PM
+        ),
+        timePickerTheme: TimePickerThemeData(
+          backgroundColor: scaffoldColor,
+          hourMinuteColor: MaterialStateColor.resolveWith((states) =>
+              states.contains(MaterialState.selected)
+                  ? primaryColorDark
+                  : secondaryContainerColor),
+          hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
+              states.contains(MaterialState.selected)
+                  ? scaffoldColor
+                  : primaryColor),
+          dayPeriodColor: secondaryColor,
+          dialHandColor: primaryColorDark,
+          dialBackgroundColor: secondaryContainerColor,
+          dialTextColor: MaterialStateColor.resolveWith((states) =>
+              states.contains(MaterialState.selected)
+                  ? scaffoldColor
+                  : primaryColorDark),
+          entryModeIconColor: primaryColorDark,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateColor.resolveWith(
+              (states) => primaryColorDark,
+            ),
+          ),
+        ),
+      ),
+      child: child,
+    );
   }
 }
 

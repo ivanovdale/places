@@ -48,4 +48,11 @@ class VisitingProvider extends ChangeNotifier {
       ..insert(destinationIndex, sight);
     notifyListeners();
   }
+
+  /// Обновляет дату желаемого посещения достопримечательности.
+  void updateToVisitSightDateTime(int id, DateTime dateTime) {
+    toVisitSights.firstWhere((sight) => sight.id == id).visitDate = dateTime;
+
+    notifyListeners();
+  }
 }

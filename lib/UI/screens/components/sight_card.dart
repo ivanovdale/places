@@ -6,6 +6,7 @@ import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:places/utils/visiting_date_formatter.dart';
 
 /// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
 ///
@@ -398,6 +399,11 @@ class _SightVisitingInfo extends StatelessWidget {
     final secondaryColor = theme.colorScheme.secondary;
     final themeBodyText2 = theme.textTheme.bodyText2;
 
+    final visitingText =
+        sight.visited ? AppStrings.placeVisited : AppStrings.planToVisit;
+    final visitDateFormatted =
+        VisitingDateFormatter.getFormattedString(visitingText, sight.visitDate);
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -408,9 +414,7 @@ class _SightVisitingInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            sight.visited
-                ? '${AppStrings.placeVisited} ${sight.visitDate}'
-                : '${AppStrings.planToVisit} ${sight.visitDate}',
+            visitDateFormatted,
             maxLines: 2,
             style: themeBodyText2?.copyWith(
               color:
