@@ -22,7 +22,7 @@ class Sight {
   String details;
   SightTypes type;
   String? workTimeFrom;
-  String? visitDate;
+  DateTime? visitDate;
   bool visited;
 
   Sight({

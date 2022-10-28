@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/providers/bottom_bar_provider.dart';
 import 'package:places/providers/visiting_provider.dart';
@@ -36,6 +37,8 @@ class _AppState extends State<App> {
     changeNotifier.addListener(() {
       setState(() {});
     });
+    // Локализация форматирования даты в приложении.
+    initializeDateFormatting('ru', '');
 
     return MaterialApp(
       initialRoute: AppRouter.root,
