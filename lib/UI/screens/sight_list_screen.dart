@@ -35,8 +35,13 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
+
     return Scaffold(
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+      // Скрываем боттом бар при горизонтальной ориентации.
+      bottomNavigationBar: orientation == Orientation.landscape
+          ? null
+          : const CustomBottomNavigationBar(),
       body: _InheritedSightListScreenState(
         data: this,
         child: const _SightListBody(),
@@ -168,9 +173,7 @@ class _InheritedSightListScreenState extends InheritedWidget {
 
 /// Отображает список достопримечательностей.
 class _SightListBody extends StatelessWidget {
-  const _SightListBody({
-    Key? key,
-  }) : super(key: key);
+  const _SightListBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +183,7 @@ class _SightListBody extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         const _SliverAppBar(),
-        _SliverSightList(
-          sights: sights,
-        ),
+        _SliverSightList(sights: sights),
       ],
     );
   }
@@ -302,7 +303,11 @@ class _SliverSightList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    final mediaQuery = MediaQuery.of(context);
+    final orientation = mediaQuery.orientation;
+    final screenHeight = mediaQuery.size.height;
+
+    return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         childCount: sights.length,
         (_, index) {
@@ -311,6 +316,13 @@ class _SliverSightList extends StatelessWidget {
             child: SightCard(sights[index]),
           );
         },
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        // Для горизонтальной ориентации отображаем 2 ряда карточек.
+        crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
+        mainAxisExtent: orientation == Orientation.portrait
+            ? screenHeight * 0.3
+            : screenHeight * 0.65,
       ),
     );
   }
