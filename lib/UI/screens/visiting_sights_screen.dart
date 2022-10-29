@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/sight_card.dart';
@@ -246,30 +249,27 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
         .firstWhere((sight) => sight.id == id)
         .visitDate;
 
-    final pickedDate = await showToVisitDatePicker(savedToVisitDate);
-    if (pickedDate != null) {
-      final pickedTime = await showToVisitTimePicker(savedToVisitDate);
-
-      final pickedDateTime = DateTime(
-        pickedDate.year,
-        pickedDate.month,
-        pickedDate.day,
-        pickedTime?.hour ?? visitingHourByDefault, // По умолчанию
-        pickedTime?.minute ?? 0,
-      );
-
-      widget.viewModel.updateToVisitSightDateTime(id, pickedDateTime);
+    // В зависимости от платформы показать нативный пикер/пикеры.
+    if (Platform.isAndroid) {
+      await showMaterialToVisitDateTimePickers(id, savedToVisitDate);
+    } else {
+      if (Platform.isIOS) {
+        await showCupertinoToVisitDateTimePicker(id, savedToVisitDate);
+      }
     }
   }
 
-  /// Отображает пикер для выбора даты.
-  Future<DateTime?> showToVisitDatePicker(DateTime? savedToVisitDate) async {
-    // Если дата посещения не задана и она находится в прошлом, то выберем сегодняшнюю.
+  /// Обновляет дату посещения во вьюмодели места.
+  void updateViewModelSightVisitDateTime(int id, DateTime pickedDateTime) {
+    widget.viewModel.updateToVisitSightDateTime(id, pickedDateTime);
+  }
+
+  /// Отображает пикер для выбора даты в стиле Material.
+  Future<DateTime?> showMaterialToVisitDatePicker(
+    DateTime? savedToVisitDate,
+  ) async {
     final currentDateTime = DateTime.now();
-    var initialDate = currentDateTime;
-    if (savedToVisitDate != null && savedToVisitDate.isAfter(DateTime.now())) {
-      initialDate = savedToVisitDate;
-    }
+    final initialDate = getPickerInitialDate(currentDateTime, savedToVisitDate);
 
     final pickedDate = showDatePicker(
       context: context,
@@ -284,8 +284,10 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
     return pickedDate;
   }
 
-  /// Отображает пикер для выбора времени.
-  Future<TimeOfDay?> showToVisitTimePicker(DateTime? savedToVisitDate) async {
+  /// Отображает пикер для выбора времени в стиле Material.
+  Future<TimeOfDay?> showMaterialToVisitTimePicker(
+    DateTime? savedToVisitDate,
+  ) async {
     // Если не задано сохранённое время посещения, то установить текущее время.
     final initialTime = savedToVisitDate != null
         ? TimeOfDay(
@@ -305,6 +307,69 @@ class _BaseVisitingSightListState extends State<_BaseVisitingSightList> {
     );
 
     return pickedTime;
+  }
+
+  /// Отображает пикеры даты и времени в стиле Material.
+  /// Обновляет вьюмодель достопримечательности.
+  Future<void> showMaterialToVisitDateTimePickers(
+    int id,
+    DateTime? savedToVisitDate,
+  ) async {
+    final pickedDate = await showMaterialToVisitDatePicker(savedToVisitDate);
+    if (pickedDate != null) {
+      final pickedTime = await showMaterialToVisitTimePicker(savedToVisitDate);
+
+      final pickedDateTime = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime?.hour ?? visitingHourByDefault, // По умолчанию
+        pickedTime?.minute ?? 0,
+      );
+
+      updateViewModelSightVisitDateTime(id, pickedDateTime);
+    }
+  }
+
+  /// Отображает пикер даты и времени в стиле Cupertino.
+  Future<void> showCupertinoToVisitDateTimePicker(
+    int id,
+    DateTime? savedToVisitDate,
+  ) {
+    return showModalBottomSheet<void>(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.3,
+      ),
+      context: context,
+      builder: (context) {
+        final currentDateTime = DateTime.now();
+        final initialDate =
+            getPickerInitialDate(currentDateTime, savedToVisitDate);
+
+        return CupertinoDatePicker(
+          minimumDate: currentDateTime,
+          maximumDate: currentDateTime.add(const Duration(days: 100)),
+          initialDateTime: initialDate,
+          onDateTimeChanged: (pickedDateTime) =>
+              updateViewModelSightVisitDateTime(id, pickedDateTime),
+        );
+      },
+    );
+  }
+
+  /// Возвращает начальную дату для пикера.
+  ///
+  /// Если дата посещения не задана и она находится в прошлом, то выберем сегодняшнюю.
+  DateTime getPickerInitialDate(
+    DateTime currentDateTime,
+    DateTime? savedToVisitDate,
+  ) {
+    var initialDate = currentDateTime;
+    if (savedToVisitDate != null && savedToVisitDate.isAfter(DateTime.now())) {
+      initialDate = savedToVisitDate;
+    }
+
+    return initialDate;
   }
 }
 
