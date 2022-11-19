@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/empty_visiting_sight_list/base_empty_visiting_sight_list.dart';
 import 'package:places/UI/screens/components/empty_visiting_sight_list/empty_visited_sight_list.dart';
+import 'package:places/UI/screens/components/sight_card/visited_sight_card.dart';
 import 'package:places/UI/screens/components/visiting_sight_list/base_visiting_sight_list.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/providers/visiting_provider.dart';
-import 'package:places/ui/screens/components/sight_card.dart';
 
 /// Список посещенных мест. Наследуется от [BaseVisitingSightList].
 ///
