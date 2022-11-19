@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/sight_details_screen.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/utils/visiting_date_formatter.dart';
 
@@ -67,114 +66,6 @@ abstract class BaseSightCard extends StatelessWidget {
       isScrollControlled: true,
       builder: (_) => SightDetailsScreen(sight.id),
     );
-  }
-}
-
-/// Виджет карточки достопримечательности. Наследуется от [BaseSightCard].
-///
-/// Переопределяет поле [actions] - в списке кнопок карточки 1 элемент - кнопка добавления в избранное.
-/// Также переопределяет поле [showDetails] - для отображения детальной информации о достопримечательности.
-///
-/// Отображает краткую информацию о месте.
-///
-/// Параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-class SightCard extends BaseSightCard {
-  @override
-  final List<Map<String, Object?>> actions = [
-    {
-      'icon': AppAssets.heart,
-    },
-  ];
-
-  @override
-  bool get showDetails => true;
-
-  SightCard(
-    Sight sight, {
-    Key? key,
-  }) : super(
-          sight,
-          key: key,
-        );
-}
-
-/// Виджет карточки достопримечательности, которую планируется посетить. Наследуется от [BaseSightCard].
-///
-/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
-/// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
-///
-/// Имеет параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-class ToVisitSightCard extends BaseSightCard {
-  final VoidCallback? onCalendarPressed;
-  final VoidCallback? onDeletePressed;
-
-  @override
-  late final List<Map<String, Object?>> actions;
-
-  @override
-  bool get showDetails => false;
-
-  ToVisitSightCard(
-    Sight sight, {
-    this.onCalendarPressed,
-    this.onDeletePressed,
-    Key? key,
-  }) : super(
-          sight,
-          key: key,
-        ) {
-    actions = [
-      {
-        'icon': AppAssets.calendar,
-        'voidCallback': onCalendarPressed,
-      },
-      {
-        'icon': AppAssets.close,
-        'voidCallback': onDeletePressed,
-      },
-    ];
-  }
-}
-
-/// Виджет карточки посещённой достопримечательности. Наследуется от [BaseSightCard].
-///
-/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
-///
-/// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
-///
-/// Имеет параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-class VisitedSightCard extends BaseSightCard {
-  final VoidCallback? onSharePressed;
-  final VoidCallback? onDeletePressed;
-
-  @override
-  late final List<Map<String, Object?>> actions;
-
-  @override
-  bool get showDetails => false;
-
-  VisitedSightCard(
-    Sight sight, {
-    this.onSharePressed,
-    this.onDeletePressed,
-    Key? key,
-  }) : super(
-          sight,
-          key: key,
-        ) {
-    actions = [
-      {
-        'icon': AppAssets.share,
-        'voidCallback': onSharePressed,
-      },
-      {
-        'icon': AppAssets.close,
-        'voidCallback': onDeletePressed,
-      },
-    ];
   }
 }
 
