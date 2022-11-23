@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/components/custom_app_bar.dart';
+import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
+import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-
 // TODO(daniiliv): Воспользуемся глобальной переменной на время, пока нет DI.
 import 'package:places/main.dart' show isDarkModeEnabled, changeNotifier;
-import 'package:places/ui/screens/components/custom_app_bar.dart';
-import 'package:places/ui/screens/components/custom_bottom_navigation_bar.dart';
-import 'package:places/ui/screens/components/custom_divider.dart';
 
 /// Экран настроек.
 ///

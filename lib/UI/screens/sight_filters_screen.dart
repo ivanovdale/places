@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:places/UI/screens/components/custom_app_bar.dart';
+import 'package:places/UI/screens/components/custom_elevated_button.dart';
+import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/ui/screens/components/custom_app_bar.dart';
-import 'package:places/ui/screens/components/custom_elevated_button.dart';
-import 'package:places/ui/screens/components/custom_text_button.dart';
 import 'package:places/utils/string_extension.dart';
 import 'package:places/utils/work_with_places_mixin.dart';
 
@@ -406,7 +406,27 @@ class _SightTypeFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataStorage = _InheritedFiltersScreenState.of(context);
     final listOfFilters = dataStorage.sightTypeFilters;
+    final mediaQuery = MediaQuery.of(context);
 
+    // Для больших экранов отображать фильтры мест в виде сетки.
+    // А для экранов малого размера - в виде скролящейся строки.
+    return mediaQuery.size.width > 332
+        ? _SightTypeFiltersGridView(listOfFilters: listOfFilters)
+        : _SightTypeFiltersScrollableRow(listOfFilters: listOfFilters);
+  }
+}
+
+/// Отображает фильтры достопримечательностей в виде сетки.
+class _SightTypeFiltersGridView extends StatelessWidget {
+  final List<Map<String, Object>> listOfFilters;
+
+  const _SightTypeFiltersGridView({
+    Key? key,
+    required this.listOfFilters,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: GridView.builder(
@@ -418,24 +438,77 @@ class _SightTypeFilters extends StatelessWidget {
         ),
         itemCount: listOfFilters.length,
         itemBuilder: (context, index) {
-          return Column(
-            children: [
-              _FilterCircle(
-                filterItemIndex: index,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 12,
-                ),
-                child: Text(
-                  (listOfFilters[index]['name'] as String).capitalize(),
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ),
-            ],
+          final sightFilterLabel =
+              (listOfFilters[index]['name'] as String).capitalize();
+
+          return _SightFilterItem(
+            sightFilterLabel: sightFilterLabel,
+            index: index,
           );
         },
       ),
+    );
+  }
+}
+
+/// Отображает фильтры достопримечательностей в виде скролящейся строки.
+class _SightTypeFiltersScrollableRow extends StatelessWidget {
+  final List<Map<String, Object>> listOfFilters;
+
+  const _SightTypeFiltersScrollableRow({
+    Key? key,
+    required this.listOfFilters,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (int index = 0; index < listOfFilters.length; index++)
+            Padding(
+              padding: const EdgeInsets.only(right: 44.0),
+              child: _SightFilterItem(
+                sightFilterLabel:
+                    (listOfFilters[index]['name'] as String).capitalize(),
+                index: index,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Отображает кликабельную иконку фильтра и его наименование.
+class _SightFilterItem extends StatelessWidget {
+  final int index;
+  final String sightFilterLabel;
+
+  const _SightFilterItem({
+    Key? key,
+    required this.sightFilterLabel,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _FilterCircle(
+          filterItemIndex: index,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 12,
+          ),
+          child: Text(
+            sightFilterLabel,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ),
+      ],
     );
   }
 }

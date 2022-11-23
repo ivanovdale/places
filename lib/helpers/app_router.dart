@@ -105,12 +105,12 @@ abstract class AppRouter {
     );
   }
 
-  static MaterialPageRoute<Object?> _getSightFiltersMaterialRoute(
+  static MaterialPageRoute<Map<String, Object>> _getSightFiltersMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
     final allFilters = _parseSightFilters(arguments);
 
-    return MaterialPageRoute<Object?>(
+    return MaterialPageRoute<Map<String, Object>>(
       builder: (_) => SightFiltersScreen(
         sightTypeFilters:
             allFilters['sightTypeFilters'] as List<Map<String, Object>>,

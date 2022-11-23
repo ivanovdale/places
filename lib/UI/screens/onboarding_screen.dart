@@ -102,7 +102,7 @@ class _OnboardingPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 5,
+      flex: MediaQuery.of(context).orientation == Orientation.portrait ? 5 : 10,
       child: PageView.builder(
         controller: controller,
         onPageChanged: onPageChanged,

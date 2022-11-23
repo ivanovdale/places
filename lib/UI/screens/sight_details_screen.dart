@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/UI/screens/components/custom_divider.dart';
+import 'package:places/UI/screens/components/custom_elevated_button.dart';
+import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/providers/sight_details_provider.dart';
-import 'package:places/ui/screens/components/custom_divider.dart';
-import 'package:places/ui/screens/components/custom_elevated_button.dart';
-import 'package:places/ui/screens/components/custom_text_button.dart';
 import 'package:provider/provider.dart';
 
 /// Экран подробностей достопримечательности.
