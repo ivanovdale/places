@@ -1,4 +1,4 @@
-import 'package:places/domain/coordinate_point.dart';
+import 'package:places/data/model/coordinate_point.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 

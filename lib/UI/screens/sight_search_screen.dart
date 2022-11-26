@@ -9,7 +9,7 @@ import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/sight_details_screen.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;

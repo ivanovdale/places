@@ -3,7 +3,7 @@ import 'package:places/UI/screens/components/empty_visiting_sight_list/base_empt
 import 'package:places/UI/screens/components/empty_visiting_sight_list/empty_to_visit_sight_list.dart';
 import 'package:places/UI/screens/components/sight_card/to_visit_sight_card.dart';
 import 'package:places/UI/screens/components/visiting_sight_list/base_visiting_sight_list.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/providers/visiting_provider.dart';
 
 /// Список планируемых к посещению мест. Наследуется от [BaseVisitingSightList].

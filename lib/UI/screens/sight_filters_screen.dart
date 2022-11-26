@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/string_extension.dart';

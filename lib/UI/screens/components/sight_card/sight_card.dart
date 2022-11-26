@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/sight_card/base_sight_card.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 
 /// Виджет карточки достопримечательности. Наследуется от [BaseSightCard].

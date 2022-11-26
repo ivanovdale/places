@@ -9,7 +9,7 @@ import 'package:places/UI/screens/components/sight_card/draggable_sight_card_wit
 import 'package:places/UI/screens/components/sight_card/to_visit_sight_card.dart';
 import 'package:places/UI/screens/components/sight_card/visited_sight_card.dart';
 import 'package:places/UI/screens/components/visiting_sight_list/base_visiting_sight_list.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';

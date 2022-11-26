@@ -1,5 +1,5 @@
-import 'package:places/domain/coordinate_point.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/coordinate_point.dart';
+import 'package:places/data/model/sight.dart';
 
 /// Миксин, содержащий методы для работы с достопримечательностями.
 mixin WorkWithPlaces {

@@ -7,7 +7,7 @@ import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/components/sight_card/sight_card.dart';
 import 'package:places/UI/screens/sight_filters_screen.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_router.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/empty_visiting_sight_list/base_empty_visiting_sight_list.dart';
 import 'package:places/UI/screens/components/visiting_sight_list/base_visiting_sight_list_state.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/providers/visiting_provider.dart';
 
 /// Абстрактный класс [BaseVisitingSightList]. Список посещенных/планируемых к посещению мест.
