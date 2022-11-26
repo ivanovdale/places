@@ -5,9 +5,9 @@ import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
-import 'package:places/UI/screens/components/sight_card/sight_card.dart';
-import 'package:places/UI/screens/sight_filters_screen.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/components/place_card/place_card.dart';
+import 'package:places/UI/screens/place_filters_screen.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_router.dart';
@@ -15,21 +15,21 @@ import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/work_with_places_mixin.dart';
 
-/// Экран списка достопримечательностей.
-class SightListScreen extends StatefulWidget {
-  const SightListScreen({Key? key}) : super(key: key);
+/// Экран списка мест.
+class PlaceListScreen extends StatefulWidget {
+  const PlaceListScreen({Key? key}) : super(key: key);
 
   @override
-  State<SightListScreen> createState() => _SightListScreenState();
+  State<PlaceListScreen> createState() => _PlaceListScreenState();
 }
 
-/// Состояние экрана списка достопримечательстей.
+/// Состояние экрана списка мест.
 ///
 /// Обновляет список при добавлении нового места.
 /// Хранит в себе значения фильтров.
-class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
-  late List<Sight> sights;
-  late List<Map<String, Object>> sightTypeFilters;
+class _PlaceListScreenState extends State<PlaceListScreen> with WorkWithPlaces {
+  late List<Place> places;
+  late List<Map<String, Object>> placeTypeFilters;
   late double distanceFrom;
   late double distanceTo;
 
@@ -42,12 +42,12 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
       bottomNavigationBar: orientation == Orientation.landscape
           ? null
           : const CustomBottomNavigationBar(),
-      body: _InheritedSightListScreenState(
+      body: _InheritedPlaceListScreenState(
         data: this,
-        child: const _SightListBody(),
+        child: const _PlaceListBody(),
       ),
       floatingActionButton: _AddNewPlaceButton(
-        onPressed: () => openAddSightScreen(context),
+        onPressed: () => openAddPlaceScreen(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -62,10 +62,10 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
     distanceTo = maxRangeValue;
 
     // Категории по умолчанию.
-    sightTypeFilters = SightTypes.values.map((sightType) {
+    placeTypeFilters = PlaceTypes.values.map((placeType) {
       return <String, Object>{
-        'name': sightType.name,
-        'imagePath': sightType.imagePath,
+        'name': placeType.name,
+        'imagePath': placeType.imagePath,
         'selected': true,
       };
     }).toList();
@@ -76,25 +76,25 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
     };
     // Фильтрация мест на основании инициализированных фильтров.
     // TODO(daniiliv): Пока в качестве источника данных - моковые данные.
-    sights = getFilteredByTypeAndRadiusSights(
-      mocked.sights,
-      sightTypeFilters,
+    places = getFilteredByTypeAndRadiusPlaces(
+      mocked.places,
+      placeTypeFilters,
       mocked.userCoordinates,
       range,
     );
   }
 
-  /// Открывает экран добавления достопримечательности.
+  /// Открывает экран добавления места.
   ///
-  /// Если была создана новая достопримечательность, добавляет её в список моковых достопримечательностей и обновляет экран.
-  Future<void> openAddSightScreen(BuildContext context) async {
-    final newSight = await Navigator.pushNamed<Sight?>(
+  /// Если было создана новое место, добавляет его в список моковых мест и обновляет экран.
+  Future<void> openAddPlaceScreen(BuildContext context) async {
+    final newPlace = await Navigator.pushNamed<Place?>(
       context,
-      AppRouter.addSight,
+      AppRouter.addPlace,
     );
 
-    if (newSight != null) {
-      mocked.sights.add(newSight);
+    if (newPlace != null) {
+      mocked.places.add(newPlace);
 
       final range = {
         'distanceFrom': distanceFrom,
@@ -103,9 +103,9 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
 
       // Обновить новый список мест в сооветствии с фильтрами.
       // TODO(daniiliv): В качестве источника фильтрации используем моковые данные.
-      sights = getFilteredByTypeAndRadiusSights(
-        mocked.sights,
-        sightTypeFilters,
+      places = getFilteredByTypeAndRadiusPlaces(
+        mocked.places,
+        placeTypeFilters,
         mocked.userCoordinates,
         range,
       );
@@ -116,7 +116,7 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
 
   /// Применяет переданные фильтры к списку мест.
   void applyFilters(
-    List<Map<String, Object>> selectedSightTypes,
+    List<Map<String, Object>> selectedPlaceTypes,
     double distanceFrom,
     double distanceTo,
   ) {
@@ -125,9 +125,9 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
       'distanceTo': distanceTo,
     };
     // TODO(daniiliv): В качестве списка, к которому применяются фильтры, пока что устанавливаем моковые данные.
-    sights = getFilteredByTypeAndRadiusSights(
-      mocked.sights,
-      selectedSightTypes,
+    places = getFilteredByTypeAndRadiusPlaces(
+      mocked.places,
+      selectedPlaceTypes,
       mocked.userCoordinates,
       range,
     );
@@ -137,53 +137,53 @@ class _SightListScreenState extends State<SightListScreen> with WorkWithPlaces {
 
   /// Сохраняет переданные фильтры в виджете-состоянии.
   void saveFilters(
-    List<Map<String, Object>> sightTypeFilters,
+    List<Map<String, Object>> placeTypeFilters,
     double distanceFrom,
     double distanceTo,
   ) {
-    this.sightTypeFilters = sightTypeFilters;
+    this.placeTypeFilters = placeTypeFilters;
     this.distanceFrom = distanceFrom;
     this.distanceTo = distanceTo;
   }
 }
 
 /// Прокидывает данные [data] вниз по дереву.
-/// Оповещает дочерние виджеты о перерисовке при изменении списка достопримечательностей.
-class _InheritedSightListScreenState extends InheritedWidget {
-  final _SightListScreenState data;
+/// Оповещает дочерние виджеты о перерисовке при изменении списка мест.
+class _InheritedPlaceListScreenState extends InheritedWidget {
+  final _PlaceListScreenState data;
 
-  const _InheritedSightListScreenState({
+  const _InheritedPlaceListScreenState({
     Key? key,
     required Widget child,
     required this.data,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSightListScreenState old) {
+  bool updateShouldNotify(_InheritedPlaceListScreenState old) {
     // Перерисовка экрана, если список мест обновился.
-    return listEquals(old.data.sights, data.sights);
+    return listEquals(old.data.places, data.places);
   }
 
-  static _SightListScreenState of(BuildContext context) {
+  static _PlaceListScreenState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedSightListScreenState>() as _InheritedSightListScreenState)
+            _InheritedPlaceListScreenState>() as _InheritedPlaceListScreenState)
         .data;
   }
 }
 
-/// Отображает список достопримечательностей.
-class _SightListBody extends StatelessWidget {
-  const _SightListBody({Key? key}) : super(key: key);
+/// Отображает список мест.
+class _PlaceListBody extends StatelessWidget {
+  const _PlaceListBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightListScreenState.of(context);
-    final sights = dataStorage.sights;
+    final dataStorage = _InheritedPlaceListScreenState.of(context);
+    final places = dataStorage.places;
 
     return CustomScrollView(
       slivers: [
         const _SliverAppBar(),
-        _SliverSightList(sights: sights),
+        _SliverPlaceList(places: places),
       ],
     );
   }
@@ -229,8 +229,8 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
     final isScrollStarted = shrinkOffset > 0;
     final theme = Theme.of(context);
     final title = isScrollStarted
-        ? AppStrings.sightListAppBarTitle
-        : AppStrings.sightListAppBarTitleWithLineBreak;
+        ? AppStrings.placeListAppBarTitle
+        : AppStrings.placeListAppBarTitleWithLineBreak;
     final titleTextStyle =
         isScrollStarted ? theme.textTheme.subtitle1 : theme.textTheme.headline4;
     final centerTitle = isScrollStarted;
@@ -260,7 +260,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
               // Не обрабатывать нажатия, когда строка поиска уже скрыта.
               onTap: isScrollStarted
                   ? null
-                  : () => navigateToSightSearchScreen(context),
+                  : () => navigateToPlaceSearchScreen(context),
               suffixIcon: _FilterButton(
                 isButtonDisabled: isScrollStarted,
               ),
@@ -276,15 +276,15 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 
-  /// Открывает экран поиска достопримечательностей.
-  void navigateToSightSearchScreen(BuildContext context) {
-    final dataStorage = _InheritedSightListScreenState.of(context);
+  /// Открывает экран поиска мест.
+  void navigateToPlaceSearchScreen(BuildContext context) {
+    final dataStorage = _InheritedPlaceListScreenState.of(context);
 
     Navigator.pushNamed(
       context,
-      AppRouter.sightSearch,
+      AppRouter.placeSearch,
       arguments: {
-        'sightTypeFilters': dataStorage.sightTypeFilters,
+        'placeTypeFilters': dataStorage.placeTypeFilters,
         'distanceFrom': dataStorage.distanceFrom,
         'distanceTo': dataStorage.distanceTo,
       },
@@ -293,12 +293,12 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 /// Список достопримечательностей на сливере.
-class _SliverSightList extends StatelessWidget {
-  final List<Sight> sights;
+class _SliverPlaceList extends StatelessWidget {
+  final List<Place> places;
 
-  const _SliverSightList({
+  const _SliverPlaceList({
     Key? key,
-    required this.sights,
+    required this.places,
   }) : super(key: key);
 
   @override
@@ -309,11 +309,11 @@ class _SliverSightList extends StatelessWidget {
 
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
-        childCount: sights.length,
+        childCount: places.length,
         (_, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SightCard(sights[index]),
+            child: PlaceCard(places[index]),
           );
         },
       ),
@@ -359,27 +359,27 @@ class _FilterButton extends StatelessWidget {
   ///
   /// После выбора фильтров сохраняет их в стейте текущего экрана и затем применяет их.
   Future<void> navigateToFiltersScreen(BuildContext context) async {
-    final dataStorage = _InheritedSightListScreenState.of(context);
+    final dataStorage = _InheritedPlaceListScreenState.of(context);
 
     final selectedFilters = await Navigator.pushNamed<Map<String, Object>>(
       context,
-      AppRouter.sightFilters,
+      AppRouter.placeFilters,
       arguments: {
-        'sightTypeFilters': dataStorage.sightTypeFilters,
+        'placeTypeFilters': dataStorage.placeTypeFilters,
         'distanceFrom': dataStorage.distanceFrom,
         'distanceTo': dataStorage.distanceTo,
       },
     );
 
     if (selectedFilters != null) {
-      final sightTypeFilters =
-          selectedFilters['sightTypeFilters'] as List<Map<String, Object>>;
+      final placeTypeFilters =
+          selectedFilters['placeTypeFilters'] as List<Map<String, Object>>;
       final distanceFrom = selectedFilters['distanceFrom'] as double;
       final distanceTo = selectedFilters['distanceTo'] as double;
 
       dataStorage
-        ..saveFilters(sightTypeFilters, distanceFrom, distanceTo)
-        ..applyFilters(sightTypeFilters, distanceFrom, distanceTo);
+        ..saveFilters(placeTypeFilters, distanceFrom, distanceTo)
+        ..applyFilters(placeTypeFilters, distanceFrom, distanceTo);
     }
   }
 }

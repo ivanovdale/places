@@ -8,28 +8,28 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
-import 'package:places/UI/screens/sight_details_screen.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/place_details_screen.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/work_with_places_mixin.dart';
 
-/// Экран поиска достопримечательностей.
+/// Экран поиска мест.
 ///
-/// Отображает поле поиска достопримечательностей, историю поиска, найденные достопримечательности.
+/// Отображает поле поиска мест, историю поиска, найденные места.
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
 ///
 /// Хранит фильтры, которые будут учитываться при поиске мест.
-class SightSearchScreen extends StatelessWidget {
-  final List<Map<String, Object>> sightTypeFilters;
+class PlaceSearchScreen extends StatelessWidget {
+  final List<Map<String, Object>> placeTypeFilters;
   final double distanceFrom;
   final double distanceTo;
 
-  const SightSearchScreen({
+  const PlaceSearchScreen({
     Key? key,
-    required this.sightTypeFilters,
+    required this.placeTypeFilters,
     required this.distanceFrom,
     required this.distanceTo,
   }) : super(key: key);
@@ -40,7 +40,7 @@ class SightSearchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: AppStrings.sightListAppBarTitle,
+        title: AppStrings.placeListAppBarTitle,
         titleTextStyle: theme.textTheme.subtitle1?.copyWith(
           color: theme.primaryColorDark,
         ),
@@ -48,8 +48,8 @@ class SightSearchScreen extends StatelessWidget {
         toolbarHeight: 56,
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
-      body: _SightSearchBody(
-        sightTypeFilters: sightTypeFilters,
+      body: _PlaceSearchBody(
+        placeTypeFilters: placeTypeFilters,
         distanceFrom: distanceFrom,
         distanceTo: distanceTo,
       ),
@@ -59,48 +59,48 @@ class SightSearchScreen extends StatelessWidget {
 
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedSightSearchBodyState extends InheritedWidget {
-  final _SightSearchBodyState data;
+class _InheritedPlaceSearchBodyState extends InheritedWidget {
+  final _PlaceSearchBodyState data;
 
-  const _InheritedSightSearchBodyState({
+  const _InheritedPlaceSearchBodyState({
     Key? key,
     required Widget child,
     required this.data,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSightSearchBodyState old) {
+  bool updateShouldNotify(_InheritedPlaceSearchBodyState old) {
     return true;
   }
 
-  static _SightSearchBodyState of(BuildContext context) {
+  static _PlaceSearchBodyState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedSightSearchBodyState>() as _InheritedSightSearchBodyState)
+            _InheritedPlaceSearchBodyState>() as _InheritedPlaceSearchBodyState)
         .data;
   }
 }
 
-/// Отображает историю поиска, найденные достопримечательности.
+/// Отображает историю поиска, найденные места.
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
-class _SightSearchBody extends StatefulWidget {
-  final List<Map<String, Object>> sightTypeFilters;
+class _PlaceSearchBody extends StatefulWidget {
+  final List<Map<String, Object>> placeTypeFilters;
   final double distanceFrom;
   final double distanceTo;
 
-  const _SightSearchBody({
+  const _PlaceSearchBody({
     Key? key,
-    required this.sightTypeFilters,
+    required this.placeTypeFilters,
     required this.distanceFrom,
     required this.distanceTo,
   }) : super(key: key);
 
   @override
-  State<_SightSearchBody> createState() => _SightSearchBodyState();
+  State<_PlaceSearchBody> createState() => _PlaceSearchBodyState();
 }
 
 /// Хранит состояние поиска мест.
-class _SightSearchBodyState extends State<_SightSearchBody>
+class _PlaceSearchBodyState extends State<_PlaceSearchBody>
     with WorkWithPlaces {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
@@ -108,8 +108,8 @@ class _SightSearchBodyState extends State<_SightSearchBody>
   /// История поиска мест.
   final Set<String> _searchHistory = {};
 
-  /// Найденные достопримечательности.
-  late List<Sight> _sightsFoundList = [];
+  /// Найденные места.
+  late List<Place> _placesFoundList = [];
 
   /// Флаг начала процесса поиска мест.
   bool _searchInProgress = false;
@@ -119,7 +119,7 @@ class _SightSearchBodyState extends State<_SightSearchBody>
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedSightSearchBodyState(
+    return _InheritedPlaceSearchBodyState(
       data: this,
       child: Column(
         children: const [
@@ -197,21 +197,21 @@ class _SightSearchBodyState extends State<_SightSearchBody>
       'distanceTo': widget.distanceTo,
     };
     // Общая фильтрация по фильтрам.
-    final sightsFilteredByTypeAndRadius = getFilteredByTypeAndRadiusSights(
-      mocked.sights,
-      widget.sightTypeFilters,
+    final placesFilteredByTypeAndRadius = getFilteredByTypeAndRadiusPlaces(
+      mocked.places,
+      widget.placeTypeFilters,
       mocked.userCoordinates,
       range,
     );
     // Финальная фильтрация по наименованию.
-    _sightsFoundList = getFilteredByNameSights(
-      sightsFilteredByTypeAndRadius,
+    _placesFoundList = getFilteredByNamePlaces(
+      placesFilteredByTypeAndRadius,
       searchString,
     );
   }
 }
 
-/// Поле ввода для поиска достопримечательностей.
+/// Поле ввода для поиска мест.
 class _SearchBar extends StatelessWidget {
   const _SearchBar({Key? key}) : super(key: key);
 
@@ -219,7 +219,7 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchController = dataStorage._searchController;
     final searchFocusNode = dataStorage._searchFocusNode;
 
@@ -242,7 +242,7 @@ class _SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchInProgress = dataStorage._searchInProgress;
 
     return !searchInProgress
@@ -251,7 +251,7 @@ class _SearchResults extends StatelessWidget {
             child: Column(
               children: const [
                 _SearchHistory(),
-                _SightsFoundList(),
+                _PlacesFoundList(),
               ],
             ),
           )
@@ -265,11 +265,11 @@ class _SearchHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchHistory = dataStorage._searchHistory;
     final isSearchInProgress = dataStorage._searchString.isNotEmpty;
 
-    // Не показывать историю поиска, если она пуста, или если начат поиск достопримечательностей.
+    // Не показывать историю поиска, если она пуста, или если начат поиск мест.
     return searchHistory.isEmpty || isSearchInProgress
         ? const SizedBox.shrink()
         : const _SearchHistoryList();
@@ -319,7 +319,7 @@ class _SearchHistoryItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchHistory = dataStorage._searchHistory;
     List<Widget> listOfItems;
     listOfItems = searchHistory
@@ -408,7 +408,7 @@ class _DeleteHistorySearchItemFromListButton extends StatelessWidget {
 
   /// Вызывает функцию из стейта экрана, которая удаляет элемент из списка истории поиска.
   void _deleteItemFromSet(BuildContext context) {
-    _InheritedSightSearchBodyState.of(context)._deleteItemFromSet(itemName);
+    _InheritedPlaceSearchBodyState.of(context)._deleteItemFromSet(itemName);
   }
 }
 
@@ -419,7 +419,7 @@ class _ClearSearchHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -465,7 +465,7 @@ class _HistorySearchItemTextButton extends StatelessWidget {
 
   /// Заполняет поле поиска заданным элементом.
   void _fillSearchFieldWithItem(BuildContext context) {
-    _InheritedSightSearchBodyState.of(context)
+    _InheritedPlaceSearchBodyState.of(context)
         ._fillSearchFieldWithItem(itemName);
   }
 }
@@ -490,22 +490,22 @@ class _SearchHistoryItemDivider extends StatelessWidget {
   }
 }
 
-/// Список найденных достопримечательностей.
-class _SightsFoundList extends StatelessWidget {
-  const _SightsFoundList({Key? key}) : super(key: key);
+/// Список найденных мест.
+class _PlacesFoundList extends StatelessWidget {
+  const _PlacesFoundList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
-    final sightsFoundList = dataStorage._sightsFoundList;
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
+    final placesFoundList = dataStorage._placesFoundList;
     final isSearchInProgress = dataStorage._searchString.isNotEmpty;
 
-    // Не показывать список найденных достопримечательностей, если ещё не начат их поиск.
+    // Не показывать список найденных мест, если ещё не начат их поиск.
     return !isSearchInProgress
         ? const SizedBox.shrink()
 
-        // Отобразить список найденных достопримечательностей, если они были найдены.
-        : sightsFoundList.isNotEmpty
+        // Отобразить список найденных мест, если они были найдены.
+        : placesFoundList.isNotEmpty
             ? Expanded(
                 child: ListView(
                   padding: const EdgeInsets.only(
@@ -513,48 +513,48 @@ class _SightsFoundList extends StatelessWidget {
                     right: 16,
                     top: 43,
                   ),
-                  children: sightsFoundList.map((sightFoundItem) {
-                    final isLastItem = sightsFoundList.last == sightFoundItem;
+                  children: placesFoundList.map((placeFoundItem) {
+                    final isLastItem = placesFoundList.last == placeFoundItem;
 
-                    return _SightsFoundItem(
-                      sight: sightFoundItem,
+                    return _PlacesFoundItem(
+                      place: placeFoundItem,
                       isLastItem: isLastItem,
                     );
                   }).toList(),
                 ),
               )
-            // Отобразить информацию, что достопримечательности не найдены.
-            : const _SightsNotFoundInfo();
+            // Отобразить информацию, что места не найдены.
+            : const _PlacesNotFoundInfo();
   }
 }
 
-/// Найденная достопримечательность.
-class _SightsFoundItem extends StatelessWidget {
-  final Sight sight;
+/// Найденное место.
+class _PlacesFoundItem extends StatelessWidget {
+  final Place place;
   final bool isLastItem;
 
-  const _SightsFoundItem({
+  const _PlacesFoundItem({
     Key? key,
-    required this.sight,
+    required this.place,
     this.isLastItem = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _showSightDetailsBottomSheet(context, sight),
+      onTap: () => _showPlacesDetailsBottomSheet(context, place),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: _SightFoundImage(
-              sight: sight,
+            child: _PlaceFoundImage(
+              place: place,
             ),
           ),
           Expanded(
             flex: 5,
-            child: _SightFoundDetails(
-              sight: sight,
+            child: _PlaceFoundDetails(
+              place: place,
               isLastItem: isLastItem,
             ),
           ),
@@ -563,32 +563,32 @@ class _SightsFoundItem extends StatelessWidget {
     );
   }
 
-  /// Сохранение места в истории поиска и открытие боттомшита детализации достопримечательности.
-  void _showSightDetailsBottomSheet(BuildContext context, Sight sight) {
+  /// Сохранение места в истории поиска и открытие боттомшита детализации места.
+  void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {
     // Сохранить переход в истории поиска.
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
-    dataStorage._searchHistory.add(sight.name);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
+    dataStorage._searchHistory.add(place.name);
 
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => SightDetailsScreen(sight.id),
+      builder: (_) => PlaceDetailsScreen(place.id),
     );
   }
 }
 
 /// Картинка найденного места
-class _SightFoundImage extends StatelessWidget {
+class _PlaceFoundImage extends StatelessWidget {
   /// Картинка по умолчанию.
   static const defaultImageUrl =
       'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
-  final Sight sight;
+  final Place place;
 
-  const _SightFoundImage({
+  const _PlaceFoundImage({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -596,35 +596,35 @@ class _SightFoundImage extends StatelessWidget {
     return RoundedCachedNetworkImage(
       size: 56,
       borderRadius: BorderRadius.circular(12),
-      url: sight.photoUrlList?[0] ?? defaultImageUrl,
+      url: place.photoUrlList?[0] ?? defaultImageUrl,
     );
   }
 }
 
 /// Детали найденного места.
-class _SightFoundDetails extends StatelessWidget {
-  final Sight sight;
+class _PlaceFoundDetails extends StatelessWidget {
+  final Place place;
   final bool isLastItem;
 
-  const _SightFoundDetails({
+  const _PlaceFoundDetails({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.isLastItem,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedSightSearchBodyState.of(context);
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchString = dataStorage._searchString;
 
     final theme = Theme.of(context);
-    final sightNameTextStyle = theme.textTheme.bodyText1?.copyWith(
+    final placeNameTextStyle = theme.textTheme.bodyText1?.copyWith(
       color: theme.primaryColorDark,
     );
-    final highlightedSightNameTextStyle = sightNameTextStyle!.copyWith(
+    final highlightedPlaceNameTextStyle = placeNameTextStyle!.copyWith(
       fontWeight: FontWeight.bold,
     );
-    final sightTypeTextStyle = theme.textTheme.bodyText2?.copyWith(
+    final placeTypeTextStyle = theme.textTheme.bodyText2?.copyWith(
       color: theme.colorScheme.secondary,
     );
 
@@ -639,22 +639,22 @@ class _SightFoundDetails extends StatelessWidget {
           RichText(
             text: TextSpan(
               children: highlightOccurrences(
-                sight.name,
+                place.name,
                 searchString,
-                highlightStyle: highlightedSightNameTextStyle,
+                highlightStyle: highlightedPlaceNameTextStyle,
               ),
-              style: sightNameTextStyle,
+              style: placeNameTextStyle,
             ),
           ),
           const SizedBox(
             height: 8,
           ),
           Text(
-            sight.type.toString(),
-            style: sightTypeTextStyle,
+            place.type.toString(),
+            style: placeTypeTextStyle,
           ),
           // Не отрисовывать разделитель для последнего элемента списка.
-          if (isLastItem) const SizedBox() else const _SightFoundItemDivider(),
+          if (isLastItem) const SizedBox() else const _PlaceFoundItemDivider(),
         ],
       ),
     );
@@ -702,8 +702,8 @@ class _SightFoundDetails extends StatelessWidget {
 }
 
 /// Разделитель между найденными местами.
-class _SightFoundItemDivider extends StatelessWidget {
-  const _SightFoundItemDivider({Key? key}) : super(key: key);
+class _PlaceFoundItemDivider extends StatelessWidget {
+  const _PlaceFoundItemDivider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -720,8 +720,8 @@ class _SightFoundItemDivider extends StatelessWidget {
 }
 
 /// Информация о том, что места не найдены.
-class _SightsNotFoundInfo extends StatelessWidget {
-  const _SightsNotFoundInfo({Key? key}) : super(key: key);
+class _PlacesNotFoundInfo extends StatelessWidget {
+  const _PlacesNotFoundInfo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

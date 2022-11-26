@@ -10,7 +10,7 @@ class AppAssets {
   static const settings = 'assets/icons/settings.svg';
   static const settingsFilled = 'assets/icons/settings_filled.svg';
 
-  // Иконки для карточки достопримечательности - SightCard
+  // Иконки для карточки места - PlaceCard
   static const close = 'assets/icons/close.svg';
   static const share = 'assets/icons/share.svg';
   static const calendar = 'assets/icons/calendar.svg';
@@ -20,7 +20,7 @@ class AppAssets {
   static const addNewCard = 'assets/icons/addNewCard.png';
   static const emptyRoute = 'assets/icons/emptyRoute.png';
 
-  // Иконки для типов достопримечательностей.
+  // Иконки для типов мест.
   static const coffeeShop = 'assets/icons/coffee_shop.svg';
   static const park = 'assets/icons/park.svg';
   static const museum = 'assets/icons/museum.svg';
@@ -28,11 +28,11 @@ class AppAssets {
   static const restaurant = 'assets/icons/restaurant.svg';
   static const particularPlace = 'assets/icons/particular_place.svg';
 
-  // Иконки для поля поиска достопримечательности - SightBar.
+  // Иконки для поля поиска места - SearchBar.
   static const search = 'assets/icons/search.svg';
   static const filter = 'assets/icons/filter.svg';
 
-  // Иконка удаления - VisitingSightsScreen.
+  // Иконка удаления - VisitingPlacesScreen.
   static const delete = 'assets/icons/delete.svg';
 
   // Иконки для экрана онбординга - OnboardingScreen.
@@ -43,7 +43,7 @@ class AppAssets {
   // Лого загрузки - SplashScreen.
   static const appLogo = 'assets/icons/app_logo.svg';
 
-  // Иконки для экрана добавления новой достопримечательности - AddSightScreen.
+  // Иконки для экрана добавления нового места - AddPlaceScreen.
   static const camera = 'assets/icons/camera.svg';
   static const photo = 'assets/icons/photo.svg';
   static const file = 'assets/icons/file.svg';

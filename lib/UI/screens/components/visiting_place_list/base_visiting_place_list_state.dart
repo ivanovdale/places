@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_pickers/custom_date_picker.dart';
 import 'package:places/UI/screens/components/custom_pickers/custom_time_picker.dart';
-import 'package:places/UI/screens/components/sight_card/draggable_sight_card_with_drag_target_option.dart';
-import 'package:places/UI/screens/components/sight_card/to_visit_sight_card.dart';
-import 'package:places/UI/screens/components/sight_card/visited_sight_card.dart';
-import 'package:places/UI/screens/components/visiting_sight_list/base_visiting_sight_list.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/components/place_card/draggable_place_card_with_drag_target_option.dart';
+import 'package:places/UI/screens/components/place_card/to_visit_place_card.dart';
+import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
+import 'package:places/UI/screens/components/visiting_place_list/base_visiting_place_list.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -20,22 +20,22 @@ const int visitingHourByDefault = 12;
 /// Состояние списка мест.
 ///
 /// Содержит в себе скроллконтроллер для прокрутки списка в момент перетаскивания места.
-class BaseVisitingSightListState extends State<BaseVisitingSightList> {
+class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
   final ScrollController _scrollController = ScrollController();
   bool isDragged = false;
 
   @override
   Widget build(BuildContext context) {
-    final listOfSights = widget.listOfSights;
+    final listOfPlaces = widget.listOfPlaces;
 
-    return listOfSights.isEmpty
+    return listOfPlaces.isEmpty
         ? widget.emptyVisitingList
         : ListView.builder(
             controller: _scrollController,
-            itemCount: listOfSights.length,
+            itemCount: listOfPlaces.length,
             itemBuilder: (context, index) {
-              final sightCard = getSightCard(
-                listOfSights[index],
+              final placeCard = getPlaceCard(
+                listOfPlaces[index],
               );
 
               return Stack(
@@ -45,20 +45,20 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
                   ),
                   Dismissible(
                     direction: DismissDirection.endToStart,
-                    onDismissed: (direction) => widget.deleteSightFromList(
-                      listOfSights[index],
+                    onDismissed: (direction) => widget.deletePlaceFromList(
+                      listOfPlaces[index],
                     ),
-                    key: ObjectKey(listOfSights[index]),
-                    child: DraggableSightCardWithDragTargetOption(
+                    key: ObjectKey(listOfPlaces[index]),
+                    child: DraggablePlaceCardWithDragTargetOption(
                       index: index,
-                      sightCard: sightCard,
+                      placeCard: placeCard,
                       isDragged: isDragged,
                       onDragStarted: onDragStarted,
                       onDragEnd: onDragEnd,
                       onAccept: (data) =>
-                          widget.insertIntoSightList(index, data, context),
-                      scrollSightCardsWhenCardDragged:
-                          scrollSightCardsWhenCardDragged,
+                          widget.insertIntoPlaceList(index, data, context),
+                      scrollPlaceCardsWhenCardDragged:
+                          scrollPlaceCardsWhenCardDragged,
                     ),
                   ),
                 ],
@@ -73,24 +73,24 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
     _scrollController.dispose();
   }
 
-  /// Возвращает карточку места в зависимости от типа поля sightCardType.
-  Widget getSightCard(Sight sight) {
-    return widget.sightCardType == ToVisitSightCard
-        ? ToVisitSightCard(
-            sight,
+  /// Возвращает карточку места в зависимости от типа поля placeCardType.
+  Widget getPlaceCard(Place place) {
+    return widget.placeCardType == ToVisitPlaceCard
+        ? ToVisitPlaceCard(
+            place,
             key: GlobalKey(),
-            onDeletePressed: () => widget.deleteSightFromList(sight),
-            onCalendarPressed: () => showToVisitDateTimePicker(sight.id),
+            onDeletePressed: () => widget.deletePlaceFromList(place),
+            onCalendarPressed: () => showToVisitDateTimePicker(place.id),
           )
-        : VisitedSightCard(
-            sight,
+        : VisitedPlaceCard(
+            place,
             key: GlobalKey(),
-            onDeletePressed: () => widget.deleteSightFromList(sight),
+            onDeletePressed: () => widget.deletePlaceFromList(place),
           );
   }
 
   /// Делает скролл вверх или вниз в зависимости от того, в какую область перетаскивается карточка места.
-  void scrollSightCardsWhenCardDragged(PointerMoveEvent event) {
+  void scrollPlaceCardsWhenCardDragged(PointerMoveEvent event) {
     const scrollArea = 300;
 
     if (event.position.dy > MediaQuery.of(context).size.height - scrollArea) {
@@ -129,10 +129,10 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
   /// Отображает пикеры для выбора даты и времени посещения места.
   /// Записывает выбранные дату и время.
   Future<void> showToVisitDateTimePicker(int id) async {
-    // Вытащим сохранённую дату посещения из модели достопримечательности.
+    // Вытащим сохранённую дату посещения из модели места.
     // Необходима при редактировании уже сохранённой даты посещения.
-    final savedToVisitDate = widget.viewModel.toVisitSights
-        .firstWhere((sight) => sight.id == id)
+    final savedToVisitDate = widget.viewModel.toVisitPlaces
+        .firstWhere((place) => place.id == id)
         .visitDate;
 
     // В зависимости от платформы показать нативный пикер/пикеры.
@@ -146,8 +146,8 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
   }
 
   /// Обновляет дату посещения во вьюмодели места.
-  void updateViewModelSightVisitDateTime(int id, DateTime pickedDateTime) {
-    widget.viewModel.updateToVisitSightDateTime(id, pickedDateTime);
+  void updateViewModelPlaceVisitDateTime(int id, DateTime pickedDateTime) {
+    widget.viewModel.updateToVisitPlaceDateTime(id, pickedDateTime);
   }
 
   /// Отображает пикер для выбора даты в стиле Material.
@@ -206,7 +206,7 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
   }
 
   /// Отображает пикеры даты и времени в стиле Material.
-  /// Обновляет вьюмодель достопримечательности.
+  /// Обновляет вьюмодель места.
   Future<void> showMaterialToVisitDateTimePickers(
     int id,
     DateTime? savedToVisitDate,
@@ -223,7 +223,7 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
         pickedTime?.minute ?? 0,
       );
 
-      updateViewModelSightVisitDateTime(id, pickedDateTime);
+      updateViewModelPlaceVisitDateTime(id, pickedDateTime);
     }
   }
 
@@ -247,7 +247,7 @@ class BaseVisitingSightListState extends State<BaseVisitingSightList> {
           maximumDate: currentDateTime.add(const Duration(days: 100)),
           initialDateTime: initialDate,
           onDateTimeChanged: (pickedDateTime) =>
-              updateViewModelSightVisitDateTime(id, pickedDateTime),
+              updateViewModelPlaceVisitDateTime(id, pickedDateTime),
         );
       },
     );

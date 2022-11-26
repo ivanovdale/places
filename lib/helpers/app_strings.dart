@@ -1,16 +1,16 @@
 /// Строковые константы приложения.
 class AppStrings {
-  // SightListScreen. Список достопримечательностей.
-  static const sightListAppBarTitle = 'Список интересных мест';
-  static const sightListAppBarTitleWithLineBreak = 'Список\nинтересных мест';
+  // PlaceListScreen. Список мест.
+  static const placeListAppBarTitle = 'Список интересных мест';
+  static const placeListAppBarTitleWithLineBreak = 'Список\nинтересных мест';
 
-  // SightDetails. Детальная информация о достопримечательности.
+  // PlaceDetails. Детальная информация о месте.
   static const buildRouteText = 'построить маршрут';
   static const toPlanText = 'Запланировать';
   static const toFavourites = 'В Избранное';
   static const closedTo = 'закрыто до';
 
-  // Модель Sight. Типы достопримечательностей.
+  // Модель Place. Типы мест.
   static const coffeeShop = 'кофейня';
   static const park = 'парк';
   static const museum = 'музей';
@@ -18,7 +18,7 @@ class AppStrings {
   static const restaurant = 'ресторан';
   static const particularPlace = 'особое место';
 
-  // SightCard. Карточка места.
+  // PlaceCard. Карточка места.
   static const planToVisit = 'Запланировано на';
   static const placeVisited = 'Цель достигнута';
 
@@ -32,9 +32,9 @@ class AppStrings {
   static const infoFinishRoute = 'Завершите маршрут,\nчтобы место попало сюда.';
   static const delete = 'Удалить';
 
-  // FiltersScreen. Экран фильтров интересных мест.
+  // PlaceFiltersScreen. Экран фильтров интересных мест.
   static const clear = 'Очистить';
-  static const sightTypes = 'категории';
+  static const placeTypes = 'категории';
   static const distance = 'Расстояние';
   static const show = 'показать';
 
@@ -43,10 +43,10 @@ class AppStrings {
   static const darkTheme = 'Тёмная тема';
   static const watchTutorial = 'Смотреть туториал';
 
-  // AddSightScreen, SightTypeSelectionScreen.
-  // Экран добавления достопримечательности. Экран выбора категории достопримечательности.
+  // AddPlaceScreen, PlaceTypeSelectionScreen.
+  // Экран добавления места. Экран выбора категории места.
   static const cancel = 'Отмена';
-  static const sightType = 'категория';
+  static const placeType = 'категория';
   static const unselected = 'Не выбрано';
   static const name = 'название';
   static const latitude = 'широта';
@@ -61,7 +61,7 @@ class AppStrings {
   static const photo = 'Фотография';
   static const file = 'Файл';
 
-  // SightSearchScreen. Экран поиска достопримечательностей.
+  // PlaceSearchScreen. Экран поиска мест.
   static const search = 'Поиск';
   static const searchedByYou = 'вы искали';
   static const clearHistory = 'Очистить историю';

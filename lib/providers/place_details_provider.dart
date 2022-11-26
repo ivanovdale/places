@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Вьюмодель для экрана детализации достопримечательности.
-class SightDetailsProvider extends ChangeNotifier {
+/// Вьюмодель для экрана детализации места.
+class PlaceDetailsProvider extends ChangeNotifier {
   final PageController pageController = PageController();
   int activePage = 0;
 

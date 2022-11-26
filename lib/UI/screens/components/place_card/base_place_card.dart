@@ -2,26 +2,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/UI/screens/sight_details_screen.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/place_details_screen.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/utils/visiting_date_formatter.dart';
 
-/// Абстрактный класс [BaseSightCard]. Отображает краткую информацию о месте.
+/// Абстрактный класс [BasePlaceCard]. Отображает краткую информацию о месте.
 ///
 /// Имеет поля, которые необходимо переопределить в потомках:
 /// * [actions] - список действий с карточкой. Список мап, содержащих картинку и коллбэк.
 /// * [showDetails] - признак отображения детальной информации (краткого описания) места.
 ///
 /// Параметры:
-/// * [sight] - модель достопримечательности.
-abstract class BaseSightCard extends StatelessWidget {
-  final Sight sight;
+/// * [place] - модель места.
+abstract class BasePlaceCard extends StatelessWidget {
+  final Place place;
   abstract final bool showDetails;
   abstract final List<Map<String, Object?>> actions;
 
-  const BaseSightCard(
-    this.sight, {
+  const BasePlaceCard(
+    this.place, {
     Key? key,
   }) : super(key: key);
 
@@ -35,18 +35,18 @@ abstract class BaseSightCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => _showSightDetailsBottomSheet(context, sight),
+            onTap: () => _showPlaceDetailsBottomSheet(context, place),
             child: Column(
               children: [
                 Expanded(
-                  child: _SightCardTop(
-                    sight,
+                  child: _PlaceCardTop(
+                    place,
                     actions,
                   ),
                 ),
                 Expanded(
-                  child: _SightCardBottom(
-                    sight,
+                  child: _PlaceCardBottom(
+                    place,
                     showDetails: showDetails,
                   ),
                 ),
@@ -58,30 +58,30 @@ abstract class BaseSightCard extends StatelessWidget {
     );
   }
 
-  /// Показывает боттомшит детализации достопримечательности.
-  void _showSightDetailsBottomSheet(BuildContext context, Sight sight) {
+  /// Показывает боттомшит детализации места.
+  void _showPlaceDetailsBottomSheet(BuildContext context, Place place) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => SightDetailsScreen(sight.id),
+      builder: (_) => PlaceDetailsScreen(place.id),
     );
   }
 }
 
-/// Виджет верхняя часть карточки достопримечательности.
+/// Виджет верхняя часть карточки места.
 ///
 /// Содержит картинку и тип места.
 ///
 /// Имеет параметры:
-/// * [sight] - модель достопримечательности;
+/// * [place] - модель места;
 /// * [actions] - список действий с карточкой.
-class _SightCardTop extends StatelessWidget {
-  final Sight sight;
+class _PlaceCardTop extends StatelessWidget {
+  final Place place;
   final List<Map<String, Object?>> actions;
 
-  const _SightCardTop(
-    this.sight,
+  const _PlaceCardTop(
+    this.place,
     this.actions, {
     Key? key,
   }) : super(key: key);
@@ -99,7 +99,7 @@ class _SightCardTop extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          imageUrl: sight.photoUrlList?[0] ?? defaultImageUrl,
+          imageUrl: place.photoUrlList?[0] ?? defaultImageUrl,
           imageBuilder: (context, imageProvider) {
             return Ink.image(
               image: imageProvider,
@@ -124,7 +124,7 @@ class _SightCardTop extends StatelessWidget {
                 top: 16.0,
               ),
               child: Text(
-                sight.type.toString(),
+                place.type.toString(),
                 style: theme.textTheme.bodyText2?.copyWith(
                   color: onSecondaryColor,
                 ),
@@ -136,7 +136,7 @@ class _SightCardTop extends StatelessWidget {
                 top: 19,
               ),
               // Действия с карточкой.
-              child: _SightActions(actions),
+              child: _PlaceActions(actions),
             ),
           ],
         ),
@@ -149,10 +149,10 @@ class _SightCardTop extends StatelessWidget {
 ///
 /// Параметр:
 /// * [actions] - список действий с карточкой.
-class _SightActions extends StatelessWidget {
+class _PlaceActions extends StatelessWidget {
   final List<Map<String, Object?>> actions;
 
-  const _SightActions(
+  const _PlaceActions(
     this.actions, {
     Key? key,
   }) : super(key: key);
@@ -183,19 +183,19 @@ class _SightActions extends StatelessWidget {
   }
 }
 
-/// Виджет нижняя часть карточки достопримечательности.
+/// Виджет нижняя часть карточки места.
 ///
 /// Содержит краткую информацию о месте (Название места, краткое описание).
 ///
 /// Имеет параметры:
-/// * [sight] - модель достопримечательности;
+/// * [place] - модель места;
 /// * [showDetails] - отображать детали места (если стоит false, то будет отображена информация о будущем/произошедшем посещении).
-class _SightCardBottom extends StatelessWidget {
-  final Sight sight;
+class _PlaceCardBottom extends StatelessWidget {
+  final Place place;
   final bool showDetails;
 
-  const _SightCardBottom(
-    this.sight, {
+  const _PlaceCardBottom(
+    this.place, {
     Key? key,
     required this.showDetails,
   }) : super(key: key);
@@ -220,21 +220,21 @@ class _SightCardBottom extends StatelessWidget {
                 right: 16,
               ),
               child: Text(
-                sight.name,
+                place.name,
                 style: theme.textTheme.button,
               ),
             ),
             const SizedBox(
               height: 2,
             ),
-            // Показывать информацию о достопримечательности.
+            // Показывать информацию о месте.
             if (showDetails)
               Expanded(
-                child: _SightDetailsInfo(sight),
+                child: _PlaceDetailsInfo(place),
               )
             else
               Expanded(
-                child: _SightVisitingInfo(sight),
+                child: _PlaceVisitingInfo(place),
               ),
           ],
         ),
@@ -243,14 +243,14 @@ class _SightCardBottom extends StatelessWidget {
   }
 }
 
-/// Отображает описание достопримечательности.
+/// Отображает описание места.
 ///
 /// Имеет параметры:
-/// * [sight] - модель достопримечательности.
-class _SightDetailsInfo extends StatelessWidget {
-  final Sight sight;
+/// * [place] - модель места.
+class _PlaceDetailsInfo extends StatelessWidget {
+  final Place place;
 
-  const _SightDetailsInfo(this.sight, {Key? key}) : super(key: key);
+  const _PlaceDetailsInfo(this.place, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +264,7 @@ class _SightDetailsInfo extends StatelessWidget {
         bottom: 16,
       ),
       child: Text(
-        sight.details,
+        place.details,
         maxLines: 2,
         style: theme.textTheme.bodyText2?.copyWith(
           color: secondaryColor,
@@ -275,14 +275,14 @@ class _SightDetailsInfo extends StatelessWidget {
   }
 }
 
-/// Отображает информацию о предстоящем/завершенном посещении. Также отображает режим работы достопримечательности.
+/// Отображает информацию о предстоящем/завершенном посещении. Также отображает режим работы места.
 ///
 /// Имеет параметры:
-/// * [sight] - модель достопримечательности.
-class _SightVisitingInfo extends StatelessWidget {
-  final Sight sight;
+/// * [place] - модель места.
+class _PlaceVisitingInfo extends StatelessWidget {
+  final Place place;
 
-  const _SightVisitingInfo(this.sight, {Key? key}) : super(key: key);
+  const _PlaceVisitingInfo(this.place, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -292,9 +292,9 @@ class _SightVisitingInfo extends StatelessWidget {
     final themeBodyText2 = theme.textTheme.bodyText2;
 
     final visitingText =
-        sight.visited ? AppStrings.placeVisited : AppStrings.planToVisit;
+        place.visited ? AppStrings.placeVisited : AppStrings.planToVisit;
     final visitDateFormatted =
-        VisitingDateFormatter.getFormattedString(visitingText, sight.visitDate);
+        VisitingDateFormatter.getFormattedString(visitingText, place.visitDate);
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -310,12 +310,12 @@ class _SightVisitingInfo extends StatelessWidget {
             maxLines: 2,
             style: themeBodyText2?.copyWith(
               color:
-                  sight.visited ? colorScheme.secondary : colorScheme.primary,
+                  place.visited ? colorScheme.secondary : colorScheme.primary,
             ),
           ),
           const Spacer(),
           Text(
-            '${AppStrings.closedTo} ${sight.workTimeFrom}',
+            '${AppStrings.closedTo} ${place.workTimeFrom}',
             style: themeBodyText2?.copyWith(
               color: secondaryColor,
             ),

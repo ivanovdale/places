@@ -2,30 +2,30 @@ import 'package:places/data/model/coordinate_point.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 
-/// Модель достопримечательности.
+/// Модель места.
 ///
 /// Имеет следующие поля:
 /// * [id] - идентификатор;
-/// * [name] - название достопримечательности;
+/// * [name] - название места;
 /// * [coordinatePoint] - географические координаты точки;
 /// * [photoUrlList] - пути до фотографии в интернете;
 /// * [details] - подробное описание места;
-/// * [type] - тип достопримечательности;
+/// * [type] - тип места;
 /// * [workTimeFrom] - время работы "с". Например, 09:00;
 /// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
 /// * [visited] - признак посещения.
-class Sight {
+class Place {
   int id;
   String name;
   CoordinatePoint coordinatePoint;
   List<String>? photoUrlList;
   String details;
-  SightTypes type;
+  PlaceTypes type;
   String? workTimeFrom;
   DateTime? visitDate;
   bool visited;
 
-  Sight({
+  Place({
     required this.id,
     required this.name,
     required this.coordinatePoint,
@@ -38,7 +38,7 @@ class Sight {
   });
 }
 
-enum SightTypes {
+enum PlaceTypes {
   hotel(AppStrings.hotel, AppAssets.hotel),
   restaurant(AppStrings.restaurant, AppAssets.restaurant),
   particularPlace(AppStrings.particularPlace, AppAssets.particularPlace),
@@ -46,7 +46,7 @@ enum SightTypes {
   museum(AppStrings.museum, AppAssets.museum),
   coffeeShop(AppStrings.coffeeShop, AppAssets.coffeeShop);
 
-  const SightTypes(this.name, this.imagePath);
+  const PlaceTypes(this.name, this.imagePath);
 
   final String name;
   final String imagePath;

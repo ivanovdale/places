@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/string_extension.dart';
@@ -19,9 +19,9 @@ const maxRangeValue = 10.0;
 const applianceDistanceFilterDelayInMillis = 500;
 
 /// Значение по умолчанию для всех фильтров по категории места.
-const areAllSightTypeFiltersActivated = true;
+const areAllPlaceTypeFiltersActivated = true;
 
-/// Экран выбора фильтров достопримечательностей.
+/// Экран выбора фильтров места.
 ///
 /// Отображает возможные фильтры мест - категория места и расстояние до места.
 /// Расстояние может быть задано в некотором диапазоне.
@@ -29,41 +29,41 @@ const areAllSightTypeFiltersActivated = true;
 /// Позволяет очистить все фильтры сразу.
 ///
 /// В конструктор могут быть переданы фильтры, которые нужно активировать при отрисовке экрана.
-class SightFiltersScreen extends StatefulWidget {
+class PlaceFiltersScreen extends StatefulWidget {
   /// Список фильтров по категории мест.
   /// Содержит имя категории, флаг активирован или не активирован, путь к картинке,
   /// обозначающей категорию;
-  final List<Map<String, Object>>? sightTypeFilters;
+  final List<Map<String, Object>>? placeTypeFilters;
   final double? distanceFrom;
   final double? distanceTo;
 
-  const SightFiltersScreen({
+  const PlaceFiltersScreen({
     Key? key,
-    this.sightTypeFilters,
+    this.placeTypeFilters,
     this.distanceFrom,
     this.distanceTo,
   }) : super(key: key);
 
   @override
-  _SightFiltersScreenState createState() => _SightFiltersScreenState();
+  _PlaceFiltersScreenState createState() => _PlaceFiltersScreenState();
 }
 
 /// Состояние экрана фильтров мест.
 ///
 /// Хранит:
-/// * [sightTypeFilters] - список фильтров по категории мест.
+/// * [placeTypeFilters] - список фильтров по категории мест.
 /// Содержит имя категории, флаг активирован или не активирован, путь к картинке,
 /// обозначающей категорию;
-/// * [filteredSightsNumber] - количество мест после фильтрации;
+/// * [filteredPlacesNumber] - количество мест после фильтрации;
 /// * [distanceFrom] - нижняя граница расстояния до места;
 /// * [distanceTo] - верхняя граница расстояния до места.
-class _SightFiltersScreenState extends State<SightFiltersScreen>
+class _PlaceFiltersScreenState extends State<PlaceFiltersScreen>
     with WorkWithPlaces {
   /// Список фильтров по категории мест.
   /// Содержит имя категории, флаг активирован или не активирован, путь к картинке,
   /// обозначающей категорию;
-  late List<Map<String, Object>> sightTypeFilters;
-  late int filteredSightsNumber;
+  late List<Map<String, Object>> placeTypeFilters;
+  late int filteredPlacesNumber;
   late double distanceFrom;
   late double distanceTo;
 
@@ -74,7 +74,7 @@ class _SightFiltersScreenState extends State<SightFiltersScreen>
   void initState() {
     super.initState();
     initializeAllFilters();
-    setFilteredSightsNumber();
+    setFilteredPlacesNumber();
   }
 
   @override
@@ -101,22 +101,22 @@ class _SightFiltersScreenState extends State<SightFiltersScreen>
     distanceTo = widget.distanceTo ?? maxRangeValue;
 
     // Формирование списка фильтров.
-    sightTypeFilters = SightTypes.values.map((sightType) {
+    placeTypeFilters = PlaceTypes.values.map((placeType) {
       // Значение выбора фильтра по умолчанию.
-      var isCurrentSightTypeSelected = areAllSightTypeFiltersActivated;
+      var isCurrentPlaceTypeSelected = areAllPlaceTypeFiltersActivated;
 
       // Если заданы выбранные категории, то необходимо их отметить как выбранные.
-      final areSightTypeFiltersSelected = widget.sightTypeFilters != null;
-      if (areSightTypeFiltersSelected) {
-        isCurrentSightTypeSelected =
-            isSightTypeFilterSelected(widget.sightTypeFilters!, sightType.name);
+      final arePlaceTypeFiltersSelected = widget.placeTypeFilters != null;
+      if (arePlaceTypeFiltersSelected) {
+        isCurrentPlaceTypeSelected =
+            isPlaceTypeFilterSelected(widget.placeTypeFilters!, placeType.name);
       }
 
       // Возвращаемый элемент мапы. Имя типа места, путь до картинки, признак выбора фильтра.
       return <String, Object>{
-        'name': sightType.name,
-        'imagePath': sightType.imagePath,
-        'selected': isCurrentSightTypeSelected,
+        'name': placeType.name,
+        'imagePath': placeType.imagePath,
+        'selected': isCurrentPlaceTypeSelected,
       };
     }).toList();
   }
@@ -133,7 +133,7 @@ class _SightFiltersScreenState extends State<SightFiltersScreen>
       _debounce = Timer(
         const Duration(milliseconds: applianceDistanceFilterDelayInMillis),
         () {
-          setState(setFilteredSightsNumber);
+          setState(setFilteredPlacesNumber);
         },
       );
     });
@@ -142,42 +142,42 @@ class _SightFiltersScreenState extends State<SightFiltersScreen>
   /// Задаёт фильтрацию по категории мест.
   /// Активирует флаг активации фильтра по заданному индексу - [index].
   /// Далее на основании взведённых флагов выпоняет фильтрацию мест по категории.
-  void setSightTypeFilterSelection(int index) {
+  void setPlaceTypeFilterSelection(int index) {
     setState(() {
-      sightTypeFilters[index]['selected'] =
-          !(sightTypeFilters[index]['selected'] as bool);
+      placeTypeFilters[index]['selected'] =
+          !(placeTypeFilters[index]['selected'] as bool);
 
-      setFilteredSightsNumber();
+      setFilteredPlacesNumber();
     });
   }
 
   /// Сбрасывает все фильтры.
   void resetAllFilters() {
     setState(() {
-      for (final item in sightTypeFilters) {
+      for (final item in placeTypeFilters) {
         item['selected'] = false;
       }
       distanceFrom = minRangeValue;
       distanceTo = maxRangeValue;
-      setFilteredSightsNumber();
+      setFilteredPlacesNumber();
     });
   }
 
   /// Задаёт количество мест после фильтрации.
-  void setFilteredSightsNumber() {
-    filteredSightsNumber = getFilteredBySightTypeAndRadiusSightsNumber();
+  void setFilteredPlacesNumber() {
+    filteredPlacesNumber = getFilteredByPlaceTypeAndRadiusPlacesNumber();
   }
 
   /// Возвращает количество мест после фильтрации по категории и расстоянию.
-  int getFilteredBySightTypeAndRadiusSightsNumber() {
+  int getFilteredByPlaceTypeAndRadiusPlacesNumber() {
     final range = {
       'distanceFrom': distanceFrom,
       'distanceTo': distanceTo,
     };
 
-    return getFilteredByTypeAndRadiusSights(
-      mocked.sights,
-      sightTypeFilters,
+    return getFilteredByTypeAndRadiusPlaces(
+      mocked.places,
+      placeTypeFilters,
       mocked.userCoordinates,
       range,
     ).length;
@@ -187,7 +187,7 @@ class _SightFiltersScreenState extends State<SightFiltersScreen>
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
 class _InheritedFiltersScreenState extends InheritedWidget {
-  final _SightFiltersScreenState data;
+  final _PlaceFiltersScreenState data;
 
   const _InheritedFiltersScreenState({
     Key? key,
@@ -200,7 +200,7 @@ class _InheritedFiltersScreenState extends InheritedWidget {
     return true;
   }
 
-  static _SightFiltersScreenState of(BuildContext context) {
+  static _PlaceFiltersScreenState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
             _InheritedFiltersScreenState>() as _InheritedFiltersScreenState)
         .data;
@@ -220,8 +220,8 @@ class _FiltersBody extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: const [
-          _SightTypesText(),
-          _SightTypeFilters(),
+          _PlaceTypesText(),
+          _PlaceTypeFilters(),
           _DistanceFilterText(),
           _DistanceFilterSlider(),
           Spacer(),
@@ -241,7 +241,7 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedFiltersScreenState.of(context);
-    final filteredSightsNumber = dataStorage.filteredSightsNumber;
+    final filteredPlacesNumber = dataStorage.filteredPlacesNumber;
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -255,7 +255,7 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
         bottom: 24.0,
       ),
       child: CustomElevatedButton(
-        '${AppStrings.show} ($filteredSightsNumber)',
+        '${AppStrings.show} ($filteredPlacesNumber)',
         textStyle: theme.textTheme.bodyText2?.copyWith(
           color: buttonTextColor,
         ),
@@ -273,7 +273,7 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
     final distanceTo = dataStorage.distanceTo;
 
     final selectedFilters = <String, Object>{
-      'sightTypeFilters': dataStorage.sightTypeFilters,
+      'placeTypeFilters': dataStorage.placeTypeFilters,
       'distanceFrom': distanceFrom,
       'distanceTo': distanceTo,
     };
@@ -369,8 +369,8 @@ class _ClearButton extends StatelessWidget {
 }
 
 /// Заголовок фильтров по категории места.
-class _SightTypesText extends StatelessWidget {
-  const _SightTypesText({Key? key}) : super(key: key);
+class _PlaceTypesText extends StatelessWidget {
+  const _PlaceTypesText({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +385,7 @@ class _SightTypesText extends StatelessWidget {
           horizontal: 16.0,
         ),
         child: Text(
-          AppStrings.sightTypes,
+          AppStrings.placeTypes,
           style: theme.textTheme.caption?.copyWith(
             color: secondaryColor,
           ),
@@ -399,28 +399,28 @@ class _SightTypesText extends StatelessWidget {
 ///
 /// Отображает картинки типов мест с их обозначениями.
 /// Показывает, установлен ли фильтр по той или иной категории.
-class _SightTypeFilters extends StatelessWidget {
-  const _SightTypeFilters({Key? key}) : super(key: key);
+class _PlaceTypeFilters extends StatelessWidget {
+  const _PlaceTypeFilters({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedFiltersScreenState.of(context);
-    final listOfFilters = dataStorage.sightTypeFilters;
+    final listOfFilters = dataStorage.placeTypeFilters;
     final mediaQuery = MediaQuery.of(context);
 
     // Для больших экранов отображать фильтры мест в виде сетки.
     // А для экранов малого размера - в виде скролящейся строки.
     return mediaQuery.size.width > 332
-        ? _SightTypeFiltersGridView(listOfFilters: listOfFilters)
-        : _SightTypeFiltersScrollableRow(listOfFilters: listOfFilters);
+        ? _PlaceTypeFiltersGridView(listOfFilters: listOfFilters)
+        : _PlaceTypeFiltersScrollableRow(listOfFilters: listOfFilters);
   }
 }
 
-/// Отображает фильтры достопримечательностей в виде сетки.
-class _SightTypeFiltersGridView extends StatelessWidget {
+/// Отображает фильтры места в виде сетки.
+class _PlaceTypeFiltersGridView extends StatelessWidget {
   final List<Map<String, Object>> listOfFilters;
 
-  const _SightTypeFiltersGridView({
+  const _PlaceTypeFiltersGridView({
     Key? key,
     required this.listOfFilters,
   }) : super(key: key);
@@ -438,11 +438,11 @@ class _SightTypeFiltersGridView extends StatelessWidget {
         ),
         itemCount: listOfFilters.length,
         itemBuilder: (context, index) {
-          final sightFilterLabel =
+          final placeFilterLabel =
               (listOfFilters[index]['name'] as String).capitalize();
 
-          return _SightFilterItem(
-            sightFilterLabel: sightFilterLabel,
+          return _PlaceFilterItem(
+            placeFilterLabel: placeFilterLabel,
             index: index,
           );
         },
@@ -451,11 +451,11 @@ class _SightTypeFiltersGridView extends StatelessWidget {
   }
 }
 
-/// Отображает фильтры достопримечательностей в виде скролящейся строки.
-class _SightTypeFiltersScrollableRow extends StatelessWidget {
+/// Отображает фильтры места в виде скролящейся строки.
+class _PlaceTypeFiltersScrollableRow extends StatelessWidget {
   final List<Map<String, Object>> listOfFilters;
 
-  const _SightTypeFiltersScrollableRow({
+  const _PlaceTypeFiltersScrollableRow({
     Key? key,
     required this.listOfFilters,
   }) : super(key: key);
@@ -469,8 +469,8 @@ class _SightTypeFiltersScrollableRow extends StatelessWidget {
           for (int index = 0; index < listOfFilters.length; index++)
             Padding(
               padding: const EdgeInsets.only(right: 44.0),
-              child: _SightFilterItem(
-                sightFilterLabel:
+              child: _PlaceFilterItem(
+                placeFilterLabel:
                     (listOfFilters[index]['name'] as String).capitalize(),
                 index: index,
               ),
@@ -482,13 +482,13 @@ class _SightTypeFiltersScrollableRow extends StatelessWidget {
 }
 
 /// Отображает кликабельную иконку фильтра и его наименование.
-class _SightFilterItem extends StatelessWidget {
+class _PlaceFilterItem extends StatelessWidget {
   final int index;
-  final String sightFilterLabel;
+  final String placeFilterLabel;
 
-  const _SightFilterItem({
+  const _PlaceFilterItem({
     Key? key,
-    required this.sightFilterLabel,
+    required this.placeFilterLabel,
     required this.index,
   }) : super(key: key);
 
@@ -504,7 +504,7 @@ class _SightFilterItem extends StatelessWidget {
             top: 12,
           ),
           child: Text(
-            sightFilterLabel,
+            placeFilterLabel,
             style: Theme.of(context).textTheme.caption,
           ),
         ),
@@ -525,9 +525,9 @@ class _FilterCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedFiltersScreenState.of(context);
-    final sightTypeFilters = dataStorage.sightTypeFilters;
-    final imagePath = sightTypeFilters[filterItemIndex]['imagePath'] as String;
-    final selected = sightTypeFilters[filterItemIndex]['selected'] as bool;
+    final placeTypeFilters = dataStorage.placeTypeFilters;
+    final imagePath = placeTypeFilters[filterItemIndex]['imagePath'] as String;
+    final selected = placeTypeFilters[filterItemIndex]['selected'] as bool;
 
     final theme = Theme.of(context);
     final colorSchemePrimaryColor = theme.colorScheme.primary;
@@ -541,7 +541,7 @@ class _FilterCircle extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () =>
-                dataStorage.setSightTypeFilterSelection(filterItemIndex),
+                dataStorage.setPlaceTypeFilterSelection(filterItemIndex),
             child: ClipOval(
               child: Container(
                 height: 64,

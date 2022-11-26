@@ -48,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           _SkipButton(
             activePage: _activePage,
-            onPressed: () => goToSightListScreen(context),
+            onPressed: () => goToPlaceListScreen(context),
           ),
           _OnboardingPageView(
             controller: _pageController,
@@ -61,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           _StartButton(
             activePage: _activePage,
-            onPressed: () => goToSightListScreen(context),
+            onPressed: () => goToPlaceListScreen(context),
           ),
         ],
       ),
@@ -76,13 +76,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Выполняет переход на главную страницу, если стек экранов пуст.
-  void goToSightListScreen(BuildContext context) {
+  void goToPlaceListScreen(BuildContext context) {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
     } else {
       Navigator.pushReplacementNamed(
         context,
-        AppRouter.sightList,
+        AppRouter.placeList,
       );
     }
   }

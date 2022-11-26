@@ -9,17 +9,17 @@ class BottomBarProvider extends ChangeNotifier {
     {
       'icon': AppAssets.list,
       'activeIcon': AppAssets.listFilled,
-      'routeName': AppRouter.sightList,
+      'routeName': AppRouter.placeList,
     },
     {
       'icon': AppAssets.map,
       'activeIcon': AppAssets.mapFilled,
-      'routeName': AppRouter.sightList, // Пока экрана нет.
+      'routeName': AppRouter.placeList, // Пока экрана нет.
     },
     {
       'icon': AppAssets.heart,
       'activeIcon': AppAssets.heartFilled,
-      'routeName': AppRouter.visitingSights,
+      'routeName': AppRouter.visitingPlaces,
     },
     {
       'icon': AppAssets.settings,

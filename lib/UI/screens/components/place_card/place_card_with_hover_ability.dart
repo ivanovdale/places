@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 /// Карточка места с подсветкой в момент, когда над ней происходит перетаскивание другой карточки.
 /// Идентифицирует о возможности сделать дроп в эту область.
-class SightCardWithHoverAbility extends StatelessWidget {
-  final Widget sightCard;
+class PlaceCardWithHoverAbility extends StatelessWidget {
+  final Widget placeCard;
   final List<int?> candidateData;
 
-  const SightCardWithHoverAbility({
+  const PlaceCardWithHoverAbility({
     Key? key,
-    required this.sightCard,
+    required this.placeCard,
     required this.candidateData,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class SightCardWithHoverAbility extends StatelessWidget {
         ],
         borderRadius: BorderRadius.circular(12),
       ),
-      child: sightCard,
+      child: placeCard,
     );
   }
 }

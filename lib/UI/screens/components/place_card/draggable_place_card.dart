@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/sight_card/sight_card_when_dragged.dart';
-import 'package:places/UI/screens/components/sight_card/sight_card_with_hover_ability.dart';
+import 'package:places/UI/screens/components/place_card/place_card_when_dragged.dart';
+import 'package:places/UI/screens/components/place_card/place_card_with_hover_ability.dart';
 
 /// Карточка места с возможностью перетаскивания.
-class DraggableSightCard extends StatelessWidget {
+class DraggablePlaceCard extends StatelessWidget {
   final VoidCallback? onDragStarted;
   final Function(DraggableDetails)? onDragEnd;
-  final Widget sightCard;
+  final Widget placeCard;
   final int index;
   final List<int?> candidateData;
 
-  const DraggableSightCard({
+  const DraggablePlaceCard({
     Key? key,
     this.onDragStarted,
     this.onDragEnd,
-    required this.sightCard,
+    required this.placeCard,
     required this.index,
     required this.candidateData,
   }) : super(key: key);
@@ -23,8 +23,8 @@ class DraggableSightCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LongPressDraggable(
       data: index,
-      child: SightCardWithHoverAbility(
-        sightCard: sightCard,
+      child: PlaceCardWithHoverAbility(
+        placeCard: placeCard,
         candidateData: candidateData,
       ),
       childWhenDragging: const SizedBox(
@@ -32,7 +32,7 @@ class DraggableSightCard extends StatelessWidget {
       ),
       onDragStarted: onDragStarted,
       onDragEnd: onDragEnd,
-      feedback: SightCardWhenDragged(sightCard: sightCard),
+      feedback: PlaceCardWhenDragged(placeCard: placeCard),
     );
   }
 }

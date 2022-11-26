@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:places/UI/screens/components/sight_card/base_sight_card.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/components/place_card/base_place_card.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
-/// Виджет карточки посещённой достопримечательности. Наследуется от [BaseSightCard].
+/// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
 ///
 /// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
 ///
 /// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-class VisitedSightCard extends BaseSightCard {
+/// * [place] - модель места (обязательный);
+class VisitedPlaceCard extends BasePlaceCard {
   final VoidCallback? onSharePressed;
   final VoidCallback? onDeletePressed;
 
@@ -21,13 +21,13 @@ class VisitedSightCard extends BaseSightCard {
   @override
   bool get showDetails => false;
 
-  VisitedSightCard(
-    Sight sight, {
+  VisitedPlaceCard(
+    Place place, {
     this.onSharePressed,
     this.onDeletePressed,
     Key? key,
   }) : super(
-          sight,
+          place,
           key: key,
         ) {
     actions = [

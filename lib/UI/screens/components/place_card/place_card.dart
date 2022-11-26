@@ -1,19 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/sight_card/base_sight_card.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/UI/screens/components/place_card/base_place_card.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
-/// Виджет карточки достопримечательности. Наследуется от [BaseSightCard].
+/// Виджет карточки места. Наследуется от [BasePlaceCard].
 ///
 /// Переопределяет поле [actions] - в списке кнопок карточки 1 элемент - кнопка добавления в избранное.
-/// Также переопределяет поле [showDetails] - для отображения детальной информации о достопримечательности.
+/// Также переопределяет поле [showDetails] - для отображения детальной информации о месте.
 ///
 /// Отображает краткую информацию о месте.
 ///
 /// Параметры:
-/// * [sight] - модель достопримечательности (обязательный);
-class SightCard extends BaseSightCard {
+/// * [place] - модель места (обязательный);
+class PlaceCard extends BasePlaceCard {
   @override
   final List<Map<String, Object?>> actions = [
     {
@@ -24,11 +24,11 @@ class SightCard extends BaseSightCard {
   @override
   bool get showDetails => true;
 
-  SightCard(
-    Sight sight, {
+  PlaceCard(
+    Place place, {
     Key? key,
   }) : super(
-          sight,
+          place,
           key: key,
         );
 }

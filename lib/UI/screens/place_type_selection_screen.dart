@@ -3,87 +3,87 @@ import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_icon_button.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/utils/string_extension.dart';
 
-/// Экран выбора категории достопримечательности.
-class SightTypeSelectionScreen extends StatelessWidget {
-  const SightTypeSelectionScreen({Key? key}) : super(key: key);
+/// Экран выбора категории места.
+class PlaceTypeSelectionScreen extends StatelessWidget {
+  const PlaceTypeSelectionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: AppStrings.sightType.capitalize(),
+        title: AppStrings.placeType.capitalize(),
         titleTextStyle: Theme.of(context).textTheme.subtitle1,
         centerTitle: true,
         toolbarHeight: 56,
         leading: const _BackButton(),
       ),
-      body: const _SightTypeSelectionBody(),
+      body: const _PlaceTypeSelectionBody(),
     );
   }
 }
 
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedSightTypeSelectionBodyState extends InheritedWidget {
-  final _SightTypeSelectionBodyState data;
+class _InheritedPlaceTypeSelectionBodyState extends InheritedWidget {
+  final _PlaceTypeSelectionBodyState data;
 
-  const _InheritedSightTypeSelectionBodyState({
+  const _InheritedPlaceTypeSelectionBodyState({
     Key? key,
     required Widget child,
     required this.data,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSightTypeSelectionBodyState old) {
+  bool updateShouldNotify(_InheritedPlaceTypeSelectionBodyState old) {
     return true;
   }
 
-  static _SightTypeSelectionBodyState of(BuildContext context) {
+  static _PlaceTypeSelectionBodyState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-                _InheritedSightTypeSelectionBodyState>()
-            as _InheritedSightTypeSelectionBodyState)
+                _InheritedPlaceTypeSelectionBodyState>()
+            as _InheritedPlaceTypeSelectionBodyState)
         .data;
   }
 }
 
-/// Выбор категории достопримечательности.
-class _SightTypeSelectionBody extends StatefulWidget {
-  const _SightTypeSelectionBody({Key? key}) : super(key: key);
+/// Выбор категории места.
+class _PlaceTypeSelectionBody extends StatefulWidget {
+  const _PlaceTypeSelectionBody({Key? key}) : super(key: key);
 
   @override
-  State<_SightTypeSelectionBody> createState() =>
-      _SightTypeSelectionBodyState();
+  State<_PlaceTypeSelectionBody> createState() =>
+      _PlaceTypeSelectionBodyState();
 }
 
-/// Состояние выбора категории достопримечательности. Хранит текущую выбранную категорию.
-class _SightTypeSelectionBodyState
-    extends State<_SightTypeSelectionBody> {
-  SightTypes? currentSightType;
+/// Состояние выбора категории места. Хранит текущую выбранную категорию.
+class _PlaceTypeSelectionBodyState
+    extends State<_PlaceTypeSelectionBody> {
+  PlaceTypes? currentPlaceType;
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedSightTypeSelectionBodyState(
+    return _InheritedPlaceTypeSelectionBodyState(
       data: this,
-      child: const _SightTypesList(),
+      child: const _PlaceTypesList(),
     );
   }
 
   /// Устанавливает новое значение выбранного типа места.
-  void setCurrentSightType(SightTypes item) {
+  void setCurrentPlaceType(PlaceTypes item) {
     setState(() {
-      currentSightType = item;
+      currentPlaceType = item;
     });
   }
 }
 
-/// Список категорий достопримечательности.
-class _SightTypesList extends StatelessWidget {
-  const _SightTypesList({
+/// Список категорий места.
+class _PlaceTypesList extends StatelessWidget {
+  const _PlaceTypesList({
     Key? key,
   }) : super(key: key);
 
@@ -94,8 +94,8 @@ class _SightTypesList extends StatelessWidget {
       child: Column(
         children: [
           Column(
-            children: SightTypes.values
-                .map((sightType) => _SightTypeItem(item: sightType))
+            children: PlaceTypes.values
+                .map((placeType) => _PlaceTypeItem(item: placeType))
                 .toList(),
           ),
           const Spacer(),
@@ -106,14 +106,14 @@ class _SightTypesList extends StatelessWidget {
   }
 }
 
-/// Элемент списка категории достопримечательности.
+/// Элемент списка категории места.
 ///
-/// Отображает имя достопримечательности и галочку выбора.
-/// Устанавливает текущий выбранный тип достопримечательности.
-class _SightTypeItem extends StatelessWidget {
-  final SightTypes item;
+/// Отображает имя места и галочку выбора.
+/// Устанавливает текущий выбранный тип места.
+class _PlaceTypeItem extends StatelessWidget {
+  final PlaceTypes item;
 
-  const _SightTypeItem({
+  const _PlaceTypeItem({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -121,13 +121,13 @@ class _SightTypeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage =
-        _InheritedSightTypeSelectionBodyState.of(context);
-    final currentSightType = dataStorage.currentSightType;
+        _InheritedPlaceTypeSelectionBodyState.of(context);
+    final currentPlaceType = dataStorage.currentPlaceType;
     final theme = Theme.of(context);
     final itemName = item.name;
 
     return InkWell(
-      onTap: () => dataStorage.setCurrentSightType(item),
+      onTap: () => dataStorage.setCurrentPlaceType(item),
       child: Column(
         children: [
           Row(
@@ -140,7 +140,7 @@ class _SightTypeItem extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              if (itemName == currentSightType?.name)
+              if (itemName == currentPlaceType?.name)
                 Padding(
                   padding: const EdgeInsets.only(right: 24.0),
                   child: Icon(
@@ -167,7 +167,7 @@ class _SightTypeItem extends StatelessWidget {
   }
 }
 
-/// Кнопка сохранения категории достопримечательности.
+/// Кнопка сохранения категории места.
 class _SaveButton extends StatelessWidget {
   const _SaveButton({
     Key? key,
@@ -176,14 +176,14 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage =
-        _InheritedSightTypeSelectionBodyState.of(context);
-    final currentSightType = dataStorage.currentSightType;
+        _InheritedPlaceTypeSelectionBodyState.of(context);
+    final currentPlaceType = dataStorage.currentPlaceType;
 
     // Логика изменения цвета кнопки в зависимости от выбранной категории.
     final theme = Theme.of(context);
     var saveButtonBackgroundColor = theme.colorScheme.primary;
     var saveButtonTextColor = theme.colorScheme.onBackground;
-    if (currentSightType == null) {
+    if (currentPlaceType == null) {
       saveButtonBackgroundColor = theme.colorScheme.secondaryContainer;
       saveButtonTextColor = theme.colorScheme.secondary.withOpacity(0.56);
     }
@@ -202,8 +202,8 @@ class _SaveButton extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
         onPressed: () {
-          if (currentSightType != null) {
-            Navigator.pop(context, currentSightType);
+          if (currentPlaceType != null) {
+            Navigator.pop(context, currentPlaceType);
           }
         },
       ),
@@ -211,7 +211,7 @@ class _SaveButton extends StatelessWidget {
   }
 }
 
-/// Кнопка возврата на экран добавления достопримечательности.
+/// Кнопка возврата на экран добавления места.
 class _BackButton extends StatelessWidget {
   const _BackButton({
     Key? key,

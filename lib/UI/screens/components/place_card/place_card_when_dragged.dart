@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// Карточка места в момент перетаскивания.
-class SightCardWhenDragged extends StatelessWidget {
-  final Widget sightCard;
+class PlaceCardWhenDragged extends StatelessWidget {
+  final Widget placeCard;
 
-  const SightCardWhenDragged({
+  const PlaceCardWhenDragged({
     Key? key,
-    required this.sightCard,
+    required this.placeCard,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class SightCardWhenDragged extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       height: 254,
-      child: sightCard,
+      child: placeCard,
     );
   }
 }

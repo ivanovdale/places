@@ -6,28 +6,28 @@ import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/providers/sight_details_provider.dart';
+import 'package:places/providers/place_details_provider.dart';
 import 'package:provider/provider.dart';
 
-/// Экран подробностей достопримечательности.
+/// Экран подробностей места.
 ///
 /// Отображает картинку, название, тип, режим работы, описание места.
 /// Предоставляет возможность построить маршрут к этому месту.
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
-/// Обязательный параметр конструктора: [sightId] - идентификатор достопримечательности.
-class SightDetailsScreen extends StatelessWidget {
-  final int sightId;
+/// Обязательный параметр конструктора: [placeId] - идентификатор места.
+class PlaceDetailsScreen extends StatelessWidget {
+  final int placeId;
 
-  const SightDetailsScreen(this.sightId, {Key? key}) : super(key: key);
+  const PlaceDetailsScreen(this.placeId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final sight = mocked.sights.firstWhere((sight) => sight.id == sightId);
+    final place = mocked.places.firstWhere((place) => place.id == placeId);
 
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
@@ -40,12 +40,12 @@ class SightDetailsScreen extends StatelessWidget {
         ),
         child: Scaffold(
           bottomSheet: ChangeNotifierProvider(
-            create: (context) => SightDetailsProvider(),
+            create: (context) => PlaceDetailsProvider(),
             child: CustomScrollView(
               controller: scrollController,
               slivers: [
-                _SliverAppBarSightPhotos(sight),
-                _SliverSightDetails(sight),
+                _SliverAppBarPlacePhotos(place),
+                _SliverPlaceDetails(place),
               ],
             ),
           ),
@@ -55,14 +55,14 @@ class SightDetailsScreen extends StatelessWidget {
   }
 }
 
-/// Сливер фотографий достопримечательности.
+/// Сливер фотографий места.
 ///
 /// Отображает картинки места и имеет кнопку "Закрыть".
 /// Сворачивается при скроллинге.
-class _SliverAppBarSightPhotos extends StatelessWidget {
-  final Sight sight;
+class _SliverAppBarPlacePhotos extends StatelessWidget {
+  final Place place;
 
-  const _SliverAppBarSightPhotos(this.sight);
+  const _SliverAppBarPlacePhotos(this.place);
 
   @override
   Widget build(BuildContext context) {
@@ -71,17 +71,17 @@ class _SliverAppBarSightPhotos extends StatelessWidget {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: Consumer<SightDetailsProvider>(
+        background: Consumer<PlaceDetailsProvider>(
           builder: (context, viewModel, child) => Stack(
             alignment: Alignment.center,
             children: [
               _PhotoGallery(
-                sight: sight,
+                place: place,
                 controller: viewModel.pageController,
                 onPageChanged: viewModel.setActivePage,
               ),
               _PageIndicator(
-                length: sight.photoUrlList?.length ?? 0,
+                length: place.photoUrlList?.length ?? 0,
                 controller: viewModel.pageController,
                 activePage: viewModel.activePage,
               ),
@@ -95,7 +95,7 @@ class _SliverAppBarSightPhotos extends StatelessWidget {
   }
 }
 
-/// Галерея фотографии достопримечательности.
+/// Галерея фотографии места.
 class _PhotoGallery extends StatelessWidget {
   /// Картинка по умолчанию.
   static const defaultImageUrl =
@@ -103,13 +103,13 @@ class _PhotoGallery extends StatelessWidget {
 
   final Function(int)? onPageChanged;
   final PageController controller;
-  final Sight sight;
+  final Place place;
 
   const _PhotoGallery({
     Key? key,
     this.onPageChanged,
     required this.controller,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -117,10 +117,10 @@ class _PhotoGallery extends StatelessWidget {
     return PageView.builder(
       controller: controller,
       onPageChanged: onPageChanged,
-      itemCount: sight.photoUrlList?.length,
+      itemCount: place.photoUrlList?.length,
       itemBuilder: (context, index) {
         return CachedNetworkImage(
-          imageUrl: sight.photoUrlList?[index] ?? defaultImageUrl,
+          imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
           progressIndicatorBuilder: LoadingIndicator.progressIndicatorBuilder,
         );
@@ -182,17 +182,17 @@ class _PageIndicator extends StatelessWidget {
   }
 }
 
-/// Виджет для отображения нижней части подробностей достопримечательности.
+/// Виджет для отображения нижней части подробностей места.
 ///
 /// Отображает название, тип, режим работы, описание места.
 /// Предоставляет возможность построить маршрут к этому месту.
 /// Также есть возможность запланировать поход в место и добавить его в список избранного.
 ///
-/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
-class _SliverSightDetails extends StatelessWidget {
-  final Sight sight;
+/// Обязательный параметр конструктора: [place] - модель места.
+class _SliverPlaceDetails extends StatelessWidget {
+  final Place place;
 
-  const _SliverSightDetails(this.sight, {Key? key}) : super(key: key);
+  const _SliverPlaceDetails(this.place, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,7 @@ class _SliverSightDetails extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SightInfo(sight),
+            _PlaceInfo(place),
             const _BuildRouteButton(),
             const CustomDivider(
               padding: EdgeInsets.only(
@@ -212,7 +212,7 @@ class _SliverSightDetails extends StatelessWidget {
               ),
               thickness: 0.8,
             ),
-            const _SightActionsButtons(),
+            const _PlaceActionsButtons(),
           ],
         ),
       ),
@@ -220,15 +220,15 @@ class _SliverSightDetails extends StatelessWidget {
   }
 }
 
-/// Виджет для отображения информации о достопримечательности.
+/// Виджет для отображения информации о места.
 ///
 /// Отображает название, тип, режим работы, описание места.
 ///
-/// Обязательный параметр конструктора: [sight] - модель достопримечательности.
-class _SightInfo extends StatelessWidget {
-  final Sight sight;
+/// Обязательный параметр конструктора: [place] - модель места.
+class _PlaceInfo extends StatelessWidget {
+  final Place place;
 
-  const _SightInfo(this.sight, {Key? key}) : super(key: key);
+  const _PlaceInfo(this.place, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -243,22 +243,22 @@ class _SightInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SightName(
-          sight.name,
+        _PlaceName(
+          place.name,
           textStyle: theme.textTheme.headline5!,
         ),
-        _SightDetailsInfo(
-          sight.type.toString(),
-          workTime: sight.workTimeFrom ?? '',
-          sightTypeTextStyle: themeBodyText2!.copyWith(
+        _PlaceDetailsInfo(
+          place.type.toString(),
+          workTime: place.workTimeFrom ?? '',
+          placeTypeTextStyle: themeBodyText2!.copyWith(
             color: onPrimaryColor,
           ),
           workTimeTextStyle: themeBodyText2.copyWith(
             color: secondaryColor,
           ),
         ),
-        _SightDescription(
-          sight.details,
+        _PlaceDescription(
+          place.details,
           textStyle: themeBodyText2.copyWith(
             color: primaryColor,
           ),
@@ -268,12 +268,12 @@ class _SightInfo extends StatelessWidget {
   }
 }
 
-/// Название достопримечательности.
-class _SightName extends StatelessWidget {
+/// Название места.
+class _PlaceName extends StatelessWidget {
   final String text;
   final TextStyle textStyle;
 
-  const _SightName(
+  const _PlaceName(
     this.text, {
     Key? key,
     required this.textStyle,
@@ -294,17 +294,17 @@ class _SightName extends StatelessWidget {
   }
 }
 
-/// Информация о достопримечательности.
-class _SightDetailsInfo extends StatelessWidget {
+/// Информация о месте.
+class _PlaceDetailsInfo extends StatelessWidget {
   final String text;
-  final TextStyle sightTypeTextStyle;
+  final TextStyle placeTypeTextStyle;
   final TextStyle workTimeTextStyle;
   final String workTime;
 
-  const _SightDetailsInfo(
+  const _PlaceDetailsInfo(
     this.text, {
     Key? key,
-    required this.sightTypeTextStyle,
+    required this.placeTypeTextStyle,
     required this.workTime,
     required this.workTimeTextStyle,
   }) : super(key: key);
@@ -322,7 +322,7 @@ class _SightDetailsInfo extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               text,
-              style: sightTypeTextStyle,
+              style: placeTypeTextStyle,
             ),
           ),
           Padding(
@@ -340,12 +340,12 @@ class _SightDetailsInfo extends StatelessWidget {
   }
 }
 
-/// Описание достопримечательности.
-class _SightDescription extends StatelessWidget {
+/// Описание места.
+class _PlaceDescription extends StatelessWidget {
   final String text;
   final TextStyle textStyle;
 
-  const _SightDescription(
+  const _PlaceDescription(
     this.text, {
     Key? key,
     required this.textStyle,
@@ -413,11 +413,11 @@ class _BuildRouteButton extends StatelessWidget {
   }
 }
 
-/// Виджет для отображения кнопок для работы с достопримечательностью.
+/// Виджет для отображения кнопок для работы с местом.
 ///
 /// Предоставляет возможность запланировать поход в место и добавить его в список избранного.
-class _SightActionsButtons extends StatelessWidget {
-  const _SightActionsButtons({Key? key}) : super(key: key);
+class _PlaceActionsButtons extends StatelessWidget {
+  const _PlaceActionsButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,23 +1,23 @@
 import 'package:places/data/model/coordinate_point.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 
-/// Миксин, содержащий методы для работы с достопримечательностями.
+/// Миксин, содержащий методы для работы с местами.
 mixin WorkWithPlaces {
   /// Возвращает места после фильтрации по категории и расстоянию.
-  List<Sight> getFilteredByTypeAndRadiusSights(
-    List<Sight> sights,
-    List<Map<String, Object>> listOfSightTypeFilters,
+  List<Place> getFilteredByTypeAndRadiusPlaces(
+    List<Place> places,
+    List<Map<String, Object>> listOfPlaceTypeFilters,
     CoordinatePoint userCoordinates,
     Map<String, double> range,
   ) {
-    final selectedSightTypeFilterNames =
-        getSelectedSightTypeFilterNames(listOfSightTypeFilters);
+    final selectedPlaceTypeFilterNames =
+        getSelectedPlaceTypeFilterNames(listOfPlaceTypeFilters);
 
-    return sights
+    return places
         .where(
-          (sight) => selectedSightTypeFilterNames.contains(sight.type.name),
+          (place) => selectedPlaceTypeFilterNames.contains(place.type.name),
         )
-        .where((sight) => sight.coordinatePoint.isPointInsideRadius(
+        .where((place) => place.coordinatePoint.isPointInsideRadius(
               userCoordinates,
               range['distanceFrom']!,
               range['distanceTo']!,
@@ -26,31 +26,31 @@ mixin WorkWithPlaces {
   }
 
   /// Возвращает места после фильтрации по наименованию.
-  List<Sight> getFilteredByNameSights(List<Sight> sights, String sightName) {
-    return sights
+  List<Place> getFilteredByNamePlaces(List<Place> places, String placeName) {
+    return places
         .where(
-          (sight) => sight.name.toLowerCase().contains(sightName.toLowerCase()),
+          (place) => place.name.toLowerCase().contains(placeName.toLowerCase()),
         )
         .toList();
   }
 
   /// Возвращает выбранные категории.
-  List<String> getSelectedSightTypeFilterNames(
-    List<Map<String, Object>> listOfSightTypeFilters,
+  List<String> getSelectedPlaceTypeFilterNames(
+    List<Map<String, Object>> listOfPlaceTypeFilters,
   ) {
-    return listOfSightTypeFilters
-        .where((sightTypeFilter) => sightTypeFilter['selected'] as bool)
+    return listOfPlaceTypeFilters
+        .where((placeTypeFilter) => placeTypeFilter['selected'] as bool)
         .toList()
-        .map((sightType) => sightType['name'] as String)
+        .map((placeType) => placeType['name'] as String)
         .toList();
   }
 
   /// Возвращает, выбрана ли категория.
-  bool isSightTypeFilterSelected(
-    List<Map<String, Object>> sightTypeFilters,
-    String sightTypeFilterName,
+  bool isPlaceTypeFilterSelected(
+    List<Map<String, Object>> placeTypeFilters,
+    String placeTypeFilterName,
   ) {
-    return getSelectedSightTypeFilterNames(sightTypeFilters)
-        .contains(sightTypeFilterName);
+    return getSelectedPlaceTypeFilterNames(placeTypeFilters)
+        .contains(placeTypeFilterName);
   }
 }

@@ -9,7 +9,7 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/data/model/coordinate_point.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -17,12 +17,12 @@ import 'package:places/mocks.dart' as mocked;
 import 'package:places/utils/replace_comma_formatter.dart';
 import 'package:places/utils/string_extension.dart';
 
-/// Экран для добавления новой достопримечательности.
+/// Экран для добавления нового места.
 ///
 /// Позволяет выбрать категорию места, ввести его название, описание и географические координаты.
 /// Также координаты можно установить, указав точку на карте.
-class AddSightScreen extends StatelessWidget {
-  const AddSightScreen({Key? key}) : super(key: key);
+class AddPlaceScreen extends StatelessWidget {
+  const AddPlaceScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class AddSightScreen extends StatelessWidget {
           leading: const _CancelButton(),
           leadingWidth: 73,
         ),
-        body: const _AddSightBody(),
+        body: const _AddPlaceBody(),
       ),
     );
   }
@@ -51,23 +51,23 @@ class AddSightScreen extends StatelessWidget {
 
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedAddSightBodyState extends InheritedWidget {
-  final _AddSightBodyState data;
+class _InheritedAddPlaceBodyState extends InheritedWidget {
+  final _AddPlaceBodyState data;
 
-  const _InheritedAddSightBodyState({
+  const _InheritedAddPlaceBodyState({
     Key? key,
     required Widget child,
     required this.data,
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_InheritedAddSightBodyState old) {
+  bool updateShouldNotify(_InheritedAddPlaceBodyState old) {
     return true;
   }
 
-  static _AddSightBodyState of(BuildContext context) {
+  static _AddPlaceBodyState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedAddSightBodyState>() as _InheritedAddSightBodyState)
+            _InheritedAddPlaceBodyState>() as _InheritedAddPlaceBodyState)
         .data;
   }
 }
@@ -75,11 +75,11 @@ class _InheritedAddSightBodyState extends InheritedWidget {
 /// Отображает свойства добавленяемого места: категория, название, описание, координаты.
 /// Позволяет ввести географические координаты места, указав точку на карте.
 /// Имеет кнопку "Создать" для добавления нового места.
-class _AddSightBody extends StatefulWidget {
-  const _AddSightBody({Key? key}) : super(key: key);
+class _AddPlaceBody extends StatefulWidget {
+  const _AddPlaceBody({Key? key}) : super(key: key);
 
   @override
-  State<_AddSightBody> createState() => _AddSightBodyState();
+  State<_AddPlaceBody> createState() => _AddPlaceBodyState();
 }
 
 /// Состояние виджета для добавления нового места.
@@ -87,7 +87,7 @@ class _AddSightBody extends StatefulWidget {
 /// Содержит в себе всю верстку, контроллеры и фокусноды для полей ввода.
 /// Также содержит ключ формы для валидации полей.
 /// Хранит выбранный тип места.
-class _AddSightBodyState extends State<_AddSightBody> {
+class _AddPlaceBodyState extends State<_AddPlaceBody> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
@@ -97,9 +97,9 @@ class _AddSightBodyState extends State<_AddSightBody> {
   final FocusNode _longitudeFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
 
-  /// Для валидации координат достопримечательности.
+  /// Для валидации координат места.
   final _formKey = GlobalKey<FormState>();
-  SightTypes? selectedSightType;
+  PlaceTypes? selectedPlaceType;
 
   /// Список добавляемых фото.
   late List<String> _newPhotoList = [];
@@ -114,15 +114,15 @@ class _AddSightBodyState extends State<_AddSightBody> {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
-        child: _InheritedAddSightBodyState(
+        child: _InheritedAddPlaceBodyState(
           data: this,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               _PhotoCarousel(),
-              _SightTypeLabel(),
-              _SightTypeSelectionField(),
-              _SightTypePaddedDivider(),
+              _PlaceTypeLabel(),
+              _PlaceTypeSelectionField(),
+              _PlaceTypePaddedDivider(),
               _NameLabel(padding: defaultLabelPadding),
               _NameTextField(),
               _MapTextFields(),
@@ -142,7 +142,7 @@ class _AddSightBodyState extends State<_AddSightBody> {
     super.initState();
 
     // TODO(daniiliv): инициализация списка добавляемых фото моковыми данными.
-    _newPhotoList = mocked.photoCarouselOnAddSightScreen;
+    _newPhotoList = mocked.photoCarouselOnAddPlaceScreen;
 
     // Для обновления SuffixIcon в TextField.
     _nameFocusNode.addListener(() {
@@ -174,9 +174,9 @@ class _AddSightBodyState extends State<_AddSightBody> {
   }
 
   /// Устанавливает выбранный тип места.
-  void setSelectedSightType(SightTypes selectedSightType) {
+  void setSelectedPlaceType(PlaceTypes selectedPlaceType) {
     setState(() {
-      this.selectedSightType = selectedSightType;
+      this.selectedPlaceType = selectedPlaceType;
     });
   }
 
@@ -196,13 +196,13 @@ class _AddSightBodyState extends State<_AddSightBody> {
 }
 
 /// Заголовок поля "Категория".
-class _SightTypeLabel extends StatelessWidget {
-  const _SightTypeLabel({Key? key}) : super(key: key);
+class _PlaceTypeLabel extends StatelessWidget {
+  const _PlaceTypeLabel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const LabelFieldText(
-      AppStrings.sightType,
+      AppStrings.placeType,
       padding: EdgeInsets.only(
         left: 16.0,
         top: 24.0,
@@ -287,7 +287,7 @@ class _NameTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedAddSightBodyState.of(context);
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
     final nameController = dataStorage._nameController;
     final nameFocusNode = dataStorage._nameFocusNode;
     final latitudeFocusNode = dataStorage._latitudeFocusNode;
@@ -349,7 +349,7 @@ class _MapTextFields extends StatelessWidget {
 /// * [padding] - отступ для поля.
 abstract class _BaseCoordinateTextField extends StatelessWidget {
   final BuildContext context;
-  abstract final _AddSightBodyState dataStorage;
+  abstract final _AddPlaceBodyState dataStorage;
   abstract final TextEditingController controller;
   abstract final FocusNode focusNode;
   abstract final FocusNode? nextFocusNode;
@@ -396,7 +396,7 @@ abstract class _BaseCoordinateTextField extends StatelessWidget {
 /// Максимальная длина поля - 9 символов.
 class _LatitudeTextField extends _BaseCoordinateTextField {
   @override
-  _AddSightBodyState get dataStorage => _InheritedAddSightBodyState.of(context);
+  _AddPlaceBodyState get dataStorage => _InheritedAddPlaceBodyState.of(context);
 
   @override
   TextEditingController get controller => dataStorage._latitudeController;
@@ -431,7 +431,7 @@ class _LatitudeTextField extends _BaseCoordinateTextField {
 /// Максимальная длина поля - 10 символов.
 class _LongitudeTextField extends _BaseCoordinateTextField {
   @override
-  _AddSightBodyState get dataStorage => _InheritedAddSightBodyState.of(context);
+  _AddPlaceBodyState get dataStorage => _InheritedAddPlaceBodyState.of(context);
 
   @override
   TextEditingController get controller => dataStorage._longitudeController;
@@ -460,7 +460,7 @@ class _LongitudeTextField extends _BaseCoordinateTextField {
         );
 }
 
-/// Поле ввода описания достопримечательности.
+/// Поле ввода описания места.
 class _DescriptionTextField extends StatelessWidget {
   const _DescriptionTextField({
     Key? key,
@@ -469,7 +469,7 @@ class _DescriptionTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final dataStorage = _InheritedAddSightBodyState.of(context);
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
     final controller = dataStorage._descriptionController;
     final focusNode = dataStorage._descriptionFocusNode;
 
@@ -587,9 +587,9 @@ class _CustomTextFormField extends StatelessWidget {
   }
 }
 
-/// Поле выбора категории достопримечательности.
-class _SightTypeSelectionField extends StatelessWidget {
-  const _SightTypeSelectionField({Key? key}) : super(key: key);
+/// Поле выбора категории места.
+class _PlaceTypeSelectionField extends StatelessWidget {
+  const _PlaceTypeSelectionField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -597,10 +597,10 @@ class _SightTypeSelectionField extends StatelessWidget {
     final selectionFieldTextStyle = theme.textTheme.bodyText1?.copyWith(
       color: theme.colorScheme.secondary,
     );
-    final dataStorage = _InheritedAddSightBodyState.of(context);
-    final selectedSightType = dataStorage.selectedSightType;
-    final selectedSightTypeName =
-        selectedSightType?.name.capitalize() ?? AppStrings.unselected;
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
+    final selectedPlaceType = dataStorage.selectedPlaceType;
+    final selectedPlaceTypeName =
+        selectedPlaceType?.name.capitalize() ?? AppStrings.unselected;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -608,15 +608,15 @@ class _SightTypeSelectionField extends StatelessWidget {
         top: 14.0,
       ),
       child: InkWell(
-        onTap: () => selectSightTypeFromListOnNewScreen(context),
+        onTap: () => selectPlaceTypeFromListOnNewScreen(context),
         child: Row(
           children: [
             Text(
-              selectedSightTypeName,
+              selectedPlaceTypeName,
               style: selectionFieldTextStyle,
             ),
             const Spacer(),
-            const _SightTypeSelectionButton(),
+            const _PlaceTypeSelectionButton(),
           ],
         ),
       ),
@@ -624,16 +624,16 @@ class _SightTypeSelectionField extends StatelessWidget {
   }
 
   /// Позволяет выбрать тип места из списка на новом экране.
-  Future<void> selectSightTypeFromListOnNewScreen(BuildContext context) async {
-    final dataStorage = _InheritedAddSightBodyState.of(context);
+  Future<void> selectPlaceTypeFromListOnNewScreen(BuildContext context) async {
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
 
-    final selectedSightType = await Navigator.pushNamed<SightTypes>(
+    final selectedPlaceType = await Navigator.pushNamed<PlaceTypes>(
       context,
-      AppRouter.sightTypeSelection,
+      AppRouter.placeTypeSelection,
     );
 
-    if (selectedSightType != null) {
-      dataStorage.setSelectedSightType(selectedSightType);
+    if (selectedPlaceType != null) {
+      dataStorage.setSelectedPlaceType(selectedPlaceType);
     }
   }
 }
@@ -646,7 +646,7 @@ class _PhotoCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedAddSightBodyState.of(context);
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
 
     var currentPhotoIndex = 0;
     final newPhotoList = dataStorage._newPhotoList;
@@ -704,7 +704,7 @@ class _NewPhotoCard extends StatelessWidget {
 
   /// Удаляет фото из списка добавляемых фото.
   void deletePhotoFromList(BuildContext context) {
-    _InheritedAddSightBodyState.of(context).deletePhotoFromList(index);
+    _InheritedAddPlaceBodyState.of(context).deletePhotoFromList(index);
   }
 }
 
@@ -770,15 +770,15 @@ class _AddNewPhotoButton extends StatelessWidget {
       builder: (context) => const _PhotoPicker(),
     );
     // TODO(daniiliv): *Как будто сработал image picker*.
-    const newPhotoUrl = mocked.newPhotoOnAddSightScreen;
+    const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;
 
-    _InheritedAddSightBodyState.of(context).addPhotoToList(newPhotoUrl);
+    _InheritedAddPlaceBodyState.of(context).addPhotoToList(newPhotoUrl);
   }
 }
 
-/// Кнопка для выбора категории достопримечательности.
-class _SightTypeSelectionButton extends StatelessWidget {
-  const _SightTypeSelectionButton({Key? key}) : super(key: key);
+/// Кнопка для выбора категории места.
+class _PlaceTypeSelectionButton extends StatelessWidget {
+  const _PlaceTypeSelectionButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -793,7 +793,7 @@ class _SightTypeSelectionButton extends StatelessWidget {
   }
 }
 
-/// Кнопка указания достопримечательности на карте.
+/// Кнопка указания места на карте.
 class _MarkOnMapButton extends StatelessWidget {
   const _MarkOnMapButton({Key? key}) : super(key: key);
 
@@ -815,10 +815,10 @@ class _MarkOnMapButton extends StatelessWidget {
   }
 }
 
-/// Кнопка создания достопримечательности.
+/// Кнопка создания места.
 class _CreateButton extends StatelessWidget {
   /// Тип достопримечательности по умолчанию.
-  SightTypes get _defaultSightType => SightTypes.particularPlace;
+  PlaceTypes get _defaultPlaceType => PlaceTypes.particularPlace;
 
   /// Режим работы места по умолчанию.
   String get _defaultWorkTimeFrom => '9:00';
@@ -846,30 +846,30 @@ class _CreateButton extends StatelessWidget {
           ),
           backgroundColor: theme.colorScheme.secondaryContainer,
           height: 48,
-          onPressed: () => createNewSight(context),
+          onPressed: () => createNewPlace(context),
         ),
       ),
     );
   }
 
   /// Создаёт новую достопримечательность и возвращает её на предыдущий экран, если валидация полей прошла успешно.
-  void createNewSight(BuildContext context) {
-    final dataStorage = _InheritedAddSightBodyState.of(context);
+  void createNewPlace(BuildContext context) {
+    final dataStorage = _InheritedAddPlaceBodyState.of(context);
     final isDataValid = dataStorage._formKey.currentState!.validate();
 
     if (isDataValid) {
-      final newSight = Sight(
-        id: mocked.sights.last.id + 1,
+      final newPlace = Place(
+        id: mocked.places.last.id + 1,
         name: dataStorage._nameController.text,
         coordinatePoint: CoordinatePoint(
           lat: double.parse(dataStorage._latitudeController.text),
           lon: double.parse(dataStorage._longitudeController.text),
         ),
-        type: dataStorage.selectedSightType ?? _defaultSightType,
+        type: dataStorage.selectedPlaceType ?? _defaultPlaceType,
         details: dataStorage._descriptionController.text,
         workTimeFrom: _defaultWorkTimeFrom,
       );
-      Navigator.of(context).pop(newSight);
+      Navigator.of(context).pop(newPlace);
     }
   }
 }
@@ -1020,8 +1020,8 @@ class _ActionItem extends StatelessWidget {
 }
 
 /// Разделитель для типа достопримечательности с заданной толщиной и отступами.
-class _SightTypePaddedDivider extends StatelessWidget {
-  const _SightTypePaddedDivider({Key? key}) : super(key: key);
+class _PlaceTypePaddedDivider extends StatelessWidget {
+  const _PlaceTypePaddedDivider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

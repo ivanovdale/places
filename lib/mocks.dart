@@ -1,8 +1,8 @@
 import 'package:places/data/model/coordinate_point.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 
-final List<Sight> sights = [
-  Sight(
+final List<Place> places = [
+  Place(
     id: 1,
     name: 'Кофейня Sibaristica',
     coordinatePoint: CoordinatePoint(
@@ -18,11 +18,11 @@ final List<Sight> sights = [
     ],
     details:
         'Это кофейня, которая затерялась среди кирпичных заводов. Это место, где свежеобжаренный спешелти кофе сразу наливают в чашку. Место, где все еще ощущается дух фабричного прошлого. Мы сохранили индустриальную атмосферу, добавили немного лоска и еды, которая насытит после сложного рабочего дня.',
-    type: SightTypes.coffeeShop,
+    type: PlaceTypes.coffeeShop,
     workTimeFrom: '09:00',
     visitDate: DateTime(2022, 9),
   ),
-  Sight(
+  Place(
     id: 2,
     name: 'Остров Новая Голландия',
     coordinatePoint: CoordinatePoint(
@@ -34,11 +34,11 @@ final List<Sight> sights = [
     ],
     details:
         'Остров в Адмиралтейском районе Санкт-Петербурга, ограниченный рекой Мойкой, Крюковым и Адмиралтейским каналами. Кроме того, Новая Голландия - единственный в своём роде памятник промышленной архитектуры раннего классицизма. Площадь острова - 7,8 га.',
-    type: SightTypes.park,
+    type: PlaceTypes.park,
     workTimeFrom: '06:00',
     visitDate: DateTime(2022, 9, 5),
   ),
-  Sight(
+  Place(
     id: 3,
     name: 'Bolshecoffee roasters',
     coordinatePoint: CoordinatePoint(
@@ -50,12 +50,12 @@ final List<Sight> sights = [
     ],
     details:
         'Хорошая кофейня с гигантским окном и берлинским интерьером. По выходным тут проходят каппинги и воркшопы.',
-    type: SightTypes.coffeeShop,
+    type: PlaceTypes.coffeeShop,
     workTimeFrom: '08:00',
     visitDate: DateTime(2022, 8, 10),
     visited: true,
   ),
-  Sight(
+  Place(
     id: 4,
     name: 'Государственный Эрмитаж',
     coordinatePoint: CoordinatePoint(
@@ -67,12 +67,12 @@ final List<Sight> sights = [
     ],
     details:
         'Музей изобразительного и декоративно-прикладного искусства, расположенный в городе Санкт-Петербурге Российской Федерации. Основан 7 декабря 1764 года. Является одним из крупнейших художественных музеев в мире.',
-    type: SightTypes.museum,
+    type: PlaceTypes.museum,
     workTimeFrom: '10:00',
     visitDate: DateTime(2022, 8, 21),
     visited: true,
   ),
-  Sight(
+  Place(
     id: 5,
     name: 'Исаакиевский собор',
     coordinatePoint: CoordinatePoint(
@@ -84,10 +84,10 @@ final List<Sight> sights = [
     ],
     details:
         'Крупнейший православный храм Санкт-Петербурга. Расположен на Исаакиевской площади. Кафедральный собор Санкт-Петербургской епархии с 1858 по 1929 год. С 1928 года имеет статус музея.',
-    type: SightTypes.museum,
+    type: PlaceTypes.museum,
     workTimeFrom: '10:00',
   ),
-  Sight(
+  Place(
     id: 6,
     name: 'Эрарта',
     coordinatePoint: CoordinatePoint(
@@ -99,12 +99,12 @@ final List<Sight> sights = [
     ],
     details:
         'Открытые в трёх странах мира, продвигают современное искусство России в самой стране и за её пределами. Продажа произведений современных авторов в международной сети галерей Эрарты - неотъемлемая часть механизма продвижения искусства, позволяющего расширить географию популяризации художников современной России.',
-    type: SightTypes.museum,
+    type: PlaceTypes.museum,
     workTimeFrom: '11:00',
     visitDate: DateTime(2022, 8, 14),
     visited: true,
   ),
-  Sight(
+  Place(
     id: 7,
     name: 'Парк 300-летия Санкт-Петербурга',
     coordinatePoint: CoordinatePoint(
@@ -116,7 +116,7 @@ final List<Sight> sights = [
     ],
     details:
         'Парк, расположенный в северо-западной части Санкт-Петербурга на границе Приневской низменности в северной части Невской губы. С севера парк ограничен Приморским проспектом и Приморским шоссе, а с востока - Яхтенной улицей. Общая площадь - 38,58 га.',
-    type: SightTypes.park,
+    type: PlaceTypes.park,
     workTimeFrom: '05:00',
     visitDate: DateTime(2022, 9, 7),
   ),
@@ -127,7 +127,7 @@ final CoordinatePoint userCoordinates =
     CoordinatePoint(lat: 30.304772, lon: 59.909876);
 
 // Список добавляемых изображений места.
-final List<String> photoCarouselOnAddSightScreen = [
+final List<String> photoCarouselOnAddPlaceScreen = [
   'https://cdn-irec.r-99.com/sites/default/files/imagecache/copyright1/user-images/771233/euxApskGZrOgQ6Wpmwrxww.jpg',
   'https://visit-primorye.ru/upload/resize_cache/webp/upload/medialibrary/92f/image_30_06_21_11_59.webp',
   'https://visit-primorye.ru/upload/resize_cache/webp/iblock/1b6/image_30_06_21_11_59_5.webp',
@@ -135,5 +135,5 @@ final List<String> photoCarouselOnAddSightScreen = [
 ];
 
 // Новое изображение места.
-const String newPhotoOnAddSightScreen =
+const String newPhotoOnAddPlaceScreen =
     'https://visit-primorye.ru/upload/resize_cache/webp/iblock/3c6/1_2.webp';
