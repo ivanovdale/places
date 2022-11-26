@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     // TODO(daniiliv): В учебных целях обратимся к апи.
-    final dio = Api.createDio();
+    final dio = Api().dio;
     dio.options.baseUrl = 'https://jsonplaceholder.typicode.com';
     dio.get<String>('/users');
 
