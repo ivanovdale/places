@@ -7,7 +7,7 @@ import 'package:places/helpers/app_urls.dart';
 /// Позволяет создать http-клиента.
 class Api {
   static final Api _singleton = Api._internal();
-  final dio = createDio();
+  final Dio httpClient = createDio();
 
   factory Api() => _singleton;
 

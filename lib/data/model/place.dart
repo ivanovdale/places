@@ -36,6 +36,19 @@ class Place {
     this.visited = false,
     this.photoUrlList,
   });
+
+  Place.fromJson(Map<String, dynamic> json)
+      : this(
+          id: int.parse(json['id'] as String),
+          name: json['name'] as String,
+          coordinatePoint: CoordinatePoint(
+            lat: json['lat'] as double,
+            lon: json['lng'] as double,
+          ),
+          details: json['description'] as String,
+          type: PlaceTypes.values.byName(json['placeType'] as String),
+          photoUrlList: json['urls'] as List<String>,
+        );
 }
 
 enum PlaceTypes {
