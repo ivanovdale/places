@@ -17,6 +17,11 @@ class AppStrings {
   static const hotel = 'отель';
   static const restaurant = 'ресторан';
   static const particularPlace = 'особое место';
+  static const other = 'другое';
+  static const monument = 'памятник';
+  static const theatre = 'театр';
+  static const temple = 'храм';
+  static const cafe = 'кафе';
 
   // PlaceCard. Карточка места.
   static const planToVisit = 'Запланировано на';

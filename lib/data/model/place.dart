@@ -39,7 +39,7 @@ class Place {
 
   Place.fromJson(Map<String, dynamic> json)
       : this(
-          id: int.parse(json['id'] as String),
+          id: json['id'] as int,
           name: json['name'] as String,
           coordinatePoint: CoordinatePoint(
             lat: json['lat'] as double,
@@ -47,7 +47,7 @@ class Place {
           ),
           details: json['description'] as String,
           type: PlaceTypes.values.byName(json['placeType'] as String),
-          photoUrlList: json['urls'] as List<String>,
+          photoUrlList: (json['urls'] as List<dynamic>).cast<String>(),
         );
 }
 
@@ -57,7 +57,12 @@ enum PlaceTypes {
   particularPlace(AppStrings.particularPlace, AppAssets.particularPlace),
   park(AppStrings.park, AppAssets.park),
   museum(AppStrings.museum, AppAssets.museum),
-  coffeeShop(AppStrings.coffeeShop, AppAssets.coffeeShop);
+  coffeeShop(AppStrings.coffeeShop, AppAssets.coffeeShop),
+  other(AppStrings.other, AppAssets.particularPlace),
+  monument(AppStrings.monument, AppAssets.particularPlace),
+  theatre(AppStrings.theatre, AppAssets.particularPlace),
+  temple(AppStrings.temple, AppAssets.particularPlace),
+  cafe(AppStrings.cafe, AppAssets.particularPlace);
 
   const PlaceTypes(this.name, this.imagePath);
 
