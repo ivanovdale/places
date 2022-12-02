@@ -1,58 +1,47 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/helpers/app_urls.dart';
-
-/// Класс для работы с АПИ.
-///
-/// Позволяет создать http-клиента.
-class Api {
-  static final Api _singleton = Api._internal();
-  final Dio httpClient = createDio();
-
-  factory Api() => _singleton;
-
-  Api._internal();
-
-  static Dio createDio() {
-    final dio = Dio(BaseOptions(
-      baseUrl: AppUrls.dioClientUrl,
-      receiveTimeout: 5000, // 15 seconds
-      connectTimeout: 5000,
-      sendTimeout: 5000,
-    ));
-
-    dio.interceptors.addAll({
-      AppInterceptors(dio),
-    });
-
-    return dio;
-  }
-}
 
 /// Интерцептор для DIO.
 ///
 /// Позволяет вывести в консоль полученные данные и также выводит ошибки, если они есть.
-class AppInterceptors extends Interceptor {
+class DioInterceptor extends Interceptor {
   final Dio dio;
 
-  AppInterceptors(this.dio);
+  DioInterceptor(this.dio);
 
   @override
   Future onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) async {
+      Response response,
+      ResponseInterceptorHandler handler,
+      ) async {
     logPrint('*** Api Response - Start ***');
 
     printKeyValue('URI', response.requestOptions.uri);
     printKeyValue('STATUS CODE', response.statusCode ?? '');
     printKeyValue('REDIRECT', response.isRedirect ?? false);
     logPrint('BODY:');
-    printAll((response.data ?? '') as String);
+    printAll(response.data as String);
 
     logPrint('*** Api Response - End ***');
 
     return handler.next(response);
+  }
+
+  @override
+  Future onRequest(
+      RequestOptions options,
+      RequestInterceptorHandler handler,
+      ) async {
+    logPrint('*** API Request - Start ***');
+
+    printKeyValue('URI', options.uri);
+    printKeyValue('METHOD', options.method);
+    logPrint('BODY:');
+    printAll(options.data as String);
+
+    logPrint('*** API Request - End ***');
+
+    return handler.next(options);
   }
 
   @override

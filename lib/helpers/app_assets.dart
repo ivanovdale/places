@@ -21,12 +21,12 @@ class AppAssets {
   static const emptyRoute = 'assets/icons/emptyRoute.png';
 
   // Иконки для типов мест.
-  static const coffeeShop = 'assets/icons/coffee_shop.svg';
+  static const cafe = 'assets/icons/cafe.svg';
   static const park = 'assets/icons/park.svg';
   static const museum = 'assets/icons/museum.svg';
   static const hotel = 'assets/icons/hotel.svg';
   static const restaurant = 'assets/icons/restaurant.svg';
-  static const particularPlace = 'assets/icons/particular_place.svg';
+  static const other = 'assets/icons/other.svg';
 
   // Иконки для поля поиска места - SearchBar.
   static const search = 'assets/icons/search.svg';

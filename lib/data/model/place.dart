@@ -1,3 +1,4 @@
+import 'package:places/data/dto/place_dto.dart';
 import 'package:places/data/model/coordinate_point.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -37,38 +38,48 @@ class Place {
     this.photoUrlList,
   });
 
-  Place.fromJson(Map<String, dynamic> json)
+  Place.fromDto(PlaceDTO placeDTO)
       : this(
-          id: json['id'] as int,
-          name: json['name'] as String,
+          id: placeDTO.id,
+          name: placeDTO.name,
           coordinatePoint: CoordinatePoint(
-            lat: json['lat'] as double,
-            lon: json['lng'] as double,
+            lat: placeDTO.lat,
+            lon: placeDTO.lng,
           ),
-          details: json['description'] as String,
-          type: PlaceTypes.values.byName(json['placeType'] as String),
-          photoUrlList: (json['urls'] as List<dynamic>).cast<String>(),
+          details: placeDTO.description,
+          type: PlaceTypes.values.byName(placeDTO.placeType),
+          photoUrlList: placeDTO.urls,
         );
+
+  PlaceDTO toDto() => PlaceDTO(
+        id: id,
+        lat: coordinatePoint.lat,
+        lng: coordinatePoint.lon,
+        name: name,
+        urls: photoUrlList ?? <String>[],
+        placeType: type.toString(),
+        description: details,
+      );
 }
 
+/// Типы мест с названиями и иконками.
 enum PlaceTypes {
-  hotel(AppStrings.hotel, AppAssets.hotel),
-  restaurant(AppStrings.restaurant, AppAssets.restaurant),
-  particularPlace(AppStrings.particularPlace, AppAssets.particularPlace),
-  park(AppStrings.park, AppAssets.park),
-  museum(AppStrings.museum, AppAssets.museum),
-  coffeeShop(AppStrings.coffeeShop, AppAssets.coffeeShop),
-  other(AppStrings.other, AppAssets.particularPlace),
-  monument(AppStrings.monument, AppAssets.particularPlace),
-  theatre(AppStrings.theatre, AppAssets.particularPlace),
-  temple(AppStrings.temple, AppAssets.particularPlace),
-  cafe(AppStrings.cafe, AppAssets.particularPlace);
+  hotel(AppStrings.hotelText, AppStrings.hotel, AppAssets.hotel),
+  restaurant(AppStrings.restaurantText, AppStrings.restaurant, AppAssets.restaurant),
+  other(AppStrings.otherText, AppStrings.other, AppAssets.other),
+  park(AppStrings.parkText, AppStrings.park, AppAssets.park),
+  museum(AppStrings.museumText, AppStrings.museum, AppAssets.museum),
+  monument(AppStrings.monumentText, AppStrings.monument, AppAssets.other),
+  theatre(AppStrings.theatreText, AppStrings.theatre, AppAssets.other),
+  temple(AppStrings.templeText, AppStrings.temple, AppAssets.other),
+  cafe(AppStrings.cafeText, AppStrings.cafe, AppAssets.cafe);
 
-  const PlaceTypes(this.name, this.imagePath);
+  const PlaceTypes(this.text, this.name, this.imagePath);
 
+  final String text;
   final String name;
   final String imagePath;
 
   @override
-  String toString() => name;
+  String toString() => text;
 }

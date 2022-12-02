@@ -11,17 +11,25 @@ class AppStrings {
   static const closedTo = 'закрыто до';
 
   // Модель Place. Типы мест.
-  static const coffeeShop = 'кофейня';
-  static const park = 'парк';
-  static const museum = 'музей';
-  static const hotel = 'отель';
-  static const restaurant = 'ресторан';
-  static const particularPlace = 'особое место';
-  static const other = 'другое';
-  static const monument = 'памятник';
-  static const theatre = 'театр';
-  static const temple = 'храм';
-  static const cafe = 'кафе';
+  static const parkText = 'парк';
+  static const museumText = 'музей';
+  static const hotelText = 'отель';
+  static const restaurantText = 'ресторан';
+  static const otherText = 'особое место';
+  static const monumentText = 'памятник';
+  static const theatreText = 'театр';
+  static const templeText = 'храм';
+  static const cafeText = 'кафе';
+
+  static const park = 'park';
+  static const museum = 'museum';
+  static const hotel = 'hotel';
+  static const restaurant = 'restaurant';
+  static const other = 'other';
+  static const monument = 'monument';
+  static const theatre = 'theatre';
+  static const temple = 'temple';
+  static const cafe = 'cafe';
 
   // PlaceCard. Карточка места.
   static const planToVisit = 'Запланировано на';

@@ -18,7 +18,7 @@ final List<Place> places = [
     ],
     details:
         'Это кофейня, которая затерялась среди кирпичных заводов. Это место, где свежеобжаренный спешелти кофе сразу наливают в чашку. Место, где все еще ощущается дух фабричного прошлого. Мы сохранили индустриальную атмосферу, добавили немного лоска и еды, которая насытит после сложного рабочего дня.',
-    type: PlaceTypes.coffeeShop,
+    type: PlaceTypes.cafe,
     workTimeFrom: '09:00',
     visitDate: DateTime(2022, 9),
   ),
@@ -50,7 +50,7 @@ final List<Place> places = [
     ],
     details:
         'Хорошая кофейня с гигантским окном и берлинским интерьером. По выходным тут проходят каппинги и воркшопы.',
-    type: PlaceTypes.coffeeShop,
+    type: PlaceTypes.cafe,
     workTimeFrom: '08:00',
     visitDate: DateTime(2022, 8, 10),
     visited: true,

@@ -1,31 +1,36 @@
 import 'dart:convert';
 
-import 'package:places/API/api.dart';
-import 'package:places/API/get_new_place_body.dart';
+import 'package:places/API/dio_api.dart';
+import 'package:places/data/dto/place_dto.dart';
+import 'package:places/data/dto/places_filter_request_dto.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 
 /// Получает данные мест по сети.
 class NetworkPlaceRepository implements PlaceRepository {
-  // TODO(daniiliv): doc
-  final Api _apiUtil;
+  // Клиент для работы с АПИ.
+  final DioApi _apiUtil;
 
   NetworkPlaceRepository(this._apiUtil);
 
-  // TODO(daniiliv): doc
+  /// Добавляет новое место в список мест.
+  ///
+  /// Возвращает добавленное место.
   @override
   Future<Place> addNewPlace(Place place) async {
-    final body = GetNewPlaceBody.toApi(place);
+    final body = jsonEncode(place.toDto().toJson());
     final response =
         await _apiUtil.httpClient.post<String>('/place', data: body);
 
     // TODO(daniiliv): Нужна обработка ошибок.
-    return Place.fromJson(
+    final placeDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
+
+    return Place.fromDto(placeDto);
   }
 
-  // TODO(daniiliv): doc
+  /// Получает место по id.
   @override
   Future<Place> getPlaceById(String id) async {
     final response = await _apiUtil.httpClient.get<String>(
@@ -33,12 +38,14 @@ class NetworkPlaceRepository implements PlaceRepository {
     );
 
     // TODO(daniiliv): Нужна обработка ошибок.
-    return Place.fromJson(
+    final placeDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
+
+    return Place.fromDto(placeDto);
   }
 
-  // TODO(daniiliv): doc
+  /// Получает список всех мест.
   @override
   Future<List<Place>> getPlaces() async {
     final response = await _apiUtil.httpClient.get<String>('/place');
@@ -47,8 +54,25 @@ class NetworkPlaceRepository implements PlaceRepository {
     final rawPlacesJSON = (jsonDecode(response.data as String) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
-    final result = rawPlacesJSON.map(Place.fromJson).toList();
+    final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
 
-    return result;
+    return placeDtoList.map(Place.fromDto).toList();
+  }
+
+  /// Получает отфильтрованный список мест.
+  Future<List<Place>> getFilteredPlaces(
+    PlacesFilterRequestDto placesFilterRequestDto,
+  ) async {
+    final body = jsonEncode(placesFilterRequestDto.toJson());
+    final response =
+        await _apiUtil.httpClient.post<String>('/filtered_places', data: body);
+
+    // TODO(daniiliv): Нужна обработка ошибок.
+    final rawPlacesJSON = (jsonDecode(response.data as String) as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+
+    final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
+
+    return placeDtoList.map(Place.fromDto).toList();
   }
 }

@@ -818,7 +818,7 @@ class _MarkOnMapButton extends StatelessWidget {
 /// Кнопка создания места.
 class _CreateButton extends StatelessWidget {
   /// Тип достопримечательности по умолчанию.
-  PlaceTypes get _defaultPlaceType => PlaceTypes.particularPlace;
+  PlaceTypes get _defaultPlaceType => PlaceTypes.other;
 
   /// Режим работы места по умолчанию.
   String get _defaultWorkTimeFrom => '9:00';
