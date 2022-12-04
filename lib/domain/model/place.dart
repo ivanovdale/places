@@ -14,7 +14,8 @@ import 'package:places/helpers/app_strings.dart';
 /// * [type] - тип места;
 /// * [workTimeFrom] - время работы "с". Например, 09:00;
 /// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
-/// * [visited] - признак посещения.
+/// * [visited] - признак посещения;
+/// * [distance] - расстояние от пользователя до места.
 class Place {
   int id;
   String name;
@@ -25,6 +26,7 @@ class Place {
   String? workTimeFrom;
   DateTime? visitDate;
   bool visited;
+  double? distance;
 
   Place({
     required this.id,
