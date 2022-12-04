@@ -11,7 +11,13 @@ class NetworkPlaceRepository implements PlaceRepository {
   // Клиент для работы с АПИ.
   final DioApi _apiUtil;
 
-  NetworkPlaceRepository(this._apiUtil);
+  // Список избранных мест пользователя.
+  final List<Place> _favoritePlaces;
+
+  NetworkPlaceRepository(
+    this._apiUtil,
+    this._favoritePlaces,
+  );
 
   /// Добавляет новое место в список мест.
   ///
@@ -60,6 +66,7 @@ class NetworkPlaceRepository implements PlaceRepository {
   }
 
   /// Получает отфильтрованный список мест.
+  @override
   Future<List<Place>> getFilteredPlaces(
     PlacesFilterRequestDto placesFilterRequestDto,
   ) async {
@@ -74,5 +81,35 @@ class NetworkPlaceRepository implements PlaceRepository {
     final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
 
     return placeDtoList.map(Place.fromDto).toList();
+  }
+
+  // TODO(daniiliv): doc
+  @override
+  Future<List<Place>> getFavoritePlaces() async {
+    return _favoritePlaces;
+  }
+
+  // TODO(daniiliv): doc
+  @override
+  Future<void> addToFavorites(Place place) async {
+    _favoritePlaces.add(place);
+  }
+
+  // TODO(daniiliv): doc
+  @override
+  Future<void> removeFromFavorites(Place place) async {
+    _favoritePlaces.remove(place);
+  }
+
+  // TODO(daniiliv): doc
+  @override
+  Future<List<Place>> getVisitedPlaces() async {
+    return _favoritePlaces.where((place) => place.visited).toList();
+  }
+
+  // TODO(daniiliv): doc
+  @override
+  Future<void> addToVisitedPlaces(Place place) async {
+    place.visited = true;
   }
 }
