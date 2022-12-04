@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 import 'package:places/mocks.dart' as mocked;
 
 /// Вьюмодель для экрана планируемых к посещению/посещённых мест.

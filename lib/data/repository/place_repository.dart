@@ -1,4 +1,5 @@
-import 'package:places/data/model/place.dart';
+import 'package:places/data/dto/places_filter_request_dto.dart';
+import 'package:places/domain/model/place.dart';
 
 /// Получает данные мест.
 abstract class PlaceRepository {

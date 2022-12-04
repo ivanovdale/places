@@ -9,7 +9,7 @@ import 'package:places/UI/screens/components/place_card/draggable_place_card_wit
 import 'package:places/UI/screens/components/place_card/to_visit_place_card.dart';
 import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
 import 'package:places/UI/screens/components/visiting_place_list/base_visiting_place_list.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';

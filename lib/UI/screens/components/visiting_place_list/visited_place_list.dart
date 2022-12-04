@@ -3,7 +3,7 @@ import 'package:places/UI/screens/components/empty_visiting_place_list/base_empt
 import 'package:places/UI/screens/components/empty_visiting_place_list/empty_visited_place_list.dart';
 import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
 import 'package:places/UI/screens/components/visiting_place_list/base_visiting_place_list.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 import 'package:places/providers/visiting_provider.dart';
 
 /// Список посещенных мест. Наследуется от [BaseVisitingPlaceList].

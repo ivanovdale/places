@@ -9,7 +9,7 @@ import 'package:places/UI/screens/place_type_selection_screen.dart';
 import 'package:places/UI/screens/settings_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
 import 'package:places/UI/screens/visiting_places_screen.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 
 /// Роутер для именованных роутов.
 abstract class AppRouter {

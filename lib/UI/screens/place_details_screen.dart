@@ -6,7 +6,7 @@ import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
 /// Виджет карточки места. Наследуется от [BasePlaceCard].

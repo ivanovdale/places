@@ -1,5 +1,5 @@
-import 'package:places/data/model/coordinate_point.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/model/coordinate_point.dart';
+import 'package:places/domain/model/place.dart';
 
 /// Миксин, содержащий методы для работы с местами.
 mixin WorkWithPlaces {
