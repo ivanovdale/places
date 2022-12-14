@@ -600,7 +600,7 @@ class _PlaceTypeSelectionField extends StatelessWidget {
     final dataStorage = _InheritedAddPlaceBodyState.of(context);
     final selectedPlaceType = dataStorage.selectedPlaceType;
     final selectedPlaceTypeName =
-        selectedPlaceType?.name.capitalize() ?? AppStrings.unselected;
+        selectedPlaceType?.text.capitalize() ?? AppStrings.unselected;
 
     return Padding(
       padding: const EdgeInsets.only(

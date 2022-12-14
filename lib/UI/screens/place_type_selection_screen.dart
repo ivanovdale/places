@@ -124,7 +124,7 @@ class _PlaceTypeItem extends StatelessWidget {
         _InheritedPlaceTypeSelectionBodyState.of(context);
     final currentPlaceType = dataStorage.currentPlaceType;
     final theme = Theme.of(context);
-    final itemName = item.name;
+    final itemName = item.text;
 
     return InkWell(
       onTap: () => dataStorage.setCurrentPlaceType(item),
@@ -140,7 +140,7 @@ class _PlaceTypeItem extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              if (itemName == currentPlaceType?.name)
+              if (itemName == currentPlaceType?.text)
                 Padding(
                   padding: const EdgeInsets.only(right: 24.0),
                   child: Icon(
