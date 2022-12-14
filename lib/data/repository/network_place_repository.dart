@@ -12,104 +12,105 @@ class NetworkPlaceRepository implements PlaceRepository {
   final DioApi _apiUtil;
 
   // Список избранных мест пользователя.
-  final List<Place> _favoritePlaces;
+  final List<Place> _favoritePlaces = [];
 
   NetworkPlaceRepository(
     this._apiUtil,
-    this._favoritePlaces,
   );
 
   /// Добавляет новое место в список мест.
   ///
   /// Возвращает добавленное место.
   @override
-  Future<Place> addNewPlace(Place place) async {
-    final body = jsonEncode(place.toDto().toJson());
+  Future<PlaceDTO> addNewPlace(PlaceDTO placeDto) async {
+    final body = jsonEncode(placeDto.toJson());
     final response =
         await _apiUtil.httpClient.post<String>('/place', data: body);
 
-    // TODO(daniiliv): Нужна обработка ошибок.
-    final placeDto = PlaceDTO.fromJson(
+    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
+    final newPlaceDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
 
-    return Place.fromDto(placeDto);
+    return newPlaceDto;
   }
 
   /// Получает место по id.
   @override
-  Future<Place> getPlaceById(String id) async {
+  Future<PlaceDTO> getPlaceById(String id) async {
     final response = await _apiUtil.httpClient.get<String>(
       '/place/$id',
     );
 
-    // TODO(daniiliv): Нужна обработка ошибок.
+    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
     final placeDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
 
-    return Place.fromDto(placeDto);
+    return placeDto;
   }
 
   /// Получает список всех мест.
   @override
-  Future<List<Place>> getPlaces() async {
+  Future<List<PlaceDTO>> getPlaces() async {
     final response = await _apiUtil.httpClient.get<String>('/place');
 
-    // TODO(daniiliv): Обработка ошибок.
+    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
     final rawPlacesJSON = (jsonDecode(response.data as String) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
     final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
 
-    return placeDtoList.map(Place.fromDto).toList();
+    return placeDtoList;
   }
 
   /// Получает отфильтрованный список мест.
   @override
-  Future<List<Place>> getFilteredPlaces(
+  Future<List<PlaceDTO>> getFilteredPlaces(
     PlacesFilterRequestDto placesFilterRequestDto,
   ) async {
     final body = jsonEncode(placesFilterRequestDto.toJson());
     final response =
         await _apiUtil.httpClient.post<String>('/filtered_places', data: body);
 
-    // TODO(daniiliv): Нужна обработка ошибок.
+    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
     final rawPlacesJSON = (jsonDecode(response.data as String) as List<dynamic>)
         .cast<Map<String, dynamic>>();
 
     final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
 
-    return placeDtoList.map(Place.fromDto).toList();
+    return placeDtoList;
   }
 
-  // TODO(daniiliv): doc
+  /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
   @override
-  Future<List<Place>> getFavoritePlaces() async {
-    return _favoritePlaces;
-  }
-
-  // TODO(daniiliv): doc
-  @override
-  Future<void> addToFavorites(Place place) async {
+  void addToFavorites(Place place) {
     _favoritePlaces.add(place);
+    place.isFavorite = true;
   }
 
-  // TODO(daniiliv): doc
+  /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
   @override
-  Future<void> removeFromFavorites(Place place) async {
+  void removeFromFavorites(Place place) {
     _favoritePlaces.remove(place);
+    place.isFavorite = false;
   }
 
-  // TODO(daniiliv): doc
+  /// Возвращает список мест, планируемых к посещению.
   @override
-  Future<List<Place>> getVisitedPlaces() async {
+  List<Place> getFavoritePlaces() {
+    return _favoritePlaces.where((place) => !place.visited).toList();
+  }
+
+  /// Возвращает список посещенных мест.
+  @override
+  List<Place> getVisitedPlaces() {
     return _favoritePlaces.where((place) => place.visited).toList();
   }
 
-  // TODO(daniiliv): doc
+  /// Делает пометку, что место посещено.
   @override
-  Future<void> addToVisitedPlaces(Place place) async {
+  void addToVisitedPlaces(Place place) {
     place.visited = true;
   }
 }

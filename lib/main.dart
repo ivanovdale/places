@@ -4,6 +4,7 @@ import 'package:places/UI/screens/res/themes.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/providers/bottom_bar_provider.dart';
+import 'package:places/providers/interactor_provider.dart';
 import 'package:places/providers/visiting_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,12 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => VisitingProvider()),
+        ChangeNotifierProvider(create: (context) => InteractorProvider()),
+        ChangeNotifierProxyProvider<InteractorProvider, VisitingProvider>(
+          update: (context, interactor, previousMessages) =>
+              VisitingProvider(interactor),
+          create: (context) => VisitingProvider(null),
+        ),
         ChangeNotifierProvider(create: (context) => BottomBarProvider()),
       ],
       child: const App(),

@@ -14,10 +14,11 @@ import 'package:places/helpers/app_strings.dart';
 /// * [type] - тип места;
 /// * [workTimeFrom] - время работы "с". Например, 09:00;
 /// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
+/// * [isFavorite] - признак добавления в избранное;
 /// * [visited] - признак посещения;
 /// * [distance] - расстояние от пользователя до места.
 class Place {
-  int id;
+  int? id;
   String name;
   CoordinatePoint coordinatePoint;
   List<String>? photoUrlList;
@@ -25,17 +26,19 @@ class Place {
   PlaceTypes type;
   String? workTimeFrom;
   DateTime? visitDate;
+  bool isFavorite;
   bool visited;
   double? distance;
 
   Place({
-    required this.id,
+    this.id,
     required this.name,
     required this.coordinatePoint,
     required this.details,
     required this.type,
     this.workTimeFrom,
     this.visitDate,
+    this.isFavorite = false,
     this.visited = false,
     this.photoUrlList,
   });
@@ -59,7 +62,7 @@ class Place {
         lng: coordinatePoint.lon,
         name: name,
         urls: photoUrlList ?? <String>[],
-        placeType: type.toString(),
+        placeType: type.name,
         description: details,
       );
 }

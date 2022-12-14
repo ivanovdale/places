@@ -64,7 +64,7 @@ abstract class BasePlaceCard extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => PlaceDetailsScreen(place.id),
+      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
     );
   }
 }
@@ -95,17 +95,23 @@ class _PlaceCardTop extends StatelessWidget {
     const defaultImageUrl =
         'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
+    // Используем первую картинку списка картинок места, если место имеет фотографии.
+    // Если фотографий нет - используем дефолтную картинку.
+    final imageUrl = place.photoUrlList?.isNotEmpty ?? false
+        ? place.photoUrlList![0]
+        : defaultImageUrl;
+
     return Stack(
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          imageUrl: place.photoUrlList?[0] ?? defaultImageUrl,
+          imageUrl: imageUrl,
           imageBuilder: (context, imageProvider) {
-            return Ink.image(
-              image: imageProvider,
-              fit: BoxFit.cover,
-            );
+            return Ink.image(image: imageProvider, fit: BoxFit.cover);
           },
+          errorWidget: (context, url, dynamic error) => const Center(
+            child: Icon(Icons.error),
+          ),
           placeholder: (context, url) => const Center(
             child: SizedBox(
               width: 40,

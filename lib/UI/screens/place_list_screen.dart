@@ -4,16 +4,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
-import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
+import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_filters_screen.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/domain/model/places_filter_request.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/utils/work_with_places_mixin.dart';
+import 'package:places/providers/interactor_provider.dart';
+import 'package:provider/provider.dart';
 
 /// Экран списка мест.
 class PlaceListScreen extends StatefulWidget {
@@ -27,11 +29,15 @@ class PlaceListScreen extends StatefulWidget {
 ///
 /// Обновляет список при добавлении нового места.
 /// Хранит в себе значения фильтров.
-class _PlaceListScreenState extends State<PlaceListScreen> with WorkWithPlaces {
-  late List<Place> places;
-  late List<Map<String, Object>> placeTypeFilters;
-  late double distanceFrom;
-  late double distanceTo;
+class _PlaceListScreenState extends State<PlaceListScreen> {
+  /// Искомые места.
+  List<Place>? places;
+
+  /// Фильтры мест.
+  Set<PlaceTypes> placeTypeFilters = PlaceTypes.values.toSet();
+
+  /// Радиус поиска.
+  double radius = maxRangeValue;
 
   @override
   Widget build(BuildContext context) {
@@ -56,94 +62,68 @@ class _PlaceListScreenState extends State<PlaceListScreen> with WorkWithPlaces {
   @override
   void initState() {
     super.initState();
+    initializePlaces();
+  }
 
-    // Установим фильтры по умолчанию.
-    distanceFrom = minRangeValue;
-    distanceTo = maxRangeValue;
-
-    // Категории по умолчанию.
-    placeTypeFilters = PlaceTypes.values.map((placeType) {
-      return <String, Object>{
-        'name': placeType.name,
-        'imagePath': placeType.imagePath,
-        'selected': true,
-      };
-    }).toList();
-
-    final range = {
-      'distanceFrom': distanceFrom,
-      'distanceTo': distanceTo,
-    };
-    // Фильтрация мест на основании инициализированных фильтров.
-    // TODO(daniiliv): Пока в качестве источника данных - моковые данные.
-    places = getFilteredByTypeAndRadiusPlaces(
-      mocked.places,
-      placeTypeFilters,
-      mocked.userCoordinates,
-      range,
+  /// Инициализирует список мест с помощью фильтра по умолчанию.
+  Future<void> initializePlaces() async {
+    final placeFilterRequest = PlacesFilterRequest(
+      coordinatePoint: mocked.userCoordinates,
+      radius: radius,
+      typeFilter: placeTypeFilters.toList(),
     );
+
+    places = await context
+        .read<InteractorProvider>()
+        .placeInteractor
+        .getFilteredPlaces(placeFilterRequest);
+
+    setState(() {});
   }
 
   /// Открывает экран добавления места.
   ///
-  /// Если было создана новое место, добавляет его в список моковых мест и обновляет экран.
+  /// Если было создано новое место, добавляет его в список мест и обновляет экран.
   Future<void> openAddPlaceScreen(BuildContext context) async {
-    final newPlace = await Navigator.pushNamed<Place?>(
+    var newPlace = await Navigator.pushNamed<Place?>(
       context,
       AppRouter.addPlace,
     );
 
-    if (newPlace != null) {
-      mocked.places.add(newPlace);
-
-      final range = {
-        'distanceFrom': distanceFrom,
-        'distanceTo': distanceTo,
-      };
-
-      // Обновить новый список мест в сооветствии с фильтрами.
-      // TODO(daniiliv): В качестве источника фильтрации используем моковые данные.
-      places = getFilteredByTypeAndRadiusPlaces(
-        mocked.places,
-        placeTypeFilters,
-        mocked.userCoordinates,
-        range,
-      );
+    if (newPlace != null && mounted) {
+      newPlace = await context
+          .read<InteractorProvider>()
+          .placeInteractor
+          .addNewPlace(newPlace);
+      places?.add(newPlace);
 
       setState(() {});
     }
   }
 
-  /// Применяет переданные фильтры к списку мест.
-  void applyFilters(
-    List<Map<String, Object>> selectedPlaceTypes,
-    double distanceFrom,
-    double distanceTo,
-  ) {
-    final range = {
-      'distanceFrom': distanceFrom,
-      'distanceTo': distanceTo,
-    };
-    // TODO(daniiliv): В качестве списка, к которому применяются фильтры, пока что устанавливаем моковые данные.
-    places = getFilteredByTypeAndRadiusPlaces(
-      mocked.places,
-      selectedPlaceTypes,
-      mocked.userCoordinates,
-      range,
+  /// Применяет переданные фильтры к списку мест и обновляет список.
+  Future<void> applyFilters() async {
+    final placeFilterRequest = PlacesFilterRequest(
+      coordinatePoint: mocked.userCoordinates,
+      radius: radius,
+      typeFilter: placeTypeFilters.toList(),
     );
+
+    places = await context
+        .read<InteractorProvider>()
+        .placeInteractor
+        .getFilteredPlaces(placeFilterRequest);
 
     setState(() {});
   }
 
   /// Сохраняет переданные фильтры в виджете-состоянии.
   void saveFilters(
-    List<Map<String, Object>> placeTypeFilters,
-    double distanceFrom,
-    double distanceTo,
+    Set<PlaceTypes> placeTypeFilters,
+    double radius,
   ) {
     this.placeTypeFilters = placeTypeFilters;
-    this.distanceFrom = distanceFrom;
-    this.distanceTo = distanceTo;
+    this.radius = radius;
   }
 }
 
@@ -285,8 +265,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
       AppRouter.placeSearch,
       arguments: {
         'placeTypeFilters': dataStorage.placeTypeFilters,
-        'distanceFrom': dataStorage.distanceFrom,
-        'distanceTo': dataStorage.distanceTo,
+        'radius': dataStorage.radius,
       },
     );
   }
@@ -294,11 +273,11 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
 
 /// Список достопримечательностей на сливере.
 class _SliverPlaceList extends StatelessWidget {
-  final List<Place> places;
+  final List<Place>? places;
 
   const _SliverPlaceList({
     Key? key,
-    required this.places,
+    this.places,
   }) : super(key: key);
 
   @override
@@ -307,24 +286,40 @@ class _SliverPlaceList extends StatelessWidget {
     final orientation = mediaQuery.orientation;
     final screenHeight = mediaQuery.size.height;
 
-    return SliverGrid(
-      delegate: SliverChildBuilderDelegate(
-        childCount: places.length,
-        (_, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: PlaceCard(places[index]),
+    /// Если места не прогрузились, то отображать прогрессбар.
+    return places != null
+        ? SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              childCount: places!.length,
+              (_, index) {
+                final interactorProvider = context.watch<InteractorProvider>();
+                final place = places![index];
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: PlaceCard(
+                    place,
+                    onAddToFavorites: () =>
+                        interactorProvider.addToFavorites(place),
+                    onRemoveFromFavorites: () =>
+                        interactorProvider.removeFromFavorites(place),
+                  ),
+                );
+              },
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              // Для горизонтальной ориентации отображаем 2 ряда карточек.
+              crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
+              mainAxisExtent: orientation == Orientation.portrait
+                  ? screenHeight * 0.3
+                  : screenHeight * 0.65,
+            ),
+          )
+        : const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
-        },
-      ),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        // Для горизонтальной ориентации отображаем 2 ряда карточек.
-        crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
-        mainAxisExtent: orientation == Orientation.portrait
-            ? screenHeight * 0.3
-            : screenHeight * 0.65,
-      ),
-    );
   }
 }
 
@@ -366,20 +361,17 @@ class _FilterButton extends StatelessWidget {
       AppRouter.placeFilters,
       arguments: {
         'placeTypeFilters': dataStorage.placeTypeFilters,
-        'distanceFrom': dataStorage.distanceFrom,
-        'distanceTo': dataStorage.distanceTo,
+        'radius': dataStorage.radius,
       },
     );
 
     if (selectedFilters != null) {
       final placeTypeFilters =
-          selectedFilters['placeTypeFilters'] as List<Map<String, Object>>;
-      final distanceFrom = selectedFilters['distanceFrom'] as double;
-      final distanceTo = selectedFilters['distanceTo'] as double;
+          selectedFilters['placeTypeFilters'] as Set<PlaceTypes>;
+      final radius = selectedFilters['radius'] as double;
 
-      dataStorage
-        ..saveFilters(placeTypeFilters, distanceFrom, distanceTo)
-        ..applyFilters(placeTypeFilters, distanceFrom, distanceTo);
+      dataStorage.saveFilters(placeTypeFilters, radius);
+      await dataStorage.applyFilters();
     }
   }
 }

@@ -13,13 +13,14 @@ import 'package:places/helpers/app_assets.dart';
 ///
 /// Параметры:
 /// * [place] - модель места (обязательный);
+/// * [onAddToFavorites] - коллбэк нажатия на добавление в избранное;
+/// * [onRemoveFromFavorites] - коллбэк нажатия на удаление из избранного;
 class PlaceCard extends BasePlaceCard {
+  final VoidCallback? onAddToFavorites;
+  final VoidCallback? onRemoveFromFavorites;
+
   @override
-  final List<Map<String, Object?>> actions = [
-    {
-      'icon': AppAssets.heart,
-    },
-  ];
+  late final List<Map<String, Object?>> actions;
 
   @override
   bool get showDetails => true;
@@ -27,8 +28,24 @@ class PlaceCard extends BasePlaceCard {
   PlaceCard(
     Place place, {
     Key? key,
+    this.onAddToFavorites,
+    this.onRemoveFromFavorites,
   }) : super(
           place,
           key: key,
-        );
+        ) {
+    actions = place.isFavorite
+        ? [
+            {
+              'icon': AppAssets.heartFilled,
+              'voidCallback': onRemoveFromFavorites,
+            },
+          ]
+        : [
+            {
+              'icon': AppAssets.heart,
+              'voidCallback': onAddToFavorites,
+            },
+          ];
+  }
 }

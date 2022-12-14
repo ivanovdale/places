@@ -1,69 +1,70 @@
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/domain/model/places_filter_request.dart';
 
-// TODO(daniiliv): doc
+/// Интерактор для работы с местами.
 class PlaceInteractor {
+  /// Репозиторий работы с местами.
   PlaceRepository placeRepository;
 
   PlaceInteractor(this.placeRepository);
 
-  // TODO(daniiliv): Уточнить и допилить
-  // /// Возвращает места после фильтрации по категории и расстоянию.
-  // List<Place> getFilteredByTypeAndRadiusPlaces(
-  //     List<Place> places,
-  //     List<Map<String, Object>> listOfPlaceTypeFilters,
-  //     CoordinatePoint userCoordinates,
-  //     Map<String, double> range,
-  //     ) {
-  //   // final selectedPlaceTypeFilterNames =
-  //   // getSelectedPlaceTypeFilterNames(listOfPlaceTypeFilters);
-  //   //
-  //   // return places
-  //   //     .where(
-  //   //       (place) => selectedPlaceTypeFilterNames.contains(place.type.name),
-  //   // )
-  //   //     .where((place) => place.coordinatePoint.isPointInsideRadius(
-  //   //   userCoordinates,
-  //   //   range['distanceFrom']!,
-  //   //   range['distanceTo']!,
-  //   // ))
-  //   //     .toList();
-  // }
+  /// Получает список мест после фильтрации.
+  /// Добавляет пометку добавления в избранное для каждого места.
+  Future<List<Place>> getFilteredPlaces(
+    PlacesFilterRequest placesFilterRequest,
+  ) async {
+    final filteredPlacesDto =
+        await placeRepository.getFilteredPlaces(placesFilterRequest.toDto());
 
-  // TODO(daniiliv): doc
-  Future<Place> getPlaceDetails(int id) async {
-    final result = await placeRepository.getPlaceById(id.toString());
+    final filteredPlaces = filteredPlacesDto.map(Place.fromDto).toList();
 
-    return result;
+    getFavoritePlaces().forEach((favoritePlace) {
+      filteredPlaces
+          .firstWhere((filteredPlace) =>
+              filteredPlace.id == favoritePlace.id && favoritePlace.isFavorite)
+          .isFavorite = true;
+    });
+
+    return filteredPlaces;
   }
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getFavoritePlaces() {
+  /// Возвращает детали места.
+  Future<Place> getPlaceDetails(int id) async {
+    final placeDto = await placeRepository.getPlaceById(id.toString());
+
+    return Place.fromDto(placeDto);
+  }
+
+  /// Получает избранные места.
+  List<Place> getFavoritePlaces() {
     return placeRepository.getFavoritePlaces();
   }
 
-  // TODO(daniiliv): doc
+  /// Добавляет место в избранное.
   void addToFavorites(Place place) {
     placeRepository.addToFavorites(place);
   }
 
-  // TODO(daniiliv): doc
+  /// Удаляет место из избранного.
   void removeFromFavorites(Place place) {
     placeRepository.removeFromFavorites(place);
   }
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getVisitedPlaces() {
+  /// Возвращает список посещенных мест.
+  List<Place> getVisitedPlaces() {
     return placeRepository.getVisitedPlaces();
   }
 
-  // TODO(daniiliv): doc
+  /// Добавляет место в список посещенных.
   void addToVisitedPlaces(Place place) {
     placeRepository.addToVisitedPlaces(place);
   }
 
-  // TODO(daniiliv): doc
-  void addNewPlace(Place place) {
-    placeRepository.addNewPlace(place);
+  /// Добавляет новое место.
+  Future<Place> addNewPlace(Place place) async {
+    final placeDto = await placeRepository.addNewPlace(place.toDto());
+
+    return Place.fromDto(placeDto);
   }
 }

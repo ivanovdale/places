@@ -573,7 +573,7 @@ class _PlacesFoundItem extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => PlaceDetailsScreen(place.id),
+      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
     );
   }
 }

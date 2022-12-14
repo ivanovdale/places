@@ -2,7 +2,7 @@
 ///
 /// От модели данных места Place отличается наличием поля distance, в котором при ответе будет расстояние от запрошенной точки.
 class PlaceDTO {
-  final int id;
+  final int? id;
   final double lat;
   final double lng;
   final double? distance;
@@ -12,7 +12,7 @@ class PlaceDTO {
   final String description;
 
   PlaceDTO({
-    required this.id,
+    this.id,
     required this.lat,
     required this.lng,
     this.distance,
@@ -35,7 +35,6 @@ class PlaceDTO {
         );
 
   Map<String, Object> toJson() => {
-        'id': id,
         'lat': lat,
         'lng': lng,
         'name': name,

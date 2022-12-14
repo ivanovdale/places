@@ -34,7 +34,7 @@ class VisitedPlaceList extends BaseVisitingPlaceList {
 
   @override
   void deletePlaceFromList(Place place) {
-    viewModel.deletePlaceFromVisitedList(place);
+    viewModel.removeFromFavorites(place);
   }
 
   @override

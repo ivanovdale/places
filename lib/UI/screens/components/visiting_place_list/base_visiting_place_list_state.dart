@@ -80,7 +80,7 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
             place,
             key: GlobalKey(),
             onDeletePressed: () => widget.deletePlaceFromList(place),
-            onCalendarPressed: () => showToVisitDateTimePicker(place.id),
+            onCalendarPressed: () => showToVisitDateTimePicker(place.id ?? 0),
           )
         : VisitedPlaceCard(
             place,

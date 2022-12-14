@@ -1,35 +1,36 @@
+import 'package:places/data/dto/place_dto.dart';
 import 'package:places/data/dto/places_filter_request_dto.dart';
 import 'package:places/domain/model/place.dart';
 
 /// Получает данные мест.
 abstract class PlaceRepository {
 
-  // TODO(daniiliv): doc
-  Future<Place> getPlaceById(String id);
+  /// Получает место по id.
+  Future<PlaceDTO> getPlaceById(String id);
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getPlaces();
+  /// Получает все места.
+  Future<List<PlaceDTO>> getPlaces();
 
-  // TODO(daniiliv): doc
-  Future<Place> addNewPlace(Place place);
+  /// Добавляет новое место.
+  Future<PlaceDTO> addNewPlace(PlaceDTO placeDto);
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getFilteredPlaces(
+  /// Получает места в соответствии с фильтром.
+  Future<List<PlaceDTO>> getFilteredPlaces(
     PlacesFilterRequestDto placesFilterRequestDto,
   );
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getFavoritePlaces();
+  /// Получает избранные места.
+  List<Place> getFavoritePlaces();
 
-  // TODO(daniiliv): doc
-  Future<void> addToFavorites(Place place);
+  /// Добавляет место в избранное.
+  void addToFavorites(Place place);
 
-  // TODO(daniiliv): doc
-  Future<void> removeFromFavorites(Place place);
+  /// Удаляет место из избранного.
+  void removeFromFavorites(Place place);
 
-  // TODO(daniiliv): doc
-  Future<List<Place>> getVisitedPlaces();
+  /// Получает посещенные места.
+  List<Place> getVisitedPlaces();
 
-  // TODO(daniiliv): doc
-  Future<void> addToVisitedPlaces(Place place);
+  /// Добавляет место в посещенные места.
+  void addToVisitedPlaces(Place place);
 }

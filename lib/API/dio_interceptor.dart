@@ -1,5 +1,6 @@
+import 'dart:developer' as developer;
+
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 /// Интерцептор для DIO.
 ///
@@ -11,9 +12,9 @@ class DioInterceptor extends Interceptor {
 
   @override
   Future onResponse(
-      Response response,
-      ResponseInterceptorHandler handler,
-      ) async {
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
     logPrint('*** Api Response - Start ***');
 
     printKeyValue('URI', response.requestOptions.uri);
@@ -29,15 +30,17 @@ class DioInterceptor extends Interceptor {
 
   @override
   Future onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     logPrint('*** API Request - Start ***');
 
     printKeyValue('URI', options.uri);
     printKeyValue('METHOD', options.method);
-    logPrint('BODY:');
-    printAll(options.data as String);
+    if (options.data != null) {
+      logPrint('BODY:');
+      printAll(options.data as String);
+    }
 
     logPrint('*** API Request - End ***');
 
@@ -83,7 +86,7 @@ class DioInterceptor extends Interceptor {
   }
 
   void logPrint(String text) {
-    debugPrint(text);
+    developer.log(text, name: 'place.dio');
   }
 }
 

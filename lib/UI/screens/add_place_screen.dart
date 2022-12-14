@@ -859,7 +859,6 @@ class _CreateButton extends StatelessWidget {
 
     if (isDataValid) {
       final newPlace = Place(
-        id: mocked.places.last.id + 1,
         name: dataStorage._nameController.text,
         coordinatePoint: CoordinatePoint(
           lat: double.parse(dataStorage._latitudeController.text),
@@ -868,6 +867,7 @@ class _CreateButton extends StatelessWidget {
         type: dataStorage.selectedPlaceType ?? _defaultPlaceType,
         details: dataStorage._descriptionController.text,
         workTimeFrom: _defaultWorkTimeFrom,
+        photoUrlList: dataStorage._newPhotoList,
       );
       Navigator.of(context).pop(newPlace);
     }

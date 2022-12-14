@@ -112,10 +112,9 @@ abstract class AppRouter {
 
     return MaterialPageRoute<Map<String, Object>>(
       builder: (_) => PlaceFiltersScreen(
-        placeTypeFilters:
-            allFilters['placeTypeFilters'] as List<Map<String, Object>>,
-        distanceFrom: allFilters['distanceFrom'] as double,
-        distanceTo: allFilters['distanceTo'] as double,
+        selectedPlaceTypeFilters:
+            allFilters['placeTypeFilters'] as Set<PlaceTypes>,
+        radius: allFilters['radius'] as double,
       ),
     );
   }
@@ -124,10 +123,8 @@ abstract class AppRouter {
     Map<String, dynamic>? arguments,
   ) {
     final allFilters = {
-      'placeTypeFilters':
-          arguments!['placeTypeFilters'] as List<Map<String, Object>>,
-      'distanceFrom': arguments['distanceFrom'] as double,
-      'distanceTo': arguments['distanceTo'] as double,
+      'placeTypeFilters': arguments!['placeTypeFilters'] as Set<PlaceTypes>,
+      'radius': arguments['radius'] as double,
     };
 
     return allFilters;

@@ -5,12 +5,16 @@
 class PlacesFilterRequestDto {
   /// Широта
   final double? lat;
+
   /// Долгота
   final double? lng;
+
   /// Радиус поиска места
   final double? radius;
+
   /// Список типов мест
   final List<String>? typeFilter;
+
   /// Имя места
   final String? nameFilter;
 

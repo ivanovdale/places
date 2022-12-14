@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/mocks.dart' as mocked;
+import 'package:places/providers/interactor_provider.dart';
 
 /// Вьюмодель для экрана планируемых к посещению/посещённых мест.
 class VisitingProvider extends ChangeNotifier {
-  // TODO(daniiliv): Инициализация мест из моковых данных.
-  List<Place> toVisitPlaces = mocked.places
-      .where(
-        (element) => !element.visited,
-      )
-      .toList();
+  InteractorProvider? interactorProvider;
 
-  List<Place> visitedPlaces = mocked.places
-      .where(
-        (element) => element.visited,
-      )
-      .toList();
+  late List<Place> toVisitPlaces;
 
-  /// Удаляет место из списка планируемых к посещению.
-  void deletePlaceFromToVisitList(Place place) {
-    toVisitPlaces.remove(place);
+  late List<Place> visitedPlaces;
 
-    notifyListeners();
+  VisitingProvider(this.interactorProvider) {
+    toVisitPlaces =
+        interactorProvider?.placeInteractor.getFavoritePlaces() ?? [];
+
+    visitedPlaces =
+        interactorProvider?.placeInteractor.getVisitedPlaces() ?? [];
   }
 
-  /// Удаляет место из списка посещенных.
-  void deletePlaceFromVisitedList(Place place) {
-    visitedPlaces.remove(place);
+  /// Удаляет место из списка планируемых к посещению.
+  void removeFromFavorites(Place place) {
+    interactorProvider?.removeFromFavorites(place);
+
     notifyListeners();
   }
 
