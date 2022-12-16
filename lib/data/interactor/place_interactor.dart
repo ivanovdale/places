@@ -4,6 +4,9 @@ import 'package:places/domain/model/places_filter_request.dart';
 
 /// Интерактор для работы с местами.
 class PlaceInteractor {
+  // Список избранных мест пользователя.
+  final List<Place> _favoritePlaces = [];
+
   /// Репозиторий работы с местами.
   PlaceRepository placeRepository;
 
@@ -36,29 +39,31 @@ class PlaceInteractor {
     return Place.fromDto(placeDto);
   }
 
-  /// Получает избранные места.
+  /// Возвращает список мест, планируемых к посещению.
   List<Place> getFavoritePlaces() {
-    return placeRepository.getFavoritePlaces();
+    return _favoritePlaces.where((place) => !place.visited).toList();
   }
 
-  /// Добавляет место в избранное.
+  /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
   void addToFavorites(Place place) {
-    placeRepository.addToFavorites(place);
+    _favoritePlaces.add(place);
+    place.isFavorite = true;
   }
 
-  /// Удаляет место из избранного.
+  /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
   void removeFromFavorites(Place place) {
-    placeRepository.removeFromFavorites(place);
+    _favoritePlaces.remove(place);
+    place.isFavorite = false;
   }
 
   /// Возвращает список посещенных мест.
   List<Place> getVisitedPlaces() {
-    return placeRepository.getVisitedPlaces();
+    return _favoritePlaces.where((place) => place.visited).toList();
   }
 
-  /// Добавляет место в список посещенных.
+  /// Делает пометку, что место посещено.
   void addToVisitedPlaces(Place place) {
-    placeRepository.addToVisitedPlaces(place);
+    place.visited = true;
   }
 
   /// Добавляет новое место.

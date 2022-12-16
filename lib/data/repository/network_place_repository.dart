@@ -4,15 +4,11 @@ import 'package:places/API/dio_api.dart';
 import 'package:places/data/dto/place_dto.dart';
 import 'package:places/data/dto/places_filter_request_dto.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/domain/model/place.dart';
 
 /// Получает данные мест по сети.
 class NetworkPlaceRepository implements PlaceRepository {
   // Клиент для работы с АПИ.
   final DioApi _apiUtil;
-
-  // Список избранных мест пользователя.
-  final List<Place> _favoritePlaces = [];
 
   NetworkPlaceRepository(
     this._apiUtil,
@@ -80,37 +76,5 @@ class NetworkPlaceRepository implements PlaceRepository {
     final placeDtoList = rawPlacesJSON.map(PlaceDTO.fromJson).toList();
 
     return placeDtoList;
-  }
-
-  /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
-  @override
-  void addToFavorites(Place place) {
-    _favoritePlaces.add(place);
-    place.isFavorite = true;
-  }
-
-  /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
-  @override
-  void removeFromFavorites(Place place) {
-    _favoritePlaces.remove(place);
-    place.isFavorite = false;
-  }
-
-  /// Возвращает список мест, планируемых к посещению.
-  @override
-  List<Place> getFavoritePlaces() {
-    return _favoritePlaces.where((place) => !place.visited).toList();
-  }
-
-  /// Возвращает список посещенных мест.
-  @override
-  List<Place> getVisitedPlaces() {
-    return _favoritePlaces.where((place) => place.visited).toList();
-  }
-
-  /// Делает пометку, что место посещено.
-  @override
-  void addToVisitedPlaces(Place place) {
-    place.visited = true;
   }
 }
