@@ -11,7 +11,6 @@ import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/providers/interactor_provider.dart';
 import 'package:places/utils/string_extension.dart';
-import 'package:places/utils/work_with_places_mixin.dart';
 import 'package:provider/provider.dart';
 
 /// Для указания минимального и максимального значения слайдера расстояния.
@@ -52,8 +51,7 @@ class PlaceFiltersScreen extends StatefulWidget {
 /// * [selectedPlaceTypeFilters] - список выбранных фильтров по категории мест.
 /// * [filteredPlacesNumber] - количество мест после фильтрации;
 /// * [radius] - расстояние до места.
-class _PlaceFiltersScreenState extends State<PlaceFiltersScreen>
-    with WorkWithPlaces {
+class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
   /// Список выбранных фильтров по категории мест.
   late Set<PlaceTypes> selectedPlaceTypeFilters;
 

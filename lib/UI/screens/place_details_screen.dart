@@ -139,6 +139,7 @@ class _PhotoGallery extends StatelessWidget {
           imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
           progressIndicatorBuilder: LoadingIndicator.progressIndicatorBuilder,
+          errorWidget: (context, url, dynamic error) => const Icon(Icons.error),
         );
       },
     );

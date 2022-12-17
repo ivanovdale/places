@@ -7,7 +7,7 @@ class PlaceDTO {
   final double lng;
   final double? distance;
   final String name;
-  final List<String> urls;
+  final List<String>? urls;
   final String placeType;
   final String description;
 
@@ -22,23 +22,29 @@ class PlaceDTO {
     required this.description,
   });
 
-  PlaceDTO.fromJson(Map<String, dynamic> json)
-      : this(
-          id: json['id'] as int,
-          lat: json['lat'] as double,
-          lng: json['lng'] as double,
-          distance: json['distance'] as double?,
-          name: json['name'] as String,
-          urls: (json['urls'] as List<dynamic>).cast<String>(),
-          placeType: json['placeType'] as String,
-          description: json['description'] as String,
-        );
+  factory PlaceDTO.fromJson(Map<String, dynamic> json) {
+    final urlsFromJson = json['urls'] as List<dynamic>;
+    final urls = urlsFromJson.isNotEmpty
+        ? urlsFromJson.cast<String>().toList()
+        : null;
+
+    return PlaceDTO(
+      id: json['id'] as int,
+      lat: json['lat'] as double,
+      lng: json['lng'] as double,
+      distance: json['distance'] as double?,
+      name: json['name'] as String,
+      urls: urls,
+      placeType: json['placeType'] as String,
+      description: json['description'] as String,
+    );
+  }
 
   Map<String, Object> toJson() => {
         'lat': lat,
         'lng': lng,
         'name': name,
-        'urls': urls,
+        'urls': urls ?? <String>[],
         'placeType': placeType,
         'description': description,
       };

@@ -9,11 +9,13 @@ import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
+import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/utils/work_with_places_mixin.dart';
+import 'package:places/providers/interactor_provider.dart';
+import 'package:provider/provider.dart';
 
 /// Экран поиска мест.
 ///
@@ -23,15 +25,13 @@ import 'package:places/utils/work_with_places_mixin.dart';
 ///
 /// Хранит фильтры, которые будут учитываться при поиске мест.
 class PlaceSearchScreen extends StatelessWidget {
-  final List<Map<String, Object>> placeTypeFilters;
-  final double distanceFrom;
-  final double distanceTo;
+  final Set<PlaceTypes> placeTypeFilters;
+  final double radius;
 
   const PlaceSearchScreen({
     Key? key,
     required this.placeTypeFilters,
-    required this.distanceFrom,
-    required this.distanceTo,
+    required this.radius,
   }) : super(key: key);
 
   @override
@@ -50,8 +50,7 @@ class PlaceSearchScreen extends StatelessWidget {
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: _PlaceSearchBody(
         placeTypeFilters: placeTypeFilters,
-        distanceFrom: distanceFrom,
-        distanceTo: distanceTo,
+        radius: radius,
       ),
     );
   }
@@ -84,15 +83,13 @@ class _InheritedPlaceSearchBodyState extends InheritedWidget {
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
 class _PlaceSearchBody extends StatefulWidget {
-  final List<Map<String, Object>> placeTypeFilters;
-  final double distanceFrom;
-  final double distanceTo;
+  final Set<PlaceTypes> placeTypeFilters;
+  final double radius;
 
   const _PlaceSearchBody({
     Key? key,
     required this.placeTypeFilters,
-    required this.distanceFrom,
-    required this.distanceTo,
+    required this.radius,
   }) : super(key: key);
 
   @override
@@ -100,13 +97,12 @@ class _PlaceSearchBody extends StatefulWidget {
 }
 
 /// Хранит состояние поиска мест.
-class _PlaceSearchBodyState extends State<_PlaceSearchBody>
-    with WorkWithPlaces {
+class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
+  late final PlaceSearchInteractor _placeSearchInteractor =
+      context.read<InteractorProvider>().placeSearchInteractor;
+
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
-
-  /// История поиска мест.
-  final Set<String> _searchHistory = {};
 
   /// Найденные места.
   late List<Place> _placesFoundList = [];
@@ -133,31 +129,13 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody>
   @override
   void initState() {
     super.initState();
+
+    _initializeFiltersAndUserCoordinates();
+
     // Активировать поле при открытии экрана.
     _searchFocusNode.requestFocus();
 
-    // Обновление найденных мест.
-    _searchController.addListener(() {
-      _searchString = _searchController.text.trim();
-      if (_searchString.isNotEmpty) {
-        setState(() {
-          _searchInProgress = true;
-        });
-
-        // Имитация работы сервера.
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () {
-            _applyAllFilters(_searchString);
-            setState(() {
-              _searchInProgress = false;
-            });
-          },
-        );
-      } else {
-        setState(() {});
-      }
-    });
+    _addListenerToUpdatePlacesFoundList();
   }
 
   @override
@@ -167,47 +145,65 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody>
     _searchFocusNode.dispose();
   }
 
+  /// Устанавливает параметры поиска и координаты пользователя для интерактора.
+  void _initializeFiltersAndUserCoordinates() {
+    _placeSearchInteractor
+      ..typeFilter = widget.placeTypeFilters.toList()
+      ..radius = widget.radius
+      ..userCoordinates = mocked.userCoordinates;
+  }
+
+  /// Обновляет список найденных мест.
+  /// Когда вводится текст в строку поиска, взводится флаг, что поиск в процессе.
+  /// Когда были найдены места, то флаг поиска убирается.
+  /// Если строка поиска пустая, то ничего не делать.
+  void _addListenerToUpdatePlacesFoundList() {
+    _searchController.addListener(() {
+      _searchString = _searchController.text.trim();
+      if (_searchString.isNotEmpty) {
+        setState(() {
+          _searchInProgress = true;
+        });
+
+        _applyAllFilters(_searchString).then((value) => setState(() {
+              _searchInProgress = false;
+            }));
+      } else {
+        setState(() {});
+      }
+    });
+  }
+
   /// Очищает поле поиска
   void _clearSearchText() {
     _searchController.clear();
   }
 
-  /// Удаляет элемент из списка истории поиска по его имени.
-  void _deleteItemFromSet(String itemName) {
-    _searchHistory.removeWhere((searchItem) => searchItem == itemName);
+  /// Удаляет элемент из списка истории поиска.
+  void _deleteFromSearchHistory(Place place) {
+    _placeSearchInteractor.removeFromSearchHistory(place);
+
     setState(() {});
   }
 
   /// Удаляет все элементы из списка истории поиска.
   void _deleteAllItemsFromSet() {
-    _searchHistory.clear();
+    _placeSearchInteractor.clearSearchHistory();
+
     setState(() {});
   }
 
   /// Заполняет поле поиска переданной строкой.
   void _fillSearchFieldWithItem(String itemName) {
     _searchController.text = itemName;
+
     setState(() {});
   }
 
   /// Применяет фильтрацию по всем текущим параметрам.
-  void _applyAllFilters(String searchString) {
-    final range = {
-      'distanceFrom': widget.distanceFrom,
-      'distanceTo': widget.distanceTo,
-    };
-    // Общая фильтрация по фильтрам.
-    final placesFilteredByTypeAndRadius = getFilteredByTypeAndRadiusPlaces(
-      mocked.places,
-      widget.placeTypeFilters,
-      mocked.userCoordinates,
-      range,
-    );
-    // Финальная фильтрация по наименованию.
-    _placesFoundList = getFilteredByNamePlaces(
-      placesFilteredByTypeAndRadius,
-      searchString,
-    );
+  Future<void> _applyAllFilters(String searchString) async {
+    _placesFoundList =
+        await _placeSearchInteractor.getFilteredPlaces(searchString);
   }
 }
 
@@ -266,7 +262,7 @@ class _SearchHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
-    final searchHistory = dataStorage._searchHistory;
+    final searchHistory = dataStorage._placeSearchInteractor.searchHistory;
     final isSearchInProgress = dataStorage._searchString.isNotEmpty;
 
     // Не показывать историю поиска, если она пуста, или если начат поиск мест.
@@ -320,11 +316,11 @@ class _SearchHistoryItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
-    final searchHistory = dataStorage._searchHistory;
+    final searchHistory = dataStorage._placeSearchInteractor.searchHistory;
     List<Widget> listOfItems;
     listOfItems = searchHistory
-        .map((searchString) => _SearchItem(
-              itemName: searchString,
+        .map((place) => _SearchItem(
+              place: place,
             ))
         .cast<Widget>()
         .toList()
@@ -357,11 +353,11 @@ class _SearchHistoryItems extends StatelessWidget {
 /// Содержит имя искомого ранее места.
 /// Позволяет удалить элемент из списка истории поиска.
 class _SearchItem extends StatelessWidget {
-  final String itemName;
+  final Place place;
 
   const _SearchItem({
     Key? key,
-    required this.itemName,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -373,11 +369,11 @@ class _SearchItem extends StatelessWidget {
       child: Row(
         children: [
           _HistorySearchItemTextButton(
-            itemName: itemName,
+            place: place,
           ),
           const Spacer(),
           _DeleteHistorySearchItemFromListButton(
-            itemName: itemName,
+            place: place,
           ),
         ],
       ),
@@ -387,11 +383,11 @@ class _SearchItem extends StatelessWidget {
 
 /// Кнопка удаления элемента истории поиска из списка.
 class _DeleteHistorySearchItemFromListButton extends StatelessWidget {
-  final String itemName;
+  final Place place;
 
   const _DeleteHistorySearchItemFromListButton({
     Key? key,
-    required this.itemName,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -400,15 +396,11 @@ class _DeleteHistorySearchItemFromListButton extends StatelessWidget {
     final secondaryColor = theme.colorScheme.secondary;
 
     return CustomIconButton(
-      onPressed: () => _deleteItemFromSet(context),
+      onPressed: () => _InheritedPlaceSearchBodyState.of(context)
+          ._deleteFromSearchHistory(place),
       icon: Icons.close,
       color: secondaryColor.withOpacity(0.56),
     );
-  }
-
-  /// Вызывает функцию из стейта экрана, которая удаляет элемент из списка истории поиска.
-  void _deleteItemFromSet(BuildContext context) {
-    _InheritedPlaceSearchBodyState.of(context)._deleteItemFromSet(itemName);
   }
 }
 
@@ -441,11 +433,11 @@ class _ClearSearchHistoryButton extends StatelessWidget {
 ///
 /// При нажатии заполняется поле поиска места.
 class _HistorySearchItemTextButton extends StatelessWidget {
-  final String itemName;
+  final Place place;
 
   const _HistorySearchItemTextButton({
     Key? key,
-    required this.itemName,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -454,7 +446,7 @@ class _HistorySearchItemTextButton extends StatelessWidget {
     final secondaryColor = theme.colorScheme.secondary;
 
     return CustomTextButton(
-      itemName,
+      place.name,
       textStyle: theme.textTheme.bodyText1?.copyWith(
         color: secondaryColor,
       ),
@@ -466,7 +458,7 @@ class _HistorySearchItemTextButton extends StatelessWidget {
   /// Заполняет поле поиска заданным элементом.
   void _fillSearchFieldWithItem(BuildContext context) {
     _InheritedPlaceSearchBodyState.of(context)
-        ._fillSearchFieldWithItem(itemName);
+        ._fillSearchFieldWithItem(place.name);
   }
 }
 
@@ -567,7 +559,7 @@ class _PlacesFoundItem extends StatelessWidget {
   void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {
     // Сохранить переход в истории поиска.
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
-    dataStorage._searchHistory.add(place.name);
+    dataStorage._placeSearchInteractor.addToSearchHistory(place);
 
     showModalBottomSheet<void>(
       context: context,
