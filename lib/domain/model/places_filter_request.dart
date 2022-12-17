@@ -19,7 +19,7 @@ class PlacesFilterRequest {
   /// Имя места
   final String? nameFilter;
 
-  PlacesFilterRequest({
+  const PlacesFilterRequest({
     this.coordinatePoint,
     this.radius,
     this.typeFilter,

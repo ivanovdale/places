@@ -41,6 +41,7 @@ class VisitingProvider extends ChangeNotifier {
     visitedPlaces
       ..removeAt(placeIndex)
       ..insert(destinationIndex, place);
+
     notifyListeners();
   }
 

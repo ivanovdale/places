@@ -41,45 +41,63 @@ class Place {
     this.isFavorite = false,
     this.visited = false,
     this.photoUrlList,
+    this.distance,
   });
-
-  Place.fromDto(PlaceDTO placeDTO)
-      : this(
-          id: placeDTO.id,
-          name: placeDTO.name,
-          coordinatePoint: CoordinatePoint(
-            lat: placeDTO.lat,
-            lon: placeDTO.lng,
-          ),
-          details: placeDTO.description,
-          type: PlaceTypes.values.byName(placeDTO.placeType),
-          photoUrlList: placeDTO.urls,
-        );
-
-  PlaceDTO toDto() => PlaceDTO(
-        id: id,
-        lat: coordinatePoint.lat,
-        lng: coordinatePoint.lon,
-        name: name,
-        urls: photoUrlList ?? <String>[],
-        placeType: type.name,
-        description: details,
-      );
 }
 
 /// Типы мест с названиями и иконками.
 enum PlaceTypes {
-  hotel(AppStrings.hotelText, AppStrings.hotel, AppAssets.hotel),
-  restaurant(AppStrings.restaurantText, AppStrings.restaurant, AppAssets.restaurant),
-  other(AppStrings.otherText, AppStrings.other, AppAssets.other),
-  park(AppStrings.parkText, AppStrings.park, AppAssets.park),
-  museum(AppStrings.museumText, AppStrings.museum, AppAssets.museum),
-  monument(AppStrings.monumentText, AppStrings.monument, AppAssets.other),
-  theatre(AppStrings.theatreText, AppStrings.theatre, AppAssets.other),
-  temple(AppStrings.templeText, AppStrings.temple, AppAssets.other),
-  cafe(AppStrings.cafeText, AppStrings.cafe, AppAssets.cafe);
+  hotel(
+    AppStrings.hotelText,
+    AppStrings.hotel,
+    AppAssets.hotel,
+  ),
+  restaurant(
+    AppStrings.restaurantText,
+    AppStrings.restaurant,
+    AppAssets.restaurant,
+  ),
+  other(
+    AppStrings.otherText,
+    AppStrings.other,
+    AppAssets.other,
+  ),
+  park(
+    AppStrings.parkText,
+    AppStrings.park,
+    AppAssets.park,
+  ),
+  museum(
+    AppStrings.museumText,
+    AppStrings.museum,
+    AppAssets.museum,
+  ),
+  monument(
+    AppStrings.monumentText,
+    AppStrings.monument,
+    AppAssets.other,
+  ),
+  theatre(
+    AppStrings.theatreText,
+    AppStrings.theatre,
+    AppAssets.other,
+  ),
+  temple(
+    AppStrings.templeText,
+    AppStrings.temple,
+    AppAssets.other,
+  ),
+  cafe(
+    AppStrings.cafeText,
+    AppStrings.cafe,
+    AppAssets.cafe,
+  );
 
-  const PlaceTypes(this.text, this.name, this.imagePath);
+  const PlaceTypes(
+    this.text,
+    this.name,
+    this.imagePath,
+  );
 
   final String text;
   final String name;
