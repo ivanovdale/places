@@ -150,7 +150,7 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
     );
 
     final places = await context
-        .read<InteractorProvider>()
+        .read<PlaceInteractorProvider>()
         .placeInteractor
         .getFilteredPlaces(placeFilterRequest);
 

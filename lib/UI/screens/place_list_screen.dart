@@ -74,7 +74,7 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
     );
 
     places = await context
-        .read<InteractorProvider>()
+        .read<PlaceInteractorProvider>()
         .placeInteractor
         .getFilteredPlaces(placeFilterRequest);
 
@@ -92,7 +92,7 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
 
     if (newPlace != null && mounted) {
       newPlace = await context
-          .read<InteractorProvider>()
+          .read<PlaceInteractorProvider>()
           .placeInteractor
           .addNewPlace(newPlace);
       places?.add(newPlace);
@@ -110,7 +110,7 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
     );
 
     places = await context
-        .read<InteractorProvider>()
+        .read<PlaceInteractorProvider>()
         .placeInteractor
         .getFilteredPlaces(placeFilterRequest);
 
@@ -292,7 +292,7 @@ class _SliverPlaceList extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               childCount: places!.length,
               (_, index) {
-                final interactorProvider = context.watch<InteractorProvider>();
+                final interactorProvider = context.watch<PlaceInteractorProvider>();
                 final place = places![index];
 
                 return Padding(

@@ -4,7 +4,7 @@ import 'package:places/providers/interactor_provider.dart';
 
 /// Вьюмодель для экрана планируемых к посещению/посещённых мест.
 class VisitingProvider extends ChangeNotifier {
-  InteractorProvider? interactorProvider;
+  PlaceInteractorProvider? interactorProvider;
 
   late List<Place> toVisitPlaces;
 

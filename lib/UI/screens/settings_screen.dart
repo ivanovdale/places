@@ -5,8 +5,8 @@ import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-// TODO(daniiliv): Воспользуемся глобальной переменной на время, пока нет DI.
-import 'package:places/main.dart' show isDarkModeEnabled, changeNotifier;
+import 'package:places/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 /// Экран настроек.
 ///
@@ -85,6 +85,8 @@ class _DarkModeSetting extends StatefulWidget {
 class _DarkModeSettingState extends State<_DarkModeSetting> {
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = context.watch<SettingsInteractorProvider>();
+
     return Row(
       children: [
         Text(
@@ -93,11 +95,8 @@ class _DarkModeSettingState extends State<_DarkModeSetting> {
         ),
         const Spacer(),
         CupertinoSwitch(
-          value: isDarkModeEnabled,
-          onChanged: (newValue) => setState(() {
-            isDarkModeEnabled = newValue;
-            changeNotifier.notifyListeners();
-          }),
+          value: settingsProvider.settingsInteractor.isDarkModeEnabled,
+          onChanged: (newValue) => settingsProvider.changeAppTheme(),
         ),
       ],
     );

@@ -65,7 +65,7 @@ class PlaceDetailsScreen extends StatelessWidget {
   /// Получает детальную информацию места.
   Future<Place> getPlaceDetails(int placeId, BuildContext context) {
     return context
-        .read<InteractorProvider>()
+        .read<PlaceInteractorProvider>()
         .placeInteractor
         .getPlaceDetails(placeId);
   }

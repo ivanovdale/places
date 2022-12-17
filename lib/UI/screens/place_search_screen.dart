@@ -14,7 +14,7 @@ import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/providers/interactor_provider.dart';
+import 'package:places/providers/place_search_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Экран поиска мест.
@@ -99,7 +99,7 @@ class _PlaceSearchBody extends StatefulWidget {
 /// Хранит состояние поиска мест.
 class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   late final PlaceSearchInteractor _placeSearchInteractor =
-      context.read<InteractorProvider>().placeSearchInteractor;
+      context.read<PlaceSearchInteractorProvider>().placeSearchInteractor;
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();

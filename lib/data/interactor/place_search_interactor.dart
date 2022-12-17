@@ -6,17 +6,17 @@ import 'package:places/domain/model/places_filter_request.dart';
 
 /// Интерактор для работы с поиском мест.
 class PlaceSearchInteractor {
-  /// Фильтр по типу мест.
-  late final List<PlaceTypes>? typeFilter;
-
-  /// Радиус поиска мест.
-  late final double radius;
-
-  /// Координаты пользователя для поиска мест с учетом радиуса.
-  late final CoordinatePoint userCoordinates;
-
   /// История поиска мест.
   final Set<Place> searchHistory = {};
+
+  /// Фильтр по типу мест.
+  late List<PlaceTypes>? typeFilter;
+
+  /// Радиус поиска мест.
+  late double radius;
+
+  /// Координаты пользователя для поиска мест с учетом радиуса.
+  late CoordinatePoint userCoordinates;
 
   /// Репозиторий работы с местами.
   PlaceRepository placeRepository;
