@@ -1,6 +1,13 @@
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
+import 'package:places/API/exceptions/bad_request_exception.dart';
+import 'package:places/API/exceptions/conflict_exception.dart';
+import 'package:places/API/exceptions/deadline_exceeded_exception.dart';
+import 'package:places/API/exceptions/internal_server_error_exception.dart';
+import 'package:places/API/exceptions/no_internet_connection_exception.dart';
+import 'package:places/API/exceptions/not_found_exception.dart';
+import 'package:places/API/exceptions/unauthorized_exception.dart';
 
 /// Интерцептор для DIO.
 ///
@@ -87,68 +94,5 @@ class DioInterceptor extends Interceptor {
 
   void logPrint(String text) {
     developer.log(text, name: 'place.dio');
-  }
-}
-
-class BadRequestException extends DioError {
-  BadRequestException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'Invalid request';
-  }
-}
-
-class InternalServerErrorException extends DioError {
-  InternalServerErrorException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'Unknown error occurred, please try again later.';
-  }
-}
-
-class ConflictException extends DioError {
-  ConflictException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'Conflict occurred';
-  }
-}
-
-class UnauthorizedException extends DioError {
-  UnauthorizedException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'Access denied';
-  }
-}
-
-class NotFoundException extends DioError {
-  NotFoundException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'The requested information could not be found';
-  }
-}
-
-class NoInternetConnectionException extends DioError {
-  NoInternetConnectionException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'No internet connection detected, please try again.';
-  }
-}
-
-class DeadlineExceededException extends DioError {
-  DeadlineExceededException(RequestOptions r) : super(requestOptions: r);
-
-  @override
-  String toString() {
-    return 'The connection has timed out, please try again.';
   }
 }
