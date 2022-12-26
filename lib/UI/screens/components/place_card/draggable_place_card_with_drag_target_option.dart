@@ -7,9 +7,9 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
   final Widget placeCard;
   final bool isDragged;
   final VoidCallback? onDragStarted;
-  final Function(DraggableDetails) onDragEnd;
-  final Function(int)? onAccept;
-  final Function(PointerMoveEvent)? scrollPlaceCardsWhenCardDragged;
+  final ValueChanged<DraggableDetails> onDragEnd;
+  final ValueChanged<int>? onAccept;
+  final ValueChanged<PointerMoveEvent>? scrollPlaceCardsWhenCardDragged;
 
   const DraggablePlaceCardWithDragTargetOption({
     Key? key,

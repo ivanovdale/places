@@ -5,7 +5,7 @@ import 'package:places/UI/screens/components/place_card/place_card_with_hover_ab
 /// Карточка места с возможностью перетаскивания.
 class DraggablePlaceCard extends StatelessWidget {
   final VoidCallback? onDragStarted;
-  final Function(DraggableDetails)? onDragEnd;
+  final ValueChanged<DraggableDetails>? onDragEnd;
   final Widget placeCard;
   final int index;
   final List<int?> candidateData;

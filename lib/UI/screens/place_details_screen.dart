@@ -117,7 +117,7 @@ class _PhotoGallery extends StatelessWidget {
   static const defaultImageUrl =
       'https://wallbox.ru/resize/1024x768/wallpapers/main2/201726/pole12.jpg';
 
-  final Function(int)? onPageChanged;
+  final ValueSetter<int>? onPageChanged;
   final PageController controller;
   final Place place;
 

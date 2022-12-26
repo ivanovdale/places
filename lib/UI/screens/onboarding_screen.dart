@@ -91,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 /// Прокручивающийся список страниц.
 class _OnboardingPageView extends StatelessWidget {
   final PageController controller;
-  final Function(int)? onPageChanged;
+  final ValueChanged<int>? onPageChanged;
 
   const _OnboardingPageView({
     Key? key,
