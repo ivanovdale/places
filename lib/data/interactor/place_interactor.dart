@@ -1,4 +1,3 @@
-import 'package:places/data/repository/place_mapper.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
@@ -18,11 +17,8 @@ class PlaceInteractor {
   Future<List<Place>> getFilteredPlaces(
     PlacesFilterRequest placesFilterRequest,
   ) async {
-    final filteredPlacesDto =
-        await placeRepository.getFilteredPlaces(placesFilterRequest.toDto());
-
     final filteredPlaces =
-        filteredPlacesDto.map(PlaceMapper.placeFromDto).toList();
+        await placeRepository.getFilteredPlaces(placesFilterRequest);
 
     // Сортировка по удалённости, если есть значение расстояния.
     if (filteredPlaces.isNotEmpty && filteredPlaces[0].distance != null) {
@@ -43,9 +39,7 @@ class PlaceInteractor {
 
   /// Возвращает детали места.
   Future<Place> getPlaceDetails(int id) async {
-    final placeDto = await placeRepository.getPlaceById(id.toString());
-
-    return PlaceMapper.placeFromDto(placeDto);
+    return placeRepository.getPlaceById(id.toString());
   }
 
   /// Возвращает список мест, планируемых к посещению.
@@ -77,9 +71,6 @@ class PlaceInteractor {
 
   /// Добавляет новое место.
   Future<Place> addNewPlace(Place place) async {
-    final placeDto =
-        await placeRepository.addNewPlace(PlaceMapper.placeToDto(place));
-
-    return PlaceMapper.placeFromDto(placeDto);
+    return placeRepository.addNewPlace(place);
   }
 }

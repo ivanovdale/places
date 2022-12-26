@@ -23,8 +23,8 @@ class PlaceDTO {
   });
 
   factory PlaceDTO.fromJson(Map<String, dynamic> json) {
-    final urlsFromJson = json['urls'] as List<dynamic>;
-    final urls = urlsFromJson.isNotEmpty
+    final urlsFromJson = json['urls'] as List<dynamic>?;
+    final urls = urlsFromJson != null && urlsFromJson.isNotEmpty
         ? urlsFromJson.cast<String>().toList()
         : null;
 

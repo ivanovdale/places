@@ -1,19 +1,19 @@
-import 'package:places/data/dto/place_dto.dart';
-import 'package:places/data/dto/places_filter_request_dto.dart';
+import 'package:places/domain/model/place.dart';
+import 'package:places/domain/model/places_filter_request.dart';
 
 /// Получает данные мест.
 abstract class PlaceRepository {
   /// Получает место по id.
-  Future<PlaceDTO> getPlaceById(String id);
+  Future<Place> getPlaceById(String id);
 
   /// Получает все места.
-  Future<List<PlaceDTO>> getPlaces();
+  Future<List<Place>> getPlaces();
 
   /// Добавляет новое место.
-  Future<PlaceDTO> addNewPlace(PlaceDTO placeDto);
+  Future<Place> addNewPlace(Place place);
 
   /// Получает места в соответствии с фильтром.
-  Future<List<PlaceDTO>> getFilteredPlaces(
-    PlacesFilterRequestDto placesFilterRequestDto,
+  Future<List<Place>> getFilteredPlaces(
+    PlacesFilterRequest placesFilterRequest,
   );
 }

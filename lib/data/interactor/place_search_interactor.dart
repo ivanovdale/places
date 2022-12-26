@@ -1,4 +1,3 @@
-import 'package:places/data/repository/place_mapper.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/coordinate_point.dart';
 import 'package:places/domain/model/place.dart';
@@ -34,10 +33,10 @@ class PlaceSearchInteractor {
       nameFilter: name,
     );
 
-    final filteredPlacesDto =
-        await placeRepository.getFilteredPlaces(placesFilterRequest.toDto());
+    final filteredPlaces =
+        await placeRepository.getFilteredPlaces(placesFilterRequest);
 
-    return filteredPlacesDto.map(PlaceMapper.placeFromDto).toList();
+    return filteredPlaces;
   }
 
   /// Удаляет все места из списка истории поиска.
