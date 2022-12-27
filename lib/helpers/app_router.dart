@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/add_sight_screen.dart';
+import 'package:places/UI/screens/add_place_screen.dart';
 import 'package:places/UI/screens/onboarding_screen.dart';
+import 'package:places/UI/screens/place_details_screen.dart';
+import 'package:places/UI/screens/place_filters_screen.dart';
+import 'package:places/UI/screens/place_list_screen.dart';
+import 'package:places/UI/screens/place_search_screen.dart';
+import 'package:places/UI/screens/place_type_selection_screen.dart';
 import 'package:places/UI/screens/settings_screen.dart';
-import 'package:places/UI/screens/sight_details_screen.dart';
-import 'package:places/UI/screens/sight_filters_screen.dart';
-import 'package:places/UI/screens/sight_list_screen.dart';
-import 'package:places/UI/screens/sight_search_screen.dart';
-import 'package:places/UI/screens/sight_type_selection_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
-import 'package:places/UI/screens/visiting_sights_screen.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/UI/screens/visiting_places_screen.dart';
+import 'package:places/domain/model/place.dart';
 
 /// Роутер для именованных роутов.
 abstract class AppRouter {
@@ -19,26 +19,26 @@ abstract class AppRouter {
   /// Экран онбординга.
   static const String onboarding = '/onboarding';
 
-  /// Экран списка достопримечательностей.
-  static const String sightList = '/sightList';
+  /// Экран списка мест.
+  static const String placeList = '/placeList';
 
-  /// Экран поиска достопримечательностей.
-  static const String sightSearch = '/sightSearch';
+  /// Экран поиска мест.
+  static const String placeSearch = '/placeSearch';
 
-  /// Экран выбора фильтров достопримечательностей.
-  static const String sightFilters = '/sightFilters';
+  /// Экран выбора фильтров мест.
+  static const String placeFilters = '/placeFilters';
 
-  /// Экран для добавления новой достопримечательности.
-  static const String addSight = '/addSight';
+  /// Экран для добавления нового места.
+  static const String addPlace = '/addPlace';
 
-  /// Экран выбора категории достопримечательности.
-  static const String sightTypeSelection = '/sightTypeSelection';
+  /// Экран выбора категории места.
+  static const String placeTypeSelection = '/placeTypeSelection';
 
-  /// Экран подробностей достопримечательности.
-  static const String sightDetails = '/sightDetails';
+  /// Экран подробностей места.
+  static const String placeDetails = '/placeDetails';
 
   /// Экран списка посещенных/планируемых к посещению мест.
-  static const String visitingSights = '/visitingSights';
+  static const String visitingPlaces = '/visitingPlaces';
 
   /// Экран настроек.
   static const String settings = '/settings';
@@ -50,20 +50,20 @@ abstract class AppRouter {
     switch (settings.name) {
       case AppRouter.onboarding:
         return _getOnboardingMaterialRoute();
-      case AppRouter.sightList:
-        return _getSightListMaterialRoute();
-      case AppRouter.sightSearch:
-        return _getSightSearchMaterialRoute(arguments);
-      case AppRouter.sightFilters:
-        return _getSightFiltersMaterialRoute(arguments);
-      case AppRouter.addSight:
-        return _getAddSightMaterialRoute();
-      case AppRouter.sightTypeSelection:
-        return _getSightTypeSelectionMaterialRoute();
-      case AppRouter.sightDetails:
-        return _getSightDetailsMaterialRoute(arguments);
-      case AppRouter.visitingSights:
-        return _getVisitingSightsMaterialRoute();
+      case AppRouter.placeList:
+        return _getPlaceListMaterialRoute();
+      case AppRouter.placeSearch:
+        return _getPlaceSearchMaterialRoute(arguments);
+      case AppRouter.placeFilters:
+        return _getPlaceFiltersMaterialRoute(arguments);
+      case AppRouter.addPlace:
+        return _getAddPlaceMaterialRoute();
+      case AppRouter.placeTypeSelection:
+        return _getPlaceTypeSelectionMaterialRoute();
+      case AppRouter.placeDetails:
+        return _getPlaceDetailsMaterialRoute(arguments);
+      case AppRouter.visitingPlaces:
+        return _getVisitingPlacesMaterialRoute();
       case AppRouter.settings:
         return _getSettingsMaterialRoute();
       case AppRouter.root:
@@ -84,80 +84,60 @@ abstract class AppRouter {
     );
   }
 
-  static MaterialPageRoute<Object?> _getSightListMaterialRoute() {
+  static MaterialPageRoute<Object?> _getPlaceListMaterialRoute() {
     return MaterialPageRoute<Object?>(
-      builder: (_) => const SightListScreen(),
+      builder: (_) => const PlaceListScreen(),
     );
   }
 
-  static MaterialPageRoute<Object?> _getSightSearchMaterialRoute(
+  static MaterialPageRoute<Object?> _getPlaceSearchMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
-    final allFilters = _parseSightFilters(arguments);
-
     return MaterialPageRoute<Object?>(
-      builder: (_) => SightSearchScreen(
-        sightTypeFilters:
-            allFilters['sightTypeFilters'] as List<Map<String, Object>>,
-        distanceFrom: allFilters['distanceFrom'] as double,
-        distanceTo: allFilters['distanceTo'] as double,
+      builder: (_) => PlaceSearchScreen(
+        placeTypeFilters: arguments!['placeTypeFilters'] as Set<PlaceTypes>,
+        radius: arguments['radius'] as double,
       ),
     );
   }
 
-  static MaterialPageRoute<Map<String, Object>> _getSightFiltersMaterialRoute(
+  static MaterialPageRoute<Map<String, Object>> _getPlaceFiltersMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
-    final allFilters = _parseSightFilters(arguments);
-
     return MaterialPageRoute<Map<String, Object>>(
-      builder: (_) => SightFiltersScreen(
-        sightTypeFilters:
-            allFilters['sightTypeFilters'] as List<Map<String, Object>>,
-        distanceFrom: allFilters['distanceFrom'] as double,
-        distanceTo: allFilters['distanceTo'] as double,
+      builder: (_) => PlaceFiltersScreen(
+        selectedPlaceTypeFilters:
+            arguments!['placeTypeFilters'] as Set<PlaceTypes>,
+        radius: arguments['radius'] as double,
       ),
     );
   }
 
-  static Map<String, dynamic> _parseSightFilters(
-    Map<String, dynamic>? arguments,
-  ) {
-    final allFilters = {
-      'sightTypeFilters':
-          arguments!['sightTypeFilters'] as List<Map<String, Object>>,
-      'distanceFrom': arguments['distanceFrom'] as double,
-      'distanceTo': arguments['distanceTo'] as double,
-    };
-
-    return allFilters;
-  }
-
-  static MaterialPageRoute<Sight?> _getAddSightMaterialRoute() {
-    return MaterialPageRoute<Sight?>(
-      builder: (_) => const AddSightScreen(),
+  static MaterialPageRoute<Place?> _getAddPlaceMaterialRoute() {
+    return MaterialPageRoute<Place?>(
+      builder: (_) => const AddPlaceScreen(),
     );
   }
 
-  static MaterialPageRoute<SightTypes> _getSightTypeSelectionMaterialRoute() {
-    return MaterialPageRoute<SightTypes>(
-      builder: (_) => const SightTypeSelectionScreen(),
+  static MaterialPageRoute<PlaceTypes> _getPlaceTypeSelectionMaterialRoute() {
+    return MaterialPageRoute<PlaceTypes>(
+      builder: (_) => const PlaceTypeSelectionScreen(),
     );
   }
 
-  static MaterialPageRoute<Object?> _getSightDetailsMaterialRoute(
+  static MaterialPageRoute<Object?> _getPlaceDetailsMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
     final id = arguments!['id'] as int;
 
     return MaterialPageRoute<Object?>(
-      builder: (_) => SightDetailsScreen(id),
+      builder: (_) => PlaceDetailsScreen(id),
     );
   }
 
-  static MaterialPageRoute<Object?> _getVisitingSightsMaterialRoute() {
+  static MaterialPageRoute<Object?> _getVisitingPlacesMaterialRoute() {
     return MaterialPageRoute<Object?>(
-      builder: (_) => const VisitingSightsScreen(),
+      builder: (_) => const VisitingPlacesScreen(),
     );
   }
 
