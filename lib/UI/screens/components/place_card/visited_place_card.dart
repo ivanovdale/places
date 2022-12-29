@@ -6,47 +6,46 @@ import 'package:places/helpers/app_assets.dart';
 
 /// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
 ///
-/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка "поделиться".
 ///
 /// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
 /// * [place] - модель места (обязательный);
 class VisitedPlaceCard extends BasePlaceCard {
-  final VoidCallback? onSharePressed;
-  final VoidCallback? onDeletePressed;
+  final VoidCallback onSharePressed;
+  final VoidCallback onDeletePressed;
 
   @override
-  late final Widget actions;
+  final Widget actions;
 
   @override
   bool get showDetails => false;
 
   VisitedPlaceCard(
     Place place, {
-    this.onSharePressed,
-    this.onDeletePressed,
+    required this.onSharePressed,
+    required this.onDeletePressed,
     Key? key,
-  }) : super(
+  })  : actions = _PlaceActions(
+          onSharePressed: onSharePressed,
+          onDeletePressed: onDeletePressed,
+        ),
+        super(
           place,
           key: key,
-        ) {
-    actions = _PlaceActions(
-      onSharePressed: onSharePressed,
-      onDeletePressed: onDeletePressed,
-    );
-  }
+        );
 }
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
-  final VoidCallback? onSharePressed;
-  final VoidCallback? onDeletePressed;
+  final VoidCallback onSharePressed;
+  final VoidCallback onDeletePressed;
 
   const _PlaceActions({
     Key? key,
-    this.onSharePressed,
-    this.onDeletePressed,
+    required this.onSharePressed,
+    required this.onDeletePressed,
   }) : super(key: key);
 
   @override

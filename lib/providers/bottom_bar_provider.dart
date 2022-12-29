@@ -40,9 +40,7 @@ class BottomBarProvider extends ChangeNotifier {
       context,
       items[index]['routeName'] as String,
     );
-
     selectedIndex = index;
-
     notifyListeners();
   }
 }

@@ -15,14 +15,12 @@ import 'package:places/helpers/app_assets.dart';
 ///
 /// Параметры:
 /// * [place] - модель места (обязательный);
-/// * [onAddToFavorites] - коллбэк нажатия на добавление в избранное;
-/// * [onRemoveFromFavorites] - коллбэк нажатия на удаление из избранного;
+/// * [toggleFavorites] - коллбэк нажатия на добавление в избранное / удаление из избранного;
 class PlaceCard extends BasePlaceCard {
-  final VoidCallback onAddToFavorites;
-  final VoidCallback onRemoveFromFavorites;
+  final VoidCallback toggleFavorites;
 
   @override
-  late final Widget actions;
+  final Widget actions;
 
   @override
   bool get showDetails => true;
@@ -30,31 +28,26 @@ class PlaceCard extends BasePlaceCard {
   PlaceCard(
     Place place, {
     Key? key,
-    required this.onAddToFavorites,
-    required this.onRemoveFromFavorites,
-  }) : super(
+    required this.toggleFavorites,
+  })  : actions = _PlaceActions(
+          isFavorite: place.isFavorite,
+          toggleFavorites: toggleFavorites,
+        ),
+        super(
           place,
           key: key,
-        ) {
-    actions = _PlaceActions(
-      isFavorite: place.isFavorite,
-      onAddToFavorites: onAddToFavorites,
-      onRemoveFromFavorites: onRemoveFromFavorites,
-    );
-  }
+        );
 }
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatefulWidget {
   final bool isFavorite;
-  final VoidCallback onAddToFavorites;
-  final VoidCallback onRemoveFromFavorites;
+  final VoidCallback toggleFavorites;
 
   const _PlaceActions({
     Key? key,
     required this.isFavorite,
-    required this.onAddToFavorites,
-    required this.onRemoveFromFavorites,
+    required this.toggleFavorites,
   }) : super(key: key);
 
   @override
@@ -70,14 +63,12 @@ class _PlaceActionsState extends State<_PlaceActions> {
   @override
   void initState() {
     super.initState();
-
     _actionStreamController.add(widget.isFavorite);
   }
 
   @override
   void dispose() {
     super.dispose();
-
     _actionStreamController.close();
   }
 
@@ -90,30 +81,23 @@ class _PlaceActionsState extends State<_PlaceActions> {
       child: StreamBuilder<bool>(
         stream: _actionStreamController.stream,
         builder: (context, snapshot) {
-          final isFavorite = snapshot.hasData && (snapshot.data ?? false);
+          final isFavorite = snapshot.data ?? false;
 
           // Переключение кнопок "В избранное"/"Убрать из избранного"
-          return isFavorite
-              ? InkWell(
-                  child: SvgPicture.asset(AppAssets.heartFilled),
-                  onTap: _onRemoveFromFavorites,
-                )
-              : InkWell(
-                  child: SvgPicture.asset(AppAssets.heart),
-                  onTap: _onAddToFavorites,
-                );
+          return InkWell(
+            child: SvgPicture.asset(
+              isFavorite ? AppAssets.heartFilled : AppAssets.heart,
+            ),
+            onTap: () => _toggleFavorites(isFavorite),
+          );
         },
       ),
     );
   }
 
-  void _onRemoveFromFavorites() {
-    widget.onRemoveFromFavorites();
-    _actionStreamController.add(false);
-  }
-
-  void _onAddToFavorites() {
-    widget.onAddToFavorites();
-    _actionStreamController.add(true);
+  /// Переключение кнопки "Добавить в избранное" / "Убрать из избранного"
+  void _toggleFavorites(bool isFavorite) {
+    widget.toggleFavorites();
+    _actionStreamController.add(!isFavorite);
   }
 }

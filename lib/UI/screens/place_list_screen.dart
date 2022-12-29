@@ -34,6 +34,9 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
   /// Контроллер стрима искомых мест.
   final _placesStreamController = StreamController<List<Place>>();
 
+  /// Стрим искомых мест.
+  Stream<List<Place>> get placesStream => _placesStreamController.stream;
+
   /// Фильтры мест.
   Set<PlaceTypes> _placeTypeFilters = PlaceTypes.values.toSet();
 
@@ -275,7 +278,7 @@ class _SliverPlaceList extends StatelessWidget {
     final orientation = mediaQuery.orientation;
     final screenHeight = mediaQuery.size.height;
     final dataStorage = _InheritedPlaceListScreenState.of(context);
-    final placesStream = dataStorage._placesStreamController.stream;
+    final placesStream = dataStorage.placesStream;
 
     /// Если места не прогрузились, то отображать прогрессбар.
     return StreamBuilder<List<Place>>(
@@ -288,18 +291,15 @@ class _SliverPlaceList extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   childCount: places!.length,
                   (_, index) {
-                    final interactorProvider =
-                        context.read<PlaceInteractorProvider>();
                     final place = places[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: PlaceCard(
                         place,
-                        onAddToFavorites: () =>
-                            interactorProvider.addToFavorites(place),
-                        onRemoveFromFavorites: () =>
-                            interactorProvider.removeFromFavorites(place),
+                        toggleFavorites: () => context
+                            .read<PlaceInteractorProvider>()
+                            .toggleFavorites(place),
                       ),
                     );
                   },
