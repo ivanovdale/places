@@ -4,24 +4,20 @@ import 'package:places/providers/interactor_provider.dart';
 
 /// Вьюмодель для экрана планируемых к посещению/посещённых мест.
 class VisitingProvider extends ChangeNotifier {
-  PlaceInteractorProvider? interactorProvider;
+  final List<Place> toVisitPlaces;
 
-  late List<Place> toVisitPlaces;
+  final List<Place> visitedPlaces;
+  final PlaceInteractorProvider? interactorProvider;
 
-  late List<Place> visitedPlaces;
-
-  VisitingProvider(this.interactorProvider) {
-    toVisitPlaces =
-        interactorProvider?.placeInteractor.getFavoritePlaces() ?? [];
-
-    visitedPlaces =
-        interactorProvider?.placeInteractor.getVisitedPlaces() ?? [];
-  }
+  VisitingProvider(this.interactorProvider)
+      : toVisitPlaces =
+            interactorProvider?.placeInteractor.getFavoritePlaces() ?? [],
+        visitedPlaces =
+            interactorProvider?.placeInteractor.getVisitedPlaces() ?? [];
 
   /// Удаляет место из списка планируемых к посещению.
   void removeFromFavorites(Place place) {
-    interactorProvider?.removeFromFavorites(place);
-
+    interactorProvider?.toggleFavorites(place);
     notifyListeners();
   }
 
@@ -31,7 +27,6 @@ class VisitingProvider extends ChangeNotifier {
     toVisitPlaces
       ..removeAt(placeIndex)
       ..insert(destinationIndex, place);
-
     notifyListeners();
   }
 
@@ -41,14 +36,12 @@ class VisitingProvider extends ChangeNotifier {
     visitedPlaces
       ..removeAt(placeIndex)
       ..insert(destinationIndex, place);
-
     notifyListeners();
   }
 
   /// Обновляет дату желаемого посещения места.
   void updateToVisitPlaceDateTime(int id, DateTime dateTime) {
     toVisitPlaces.firstWhere((place) => place.id == id).visitDate = dateTime;
-
     notifyListeners();
   }
 }

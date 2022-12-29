@@ -48,15 +48,11 @@ class PlaceInteractor {
   }
 
   /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
-  void addToFavorites(Place place) {
-    _favoritePlaces.add(place);
-    place.isFavorite = true;
-  }
-
   /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
-  void removeFromFavorites(Place place) {
-    _favoritePlaces.remove(place);
-    place.isFavorite = false;
+  void toggleFavorites(Place place) {
+    final isFavorite = place.isFavorite;
+    place.isFavorite = !place.isFavorite;
+    isFavorite ? _favoritePlaces.remove(place) : _favoritePlaces.add(place);
   }
 
   /// Возвращает список посещенных мест.

@@ -4,28 +4,19 @@ import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 
 /// Провайдер для интерактора.
+///
+/// В конструктор передаётся репозиторий, с которым работает интерактор.
 class PlaceInteractorProvider extends ChangeNotifier {
   /// Интерактор для работы с местами.
-  late final PlaceInteractor placeInteractor;
+  final PlaceInteractor placeInteractor;
 
-  /// Репозиторий, с которым работает интерактор.
-  late final PlaceRepository _placeRepository;
-
-  PlaceInteractorProvider(this._placeRepository) {
-    placeInteractor = PlaceInteractor(_placeRepository);
-  }
+  PlaceInteractorProvider(PlaceRepository placeRepository)
+      : placeInteractor = PlaceInteractor(placeRepository);
 
   /// Добавляет место в избранное и уведомляет слушателей.
-  void addToFavorites(Place place) {
-    placeInteractor.addToFavorites(place);
-
-    notifyListeners();
-  }
-
   /// Убирает место из избранного и уведомляет слушателей.
-  void removeFromFavorites(Place place) {
-    placeInteractor.removeFromFavorites(place);
-
+  void toggleFavorites(Place place) {
+    placeInteractor.toggleFavorites(place);
     notifyListeners();
   }
 }

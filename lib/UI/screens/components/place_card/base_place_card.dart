@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -10,7 +8,7 @@ import 'package:places/utils/visiting_date_formatter.dart';
 /// Абстрактный класс [BasePlaceCard]. Отображает краткую информацию о месте.
 ///
 /// Имеет поля, которые необходимо переопределить в потомках:
-/// * [actions] - список действий с карточкой. Список мап, содержащих картинку и коллбэк.
+/// * [actions] - кнопки для работы с карточкой.
 /// * [showDetails] - признак отображения детальной информации (краткого описания) места.
 ///
 /// Параметры:
@@ -18,7 +16,7 @@ import 'package:places/utils/visiting_date_formatter.dart';
 abstract class BasePlaceCard extends StatelessWidget {
   final Place place;
   abstract final bool showDetails;
-  abstract final List<Map<String, Object?>> actions;
+  abstract final Widget actions;
 
   const BasePlaceCard(
     this.place, {
@@ -75,10 +73,10 @@ abstract class BasePlaceCard extends StatelessWidget {
 ///
 /// Имеет параметры:
 /// * [place] - модель места;
-/// * [actions] - список действий с карточкой.
+/// * [actions] - кнопки для работы с карточкой.
 class _PlaceCardTop extends StatelessWidget {
   final Place place;
-  final List<Map<String, Object?>> actions;
+  final Widget actions;
 
   const _PlaceCardTop(
     this.place,
@@ -142,49 +140,11 @@ class _PlaceCardTop extends StatelessWidget {
                 top: 19,
               ),
               // Действия с карточкой.
-              child: _PlaceActions(actions),
+              child: actions,
             ),
           ],
         ),
       ],
-    );
-  }
-}
-
-/// Список кнопок для работы с карточкой.
-///
-/// Параметр:
-/// * [actions] - список действий с карточкой.
-class _PlaceActions extends StatelessWidget {
-  final List<Map<String, Object?>> actions;
-
-  const _PlaceActions(
-    this.actions, {
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: actions.map((action) {
-        return Padding(
-          padding: const EdgeInsets.only(
-            left: 18.0,
-          ),
-          child: InkWell(
-            child: SvgPicture.asset(action['icon'] as String),
-            onTap: (action['voidCallback'] as VoidCallback?) ??
-                () {
-                  // TODO(daniiliv): Здесь будет реальный вызов.
-                  if (kDebugMode) {
-                    print(
-                      '"${(action['icon'] as String).split('/')[2].replaceAll('.svg', '')}" button pressed.',
-                    );
-                  }
-                },
-          ),
-        );
-      }).toList(),
     );
   }
 }

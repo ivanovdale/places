@@ -85,6 +85,8 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
         : VisitedPlaceCard(
             place,
             key: GlobalKey(),
+            // TODO(daniiliv): Вызов реальной функции
+            onSharePressed: () {},
             onDeletePressed: () => widget.deletePlaceFromList(place),
           );
   }
