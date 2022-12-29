@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
@@ -30,14 +31,14 @@ class PlaceListScreen extends StatefulWidget {
 /// Обновляет список при добавлении нового места.
 /// Хранит в себе значения фильтров.
 class _PlaceListScreenState extends State<PlaceListScreen> {
-  /// Искомые места.
-  List<Place>? places;
+  /// Контроллер стрима искомых мест.
+  final _placesStreamController = StreamController<List<Place>>();
 
   /// Фильтры мест.
-  Set<PlaceTypes> placeTypeFilters = PlaceTypes.values.toSet();
+  Set<PlaceTypes> _placeTypeFilters = PlaceTypes.values.toSet();
 
   /// Радиус поиска.
-  double radius = maxRangeValue;
+  double _radius = maxRangeValue;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
         child: const _PlaceListBody(),
       ),
       floatingActionButton: _AddNewPlaceButton(
-        onPressed: () => openAddPlaceScreen(context),
+        onPressed: () => _openAddPlaceScreen(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -62,29 +63,50 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
   @override
   void initState() {
     super.initState();
-    initializePlaces();
+
+    _applyFilters();
   }
 
-  /// Инициализирует список мест с помощью фильтра по умолчанию.
-  Future<void> initializePlaces() async {
+  @override
+  void dispose() {
+    super.dispose();
+
+    _placesStreamController.close();
+  }
+
+  /// Применяет переданные фильтры к списку мест и обновляет список.
+  Future<void> _applyFilters() async {
     final placeFilterRequest = PlacesFilterRequest(
       coordinatePoint: mocked.userCoordinates,
-      radius: radius,
-      typeFilter: placeTypeFilters.toList(),
+      radius: _radius,
+      typeFilter: _placeTypeFilters.toList(),
     );
 
-    places = await context
-        .read<PlaceInteractorProvider>()
-        .placeInteractor
-        .getFilteredPlaces(placeFilterRequest);
+    try {
+      final places = await context
+          .read<PlaceInteractorProvider>()
+          .placeInteractor
+          .getFilteredPlaces(placeFilterRequest);
 
-    setState(() {});
+      _placesStreamController.add(places);
+    } on Exception catch (e) {
+      _placesStreamController.addError(e.toString());
+    }
+  }
+
+  /// Сохраняет переданные фильтры в виджете-состоянии.
+  void _saveFilters(
+    Set<PlaceTypes> placeTypeFilters,
+    double radius,
+  ) {
+    _placeTypeFilters = placeTypeFilters;
+    _radius = radius;
   }
 
   /// Открывает экран добавления места.
   ///
   /// Если было создано новое место, добавляет его в список мест и обновляет экран.
-  Future<void> openAddPlaceScreen(BuildContext context) async {
+  Future<void> _openAddPlaceScreen(BuildContext context) async {
     var newPlace = await Navigator.pushNamed<Place?>(
       context,
       AppRouter.addPlace,
@@ -95,35 +117,9 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
           .read<PlaceInteractorProvider>()
           .placeInteractor
           .addNewPlace(newPlace);
-      places?.add(newPlace);
 
-      setState(() {});
+      await _applyFilters();
     }
-  }
-
-  /// Применяет переданные фильтры к списку мест и обновляет список.
-  Future<void> applyFilters() async {
-    final placeFilterRequest = PlacesFilterRequest(
-      coordinatePoint: mocked.userCoordinates,
-      radius: radius,
-      typeFilter: placeTypeFilters.toList(),
-    );
-
-    places = await context
-        .read<PlaceInteractorProvider>()
-        .placeInteractor
-        .getFilteredPlaces(placeFilterRequest);
-
-    setState(() {});
-  }
-
-  /// Сохраняет переданные фильтры в виджете-состоянии.
-  void saveFilters(
-    Set<PlaceTypes> placeTypeFilters,
-    double radius,
-  ) {
-    this.placeTypeFilters = placeTypeFilters;
-    this.radius = radius;
   }
 }
 
@@ -140,8 +136,7 @@ class _InheritedPlaceListScreenState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_InheritedPlaceListScreenState old) {
-    // Перерисовка экрана, если список мест обновился.
-    return listEquals(old.data.places, data.places);
+    return true;
   }
 
   static _PlaceListScreenState of(BuildContext context) {
@@ -157,13 +152,10 @@ class _PlaceListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = _InheritedPlaceListScreenState.of(context);
-    final places = dataStorage.places;
-
-    return CustomScrollView(
+    return const CustomScrollView(
       slivers: [
-        const _SliverAppBar(),
-        _SliverPlaceList(places: places),
+        _SliverAppBar(),
+        _SliverPlaceList(),
       ],
     );
   }
@@ -240,7 +232,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
               // Не обрабатывать нажатия, когда строка поиска уже скрыта.
               onTap: isScrollStarted
                   ? null
-                  : () => navigateToPlaceSearchScreen(context),
+                  : () => _navigateToPlaceSearchScreen(context),
               suffixIcon: _FilterButton(
                 isButtonDisabled: isScrollStarted,
               ),
@@ -257,15 +249,15 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   /// Открывает экран поиска мест.
-  void navigateToPlaceSearchScreen(BuildContext context) {
+  void _navigateToPlaceSearchScreen(BuildContext context) {
     final dataStorage = _InheritedPlaceListScreenState.of(context);
 
     Navigator.pushNamed(
       context,
       AppRouter.placeSearch,
       arguments: {
-        'placeTypeFilters': dataStorage.placeTypeFilters,
-        'radius': dataStorage.radius,
+        'placeTypeFilters': dataStorage._placeTypeFilters,
+        'radius': dataStorage._radius,
       },
     );
   }
@@ -273,11 +265,8 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
 
 /// Список достопримечательностей на сливере.
 class _SliverPlaceList extends StatelessWidget {
-  final List<Place>? places;
-
   const _SliverPlaceList({
     Key? key,
-    this.places,
   }) : super(key: key);
 
   @override
@@ -285,41 +274,51 @@ class _SliverPlaceList extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final orientation = mediaQuery.orientation;
     final screenHeight = mediaQuery.size.height;
+    final dataStorage = _InheritedPlaceListScreenState.of(context);
+    final placesStream = dataStorage._placesStreamController.stream;
 
     /// Если места не прогрузились, то отображать прогрессбар.
-    return places != null
-        ? SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              childCount: places!.length,
-              (_, index) {
-                final interactorProvider = context.watch<PlaceInteractorProvider>();
-                final place = places![index];
+    return StreamBuilder<List<Place>>(
+      stream: placesStream,
+      builder: (_, snapshot) {
+        final places = snapshot.data;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: PlaceCard(
-                    place,
-                    onAddToFavorites: () =>
-                        interactorProvider.addToFavorites(place),
-                    onRemoveFromFavorites: () =>
-                        interactorProvider.removeFromFavorites(place),
-                  ),
-                );
-              },
-            ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              // Для горизонтальной ориентации отображаем 2 ряда карточек.
-              crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
-              mainAxisExtent: orientation == Orientation.portrait
-                  ? screenHeight * 0.3
-                  : screenHeight * 0.65,
-            ),
-          )
-        : const SliverFillRemaining(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+        return snapshot.hasData
+            ? SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: places!.length,
+                  (_, index) {
+                    final interactorProvider =
+                        context.read<PlaceInteractorProvider>();
+                    final place = places[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: PlaceCard(
+                        place,
+                        onAddToFavorites: () =>
+                            interactorProvider.addToFavorites(place),
+                        onRemoveFromFavorites: () =>
+                            interactorProvider.removeFromFavorites(place),
+                      ),
+                    );
+                  },
+                ),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  // Для горизонтальной ориентации отображаем 2 ряда карточек.
+                  crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
+                  mainAxisExtent: orientation == Orientation.portrait
+                      ? screenHeight * 0.3
+                      : screenHeight * 0.65,
+                ),
+              )
+            : const SliverFillRemaining(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+      },
+    );
   }
 }
 
@@ -346,22 +345,22 @@ class _FilterButton extends StatelessWidget {
       ),
       color: theme.primaryColorDark,
       onPressed:
-          isButtonDisabled ? null : () => navigateToFiltersScreen(context),
+          isButtonDisabled ? null : () => _navigateToFiltersScreen(context),
     );
   }
 
   /// Открывает экран фильтрации мест.
   ///
   /// После выбора фильтров сохраняет их в стейте текущего экрана и затем применяет их.
-  Future<void> navigateToFiltersScreen(BuildContext context) async {
+  Future<void> _navigateToFiltersScreen(BuildContext context) async {
     final dataStorage = _InheritedPlaceListScreenState.of(context);
 
     final selectedFilters = await Navigator.pushNamed<Map<String, Object>>(
       context,
       AppRouter.placeFilters,
       arguments: {
-        'placeTypeFilters': dataStorage.placeTypeFilters,
-        'radius': dataStorage.radius,
+        'placeTypeFilters': dataStorage._placeTypeFilters,
+        'radius': dataStorage._radius,
       },
     );
 
@@ -370,8 +369,8 @@ class _FilterButton extends StatelessWidget {
           selectedFilters['placeTypeFilters'] as Set<PlaceTypes>;
       final radius = selectedFilters['radius'] as double;
 
-      dataStorage.saveFilters(placeTypeFilters, radius);
-      await dataStorage.applyFilters();
+      dataStorage._saveFilters(placeTypeFilters, radius);
+      await dataStorage._applyFilters();
     }
   }
 }
