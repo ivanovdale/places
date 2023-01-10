@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/empty_visiting_place_list/base_empty_visiting_place_list.dart';
-import 'package:places/UI/screens/components/empty_visiting_place_list/empty_to_visit_place_list.dart';
 import 'package:places/UI/screens/components/place_card/to_visit_place_card.dart';
+import 'package:places/UI/screens/components/placeholders/empty_to_visit_placeholder.dart';
+import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
 import 'package:places/UI/screens/components/visiting_place_list/base_visiting_place_list.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/providers/visiting_provider.dart';
 
 /// Список планируемых к посещению мест. Наследуется от [BaseVisitingPlaceList].
 ///
-/// Если список пуст, будет отображена соответствующая информация ([EmptyToVisitPlaceList]).
+/// Если список пуст, будет отображена соответствующая информация ([emptyVisitingList]).
 ///
 /// Переопределяет поля:
 /// * [emptyVisitingList] - виджет для отображения пустого списка;
 /// * [placeCardType] - тип карточки места.
 class ToVisitPlaceList extends BaseVisitingPlaceList {
   @override
-  late final BaseEmptyVisitingList emptyVisitingList;
+  final InfoPlaceHolder emptyVisitingList;
 
   @override
-  late final Type placeCardType;
+  final Type placeCardType;
 
   ToVisitPlaceList(
     VisitingProvider viewModel, {
     Key? key,
-  }) : super(
+  })  : emptyVisitingList = const EmptyToVisitPlaceHolder(),
+        placeCardType = ToVisitPlaceCard,
+        super(
           listOfPlaces: viewModel.toVisitPlaces,
           viewModel: viewModel,
           key: key,
-        ) {
-    emptyVisitingList = const EmptyToVisitPlaceList();
-    placeCardType = ToVisitPlaceCard;
-  }
+        );
 
   @override
   void deletePlaceFromList(Place place) {

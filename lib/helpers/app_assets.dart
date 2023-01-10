@@ -17,8 +17,8 @@ class AppAssets {
   static const route = 'assets/icons/route.svg';
 
   // Иконки для пустых списков посещенных/планируемых к посещению мест.
-  static const addNewCard = 'assets/icons/addNewCard.png';
-  static const emptyRoute = 'assets/icons/emptyRoute.png';
+  static const addNewCard = 'assets/icons/add_new_card.svg';
+  static const emptyRoute = 'assets/icons/empty_route.svg';
 
   // Иконки для типов мест.
   static const cafe = 'assets/icons/cafe.svg';
@@ -47,4 +47,7 @@ class AppAssets {
   static const camera = 'assets/icons/camera.svg';
   static const photo = 'assets/icons/photo.svg';
   static const file = 'assets/icons/file.svg';
+
+  // Иконка ошибки.
+  static const error = 'assets/icons/error.svg';
 }
