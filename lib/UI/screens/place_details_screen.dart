@@ -6,6 +6,7 @@ import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
+import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -27,37 +28,40 @@ class PlaceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(daniiliv): Для ревью. Норм ли здесь FutureBuilder? Как можно ещё оптимально получать данные асинхронно и отображать их?
     return FutureBuilder<Place>(
       future: getPlaceDetails(placeId, context),
       builder: (context, snapshot) {
-        return snapshot.hasData
-            ? DraggableScrollableSheet(
-                initialChildSize: 0.9,
-                maxChildSize: 0.9,
-                minChildSize: 0.5,
-                builder: (_, scrollController) => ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                  child: Scaffold(
-                    bottomSheet: ChangeNotifierProvider(
-                      create: (context) => PlaceDetailsProvider(),
-                      child: CustomScrollView(
-                        controller: scrollController,
-                        slivers: [
-                          _SliverAppBarPlacePhotos(snapshot.data!),
-                          _SliverPlaceDetails(snapshot.data!),
-                        ],
-                      ),
-                    ),
+        if (snapshot.hasError) {
+          return const ErrorPlaceHolder();
+        } else if (snapshot.hasData) {
+          return DraggableScrollableSheet(
+            initialChildSize: 0.9,
+            maxChildSize: 0.9,
+            minChildSize: 0.5,
+            builder: (_, scrollController) => ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              child: Scaffold(
+                bottomSheet: ChangeNotifierProvider(
+                  create: (context) => PlaceDetailsProvider(),
+                  child: CustomScrollView(
+                    controller: scrollController,
+                    slivers: [
+                      _SliverAppBarPlacePhotos(snapshot.data!),
+                      _SliverPlaceDetails(snapshot.data!),
+                    ],
                   ),
                 ),
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              );
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
   }
