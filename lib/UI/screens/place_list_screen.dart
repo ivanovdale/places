@@ -6,6 +6,7 @@ import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
+import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_filters_screen.dart';
 import 'package:places/domain/model/place.dart';
@@ -286,37 +287,43 @@ class _SliverPlaceList extends StatelessWidget {
       builder: (_, snapshot) {
         final places = snapshot.data;
 
-        return snapshot.hasData
-            ? SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: places!.length,
-                  (_, index) {
-                    final place = places[index];
+        if (snapshot.hasData) {
+          return SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              childCount: places!.length,
+              (_, index) {
+                final place = places[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: PlaceCard(
-                        place,
-                        toggleFavorites: () => context
-                            .read<PlaceInteractorProvider>()
-                            .toggleFavorites(place),
-                      ),
-                    );
-                  },
-                ),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  // Для горизонтальной ориентации отображаем 2 ряда карточек.
-                  crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
-                  mainAxisExtent: orientation == Orientation.portrait
-                      ? screenHeight * 0.3
-                      : screenHeight * 0.65,
-                ),
-              )
-            : const SliverFillRemaining(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: PlaceCard(
+                    place,
+                    toggleFavorites: () => context
+                        .read<PlaceInteractorProvider>()
+                        .toggleFavorites(place),
+                  ),
+                );
+              },
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              // Для горизонтальной ориентации отображаем 2 ряда карточек.
+              crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
+              mainAxisExtent: orientation == Orientation.portrait
+                  ? screenHeight * 0.3
+                  : screenHeight * 0.65,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return const SliverFillRemaining(
+            child: ErrorPlaceHolder(),
+          );
+        } else {
+          return const SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
       },
     );
   }

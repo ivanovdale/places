@@ -31,37 +31,37 @@ class PlaceDetailsScreen extends StatelessWidget {
     return FutureBuilder<Place>(
       future: getPlaceDetails(placeId, context),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const ErrorPlaceHolder();
-        } else if (snapshot.hasData) {
-          return DraggableScrollableSheet(
-            initialChildSize: 0.9,
-            maxChildSize: 0.9,
-            minChildSize: 0.5,
-            builder: (_, scrollController) => ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-              child: Scaffold(
-                bottomSheet: ChangeNotifierProvider(
-                  create: (context) => PlaceDetailsProvider(),
-                  child: CustomScrollView(
-                    controller: scrollController,
-                    slivers: [
-                      _SliverAppBarPlacePhotos(snapshot.data!),
-                      _SliverPlaceDetails(snapshot.data!),
-                    ],
+        return snapshot.hasData || snapshot.hasError
+            ? DraggableScrollableSheet(
+                initialChildSize: 0.9,
+                maxChildSize: 0.9,
+                minChildSize: 0.5,
+                builder: (_, scrollController) => ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                  child: Scaffold(
+                    bottomSheet: snapshot.hasData
+                        ? ChangeNotifierProvider(
+                            create: (context) => PlaceDetailsProvider(),
+                            child: CustomScrollView(
+                              controller: scrollController,
+                              slivers: [
+                                _SliverAppBarPlacePhotos(snapshot.data!),
+                                _SliverPlaceDetails(snapshot.data!),
+                              ],
+                            ),
+                          )
+                        : const Center(
+                            child: ErrorPlaceHolder(),
+                          ),
                   ),
                 ),
-              ),
-            ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
+              );
       },
     );
   }
