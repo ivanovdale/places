@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-/// Отображает информацию о пустом списке мест.
+/// Отображает плейсхолдер с информацией.
 ///
-/// Имеет поля, которые необходимо переопределить в потомках:
-/// * [emptyInfo] - информация об отсутсвии записей;
-/// * [emptyIconPath] - иконка пустого списка.
-abstract class BaseEmptyVisitingList extends StatelessWidget {
-  static const double _iconSize = 64.0;
+/// Для ошибок/предупреждений.
+abstract class InfoPlaceHolder extends StatelessWidget {
+  final double iconSize;
+  abstract final String iconPath;
+  abstract final String infoText;
+  abstract final String descriptionText;
 
-  abstract final String emptyInfo;
-  abstract final String emptyIconPath;
-
-  const BaseEmptyVisitingList({
+  const InfoPlaceHolder({
     Key? key,
+    required this.iconSize,
   }) : super(key: key);
 
   @override
@@ -25,16 +24,17 @@ abstract class BaseEmptyVisitingList extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          emptyIconPath,
-          height: _iconSize,
-          width: _iconSize,
+        SvgPicture.asset(
+          iconPath,
+          height: iconSize,
+          width: iconSize,
+          color: secondaryColor,
         ),
         const SizedBox(
           height: 24,
         ),
         Text(
-          AppStrings.empty,
+          infoText,
           style: textTheme.subtitle1?.copyWith(
             color: secondaryColor,
           ),
@@ -43,7 +43,7 @@ abstract class BaseEmptyVisitingList extends StatelessWidget {
           height: 8,
         ),
         Text(
-          emptyInfo,
+          descriptionText,
           style: textTheme.bodyText2?.copyWith(
             color: secondaryColor,
             height: 1.2,

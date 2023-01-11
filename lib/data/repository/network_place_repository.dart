@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:places/API/dio_api.dart';
+import 'package:places/API/dio_query_util.dart';
 import 'package:places/data/dto/place_dto.dart';
 import 'package:places/data/repository/place_mapper.dart';
 import 'package:places/data/repository/place_repository.dart';
@@ -23,10 +24,12 @@ class NetworkPlaceRepository implements PlaceRepository {
   Future<Place> addNewPlace(Place place) async {
     final placeDto = PlaceMapper.placeToDto(place);
     final body = jsonEncode(placeDto.toJson());
-    final response =
-        await _apiUtil.httpClient.post<String>('/place', data: body);
-
-    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
+    final response = await DioQueryUtil.handleQuery(
+      _apiUtil,
+      requestType: RequestType.post,
+      uri: '/place',
+      data: body,
+    );
     final newPlaceDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
@@ -37,11 +40,12 @@ class NetworkPlaceRepository implements PlaceRepository {
   /// Получает место по id.
   @override
   Future<Place> getPlaceById(String id) async {
-    final response = await _apiUtil.httpClient.get<String>(
-      '/place/$id',
+    final uri = '/place/$id';
+    final response = await DioQueryUtil.handleQuery(
+      _apiUtil,
+      requestType: RequestType.get,
+      uri: uri,
     );
-
-    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
     final placeDto = PlaceDTO.fromJson(
       jsonDecode(response.data as String) as Map<String, dynamic>,
     );
@@ -52,12 +56,13 @@ class NetworkPlaceRepository implements PlaceRepository {
   /// Получает список всех мест.
   @override
   Future<List<Place>> getPlaces() async {
-    final response = await _apiUtil.httpClient.get<String>('/place');
-
-    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
+    final response = await DioQueryUtil.handleQuery(
+      _apiUtil,
+      requestType: RequestType.get,
+      uri: '/place',
+    );
     final rawPlacesJson = (jsonDecode(response.data as String) as List<dynamic>)
         .cast<Map<String, dynamic>>();
-
     final placeList = rawPlacesJson
         .map((rawPlaceJson) =>
             PlaceMapper.placeFromDto(PlaceDTO.fromJson(rawPlaceJson)))
@@ -73,13 +78,14 @@ class NetworkPlaceRepository implements PlaceRepository {
   ) async {
     final placesFilterRequestDto = placesFilterRequest.toDto();
     final body = jsonEncode(placesFilterRequestDto.toJson());
-    final response =
-        await _apiUtil.httpClient.post<String>('/filtered_places', data: body);
-
-    // TODO(daniiliv): Тех.долг - нужна обработка ошибок.
+    final response = await DioQueryUtil.handleQuery(
+      _apiUtil,
+      requestType: RequestType.post,
+      uri: '/filtered_places',
+      data: body,
+    );
     final rawPlacesJson = (jsonDecode(response.data as String) as List<dynamic>)
         .cast<Map<String, dynamic>>();
-
     final placeList = rawPlacesJson
         .map((rawPlaceJson) =>
             PlaceMapper.placeFromDto(PlaceDTO.fromJson(rawPlaceJson)))

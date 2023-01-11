@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_icon_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
+import 'package:places/UI/screens/components/placeholders/places_not_found_placeholder.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
 import 'package:places/providers/place_search_interactor_provider.dart';
@@ -717,40 +716,8 @@ class _PlacesNotFoundInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final secondaryColor = theme.colorScheme.secondary.withOpacity(0.56);
-
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            AppAssets.search,
-            width: 64,
-            height: 64,
-            color: secondaryColor,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Text(
-            AppStrings.nothingFound,
-            style: theme.textTheme.subtitle1?.copyWith(
-              color: secondaryColor,
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            AppStrings.searchAdvice,
-            style: theme.textTheme.bodyText2?.copyWith(
-              color: secondaryColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return const Expanded(
+      child: PlacesNotFoundPlaceHolder(),
     );
   }
 }

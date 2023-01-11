@@ -96,4 +96,6 @@ class AppStrings {
 
   // Общие строковые константы.
   static const newPlace = 'новое место';
+  static const error = 'ошибка';
+  static const errorDescription = 'Что-то пошло не так\nПопробуйте позже.';
 }
