@@ -26,7 +26,7 @@ class NetworkPlaceRepository implements PlaceRepository {
     final body = jsonEncode(placeDto.toJson());
     final response = await DioQueryUtil.handleQuery(
       _apiUtil,
-      dioMethod: DioMethod.post,
+      requestType: RequestType.post,
       uri: '/place',
       data: body,
     );
@@ -43,7 +43,7 @@ class NetworkPlaceRepository implements PlaceRepository {
     final uri = '/place/$id';
     final response = await DioQueryUtil.handleQuery(
       _apiUtil,
-      dioMethod: DioMethod.get,
+      requestType: RequestType.get,
       uri: uri,
     );
     final placeDto = PlaceDTO.fromJson(
@@ -58,7 +58,7 @@ class NetworkPlaceRepository implements PlaceRepository {
   Future<List<Place>> getPlaces() async {
     final response = await DioQueryUtil.handleQuery(
       _apiUtil,
-      dioMethod: DioMethod.get,
+      requestType: RequestType.get,
       uri: '/place',
     );
     final rawPlacesJson = (jsonDecode(response.data as String) as List<dynamic>)
@@ -80,7 +80,7 @@ class NetworkPlaceRepository implements PlaceRepository {
     final body = jsonEncode(placesFilterRequestDto.toJson());
     final response = await DioQueryUtil.handleQuery(
       _apiUtil,
-      dioMethod: DioMethod.post,
+      requestType: RequestType.post,
       uri: '/filtered_places',
       data: body,
     );

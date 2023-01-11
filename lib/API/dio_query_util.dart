@@ -8,24 +8,24 @@ class DioQueryUtil {
   ///
   /// Принимает параметры:
   /// * [apiUtil] - http-клиент DIO;
-  /// * [dioMethod] - метод http-запроса;
+  /// * [requestType] - метод http-запроса;
   /// * [uri] - запрашиваемый URI;
   /// * [data] - данные для POST метода.
   static Future<Response<String>> handleQuery(
     DioApi apiUtil, {
-    required DioMethod dioMethod,
+    required RequestType requestType,
     required String uri,
     Object? data,
   }) async {
     Response<String> response;
     try {
-      switch (dioMethod) {
-        case DioMethod.get:
+      switch (requestType) {
+        case RequestType.get:
           response = await apiUtil.httpClient.get<String>(
             uri,
           );
           break;
-        case DioMethod.post:
+        case RequestType.post:
           response = await apiUtil.httpClient.post<String>(uri, data: data);
           break;
       }
@@ -48,7 +48,7 @@ class DioQueryUtil {
 }
 
 /// Методы http клиента.
-enum DioMethod {
+enum RequestType {
   get,
   post,
 }
