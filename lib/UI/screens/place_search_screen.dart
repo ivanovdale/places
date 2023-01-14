@@ -11,7 +11,7 @@ import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
-import 'package:places/data/repository/network_place_repository.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
@@ -98,7 +98,7 @@ class _PlaceSearchBody extends StatefulWidget {
 /// Хранит состояние поиска мест.
 class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   final PlaceSearchInteractor _placeSearchInteractor =
-      PlaceSearchInteractor(GetIt.instance.get<NetworkPlaceRepository>());
+      PlaceSearchInteractor(GetIt.instance.get<PlaceRepository>());
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
