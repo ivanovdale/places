@@ -9,7 +9,6 @@ class SettingsInteractorProvider extends ChangeNotifier {
 
   void changeAppTheme() {
     settingsInteractor.changeAppTheme();
-
     notifyListeners();
   }
 }

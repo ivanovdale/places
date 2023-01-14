@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
@@ -10,11 +11,10 @@ import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/UI/screens/components/search_bar.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
+import 'package:places/data/repository/network_place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/providers/place_search_interactor_provider.dart';
-import 'package:provider/provider.dart';
 
 /// Экран поиска мест.
 ///
@@ -97,8 +97,8 @@ class _PlaceSearchBody extends StatefulWidget {
 
 /// Хранит состояние поиска мест.
 class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
-  late final PlaceSearchInteractor _placeSearchInteractor =
-      context.read<PlaceSearchInteractorProvider>().placeSearchInteractor;
+  final PlaceSearchInteractor _placeSearchInteractor =
+      PlaceSearchInteractor(GetIt.instance.get<NetworkPlaceRepository>());
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
@@ -113,6 +113,15 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   String _searchString = '';
 
   @override
+  void initState() {
+    super.initState();
+    // Активировать поле при открытии экрана.
+    _searchFocusNode.requestFocus();
+    _initializeFiltersAndUserCoordinates();
+    _addListenerToUpdatePlacesFoundList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _InheritedPlaceSearchBodyState(
       data: this,
@@ -123,18 +132,6 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _initializeFiltersAndUserCoordinates();
-
-    // Активировать поле при открытии экрана.
-    _searchFocusNode.requestFocus();
-
-    _addListenerToUpdatePlacesFoundList();
   }
 
   @override
