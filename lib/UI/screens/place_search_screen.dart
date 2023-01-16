@@ -101,7 +101,6 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
       PlaceSearchInteractor(GetIt.instance.get<PlaceRepository>());
 
   final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
 
   /// Найденные места.
   late List<Place> _placesFoundList = [];
@@ -115,8 +114,6 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   @override
   void initState() {
     super.initState();
-    // Активировать поле при открытии экрана.
-    _searchFocusNode.requestFocus();
     _initializeFiltersAndUserCoordinates();
     _addListenerToUpdatePlacesFoundList();
   }
@@ -138,7 +135,6 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   void dispose() {
     super.dispose();
     _searchController.dispose();
-    _searchFocusNode.dispose();
   }
 
   /// Устанавливает параметры поиска и координаты пользователя для интерактора.
@@ -213,11 +209,10 @@ class _SearchBar extends StatelessWidget {
 
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchController = dataStorage._searchController;
-    final searchFocusNode = dataStorage._searchFocusNode;
 
     return SearchBar(
       controller: searchController,
-      focusNode: searchFocusNode,
+      autofocus: true,
       suffixIcon: IconButton(
         icon: const Icon(Icons.cancel),
         color: theme.primaryColorDark,

@@ -10,6 +10,7 @@ class SearchBar extends StatelessWidget {
   final Widget? suffixIcon;
   final FocusNode? focusNode;
   final TextEditingController? controller;
+  final bool autofocus;
 
   const SearchBar({
     Key? key,
@@ -18,6 +19,7 @@ class SearchBar extends StatelessWidget {
     this.suffixIcon,
     this.focusNode,
     this.controller,
+    this.autofocus = false,
   }) : super(key: key);
 
   @override
@@ -60,6 +62,7 @@ class SearchBar extends StatelessWidget {
         textAlignVertical: TextAlignVertical.center,
         focusNode: focusNode,
         controller: controller,
+        autofocus: autofocus,
       ),
     );
   }
