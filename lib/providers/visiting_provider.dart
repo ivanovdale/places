@@ -11,7 +11,7 @@ class VisitingProvider extends ChangeNotifier {
 
   VisitingProvider(this.interactorProvider)
       : toVisitPlaces =
-            interactorProvider?.placeInteractor.getFavoritePlaces() ?? [],
+            interactorProvider?.placeInteractor.getToVisitPlaces() ?? [],
         visitedPlaces =
             interactorProvider?.placeInteractor.getVisitedPlaces() ?? [];
 

@@ -27,11 +27,14 @@ class PlaceInteractor {
     }
 
     // Добавляем пометку добавления в избранное для каждого места.
-    getFavoritePlaces().forEach((favoritePlace) {
-      filteredPlaces
-          .firstWhere((filteredPlace) =>
-              filteredPlace.id == favoritePlace.id && favoritePlace.isFavorite)
-          .isFavorite = true;
+    getFavoritePlaces()
+        .map((favoritePlace) => favoritePlace.id)
+        .toList()
+        .forEach((favoritePlaceId) {
+      final indexOfFilteredPlace = filteredPlaces
+          .indexWhere((filteredPlace) => filteredPlace.id == favoritePlaceId);
+
+      filteredPlaces[indexOfFilteredPlace].isFavorite = true;
     });
 
     return filteredPlaces;
@@ -42,9 +45,19 @@ class PlaceInteractor {
     return placeRepository.getPlaceById(id.toString());
   }
 
-  /// Возвращает список мест, планируемых к посещению.
+  /// Возвращает список избранных мест.
   List<Place> getFavoritePlaces() {
+    return _favoritePlaces;
+  }
+
+  /// Возвращает список мест, планируемых к посещению.
+  List<Place> getToVisitPlaces() {
     return _favoritePlaces.where((place) => !place.visited).toList();
+  }
+
+  /// Возвращает список посещенных мест.
+  List<Place> getVisitedPlaces() {
+    return _favoritePlaces.where((place) => place.visited).toList();
   }
 
   /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
@@ -52,12 +65,10 @@ class PlaceInteractor {
   void toggleFavorites(Place place) {
     final isFavorite = place.isFavorite;
     place.isFavorite = !place.isFavorite;
-    isFavorite ? _favoritePlaces.remove(place) : _favoritePlaces.add(place);
-  }
-
-  /// Возвращает список посещенных мест.
-  List<Place> getVisitedPlaces() {
-    return _favoritePlaces.where((place) => place.visited).toList();
+    isFavorite
+        ? _favoritePlaces
+            .removeWhere((favoritePlace) => favoritePlace.id == place.id)
+        : _favoritePlaces.add(place);
   }
 
   /// Делает пометку, что место посещено.
