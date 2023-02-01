@@ -21,7 +21,7 @@ class LabelFieldText extends StatelessWidget {
       padding: padding ?? EdgeInsets.zero,
       child: Text(
         labelText,
-        style: theme.textTheme.caption?.copyWith(
+        style: theme.textTheme.bodySmall?.copyWith(
           color: theme.colorScheme.secondary.withOpacity(0.56),
         ),
       ),

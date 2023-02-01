@@ -112,69 +112,69 @@ const fontWeight500 = FontWeight.w500;
 
 /// Общие настройки шрифтов.
 final _generalTextTheme = TextTheme(
-  headline4: AppTypography.roboto32Regular.copyWith(
+  headlineMedium: AppTypography.roboto32Regular.copyWith(
     fontWeight: fontWeight700,
   ),
-  headline5: AppTypography.roboto24Regular.copyWith(
+  headlineSmall: AppTypography.roboto24Regular.copyWith(
     fontWeight: fontWeight700,
   ),
-  subtitle1: AppTypography.roboto18Regular.copyWith(
+  titleMedium: AppTypography.roboto18Regular.copyWith(
     fontWeight: fontWeight500,
   ),
-  bodyText1: AppTypography.roboto16Regular,
-  button: AppTypography.roboto16Regular.copyWith(
+  bodyLarge: AppTypography.roboto16Regular,
+  labelLarge: AppTypography.roboto16Regular.copyWith(
     fontWeight: fontWeight500,
   ),
-  bodyText2: AppTypography.roboto14Regular,
-  caption: AppTypography.roboto12Regular,
+  bodyMedium: AppTypography.roboto14Regular,
+  bodySmall: AppTypography.roboto12Regular,
 );
 
 /// Настройки шрифтов для светлой темы.
 final _lightTextTheme = _generalTextTheme.copyWith(
-  headline4: _generalTextTheme.headline4?.copyWith(
+  headlineMedium: _generalTextTheme.headlineMedium?.copyWith(
     color: _martiniqueColor,
   ),
-  headline5: _generalTextTheme.headline5?.copyWith(
+  headlineSmall: _generalTextTheme.headlineSmall?.copyWith(
     color: _oxfordBlueColor,
   ),
-  subtitle1: _generalTextTheme.subtitle1?.copyWith(
+  titleMedium: _generalTextTheme.titleMedium?.copyWith(
     color: _martiniqueColor,
   ),
-  bodyText1: _generalTextTheme.bodyText1?.copyWith(
+  bodyLarge: _generalTextTheme.bodyLarge?.copyWith(
     color: _martiniqueColor,
   ),
-  button: _generalTextTheme.button?.copyWith(
+  labelLarge: _generalTextTheme.labelLarge?.copyWith(
     color: _oxfordBlueColor,
   ),
-  bodyText2: _generalTextTheme.bodyText2?.copyWith(
+  bodyMedium: _generalTextTheme.bodyMedium?.copyWith(
     color: _oxfordBlueColor,
   ),
-  caption: _generalTextTheme.caption?.copyWith(
+  bodySmall: _generalTextTheme.bodySmall?.copyWith(
     color: _oxfordBlueColor,
   ),
 );
 
 /// Настройки шрифтов для тёмной темы.
 final _darkTextTheme = _generalTextTheme.copyWith(
-  headline4: _generalTextTheme.headline4?.copyWith(
+  headlineMedium: _generalTextTheme.headlineMedium?.copyWith(
     color: _whiteColor,
   ),
-  headline5: _generalTextTheme.headline5?.copyWith(
+  headlineSmall: _generalTextTheme.headlineSmall?.copyWith(
     color: _whiteColor,
   ),
-  subtitle1: _generalTextTheme.subtitle1?.copyWith(
+  titleMedium: _generalTextTheme.titleMedium?.copyWith(
     color: _whiteColor,
   ),
-  bodyText1: _generalTextTheme.bodyText1?.copyWith(
+  bodyLarge: _generalTextTheme.bodyLarge?.copyWith(
     color: _whiteColor,
   ),
-  button: _generalTextTheme.button?.copyWith(
+  labelLarge: _generalTextTheme.labelLarge?.copyWith(
     color: _whiteColor,
   ),
-  bodyText2: _generalTextTheme.bodyText2?.copyWith(
+  bodyMedium: _generalTextTheme.bodyMedium?.copyWith(
     color: _whiteColor,
   ),
-  caption: _generalTextTheme.caption?.copyWith(
+  bodySmall: _generalTextTheme.bodySmall?.copyWith(
     color: _whiteColor,
   ),
 );

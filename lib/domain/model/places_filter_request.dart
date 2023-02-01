@@ -30,27 +30,27 @@ class PlacesFilterRequest {
     double? lat;
     double? lon;
     double? radius;
-    List<String>? typeFilter;
+    List<String>? typeFilterNames;
+    final coordinatePoint = this.coordinatePoint;
+    final typeFilter = this.typeFilter;
 
     // Если параметры координат и радиуса поиска заполнены, то добавим их в модель данных фильтра мест.
     if (coordinatePoint != null && this.radius != null && this.radius != 0) {
-      lat = coordinatePoint!.lat;
-      lon = coordinatePoint!.lon;
+      lat = coordinatePoint.lat;
+      lon = coordinatePoint.lon;
       radius = this.radius;
     }
 
-    if (this.typeFilter != null && this.typeFilter!.isNotEmpty) {
-      typeFilter = this
-          .typeFilter!
-          .map((typeFilterItem) => typeFilterItem.name)
-          .toList();
+    if (typeFilter != null && typeFilter.isNotEmpty) {
+      typeFilterNames =
+          typeFilter.map((typeFilterItem) => typeFilterItem.name).toList();
     }
 
     final placesFilterRequestDto = PlacesFilterRequestDto(
       lat: lat,
       lng: lon,
       radius: radius,
-      typeFilter: typeFilter,
+      typeFilter: typeFilterNames,
       nameFilter: nameFilter,
     );
 

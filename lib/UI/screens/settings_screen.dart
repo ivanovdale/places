@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.settings,
-        titleTextStyle: Theme.of(context).textTheme.subtitle1,
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
         centerTitle: true,
         toolbarHeight: 56,
       ),
@@ -91,7 +91,7 @@ class _DarkModeSettingState extends State<_DarkModeSetting> {
       children: [
         Text(
           AppStrings.darkTheme,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const Spacer(),
         CupertinoSwitch(
@@ -115,7 +115,7 @@ class _WatchTutorialInfo extends StatelessWidget {
       children: [
         Text(
           AppStrings.watchTutorial,
-          style: theme.textTheme.bodyText1,
+          style: theme.textTheme.bodyLarge,
         ),
         const Spacer(),
         Padding(

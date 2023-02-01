@@ -46,7 +46,7 @@ class SearchBar extends StatelessWidget {
           suffixIcon: suffixIcon,
           counterText: '',
           hintText: AppStrings.search,
-          hintStyle: theme.textTheme.bodyText1?.copyWith(
+          hintStyle: theme.textTheme.bodyLarge?.copyWith(
             color: secondaryColor,
           ),
           filled: true,

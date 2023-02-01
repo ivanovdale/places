@@ -35,7 +35,7 @@ abstract class InfoPlaceHolder extends StatelessWidget {
         ),
         Text(
           infoText,
-          style: textTheme.subtitle1?.copyWith(
+          style: textTheme.titleMedium?.copyWith(
             color: secondaryColor,
           ),
         ),
@@ -44,7 +44,7 @@ abstract class InfoPlaceHolder extends StatelessWidget {
         ),
         Text(
           descriptionText,
-          style: textTheme.bodyText2?.copyWith(
+          style: textTheme.bodyMedium?.copyWith(
             color: secondaryColor,
             height: 1.2,
           ),

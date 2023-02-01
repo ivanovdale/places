@@ -5,7 +5,7 @@ import 'package:places/helpers/app_router.dart';
 /// Хранит текущую выбранную вкладку.
 class BottomBarProvider extends ChangeNotifier {
   /// Иконки и страницы.
-  final items = [
+  final List<Map<String, String>> items = [
     {
       'icon': AppAssets.list,
       'activeIcon': AppAssets.listFilled,

@@ -142,7 +142,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
         ? AppStrings.placeListAppBarTitle
         : AppStrings.placeListAppBarTitleWithLineBreak;
     final titleTextStyle =
-        isScrollStarted ? theme.textTheme.subtitle1 : theme.textTheme.headline4;
+        isScrollStarted ? theme.textTheme.titleMedium : theme.textTheme.headlineMedium;
     final centerTitle = isScrollStarted;
 
     return Column(
@@ -340,7 +340,7 @@ class _AddNewPlaceButton extends StatelessWidget {
         color: colorSchemeOnBackgroundColor,
       ),
       borderRadius: BorderRadius.circular(24),
-      textStyle: theme.textTheme.bodyText2?.copyWith(
+      textStyle: theme.textTheme.bodyMedium?.copyWith(
         color: colorSchemeOnBackgroundColor,
         fontWeight: FontWeight.w700,
       ),

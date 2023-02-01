@@ -255,7 +255,7 @@ class _PlaceInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final themeBodyText2 = theme.textTheme.bodyText2;
+    final themeBodyText2 = theme.textTheme.bodyMedium;
     final onPrimaryColor = colorScheme.onPrimary;
     final secondaryColor = colorScheme.secondary;
     final primaryColor = theme.primaryColor;
@@ -266,7 +266,7 @@ class _PlaceInfo extends StatelessWidget {
       children: [
         _PlaceName(
           place.name,
-          textStyle: theme.textTheme.headline5!,
+          textStyle: theme.textTheme.headlineSmall!,
         ),
         _PlaceDetailsInfo(
           place.type.toString(),
@@ -411,7 +411,7 @@ class _BuildRouteButton extends StatelessWidget {
       ),
       child: CustomElevatedButton(
         AppStrings.buildRouteText,
-        textStyle: theme.textTheme.bodyText2?.copyWith(
+        textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: onSecondaryColor,
         ),
         backgroundColor: colorScheme.primary,
@@ -466,7 +466,7 @@ class _ToPlanButton extends StatelessWidget {
 
     return CustomTextButton(
       AppStrings.toPlanText,
-      textStyle: theme.textTheme.bodyText2?.copyWith(
+      textStyle: theme.textTheme.bodyMedium?.copyWith(
         color: secondaryColor,
       ),
       buttonLabel: SvgPicture.asset(
@@ -496,7 +496,7 @@ class _ToFavouritesButton extends StatelessWidget {
 
     return CustomTextButton(
       AppStrings.toFavourites,
-      textStyle: theme.textTheme.bodyText2?.copyWith(
+      textStyle: theme.textTheme.bodyMedium?.copyWith(
         color: buttonColor,
       ),
       buttonLabel: SvgPicture.asset(

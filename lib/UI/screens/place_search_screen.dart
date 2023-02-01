@@ -40,7 +40,7 @@ class PlaceSearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppStrings.placeListAppBarTitle,
-        titleTextStyle: theme.textTheme.subtitle1?.copyWith(
+        titleTextStyle: theme.textTheme.titleMedium?.copyWith(
           color: theme.primaryColorDark,
         ),
         centerTitle: true,
@@ -408,7 +408,7 @@ class _ClearSearchHistoryButton extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: CustomTextButton(
         AppStrings.clearHistory,
-        textStyle: theme.textTheme.button?.copyWith(
+        textStyle: theme.textTheme.labelLarge?.copyWith(
           color: theme.colorScheme.primary,
         ),
         padding: const EdgeInsets.only(
@@ -438,7 +438,7 @@ class _HistorySearchItemTextButton extends StatelessWidget {
 
     return CustomTextButton(
       place.name,
-      textStyle: theme.textTheme.bodyText1?.copyWith(
+      textStyle: theme.textTheme.bodyLarge?.copyWith(
         color: secondaryColor,
       ),
       alignment: Alignment.centerLeft,
@@ -601,13 +601,13 @@ class _PlaceFoundDetails extends StatelessWidget {
     final searchString = dataStorage._searchString;
 
     final theme = Theme.of(context);
-    final placeNameTextStyle = theme.textTheme.bodyText1?.copyWith(
+    final placeNameTextStyle = theme.textTheme.bodyLarge?.copyWith(
       color: theme.primaryColorDark,
     );
     final highlightedPlaceNameTextStyle = placeNameTextStyle!.copyWith(
       fontWeight: FontWeight.bold,
     );
-    final placeTypeTextStyle = theme.textTheme.bodyText2?.copyWith(
+    final placeTypeTextStyle = theme.textTheme.bodyMedium?.copyWith(
       color: theme.colorScheme.secondary,
     );
 

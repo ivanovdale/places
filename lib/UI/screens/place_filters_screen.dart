@@ -68,7 +68,6 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
   void initState() {
     super.initState();
     initializeFilters();
-    // TODO(daniiliv): Для ревью. Делать сетстейт здесь - хорошее решение?
     setFilteredPlacesNumber().then((value) => setState(() {}));
   }
 
@@ -99,9 +98,7 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
 
       _debounce = Timer(
         const Duration(milliseconds: applianceDistanceFilterDelayInMillis),
-        () {
-          setState(setFilteredPlacesNumber);
-        },
+        setFilteredPlacesNumber,
       );
     });
   }
@@ -230,7 +227,7 @@ class _ShowPlacesElevatedButton extends StatelessWidget {
       ),
       child: CustomElevatedButton(
         '${AppStrings.show} ($filteredPlacesNumber)',
-        textStyle: theme.textTheme.bodyText2?.copyWith(
+        textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: buttonTextColor,
         ),
         backgroundColor: buttonBackgroundColor,
@@ -267,7 +264,7 @@ class _DistanceFilterText extends StatelessWidget {
 
     final theme = Theme.of(context);
     final secondaryColor = theme.colorScheme.secondary;
-    final themeBodyText1 = theme.textTheme.bodyText1;
+    final themeBodyText1 = theme.textTheme.bodyLarge;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -330,7 +327,7 @@ class _ClearButton extends StatelessWidget {
 
     return CustomTextButton(
       AppStrings.clear,
-      textStyle: theme.textTheme.button?.copyWith(
+      textStyle: theme.textTheme.labelLarge?.copyWith(
         color: theme.colorScheme.primary,
       ),
       padding: const EdgeInsets.only(right: 16.0),
@@ -357,7 +354,7 @@ class _PlaceTypesText extends StatelessWidget {
         ),
         child: Text(
           AppStrings.placeTypes,
-          style: theme.textTheme.caption?.copyWith(
+          style: theme.textTheme.bodySmall?.copyWith(
             color: secondaryColor,
           ),
         ),
@@ -475,7 +472,7 @@ class _PlaceFilterItem extends StatelessWidget {
           ),
           child: Text(
             placeType.text.capitalize(),
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
       ],

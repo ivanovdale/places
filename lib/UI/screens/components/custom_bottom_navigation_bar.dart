@@ -27,12 +27,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
           items: viewModel.items.map((item) {
             return BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                item['icon']! as String,
+                item['icon'] ?? '',
                 height: _itemIconSize,
                 color: theme.primaryColorDark,
               ),
               activeIcon: SvgPicture.asset(
-                item['activeIcon']! as String,
+                item['activeIcon'] ?? '',
                 height: _itemIconSize,
                 color: theme.primaryColorDark,
               ),
