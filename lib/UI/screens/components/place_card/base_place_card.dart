@@ -129,7 +129,7 @@ class _PlaceCardTop extends StatelessWidget {
               ),
               child: Text(
                 place.type.toString(),
-                style: theme.textTheme.bodyText2?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: onSecondaryColor,
                 ),
               ),
@@ -187,7 +187,7 @@ class _PlaceCardBottom extends StatelessWidget {
               ),
               child: Text(
                 place.name,
-                style: theme.textTheme.button,
+                style: theme.textTheme.labelLarge,
               ),
             ),
             const SizedBox(
@@ -232,7 +232,7 @@ class _PlaceDetailsInfo extends StatelessWidget {
       child: Text(
         place.details,
         maxLines: 2,
-        style: theme.textTheme.bodyText2?.copyWith(
+        style: theme.textTheme.bodyMedium?.copyWith(
           color: secondaryColor,
           overflow: TextOverflow.ellipsis,
         ),
@@ -255,7 +255,7 @@ class _PlaceVisitingInfo extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final secondaryColor = theme.colorScheme.secondary;
-    final themeBodyText2 = theme.textTheme.bodyText2;
+    final themeBodyText2 = theme.textTheme.bodyMedium;
 
     final visitingText =
         place.visited ? AppStrings.placeVisited : AppStrings.planToVisit;

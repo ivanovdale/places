@@ -132,10 +132,10 @@ class _PageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColorDark = theme.primaryColorDark;
-    final pageItemTitleStyle = theme.textTheme.headline5!.copyWith(
+    final pageItemTitleStyle = theme.textTheme.headlineSmall!.copyWith(
       color: primaryColorDark,
     );
-    final pageItemDescriptionStyle = theme.textTheme.bodyText2!.copyWith(
+    final pageItemDescriptionStyle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.secondary,
     );
 
@@ -308,7 +308,7 @@ class _SkipButton extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: CustomTextButton(
                 AppStrings.skip,
-                textStyle: theme.textTheme.button!.copyWith(
+                textStyle: theme.textTheme.labelLarge!.copyWith(
                   color: theme.colorScheme.primary,
                 ),
                 onPressed: onPressed,
@@ -346,7 +346,7 @@ class _StartButton extends StatelessWidget {
               AppStrings.start,
               backgroundColor: colorScheme.primary,
               height: 48,
-              textStyle: theme.textTheme.bodyText2!.copyWith(
+              textStyle: theme.textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w700,
                 color: colorScheme.onBackground,
               ),

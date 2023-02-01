@@ -356,7 +356,7 @@ class _BackgroundOnDismiss extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
                     AppStrings.delete,
-                    style: theme.textTheme.caption!.copyWith(
+                    style: theme.textTheme.bodySmall!.copyWith(
                       fontWeight: FontWeight.w500,
                       color: theme.colorScheme.onSecondary,
                     ),

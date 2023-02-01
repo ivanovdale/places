@@ -37,7 +37,7 @@ class AddPlaceScreen extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           title: AppStrings.newPlace.capitalize(),
-          titleTextStyle: Theme.of(context).textTheme.subtitle1,
+          titleTextStyle: Theme.of(context).textTheme.titleMedium,
           centerTitle: true,
           toolbarHeight: 56,
           leading: const _CancelButton(),
@@ -481,7 +481,7 @@ class _DescriptionTextField extends StatelessWidget {
       maxLength: 120,
       maxLines: 3,
       hintText: AppStrings.enterText,
-      hintStyle: theme.textTheme.bodyText1?.copyWith(
+      hintStyle: theme.textTheme.bodyLarge?.copyWith(
         color: theme.colorScheme.secondary.withOpacity(0.56),
       ),
       unfocusWhenEditingComplete: true,
@@ -565,7 +565,7 @@ class _CustomTextFormField extends StatelessWidget {
                 : null,
           ),
           textAlignVertical: TextAlignVertical.top,
-          style: theme.textTheme.bodyText1,
+          style: theme.textTheme.bodyLarge,
           onEditingComplete: changeFocus,
         ),
       ),
@@ -594,7 +594,7 @@ class _PlaceTypeSelectionField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final selectionFieldTextStyle = theme.textTheme.bodyText1?.copyWith(
+    final selectionFieldTextStyle = theme.textTheme.bodyLarge?.copyWith(
       color: theme.colorScheme.secondary,
     );
     final dataStorage = _InheritedAddPlaceBodyState.of(context);
@@ -718,7 +718,7 @@ class _CancelButton extends StatelessWidget {
 
     return CustomTextButton(
       AppStrings.cancel,
-      textStyle: theme.textTheme.button?.copyWith(
+      textStyle: theme.textTheme.labelLarge?.copyWith(
         color: theme.colorScheme.secondary,
       ),
       padding: const EdgeInsets.only(
@@ -803,7 +803,7 @@ class _MarkOnMapButton extends StatelessWidget {
 
     return CustomTextButton(
       AppStrings.markOnMap,
-      textStyle: theme.textTheme.button?.copyWith(
+      textStyle: theme.textTheme.labelLarge?.copyWith(
         color: theme.colorScheme.primary,
       ),
       padding: const EdgeInsets.only(
@@ -840,7 +840,7 @@ class _CreateButton extends StatelessWidget {
         ),
         child: CustomElevatedButton(
           AppStrings.create,
-          textStyle: theme.textTheme.bodyText2?.copyWith(
+          textStyle: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w700,
             color: theme.colorScheme.secondary.withOpacity(0.56),
           ),
@@ -919,7 +919,7 @@ class _PhotoPicker extends StatelessWidget {
               AppStrings.cancel,
               backgroundColor: onBackgroundColor,
               height: 48,
-              textStyle: theme.textTheme.bodyText2!.copyWith(
+              textStyle: theme.textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w700,
                 color: theme.colorScheme.primary,
               ),
@@ -1005,7 +1005,7 @@ class _ActionItem extends StatelessWidget {
               ),
               Text(
                 text,
-                style: theme.textTheme.bodyText1!.copyWith(
+                style: theme.textTheme.bodyLarge!.copyWith(
                   color: secondaryColor,
                 ),
               ),

@@ -21,7 +21,7 @@ class VisitingPlacesScreen extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           title: AppStrings.visitingScreenAppBarTitle,
-          titleTextStyle: Theme.of(context).textTheme.subtitle1,
+          titleTextStyle: Theme.of(context).textTheme.titleMedium,
           centerTitle: true,
           toolbarHeight: 56.0,
         ),

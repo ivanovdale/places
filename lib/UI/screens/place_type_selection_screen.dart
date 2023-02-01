@@ -17,7 +17,7 @@ class PlaceTypeSelectionScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: AppStrings.placeType.capitalize(),
-        titleTextStyle: Theme.of(context).textTheme.subtitle1,
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
         centerTitle: true,
         toolbarHeight: 56,
         leading: const _BackButton(),
@@ -136,7 +136,7 @@ class _PlaceTypeItem extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: Text(
                   itemName.capitalize(),
-                  style: theme.textTheme.bodyText1,
+                  style: theme.textTheme.bodyLarge,
                 ),
               ),
               const Spacer(),
@@ -197,7 +197,7 @@ class _SaveButton extends StatelessWidget {
         AppStrings.save,
         backgroundColor: saveButtonBackgroundColor,
         height: 48,
-        textStyle: theme.textTheme.bodyText2?.copyWith(
+        textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: saveButtonTextColor,
           fontWeight: FontWeight.w700,
         ),
