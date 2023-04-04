@@ -5,7 +5,7 @@ import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/providers/settings_provider.dart';
+import 'package:places/providers/settings_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Экран настроек.

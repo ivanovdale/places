@@ -19,6 +19,27 @@ class SplashScreen extends StatefulWidget {
 /// Состояние сплэш-экрана. Переходит на экран онбординга через заданное количество времени после запуска.
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    _navigateToNextScreen();
+  }
+
+  // Дожидаемся инициализации приложения для перехода на следующий экран.
+  Future<void> _navigateToNextScreen() async {
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () => true,
+    );
+
+    if (context.mounted) {
+      await Navigator.pushReplacementNamed(
+        context,
+        AppRouter.onboarding,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -33,27 +54,6 @@ class _SplashScreenState extends State<SplashScreen> {
         AppAssets.appLogo,
         fit: BoxFit.none,
       ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Дожидаемся инициализации приложения для перехода на следующий экран.
-    Future.delayed(
-      const Duration(seconds: 2),
-      () => true,
-    ).then(
-      (value) => _navigateToNext(),
-    );
-  }
-
-  /// Переход на экран онбординга.
-  void _navigateToNext() {
-    Navigator.pushReplacementNamed(
-      context,
-      AppRouter.onboarding,
     );
   }
 }

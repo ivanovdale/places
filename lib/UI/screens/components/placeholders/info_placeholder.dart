@@ -28,7 +28,10 @@ abstract class InfoPlaceHolder extends StatelessWidget {
           iconPath,
           height: iconSize,
           width: iconSize,
-          color: secondaryColor,
+          colorFilter: ColorFilter.mode(
+            secondaryColor,
+            BlendMode.srcIn,
+          ),
         ),
         const SizedBox(
           height: 24,

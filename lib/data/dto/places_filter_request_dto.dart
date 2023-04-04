@@ -3,19 +3,19 @@
 /// Все поля не обязательные, но параметры "lat", "lat" и "radius" зависят друг от друга,
 /// поэтому если указан один из них, то остальные два становятся обязательными.
 class PlacesFilterRequestDto {
-  /// Широта
+  /// Широта.
   final double? lat;
 
-  /// Долгота
+  /// Долгота.
   final double? lng;
 
-  /// Радиус поиска места
+  /// Радиус поиска места.
   final double? radius;
 
-  /// Список типов мест
+  /// Список типов мест.
   final List<String>? typeFilter;
 
-  /// Имя места
+  /// Имя места.
   final String? nameFilter;
 
   PlacesFilterRequestDto({

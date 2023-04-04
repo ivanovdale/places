@@ -23,6 +23,16 @@ abstract class BasePlaceCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// Показывает боттомшит детализации места.
+  void _showPlaceDetailsBottomSheet(BuildContext context, Place place) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,16 +63,6 @@ abstract class BasePlaceCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  /// Показывает боттомшит детализации места.
-  void _showPlaceDetailsBottomSheet(BuildContext context, Place place) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
     );
   }
 }
@@ -139,6 +139,7 @@ class _PlaceCardTop extends StatelessWidget {
                 right: 18,
                 top: 19,
               ),
+
               // Действия с карточкой.
               child: actions,
             ),

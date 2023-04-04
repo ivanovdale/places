@@ -15,7 +15,7 @@ import 'package:places/helpers/app_assets.dart';
 ///
 /// Параметры:
 /// * [place] - модель места (обязательный);
-/// * [toggleFavorites] - коллбэк нажатия на добавление в избранное / удаление из избранного;
+/// * [toggleFavorites] - коллбэк нажатия на добавление в избранное / удаление из избранного.
 class PlaceCard extends BasePlaceCard {
   final VoidCallback toggleFavorites;
 
@@ -66,6 +66,12 @@ class _PlaceActionsState extends State<_PlaceActions> {
     _actionStreamController.add(widget.isFavorite);
   }
 
+  /// Переключение кнопки "Добавить в избранное" / "Убрать из избранного".
+  void _toggleFavorites(bool isFavorite) {
+    widget.toggleFavorites();
+    _actionStreamController.add(!isFavorite);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -83,7 +89,7 @@ class _PlaceActionsState extends State<_PlaceActions> {
         builder: (context, snapshot) {
           final isFavorite = snapshot.data ?? false;
 
-          // Переключение кнопок "В избранное"/"Убрать из избранного"
+          // Переключение кнопок "В избранное"/"Убрать из избранного".
           return InkWell(
             child: SvgPicture.asset(
               isFavorite ? AppAssets.heartFilled : AppAssets.heart,
@@ -93,11 +99,5 @@ class _PlaceActionsState extends State<_PlaceActions> {
         },
       ),
     );
-  }
-
-  /// Переключение кнопки "Добавить в избранное" / "Убрать из избранного"
-  void _toggleFavorites(bool isFavorite) {
-    widget.toggleFavorites();
-    _actionStreamController.add(!isFavorite);
   }
 }
