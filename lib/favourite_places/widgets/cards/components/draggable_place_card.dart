@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/UI/screens/components/place_card/place_card_when_dragged.dart';
-import 'package:places/UI/screens/components/place_card/place_card_with_hover_ability.dart';
+import 'package:places/favourite_places/widgets/cards/components/place_card_when_dragged.dart';
+import 'package:places/favourite_places/widgets/cards/components/place_card_with_hover_ability.dart';
 
 /// Карточка места с возможностью перетаскивания.
 class DraggablePlaceCard extends StatelessWidget {

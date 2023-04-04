@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/UI/screens/components/place_card/draggable_place_card.dart';
+import 'package:places/favourite_places/widgets/cards/components/draggable_place_card.dart';
 
 /// Перетаскиваемая карточка места с возможностью перетаскивать на неё другие карточки для сортировки списка мест.
 class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
