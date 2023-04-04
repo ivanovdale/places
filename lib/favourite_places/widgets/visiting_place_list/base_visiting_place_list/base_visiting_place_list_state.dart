@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_pickers/custom_date_picker.dart';
 import 'package:places/UI/screens/components/custom_pickers/custom_time_picker.dart';
+import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/UI/screens/components/place_card/draggable_place_card_with_drag_target_option.dart';
-import 'package:places/UI/screens/components/place_card/to_visit_place_card.dart';
-import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/widgets/cards/to_visit_place_card.dart';
+import 'package:places/favourite_places/widgets/cards/visited_place_card.dart';
 import 'package:places/favourite_places/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
@@ -74,7 +75,7 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
   }
 
   /// Возвращает карточку места в зависимости от типа поля placeCardType.
-  Widget getPlaceCard(Place place) {
+  BasePlaceCard getPlaceCard(Place place) {
     return widget.placeCardType == ToVisitPlaceCard
         ? ToVisitPlaceCard(
             place,
@@ -334,36 +335,39 @@ class _BackgroundOnDismiss extends StatelessWidget {
     final theme = Theme.of(context);
 
     return !isDraggingActive
-        ? Container(
-            alignment: Alignment.centerRight,
-            height: 238,
-            width: double.infinity,
-            margin: const EdgeInsets.only(
-              bottom: 16,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.flamingo,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  AppAssets.delete,
-                  width: 24,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    AppStrings.delete,
-                    style: theme.textTheme.bodySmall!.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: theme.colorScheme.onSecondary,
+        ? AspectRatio(
+            aspectRatio: 3 / 2,
+            child: Container(
+              alignment: Alignment.centerRight,
+              decoration: BoxDecoration(
+                color: AppColors.flamingo,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.only(
+                right: 16.0,
+                bottom: 16.0,
+                top: 16.0,
+              ),
+              margin: const EdgeInsets.only(bottom: 0.1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    AppAssets.delete,
+                    width: 24,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      AppStrings.delete,
+                      style: theme.textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.onSecondary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         : const SizedBox.shrink();

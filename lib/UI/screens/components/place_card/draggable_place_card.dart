@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/UI/screens/components/place_card/place_card_when_dragged.dart';
 import 'package:places/UI/screens/components/place_card/place_card_with_hover_ability.dart';
 
@@ -6,7 +7,7 @@ import 'package:places/UI/screens/components/place_card/place_card_with_hover_ab
 class DraggablePlaceCard extends StatelessWidget {
   final VoidCallback? onDragStarted;
   final ValueChanged<DraggableDetails>? onDragEnd;
-  final Widget placeCard;
+  final BasePlaceCard placeCard;
   final int index;
   final List<int?> candidateData;
 

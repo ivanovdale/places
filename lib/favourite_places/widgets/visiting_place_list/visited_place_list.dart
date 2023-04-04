@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
+
 import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/widgets/cards/visited_place_card.dart';
 import 'package:places/favourite_places/widgets/placeholders/empty_visited_placeholder.dart';
 import 'package:places/favourite_places/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list.dart';
 import 'package:places/providers/visiting_provider.dart';
