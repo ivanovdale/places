@@ -11,7 +11,7 @@ import 'package:places/helpers/app_assets.dart';
 /// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
 ///
 /// Имеет параметры:
-/// * [place] - модель места (обязательный);
+/// * [place] - модель места (обязательный).
 class ToVisitPlaceCard extends BasePlaceCard {
   final VoidCallback onCalendarPressed;
   final VoidCallback onDeletePressed;

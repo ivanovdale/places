@@ -23,7 +23,6 @@ class RoundedCachedNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: [
       ClipRRect(
-        // Use here borderRadius
         borderRadius: borderRadius ?? BorderRadius.circular(12),
         child: Material(
           child: Ink.image(

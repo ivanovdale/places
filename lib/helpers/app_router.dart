@@ -8,8 +8,8 @@ import 'package:places/UI/screens/place_search_screen.dart';
 import 'package:places/UI/screens/place_type_selection_screen.dart';
 import 'package:places/UI/screens/settings_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
-import 'package:places/UI/screens/visiting_places_screen.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/view/favourite_places_screen.dart';
 
 /// Роутер для именованных роутов.
 abstract class AppRouter {
@@ -137,7 +137,7 @@ abstract class AppRouter {
 
   static MaterialPageRoute<Object?> _getVisitingPlacesMaterialRoute() {
     return MaterialPageRoute<Object?>(
-      builder: (_) => const VisitingPlacesScreen(),
+      builder: (_) => const FavouritePlacesScreen(),
     );
   }
 

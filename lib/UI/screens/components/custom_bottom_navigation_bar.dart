@@ -29,12 +29,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
               icon: SvgPicture.asset(
                 item['icon'] ?? '',
                 height: _itemIconSize,
-                color: theme.primaryColorDark,
+                colorFilter: ColorFilter.mode(
+                  theme.primaryColorDark,
+                  BlendMode.srcIn,
+                ),
               ),
               activeIcon: SvgPicture.asset(
                 item['activeIcon'] ?? '',
                 height: _itemIconSize,
-                color: theme.primaryColorDark,
+                colorFilter: ColorFilter.mode(
+                  theme.primaryColorDark,
+                  BlendMode.srcIn,
+                ),
               ),
               label: '',
             );

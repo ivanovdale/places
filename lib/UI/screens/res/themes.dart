@@ -16,28 +16,28 @@ final lightTheme = ThemeData(
   primaryColor: _oxfordBlueColor,
   primaryColorDark: _martiniqueColor,
   colorScheme: const ColorScheme(
-    // Не используется
+    // Не используется.
     background: _whiteColor,
     onPrimary: _oxfordBlueColor,
     onBackground: _whiteColor,
-    // Не используется
+    // Не используется.
     onError: _whiteColor,
     onSecondary: _whiteColor,
-    // Не используется
+    // Не используется.
     onSurface: _whiteColor,
-    // Не используется
+    // Не используется.
     error: _whiteColor,
     primary: AppColors.fruitSalad,
-    // Не используется
+    // Не используется.
     primaryContainer: _whiteColor,
     secondary: _waterlooColor,
     secondaryContainer: AppColors.wildSand,
-    // Не используется
+    // Не используется.
     surface: _whiteColor,
-    // Не используется
+    // Не используется.
     brightness: Brightness.light,
   ),
-  // Настройки шрифтов
+  // Настройки шрифтов.
   textTheme: _lightTextTheme,
 );
 
@@ -49,25 +49,25 @@ final darkTheme = ThemeData(
   primaryColor: _whiteColor,
   primaryColorDark: _whiteColor,
   colorScheme: const ColorScheme(
-    // Не используется
+    // Не используется.
     background: _whiteColor,
     onPrimary: _waterlooColor,
     onBackground: _whiteColor,
-    // Не используется
+    // Не используется.
     onError: _whiteColor,
     onSecondary: _whiteColor,
-    // Не используется
+    // Не используется.
     onSurface: _whiteColor,
-    // Не используется
+    // Не используется.
     error: _whiteColor,
     primary: AppColors.pastelGreen,
-    // Не используется
+    // Не используется.
     primaryContainer: _whiteColor,
     secondary: _waterlooColor,
     secondaryContainer: AppColors.shark,
-    // Не используется
+    // Не используется.
     surface: _whiteColor,
-    // Не используется
+    // Не используется.
     brightness: Brightness.light,
   ),
   textTheme: _darkTextTheme,

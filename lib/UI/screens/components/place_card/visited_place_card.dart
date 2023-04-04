@@ -11,7 +11,7 @@ import 'package:places/helpers/app_assets.dart';
 /// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
-/// * [place] - модель места (обязательный);
+/// * [place] - модель места (обязательный).
 class VisitedPlaceCard extends BasePlaceCard {
   final VoidCallback onSharePressed;
   final VoidCallback onDeletePressed;

@@ -7,16 +7,16 @@ import 'package:places/domain/model/place.dart';
 /// Все поля не обязательные, но параметры "coordinatePoint" и "radius" зависят друг от друга,
 /// поэтому если указан один из них, то второй становятся обязательным.
 class PlacesFilterRequest {
-  /// Координаты
+  /// Координаты.
   final CoordinatePoint? coordinatePoint;
 
-  /// Радиус поиска места
+  /// Радиус поиска места.
   final double? radius;
 
-  /// Список типов мест
+  /// Список типов мест.
   final List<PlaceTypes>? typeFilter;
 
-  /// Имя места
+  /// Имя места.
   final String? nameFilter;
 
   const PlacesFilterRequest({
@@ -29,16 +29,15 @@ class PlacesFilterRequest {
   PlacesFilterRequestDto toDto() {
     double? lat;
     double? lon;
-    double? radius;
     List<String>? typeFilterNames;
     final coordinatePoint = this.coordinatePoint;
     final typeFilter = this.typeFilter;
+    final radius = this.radius;
 
     // Если параметры координат и радиуса поиска заполнены, то добавим их в модель данных фильтра мест.
-    if (coordinatePoint != null && this.radius != null && this.radius != 0) {
+    if (coordinatePoint != null && radius != null && radius != 0) {
       lat = coordinatePoint.lat;
       lon = coordinatePoint.lon;
-      radius = this.radius;
     }
 
     if (typeFilter != null && typeFilter.isNotEmpty) {

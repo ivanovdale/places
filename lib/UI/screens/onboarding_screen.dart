@@ -177,7 +177,10 @@ class _PageItemIcon extends StatelessWidget {
       child: SvgPicture.asset(
         assetName,
         width: 100,
-        color: color,
+        colorFilter: ColorFilter.mode(
+          color,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

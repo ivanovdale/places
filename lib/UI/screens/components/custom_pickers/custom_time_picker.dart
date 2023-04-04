@@ -40,9 +40,9 @@ class CustomTimePicker extends StatelessWidget {
     return Theme(
       data: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(
-          primary: colorSchemePrimary, // Enabled AM/PM text
-          onSurface: colorSchemeOnSurface, // Disabled AM/PM text
-          surface: colorSchemeSurface, // Border AM/PM
+          primary: colorSchemePrimary, // Enabled AM/PM text.
+          onSurface: colorSchemeOnSurface, // Disabled AM/PM text.
+          surface: colorSchemeSurface, // Border AM/PM.
         ),
         timePickerTheme: TimePickerThemeData(
           backgroundColor: pickerBackGroundColor,

@@ -8,8 +8,8 @@ import 'package:places/UI/screens/components/custom_pickers/custom_time_picker.d
 import 'package:places/UI/screens/components/place_card/draggable_place_card_with_drag_target_option.dart';
 import 'package:places/UI/screens/components/place_card/to_visit_place_card.dart';
 import 'package:places/UI/screens/components/place_card/visited_place_card.dart';
-import 'package:places/UI/screens/components/visiting_place_list/base_visiting_place_list.dart';
 import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -23,6 +23,12 @@ const int visitingHourByDefault = 12;
 class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
   final ScrollController _scrollController = ScrollController();
   bool isDragged = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +73,6 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
           );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-  }
-
   /// Возвращает карточку места в зависимости от типа поля placeCardType.
   Widget getPlaceCard(Place place) {
     return widget.placeCardType == ToVisitPlaceCard
@@ -85,7 +85,7 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
         : VisitedPlaceCard(
             place,
             key: GlobalKey(),
-            // TODO(daniiliv): Вызов реальной функции
+            // TODO(daniiliv): Вызов реальной функции.
             onSharePressed: () {},
             onDeletePressed: () => widget.deletePlaceFromList(place),
           );
@@ -95,7 +95,8 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
   void scrollPlaceCardsWhenCardDragged(PointerMoveEvent event) {
     const scrollArea = 300;
 
-    if (event.position.dy > MediaQuery.of(context).size.height - scrollArea) {
+    final scrollPositionY = event.position.dy;
+    if (scrollPositionY > MediaQuery.of(context).size.height - scrollArea) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 200),
@@ -103,7 +104,7 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
       );
 
       /// Скролл вверх при перетаскивании.
-    } else if (event.position.dy < scrollArea) {
+    } else if (scrollPositionY < scrollArea) {
       _scrollController.animateTo(
         _scrollController.position.minScrollExtent,
         duration: const Duration(milliseconds: 200),
@@ -221,7 +222,7 @@ class BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
         pickedDate.year,
         pickedDate.month,
         pickedDate.day,
-        pickedTime?.hour ?? visitingHourByDefault, // По умолчанию
+        pickedTime?.hour ?? visitingHourByDefault, // По умолчанию.
         pickedTime?.minute ?? 0,
       );
 

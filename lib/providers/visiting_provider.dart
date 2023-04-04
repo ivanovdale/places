@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/providers/interactor_provider.dart';
+import 'package:places/providers/place_interactor_provider.dart';
 
 /// Вьюмодель для экрана планируемых к посещению/посещённых мест.
 class VisitingProvider extends ChangeNotifier {

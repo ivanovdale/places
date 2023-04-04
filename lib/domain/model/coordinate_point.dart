@@ -4,7 +4,7 @@ import 'dart:math';
 ///
 /// Свойства:
 /// * [lat] - географические долгота точки;
-/// * [lon] - географическая широта точки;
+/// * [lon] - географическая широта точки.
 class CoordinatePoint {
   final double lat;
   final double lon;
