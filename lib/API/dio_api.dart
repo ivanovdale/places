@@ -15,11 +15,13 @@ class DioApi {
   DioApi._internal();
 
   static Dio createDio() {
+    const timeOut = Duration(milliseconds: 5000);
+
     final dio = Dio(BaseOptions(
       baseUrl: AppUrls.dioClientUrl,
-      receiveTimeout: 5000, // 15 seconds
-      connectTimeout: 5000,
-      sendTimeout: 5000,
+      receiveTimeout: timeOut,
+      connectTimeout: timeOut,
+      sendTimeout: timeOut,
     ));
 
     dio.interceptors.addAll({
