@@ -1,16 +1,19 @@
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
+import 'package:places/favourite_places/domain/favourite_place_repository.dart';
 
 /// Интерактор для работы с местами.
 class PlaceInteractor {
-  // Список избранных мест пользователя.
-  final List<Place> _favoritePlaces = [];
-
   /// Репозиторий работы с местами.
-  PlaceRepository placeRepository;
+  final PlaceRepository placeRepository;
 
-  PlaceInteractor(this.placeRepository);
+  final FavouritePlaceRepository favouritePlaceRepository;
+
+  PlaceInteractor({
+    required this.placeRepository,
+    required this.favouritePlaceRepository,
+  });
 
   /// Получает список мест после фильтрации.
   /// Добавляет пометку добавления в избранное для каждого места.
