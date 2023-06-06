@@ -33,14 +33,4 @@ abstract class BaseVisitingPlaceList extends StatefulWidget {
 
   @override
   State<BaseVisitingPlaceList> createState() => BaseVisitingPlaceListState();
-
-  /// Удаляет места из списка.
-  void deletePlaceFromList(Place place);
-
-  /// Вставляет нужную карточку места по заданному индексу.
-  void insertIntoPlaceList(
-    int destinationIndex,
-    int placeIndex,
-    BuildContext context,
-  );
 }
