@@ -4,7 +4,7 @@ import 'package:places/UI/screens/onboarding_screen.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/UI/screens/place_filters_screen.dart';
 import 'package:places/UI/screens/place_list_screen.dart';
-import 'package:places/UI/screens/place_search_screen.dart';
+import 'package:places/place_search/place_search_screen.dart';
 import 'package:places/UI/screens/place_type_selection_screen.dart';
 import 'package:places/UI/screens/settings_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
