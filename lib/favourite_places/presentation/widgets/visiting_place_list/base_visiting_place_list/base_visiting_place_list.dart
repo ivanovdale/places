@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/favourite_places/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list_state.dart';
-import 'package:places/providers/visiting_provider.dart';
+import 'package:places/favourite_places/presentation/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list_state.dart';
+
+
+typedef OnPlaceInserted = Function(Place, Place);
+typedef OnPlaceDeleted = Function(Place);
 
 /// Абстрактный класс [BaseVisitingPlaceList]. Список посещенных/планируемых к посещению мест.
 ///
@@ -14,17 +16,19 @@ import 'package:places/providers/visiting_provider.dart';
 ///
 /// Имеет параметры
 /// * [listOfPlaces] - список мест.
-/// * [viewModel] - вьюмодель для работы со списком мест.
 abstract class BaseVisitingPlaceList extends StatefulWidget {
   final List<Place> listOfPlaces;
-  abstract final InfoPlaceHolder emptyVisitingList;
+  abstract final WidgetBuilder emptyVisitingList;
   abstract final Type placeCardType;
-  final VisitingProvider viewModel;
+
+  final OnPlaceInserted? onPlaceInserted;
+  final OnPlaceDeleted? onPlaceDeleted;
 
   const BaseVisitingPlaceList({
     Key? key,
     required this.listOfPlaces,
-    required this.viewModel,
+    this.onPlaceInserted,
+    this.onPlaceDeleted,
   }) : super(key: key);
 
   @override
