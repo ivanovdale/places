@@ -30,12 +30,9 @@ class PlaceInteractor {
     }
 
     // Добавляем пометку добавления в избранное для каждого места.
-    getFavoritePlaces()
-        .map((favoritePlace) => favoritePlace.id)
-        .toList()
-        .forEach((favoritePlaceId) {
-      final indexOfFilteredPlace = filteredPlaces
-          .indexWhere((filteredPlace) => filteredPlace.id == favoritePlaceId);
+    favouritePlaceRepository.getPlaces().forEach((place) {
+      final indexOfFilteredPlace =
+          filteredPlaces.indexWhere((filteredPlace) => filteredPlace == place);
 
       filteredPlaces[indexOfFilteredPlace].isFavorite = true;
     });
