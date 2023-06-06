@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:places/UI/screens/res/themes.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/providers/settings_interactor_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +22,12 @@ class _AppState extends State<App> {
       initialRoute: AppRouter.root,
       onGenerateRoute: AppRouter.generateRoute,
       debugShowCheckedModeBanner: false,
-      theme: context
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: context
           .watch<SettingsInteractorProvider>()
           .settingsInteractor
-          .appTheme,
+          .themeMode,
     );
   }
 }

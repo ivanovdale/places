@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/res/themes.dart';
 
 /// Интерактор для работы с настройками.
 class SettingsInteractor {
-
   /// Тема приложения по умолчанию.
-  ThemeData appTheme = lightTheme;
+  ThemeMode themeMode = ThemeMode.light;
 
-  bool isDarkModeEnabled = false;
+  bool get isDarkModeEnabled => themeMode == ThemeMode.dark;
 
   void changeAppTheme() {
-    isDarkModeEnabled = !isDarkModeEnabled;
-    appTheme = isDarkModeEnabled ? darkTheme : lightTheme;
+    themeMode = isDarkModeEnabled ? ThemeMode.light : ThemeMode.dark;
   }
-
 }
