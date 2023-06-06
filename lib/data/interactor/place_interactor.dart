@@ -45,37 +45,6 @@ class PlaceInteractor {
     return placeRepository.getPlaceById(id.toString());
   }
 
-  /// Возвращает список избранных мест.
-  List<Place> getFavoritePlaces() {
-    return _favoritePlaces;
-  }
-
-  /// Возвращает список мест, планируемых к посещению.
-  List<Place> getToVisitPlaces() {
-    return _favoritePlaces.where((place) => !place.visited).toList();
-  }
-
-  /// Возвращает список посещенных мест.
-  List<Place> getVisitedPlaces() {
-    return _favoritePlaces.where((place) => place.visited).toList();
-  }
-
-  /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
-  /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
-  void toggleFavorites(Place place) {
-    final isFavorite = place.isFavorite;
-    place.isFavorite = !place.isFavorite;
-    isFavorite
-        ? _favoritePlaces
-            .removeWhere((favoritePlace) => favoritePlace.id == place.id)
-        : _favoritePlaces.add(place);
-  }
-
-  /// Делает пометку, что место посещено.
-  void addToVisitedPlaces(Place place) {
-    place.visited = true;
-  }
-
   /// Добавляет новое место.
   Future<Place> addNewPlace(Place place) async {
     return placeRepository.addNewPlace(place);
