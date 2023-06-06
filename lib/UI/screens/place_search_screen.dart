@@ -8,7 +8,7 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/placeholders/places_not_found_placeholder.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
-import 'package:places/UI/screens/components/search_bar.dart';
+import 'package:places/UI/screens/components/search_bar.dart' as custom_search_bar;
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
@@ -194,8 +194,8 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   Widget build(BuildContext context) {
     return _InheritedPlaceSearchBodyState(
       data: this,
-      child: Column(
-        children: const [
+      child: const Column(
+        children: [
           _SearchBar(),
           _SearchResults(),
         ],
@@ -215,7 +215,7 @@ class _SearchBar extends StatelessWidget {
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchController = dataStorage._searchController;
 
-    return SearchBar(
+    return custom_search_bar.SearchBar(
       controller: searchController,
       autofocus: true,
       suffixIcon: IconButton(
@@ -238,10 +238,10 @@ class _SearchResults extends StatelessWidget {
     final searchInProgress = dataStorage._searchInProgress;
 
     return !searchInProgress
-        ? Expanded(
+        ? const Expanded(
             flex: 10,
             child: Column(
-              children: const [
+              children: [
                 _SearchHistory(),
                 _PlacesFoundList(),
               ],
@@ -276,10 +276,10 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           _SearchedByYouLabel(),
           _SearchHistoryItems(),
         ],

@@ -152,9 +152,9 @@ class _AddPlaceBodyState extends State<_AddPlaceBody> {
         key: _formKey,
         child: _InheritedAddPlaceBodyState(
           data: this,
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               _PhotoCarousel(),
               _PlaceTypeLabel(),
               _PlaceTypeSelectionField(),

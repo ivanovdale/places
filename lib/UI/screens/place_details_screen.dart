@@ -445,8 +445,8 @@ class _PlaceActionsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Expanded(
           child: _ToPlanButton(),
         ),

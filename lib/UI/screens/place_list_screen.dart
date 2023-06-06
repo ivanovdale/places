@@ -9,7 +9,8 @@ import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
-import 'package:places/UI/screens/components/search_bar.dart';
+import 'package:places/UI/screens/components/search_bar.dart'
+    as custom_search_bar;
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
@@ -166,7 +167,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
           child: Opacity(
             // При сужении аппбара строка поиска становится невидимой.
             opacity: 1 - shrinkOffset / expandedHeight,
-            child: SearchBar(
+            child: custom_search_bar.SearchBar(
               readOnly: true,
               // Не обрабатывать нажатия, когда строка поиска уже скрыта.
               onTap: isScrollStarted

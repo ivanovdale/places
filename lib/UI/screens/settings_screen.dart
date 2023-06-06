@@ -37,14 +37,14 @@ class _SettingsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
         top: 42.0,
         left: 16.0,
         right: 16.0,
       ),
       child: Column(
-        children: const [
+        children: [
           _DarkModeSetting(),
           _DividerWithPaddingAndThickness(),
           _WatchTutorialInfo(),
