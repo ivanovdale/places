@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/favourite_places/widgets/cards/components/place_card_when_dragged.dart';
-import 'package:places/favourite_places/widgets/cards/components/place_card_with_hover_ability.dart';
+import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/presentation/widgets/cards/components/place_card_when_dragged.dart';
+import 'package:places/favourite_places/presentation/widgets/cards/components/place_card_with_hover_ability.dart';
 
 /// Карточка места с возможностью перетаскивания.
 class DraggablePlaceCard extends StatelessWidget {
@@ -9,7 +10,8 @@ class DraggablePlaceCard extends StatelessWidget {
   final ValueChanged<DraggableDetails>? onDragEnd;
   final BasePlaceCard placeCard;
   final int index;
-  final List<int?> candidateData;
+  final Place place;
+  final List<Place?> candidateData;
 
   const DraggablePlaceCard({
     Key? key,
@@ -17,13 +19,14 @@ class DraggablePlaceCard extends StatelessWidget {
     this.onDragEnd,
     required this.placeCard,
     required this.index,
+    required this.place,
     required this.candidateData,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LongPressDraggable(
-      data: index,
+      data: place,
       child: PlaceCardWithHoverAbility(
         placeCard: placeCard,
         candidateData: candidateData,

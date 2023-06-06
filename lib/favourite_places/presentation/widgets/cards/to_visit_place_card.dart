@@ -4,31 +4,28 @@ import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
-/// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
+/// Виджет карточки места, которую планируется посетить. Наследуется от [BasePlaceCard].
 ///
-/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка "поделиться".
+/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
 ///
-/// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
+/// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
 ///
 /// Имеет параметры:
 /// * [place] - модель места (обязательный).
-class VisitedPlaceCard extends BasePlaceCard {
-  final VoidCallback onSharePressed;
-  final VoidCallback onDeletePressed;
-
+class ToVisitPlaceCard extends BasePlaceCard {
   @override
   final Widget actions;
 
   @override
   bool get showDetails => false;
 
-  VisitedPlaceCard(
+  ToVisitPlaceCard(
     Place place, {
-    required this.onSharePressed,
-    required this.onDeletePressed,
+    VoidCallback? onCalendarPressed,
+    VoidCallback? onDeletePressed,
     Key? key,
   })  : actions = _PlaceActions(
-          onSharePressed: onSharePressed,
+          onCalendarPressed: onCalendarPressed,
           onDeletePressed: onDeletePressed,
         ),
         super(
@@ -39,21 +36,21 @@ class VisitedPlaceCard extends BasePlaceCard {
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
-  final VoidCallback onSharePressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback? onCalendarPressed;
+  final VoidCallback? onDeletePressed;
 
   const _PlaceActions({
     Key? key,
-    required this.onSharePressed,
-    required this.onDeletePressed,
+    this.onCalendarPressed,
+    this.onDeletePressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final actionButtons = [
       InkWell(
-        child: SvgPicture.asset(AppAssets.share),
-        onTap: onSharePressed,
+        child: SvgPicture.asset(AppAssets.calendar),
+        onTap: onCalendarPressed,
       ),
       InkWell(
         child: SvgPicture.asset(AppAssets.close),

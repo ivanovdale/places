@@ -4,17 +4,18 @@ import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
-/// Виджет карточки места, которую планируется посетить. Наследуется от [BasePlaceCard].
+typedef OnDeletePressed = Function(Place);
+
+/// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
 ///
-/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка календаря.
+/// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка "поделиться".
 ///
-/// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
+/// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
 /// * [place] - модель места (обязательный).
-class ToVisitPlaceCard extends BasePlaceCard {
-  final VoidCallback onCalendarPressed;
-  final VoidCallback onDeletePressed;
+class VisitedPlaceCard extends BasePlaceCard {
+  final VoidCallback onSharePressed;
 
   @override
   final Widget actions;
@@ -22,13 +23,13 @@ class ToVisitPlaceCard extends BasePlaceCard {
   @override
   bool get showDetails => false;
 
-  ToVisitPlaceCard(
+  VisitedPlaceCard(
     Place place, {
-    required this.onCalendarPressed,
-    required this.onDeletePressed,
+    OnDeletePressed? onDeletePressed,
+    required this.onSharePressed,
     Key? key,
   })  : actions = _PlaceActions(
-          onCalendarPressed: onCalendarPressed,
+          onSharePressed: onSharePressed,
           onDeletePressed: onDeletePressed,
         ),
         super(
@@ -39,12 +40,12 @@ class ToVisitPlaceCard extends BasePlaceCard {
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
-  final VoidCallback onCalendarPressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback onSharePressed;
+  final OnDeletePressed? onDeletePressed;
 
   const _PlaceActions({
     Key? key,
-    required this.onCalendarPressed,
+    required this.onSharePressed,
     required this.onDeletePressed,
   }) : super(key: key);
 
@@ -52,12 +53,12 @@ class _PlaceActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final actionButtons = [
       InkWell(
-        child: SvgPicture.asset(AppAssets.calendar),
-        onTap: onCalendarPressed,
+        child: SvgPicture.asset(AppAssets.share),
+        onTap: onSharePressed,
       ),
       InkWell(
         child: SvgPicture.asset(AppAssets.close),
-        onTap: onDeletePressed,
+        onTap: () => onDeletePressed,
       ),
     ];
 
