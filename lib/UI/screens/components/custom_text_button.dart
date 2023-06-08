@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Кастомная текстовая кнопка.
@@ -31,13 +30,7 @@ class CustomTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      // TODO(daniiliv): Здесь будет вызов реальной функции.
-      onPressed: onPressed ??
-          () {
-            if (kDebugMode) {
-              print('"$text" button pressed.');
-            }
-          },
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         padding: padding ?? EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
