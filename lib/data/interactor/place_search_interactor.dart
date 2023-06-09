@@ -1,10 +1,13 @@
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/coordinate_point.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
+import 'package:places/domain/repository/place_repository.dart';
 
 /// Интерактор для работы с поиском мест.
 class PlaceSearchInteractor {
+  /// Найденные места.
+  final List<Place> placesFoundList = [];
+
   /// История поиска мест.
   final Set<Place> searchHistory = {};
 

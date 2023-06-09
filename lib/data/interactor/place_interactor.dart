@@ -1,6 +1,6 @@
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
+import 'package:places/domain/repository/place_repository.dart';
 
 /// Интерактор для работы с местами.
 class PlaceInteractor {
