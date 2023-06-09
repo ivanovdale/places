@@ -49,29 +49,6 @@ class PlaceSearchScreen extends StatelessWidget {
   }
 }
 
-/// Прокидывает данные [data] вниз по дереву.
-/// Всегда оповещает дочерние виджеты о перерисовке.
-class _InheritedPlaceSearchBodyState extends InheritedWidget {
-  static _PlaceSearchBodyState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedPlaceSearchBodyState>() as _InheritedPlaceSearchBodyState)
-        .data;
-  }
-
-  final _PlaceSearchBodyState data;
-
-  const _InheritedPlaceSearchBodyState({
-    Key? key,
-    required Widget child,
-    required this.data,
-  }) : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(_InheritedPlaceSearchBodyState old) {
-    return true;
-  }
-}
-
 /// Отображает историю поиска, найденные места.
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
@@ -100,7 +77,7 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   late List<Place> _placesFoundList = [];
 
   /// Флаг начала процесса поиска мест.
-  bool _searchInProgress = false;
+  bool _isSearchQueryInProgress = false;
 
   /// Данные строки поиска.
   String _searchString = '';
@@ -134,12 +111,12 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
     _searchString = _searchController.text.trim();
     if (_searchString.isNotEmpty) {
       setState(() {
-        _searchInProgress = true;
+        _isSearchQueryInProgress = true;
       });
 
       await _applyAllFilters(_searchString);
       setState(() {
-        _searchInProgress = false;
+        _isSearchQueryInProgress = false;
       });
     } else {
       setState(() {});
@@ -186,42 +163,30 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedPlaceSearchBodyState(
-      data: this,
-      child: Builder(
-        builder: (context) {
-          final dataStorage = _InheritedPlaceSearchBodyState.of(context);
-          final searchController = dataStorage._searchController;
-          final isSearchStringEmpty = dataStorage._searchString.isNotEmpty;
-          final isSearchQueryInProgress = dataStorage._searchInProgress;
-          final searchHistory =
-              dataStorage._placeSearchInteractor.searchHistory;
-          final searchString = dataStorage._searchString;
-          final placeFoundList = dataStorage._placesFoundList;
+    final dataStorage = this;
+    final isSearchStringEmpty = _searchString.isEmpty;
+    final searchHistory = _placeSearchInteractor.searchHistory;
 
-          return Column(
-            children: [
-              PlaceSearchBar(
-                controller: searchController,
-                onPressed: dataStorage._clearSearchText,
-              ),
-              SearchResults(
-                searchHistory: searchHistory,
-                searchString: searchString,
-                placesFoundList: placeFoundList,
-                onPlacesFoundItemPressed:
-                    dataStorage._placeSearchInteractor.addToSearchHistory,
-                isSearchStringEmpty: isSearchStringEmpty,
-                isSearchQueryInProgress: isSearchQueryInProgress,
-                onClearHistoryPressed: dataStorage._deleteAllItemsFromSet,
-                onHistorySearchItemPressed: _fillSearchFieldWithItem,
-                onDeleteHistorySearchItemPressed:
-                    dataStorage._deleteFromSearchHistory,
-              ),
-            ],
-          );
-        },
-      ),
+    return Column(
+      children: [
+        PlaceSearchBar(
+          controller: _searchController,
+          onPressed: _clearSearchText,
+        ),
+        SearchResults(
+          searchHistory: searchHistory,
+          searchString: _searchString,
+          placesFoundList: _placesFoundList,
+          onPlacesFoundItemPressed:
+              dataStorage._placeSearchInteractor.addToSearchHistory,
+          isSearchStringEmpty: isSearchStringEmpty,
+          isSearchQueryInProgress: _isSearchQueryInProgress,
+          onClearHistoryPressed: dataStorage._deleteAllItemsFromSet,
+          onHistorySearchItemPressed: _fillSearchFieldWithItem,
+          onDeleteHistorySearchItemPressed:
+              dataStorage._deleteFromSearchHistory,
+        ),
+      ],
     );
   }
 }
