@@ -41,11 +41,12 @@ class SearchResults extends StatelessWidget {
               children: [
                 SearchHistory(
                   searchHistory: searchHistory,
-                  isSearchStringEmpty: isSearchStringEmpty,
                   onClearHistoryPressed: onClearHistoryPressed,
                   onHistorySearchItemPressed: onHistorySearchItemPressed,
                   onDeleteHistorySearchItemPressed:
                       onDeleteHistorySearchItemPressed,
+                  showCondition: () =>
+                      searchHistory.isNotEmpty && isSearchStringEmpty,
                 ),
                 PlacesFoundList(
                   placesFoundList: placesFoundList,
