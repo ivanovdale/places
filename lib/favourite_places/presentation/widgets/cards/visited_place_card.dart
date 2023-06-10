@@ -4,6 +4,8 @@ import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 
+typedef OnDeletePressed = Function(Place);
+
 /// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
 ///
 /// Переопределяет поле [actions] - в списке кнопок карточки 2 элемента - кнопка удаления из избранного, кнопка "поделиться".
@@ -11,10 +13,9 @@ import 'package:places/helpers/app_assets.dart';
 /// Также переопределяет поле [showDetails] - для отображения информации о посещенном месте.
 ///
 /// Имеет параметры:
-/// * [place] - модель места (обязательный);
+/// * [place] - модель места (обязательный).
 class VisitedPlaceCard extends BasePlaceCard {
   final VoidCallback onSharePressed;
-  final VoidCallback onDeletePressed;
 
   @override
   final Widget actions;
@@ -24,8 +25,8 @@ class VisitedPlaceCard extends BasePlaceCard {
 
   VisitedPlaceCard(
     Place place, {
+    OnDeletePressed? onDeletePressed,
     required this.onSharePressed,
-    required this.onDeletePressed,
     Key? key,
   })  : actions = _PlaceActions(
           onSharePressed: onSharePressed,
@@ -40,7 +41,7 @@ class VisitedPlaceCard extends BasePlaceCard {
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
   final VoidCallback onSharePressed;
-  final VoidCallback onDeletePressed;
+  final OnDeletePressed? onDeletePressed;
 
   const _PlaceActions({
     Key? key,
@@ -57,7 +58,7 @@ class _PlaceActions extends StatelessWidget {
       ),
       InkWell(
         child: SvgPicture.asset(AppAssets.close),
-        onTap: onDeletePressed,
+        onTap: () => onDeletePressed,
       ),
     ];
 

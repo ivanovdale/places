@@ -52,6 +52,12 @@ class AddPlaceScreen extends StatelessWidget {
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
 class _InheritedAddPlaceBodyState extends InheritedWidget {
+  static _AddPlaceBodyState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedAddPlaceBodyState>() as _InheritedAddPlaceBodyState)
+        .data;
+  }
+
   final _AddPlaceBodyState data;
 
   const _InheritedAddPlaceBodyState({
@@ -64,15 +70,9 @@ class _InheritedAddPlaceBodyState extends InheritedWidget {
   bool updateShouldNotify(_InheritedAddPlaceBodyState old) {
     return true;
   }
-
-  static _AddPlaceBodyState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedAddPlaceBodyState>() as _InheritedAddPlaceBodyState)
-        .data;
-  }
 }
 
-/// Отображает свойства добавленяемого места: категория, название, описание, координаты.
+/// Отображает свойства добавленяемого места - категория, название, описание, координаты.
 /// Позволяет ввести географические координаты места, указав точку на карте.
 /// Имеет кнопку "Создать" для добавления нового места.
 class _AddPlaceBody extends StatefulWidget {
@@ -103,39 +103,6 @@ class _AddPlaceBodyState extends State<_AddPlaceBody> {
 
   /// Список добавляемых фото.
   late List<String> _newPhotoList = [];
-
-  @override
-  Widget build(BuildContext context) {
-    const defaultLabelPadding = EdgeInsets.only(
-      left: 16.0,
-      bottom: 12.0,
-    );
-
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: _InheritedAddPlaceBodyState(
-          data: this,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _PhotoCarousel(),
-              _PlaceTypeLabel(),
-              _PlaceTypeSelectionField(),
-              _PlaceTypePaddedDivider(),
-              _NameLabel(padding: defaultLabelPadding),
-              _NameTextField(),
-              _MapTextFields(),
-              _MarkOnMapButton(),
-              _DescriptionLabel(padding: defaultLabelPadding),
-              _DescriptionTextField(),
-              _CreateButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -171,6 +138,39 @@ class _AddPlaceBodyState extends State<_AddPlaceBody> {
     _latitudeFocusNode.dispose();
     _longitudeFocusNode.dispose();
     _descriptionFocusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const defaultLabelPadding = EdgeInsets.only(
+      left: 16.0,
+      bottom: 12.0,
+    );
+
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: _InheritedAddPlaceBodyState(
+          data: this,
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _PhotoCarousel(),
+              _PlaceTypeLabel(),
+              _PlaceTypeSelectionField(),
+              _PlaceTypePaddedDivider(),
+              _NameLabel(padding: defaultLabelPadding),
+              _NameTextField(),
+              _MapTextFields(),
+              _MarkOnMapButton(),
+              _DescriptionLabel(padding: defaultLabelPadding),
+              _DescriptionTextField(),
+              _CreateButton(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Устанавливает выбранный тип места.
@@ -998,7 +998,10 @@ class _ActionItem extends StatelessWidget {
               SvgPicture.asset(
                 iconAsset,
                 height: 24,
-                color: secondaryColor,
+                colorFilter: ColorFilter.mode(
+                  secondaryColor,
+                  BlendMode.srcIn,
+                ),
               ),
               const SizedBox(
                 width: 12,

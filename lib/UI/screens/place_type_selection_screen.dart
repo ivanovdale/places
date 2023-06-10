@@ -30,6 +30,13 @@ class PlaceTypeSelectionScreen extends StatelessWidget {
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
 class _InheritedPlaceTypeSelectionBodyState extends InheritedWidget {
+  static _PlaceTypeSelectionBodyState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+        _InheritedPlaceTypeSelectionBodyState>()
+    as _InheritedPlaceTypeSelectionBodyState)
+        .data;
+  }
+
   final _PlaceTypeSelectionBodyState data;
 
   const _InheritedPlaceTypeSelectionBodyState({
@@ -43,12 +50,7 @@ class _InheritedPlaceTypeSelectionBodyState extends InheritedWidget {
     return true;
   }
 
-  static _PlaceTypeSelectionBodyState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-                _InheritedPlaceTypeSelectionBodyState>()
-            as _InheritedPlaceTypeSelectionBodyState)
-        .data;
-  }
+
 }
 
 /// Выбор категории места.

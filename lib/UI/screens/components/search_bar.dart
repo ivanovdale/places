@@ -41,7 +41,10 @@ class SearchBar extends StatelessWidget {
           prefixIcon: SvgPicture.asset(
             AppAssets.search,
             fit: BoxFit.none,
-            color: secondaryColor,
+            colorFilter: ColorFilter.mode(
+              secondaryColor,
+              BlendMode.srcIn,
+            ),
           ),
           suffixIcon: suffixIcon,
           counterText: '',

@@ -8,7 +8,7 @@ import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/label_field_text.dart';
 import 'package:places/UI/screens/components/placeholders/places_not_found_placeholder.dart';
 import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
-import 'package:places/UI/screens/components/search_bar.dart';
+import 'package:places/UI/screens/components/search_bar.dart' as custom_search_bar;
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
@@ -58,6 +58,12 @@ class PlaceSearchScreen extends StatelessWidget {
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
 class _InheritedPlaceSearchBodyState extends InheritedWidget {
+  static _PlaceSearchBodyState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedPlaceSearchBodyState>() as _InheritedPlaceSearchBodyState)
+        .data;
+  }
+
   final _PlaceSearchBodyState data;
 
   const _InheritedPlaceSearchBodyState({
@@ -69,12 +75,6 @@ class _InheritedPlaceSearchBodyState extends InheritedWidget {
   @override
   bool updateShouldNotify(_InheritedPlaceSearchBodyState old) {
     return true;
-  }
-
-  static _PlaceSearchBodyState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedPlaceSearchBodyState>() as _InheritedPlaceSearchBodyState)
-        .data;
   }
 }
 
@@ -118,25 +118,6 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
     _addListenerToUpdatePlacesFoundList();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _InheritedPlaceSearchBodyState(
-      data: this,
-      child: Column(
-        children: const [
-          _SearchBar(),
-          _SearchResults(),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _searchController.dispose();
-  }
-
   /// Устанавливает параметры поиска и координаты пользователя для интерактора.
   void _initializeFiltersAndUserCoordinates() {
     _placeSearchInteractor
@@ -150,23 +131,28 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
   /// Когда были найдены места, то флаг поиска убирается.
   /// Если строка поиска пустая, то ничего не делать.
   void _addListenerToUpdatePlacesFoundList() {
-    _searchController.addListener(() {
-      _searchString = _searchController.text.trim();
-      if (_searchString.isNotEmpty) {
-        setState(() {
-          _searchInProgress = true;
-        });
-
-        _applyAllFilters(_searchString).then((value) => setState(() {
-              _searchInProgress = false;
-            }));
-      } else {
-        setState(() {});
-      }
-    });
+    _searchController.addListener(_updatePlacesListener);
   }
 
-  /// Очищает поле поиска
+  void _updatePlacesListener() => _updatePlacesFoundList();
+
+  Future<void> _updatePlacesFoundList() async {
+    _searchString = _searchController.text.trim();
+    if (_searchString.isNotEmpty) {
+      setState(() {
+        _searchInProgress = true;
+      });
+
+      await _applyAllFilters(_searchString);
+      setState(() {
+        _searchInProgress = false;
+      });
+    } else {
+      setState(() {});
+    }
+  }
+
+  /// Очищает поле поиска.
   void _clearSearchText() {
     _searchController.clear();
   }
@@ -197,6 +183,25 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
     _placesFoundList =
         await _placeSearchInteractor.getFilteredPlaces(searchString);
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _InheritedPlaceSearchBodyState(
+      data: this,
+      child: const Column(
+        children: [
+          _SearchBar(),
+          _SearchResults(),
+        ],
+      ),
+    );
+  }
 }
 
 /// Поле ввода для поиска мест.
@@ -210,7 +215,7 @@ class _SearchBar extends StatelessWidget {
     final dataStorage = _InheritedPlaceSearchBodyState.of(context);
     final searchController = dataStorage._searchController;
 
-    return SearchBar(
+    return custom_search_bar.SearchBar(
       controller: searchController,
       autofocus: true,
       suffixIcon: IconButton(
@@ -222,7 +227,7 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-/// Отображает результаты поиска: историю прошлых поисков или найденные места,
+/// Отображает результаты поиска - историю прошлых поисков или найденные места,
 /// если в строке поиска начат ввод текста.
 class _SearchResults extends StatelessWidget {
   const _SearchResults({Key? key}) : super(key: key);
@@ -233,10 +238,10 @@ class _SearchResults extends StatelessWidget {
     final searchInProgress = dataStorage._searchInProgress;
 
     return !searchInProgress
-        ? Expanded(
+        ? const Expanded(
             flex: 10,
             child: Column(
-              children: const [
+              children: [
                 _SearchHistory(),
                 _PlacesFoundList(),
               ],
@@ -271,10 +276,10 @@ class _SearchHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           _SearchedByYouLabel(),
           _SearchHistoryItems(),
         ],
@@ -431,6 +436,12 @@ class _HistorySearchItemTextButton extends StatelessWidget {
     required this.place,
   }) : super(key: key);
 
+  /// Заполняет поле поиска заданным элементом.
+  void _fillSearchFieldWithItem(BuildContext context) {
+    _InheritedPlaceSearchBodyState.of(context)
+        ._fillSearchFieldWithItem(place.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -444,12 +455,6 @@ class _HistorySearchItemTextButton extends StatelessWidget {
       alignment: Alignment.centerLeft,
       onPressed: () => _fillSearchFieldWithItem(context),
     );
-  }
-
-  /// Заполняет поле поиска заданным элементом.
-  void _fillSearchFieldWithItem(BuildContext context) {
-    _InheritedPlaceSearchBodyState.of(context)
-        ._fillSearchFieldWithItem(place.name);
   }
 }
 
@@ -522,6 +527,20 @@ class _PlacesFoundItem extends StatelessWidget {
     this.isLastItem = false,
   }) : super(key: key);
 
+  /// Сохранение места в истории поиска и открытие боттомшита детализации места.
+  void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {
+    // Сохранить переход в истории поиска.
+    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
+    dataStorage._placeSearchInteractor.addToSearchHistory(place);
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -545,23 +564,9 @@ class _PlacesFoundItem extends StatelessWidget {
       ),
     );
   }
-
-  /// Сохранение места в истории поиска и открытие боттомшита детализации места.
-  void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {
-    // Сохранить переход в истории поиска.
-    final dataStorage = _InheritedPlaceSearchBodyState.of(context);
-    dataStorage._placeSearchInteractor.addToSearchHistory(place);
-
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
-    );
-  }
 }
 
-/// Картинка найденного места
+/// Картинка найденного места.
 class _PlaceFoundImage extends StatelessWidget {
   /// Картинка по умолчанию.
   static const defaultImageUrl =

@@ -9,14 +9,14 @@ import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
-import 'package:places/providers/interactor_provider.dart';
+import 'package:places/providers/place_interactor_provider.dart';
 import 'package:places/utils/string_extension.dart';
 import 'package:provider/provider.dart';
 
 /// Для указания минимального и максимального значения слайдера расстояния.
 const minRangeValue = 0.1;
 const maxRangeValue =
-    10000001.1; // 0.1 в конце добавляется для правильной работы бэкенда (костыль)
+    10000001.1; // 0.1 в конце добавляется для правильной работы бэкенда (костыль).
 
 /// Время активации фильтра по расстоянию до места.
 const applianceDistanceFilterDelayInMillis = 500;
@@ -42,7 +42,7 @@ class PlaceFiltersScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlaceFiltersScreenState createState() => _PlaceFiltersScreenState();
+  PlaceFiltersScreenState createState() => PlaceFiltersScreenState();
 }
 
 /// Состояние экрана фильтров мест.
@@ -51,7 +51,7 @@ class PlaceFiltersScreen extends StatefulWidget {
 /// * [selectedPlaceTypeFilters] - список выбранных фильтров по категории мест.
 /// * [filteredPlacesNumber] - количество мест после фильтрации;
 /// * [radius] - расстояние до места.
-class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
+class PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
   /// Список выбранных фильтров по категории мест.
   late Set<PlaceTypes> selectedPlaceTypeFilters;
 
@@ -68,7 +68,7 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
   void initState() {
     super.initState();
     initializeFilters();
-    setFilteredPlacesNumber().then((value) => setState(() {}));
+    setFilteredPlacesNumber();
   }
 
   @override
@@ -98,7 +98,7 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
 
       _debounce = Timer(
         const Duration(milliseconds: applianceDistanceFilterDelayInMillis),
-        setFilteredPlacesNumber,
+        () => setFilteredPlacesNumber,
       );
     });
   }
@@ -158,7 +158,13 @@ class _PlaceFiltersScreenState extends State<PlaceFiltersScreen> {
 /// Прокидывает данные [data] вниз по дереву.
 /// Всегда оповещает дочерние виджеты о перерисовке.
 class _InheritedFiltersScreenState extends InheritedWidget {
-  final _PlaceFiltersScreenState data;
+  static PlaceFiltersScreenState of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<
+        _InheritedFiltersScreenState>() as _InheritedFiltersScreenState)
+        .data;
+  }
+
+  final PlaceFiltersScreenState data;
 
   const _InheritedFiltersScreenState({
     Key? key,
@@ -169,12 +175,6 @@ class _InheritedFiltersScreenState extends InheritedWidget {
   @override
   bool updateShouldNotify(_InheritedFiltersScreenState old) {
     return true;
-  }
-
-  static _PlaceFiltersScreenState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedFiltersScreenState>() as _InheritedFiltersScreenState)
-        .data;
   }
 }
 
@@ -187,10 +187,10 @@ class _FiltersBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
-        children: const [
+        children: [
           _PlaceTypesText(),
           _PlaceTypeFilters(),
           _DistanceFilterText(),
@@ -519,7 +519,10 @@ class _FilterCircle extends StatelessWidget {
                   placeFilter.imagePath,
                   height: 32,
                   width: 32,
-                  color: colorSchemePrimaryColor,
+                  colorFilter: ColorFilter.mode(
+                    colorSchemePrimaryColor,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
@@ -577,7 +580,7 @@ class _DistanceFilterSlider extends StatelessWidget {
         onChanged: (currentValue) {
           final radiusInMeters =
               double.parse(currentValue.toStringAsFixed(1)) * 1000;
-          // + 0.1 к радиусу - костыль для работы бэкенда. -_-
+          // + 0.1 к радиусу - костыль для работы бэкенда.
           dataStorage.applyDistanceFilter(radiusInMeters + 0.1);
         },
         value: radiusInKilometers,

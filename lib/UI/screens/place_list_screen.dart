@@ -9,14 +9,17 @@ import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
-import 'package:places/UI/screens/components/search_bar.dart';
+import 'package:places/UI/screens/components/search_bar.dart'
+    as custom_search_bar;
 import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
+import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/providers/interactor_provider.dart';
-import 'package:places/stores/place_list_store/place_list_store.dart';
+import 'package:places/providers/place_interactor_provider.dart';
+import 'package:places/stores/place_list_store/place_list_store_base.dart';
 import 'package:provider/provider.dart';
 
 /// Экран списка мест.
@@ -44,6 +47,25 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
     _store.getFilteredPlaces();
   }
 
+  /// Открывает экран добавления места.
+  ///
+  /// Если было создано новое место, добавляет его в список мест и обновляет экран.
+  Future<void> _openAddPlaceScreen(BuildContext context) async {
+    var newPlace = await Navigator.pushNamed<Place?>(
+      context,
+      AppRouter.addPlace,
+    );
+
+    if (newPlace != null && mounted) {
+      newPlace = await context
+          .read<PlaceInteractorProvider>()
+          .placeInteractor
+          .addNewPlace(newPlace);
+
+      if (mounted) await context.read<PlaceListStore>().getFilteredPlaces();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
@@ -62,25 +84,6 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
-  }
-
-  /// Открывает экран добавления места.
-  ///
-  /// Если было создано новое место, добавляет его в список мест и обновляет экран.
-  Future<void> _openAddPlaceScreen(BuildContext context) async {
-    var newPlace = await Navigator.pushNamed<Place?>(
-      context,
-      AppRouter.addPlace,
-    );
-
-    if (newPlace != null && mounted) {
-      newPlace = await context
-          .read<PlaceInteractorProvider>()
-          .placeInteractor
-          .addNewPlace(newPlace);
-
-      if (mounted) await context.read<PlaceListStore>().getFilteredPlaces();
-    }
   }
 }
 
@@ -141,8 +144,9 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
     final title = isScrollStarted
         ? AppStrings.placeListAppBarTitle
         : AppStrings.placeListAppBarTitleWithLineBreak;
-    final titleTextStyle =
-        isScrollStarted ? theme.textTheme.titleMedium : theme.textTheme.headlineMedium;
+    final titleTextStyle = isScrollStarted
+        ? theme.textTheme.titleMedium
+        : theme.textTheme.headlineMedium;
     final centerTitle = isScrollStarted;
 
     return Column(
@@ -165,7 +169,7 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
           child: Opacity(
             // При сужении аппбара строка поиска становится невидимой.
             opacity: 1 - shrinkOffset / expandedHeight,
-            child: SearchBar(
+            child: custom_search_bar.SearchBar(
               readOnly: true,
               // Не обрабатывать нажатия, когда строка поиска уже скрыта.
               onTap: isScrollStarted
@@ -232,9 +236,11 @@ class _SliverPlaceList extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: PlaceCard(
                     place,
-                    toggleFavorites: () => context
-                        .read<PlaceInteractorProvider>()
-                        .toggleFavorites(place),
+                    toggleFavorites: () {
+                      context.read<FavouritePlacesBloc>().add(
+                            ToggleFavouritesEvent(place),
+                          );
+                    },
                   ),
                 );
               },
@@ -274,22 +280,6 @@ class _FilterButton extends StatelessWidget {
     this.isButtonDisabled = false,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return IconButton(
-      icon: SvgPicture.asset(
-        AppAssets.filter,
-        fit: BoxFit.none,
-        color: theme.colorScheme.primary,
-      ),
-      color: theme.primaryColorDark,
-      onPressed:
-          isButtonDisabled ? null : () => _navigateToFiltersScreen(context),
-    );
-  }
-
   /// Открывает экран фильтрации мест.
   ///
   /// После выбора фильтров сохраняет их в стейте текущего экрана и затем применяет их.
@@ -313,6 +303,25 @@ class _FilterButton extends StatelessWidget {
       store.saveFilters(placeTypeFilters, radius);
       await store.getFilteredPlaces();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return IconButton(
+      icon: SvgPicture.asset(
+        AppAssets.filter,
+        fit: BoxFit.none,
+        colorFilter: ColorFilter.mode(
+          theme.colorScheme.primary,
+          BlendMode.srcIn,
+        ),
+      ),
+      color: theme.primaryColorDark,
+      onPressed:
+          isButtonDisabled ? null : () => _navigateToFiltersScreen(context),
+    );
   }
 }
 

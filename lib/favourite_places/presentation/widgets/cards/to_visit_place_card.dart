@@ -11,11 +11,8 @@ import 'package:places/helpers/app_assets.dart';
 /// Также переопределяет поле [showDetails] - для отображения информации о планируемом посещении места.
 ///
 /// Имеет параметры:
-/// * [place] - модель места (обязательный);
+/// * [place] - модель места (обязательный).
 class ToVisitPlaceCard extends BasePlaceCard {
-  final VoidCallback onCalendarPressed;
-  final VoidCallback onDeletePressed;
-
   @override
   final Widget actions;
 
@@ -24,8 +21,8 @@ class ToVisitPlaceCard extends BasePlaceCard {
 
   ToVisitPlaceCard(
     Place place, {
-    required this.onCalendarPressed,
-    required this.onDeletePressed,
+    VoidCallback? onCalendarPressed,
+    VoidCallback? onDeletePressed,
     Key? key,
   })  : actions = _PlaceActions(
           onCalendarPressed: onCalendarPressed,
@@ -39,13 +36,13 @@ class ToVisitPlaceCard extends BasePlaceCard {
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
-  final VoidCallback onCalendarPressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback? onCalendarPressed;
+  final VoidCallback? onDeletePressed;
 
   const _PlaceActions({
     Key? key,
-    required this.onCalendarPressed,
-    required this.onDeletePressed,
+    this.onCalendarPressed,
+    this.onDeletePressed,
   }) : super(key: key);
 
   @override

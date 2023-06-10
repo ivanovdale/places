@@ -26,7 +26,7 @@ class DioInterceptor extends Interceptor {
 
     printKeyValue('URI', response.requestOptions.uri);
     printKeyValue('STATUS CODE', response.statusCode ?? '');
-    printKeyValue('REDIRECT', response.isRedirect ?? false);
+    printKeyValue('REDIRECT', response.isRedirect);
     logPrint('BODY:');
     printAll(response.data as String);
 
@@ -57,11 +57,11 @@ class DioInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     switch (err.type) {
-      case DioErrorType.connectTimeout:
+      case DioErrorType.connectionTimeout:
       case DioErrorType.sendTimeout:
       case DioErrorType.receiveTimeout:
         throw DeadlineExceededException(err.requestOptions);
-      case DioErrorType.response:
+      case DioErrorType.badResponse:
         switch (err.response?.statusCode) {
           case 400:
             throw BadRequestException(err.requestOptions);
@@ -77,7 +77,9 @@ class DioInterceptor extends Interceptor {
         break;
       case DioErrorType.cancel:
         break;
-      case DioErrorType.other:
+      case DioErrorType.badCertificate:
+      case DioErrorType.connectionError:
+      case DioErrorType.unknown:
         throw NoInternetConnectionException(err.requestOptions);
     }
 

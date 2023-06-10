@@ -5,7 +5,7 @@ import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/providers/settings_provider.dart';
+import 'package:places/providers/settings_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Экран настроек.
@@ -37,14 +37,14 @@ class _SettingsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
         top: 42.0,
         left: 16.0,
         right: 16.0,
       ),
       child: Column(
-        children: const [
+        children: [
           _DarkModeSetting(),
           _DividerWithPaddingAndThickness(),
           _WatchTutorialInfo(),

@@ -1,6 +1,6 @@
 /// Хранилище путей ресурсов приложения.
 class AppAssets {
-  // CustomBottomNavigationBar
+  // CustomBottomNavigationBar.
   static const list = 'assets/icons/list.svg';
   static const listFilled = 'assets/icons/list_filled.svg';
   static const map = 'assets/icons/map.svg';
@@ -10,7 +10,7 @@ class AppAssets {
   static const settings = 'assets/icons/settings.svg';
   static const settingsFilled = 'assets/icons/settings_filled.svg';
 
-  // Иконки для карточки места - PlaceCard
+  // Иконки для карточки места - PlaceCard.
   static const close = 'assets/icons/close.svg';
   static const share = 'assets/icons/share.svg';
   static const calendar = 'assets/icons/calendar.svg';

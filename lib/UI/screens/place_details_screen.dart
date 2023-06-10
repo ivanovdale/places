@@ -10,8 +10,8 @@ import 'package:places/UI/screens/components/placeholders/error_placeholder.dart
 import 'package:places/domain/model/place.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/providers/interactor_provider.dart';
 import 'package:places/providers/place_details_provider.dart';
+import 'package:places/providers/place_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Экран подробностей места.
@@ -421,7 +421,10 @@ class _BuildRouteButton extends StatelessWidget {
           AppAssets.route,
           width: 24,
           height: 24,
-          color: onSecondaryColor,
+          colorFilter: ColorFilter.mode(
+            onSecondaryColor,
+            BlendMode.srcIn,
+          ),
         ),
         // TODO(daniiliv): Здесь будет вызов реальной функции.
         onPressed: () {
@@ -442,8 +445,8 @@ class _PlaceActionsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Expanded(
           child: _ToPlanButton(),
         ),
@@ -473,7 +476,10 @@ class _ToPlanButton extends StatelessWidget {
         AppAssets.calendar,
         width: 24,
         height: 24,
-        color: secondaryColor,
+        colorFilter: ColorFilter.mode(
+          secondaryColor,
+          BlendMode.srcIn,
+        ),
       ),
       // TODO(daniiliv): Здесь будет вызов реальной функции.
       onPressed: () {
@@ -503,7 +509,10 @@ class _ToFavouritesButton extends StatelessWidget {
         AppAssets.heart,
         width: 24,
         height: 24,
-        color: buttonColor,
+        colorFilter: ColorFilter.mode(
+          buttonColor,
+          BlendMode.srcIn,
+        ),
       ),
       // TODO(daniiliv): Здесь будет вызов реальной функции.
       onPressed: () {
