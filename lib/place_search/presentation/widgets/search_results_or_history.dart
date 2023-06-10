@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/place_search/presentation/widgets/places_found_list/components/place_found_item.dart';
 import 'package:places/place_search/presentation/widgets/places_found_list/places_found_list.dart';
-import 'package:places/place_search/presentation/widgets/search_history/components/delete_history_search_item_from_list_button.dart';
-import 'package:places/place_search/presentation/widgets/search_history/components/history_search_item_text_button.dart';
-import 'package:places/place_search/presentation/widgets/search_history/search_history.dart';
+import 'package:places/place_search/presentation/widgets/search_history_list/components/delete_history_search_item_from_list_button.dart';
+import 'package:places/place_search/presentation/widgets/search_history_list/components/history_search_item_text_button.dart';
+import 'package:places/place_search/presentation/widgets/search_history_list/search_history_list.dart';
 
 /// Отображает результаты поиска - историю прошлых поисков или найденные места,
 /// если в строке поиска начат ввод текста.
-class SearchResults extends StatelessWidget {
+class SearchResultsOrHistory extends StatelessWidget {
   final Set<Place> searchHistory;
   final String searchString;
   final List<Place> placesFoundList;
@@ -19,7 +19,7 @@ class SearchResults extends StatelessWidget {
   final OnHistorySearchItemPressed? onHistorySearchItemPressed;
   final OnDeleteHistorySearchItemPressed? onDeleteHistorySearchItemPressed;
 
-  const SearchResults({
+  const SearchResultsOrHistory({
     Key? key,
     required this.searchHistory,
     required this.placesFoundList,
@@ -39,20 +39,22 @@ class SearchResults extends StatelessWidget {
             flex: 10,
             child: Column(
               children: [
-                SearchHistory(
-                  searchHistory: searchHistory,
-                  onClearHistoryPressed: onClearHistoryPressed,
-                  onHistorySearchItemPressed: onHistorySearchItemPressed,
-                  onDeleteHistorySearchItemPressed:
-                      onDeleteHistorySearchItemPressed,
-                  showCondition: () =>
-                      searchHistory.isNotEmpty && isSearchStringEmpty,
-                ),
-                PlacesFoundList(
-                  placesFoundList: placesFoundList,
-                  searchString: searchString,
-                  onPlacesFoundItemPressed: onPlacesFoundItemPressed,
-                ),
+                // Не показывать историю поиска, если она пуста, или если начат поиск мест.
+                if (searchHistory.isNotEmpty && isSearchStringEmpty)
+                  SearchHistoryList(
+                    searchHistory: searchHistory,
+                    onClearHistoryPressed: onClearHistoryPressed,
+                    onHistorySearchItemPressed: onHistorySearchItemPressed,
+                    onDeleteHistorySearchItemPressed:
+                        onDeleteHistorySearchItemPressed,
+                  ),
+                // Не показывать список найденных мест, если ещё не начат их поиск.
+                if (searchString.isNotEmpty)
+                  PlacesFoundList(
+                    placesFoundList: placesFoundList,
+                    searchString: searchString,
+                    onPlacesFoundItemPressed: onPlacesFoundItemPressed,
+                  ),
               ],
             ),
           )

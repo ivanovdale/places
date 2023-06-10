@@ -18,32 +18,27 @@ class PlacesFoundList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Не показывать список найденных мест, если ещё не начат их поиск.
-    return searchString.isEmpty
-        ? const SizedBox.shrink()
+    return placesFoundList.isNotEmpty
+        ? Expanded(
+            child: ListView(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 43,
+              ),
+              children: placesFoundList.map((placeFoundItem) {
+                final isLastItem = placesFoundList.last == placeFoundItem;
 
-        // Отобразить список найденных мест, если они были найдены.
-        : placesFoundList.isNotEmpty
-            ? Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 43,
-                  ),
-                  children: placesFoundList.map((placeFoundItem) {
-                    final isLastItem = placesFoundList.last == placeFoundItem;
-
-                    return PlaceFoundItem(
-                      place: placeFoundItem,
-                      searchString: searchString,
-                      onPlaceFoundItemPressed: onPlacesFoundItemPressed,
-                      isLastItem: isLastItem,
-                    );
-                  }).toList(),
-                ),
-              )
-            // Отобразить информацию, что места не найдены.
-            : const PlacesNotFoundInfo();
+                return PlaceFoundItem(
+                  place: placeFoundItem,
+                  searchString: searchString,
+                  onPlaceFoundItemPressed: onPlacesFoundItemPressed,
+                  isLastItem: isLastItem,
+                );
+              }).toList(),
+            ),
+          )
+        // Отобразить информацию, что места не найдены.
+        : const PlacesNotFoundInfo();
   }
 }

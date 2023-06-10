@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/place_search/presentation/widgets/search_history/components/delete_history_search_item_from_list_button.dart';
-import 'package:places/place_search/presentation/widgets/search_history/components/history_search_item_text_button.dart';
+import 'package:places/place_search/presentation/widgets/search_history_list/components/delete_history_search_item_from_list_button.dart';
+import 'package:places/place_search/presentation/widgets/search_history_list/components/history_search_item_text_button.dart';
 
 /// Элемент истории поиска.
 ///
