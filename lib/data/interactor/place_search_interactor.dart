@@ -12,45 +12,35 @@ class PlaceSearchInteractor {
   late List<PlaceTypes>? _typeFilter;
 
   /// Радиус поиска мест.
-  late double radius;
+  late double _radius;
 
   /// Координаты пользователя для поиска мест с учетом радиуса.
-  late CoordinatePoint userCoordinates;
+  late CoordinatePoint _userCoordinates;
 
-  /// Репозиторий работы с местами.
-  PlaceRepository placeRepository;
+  PlaceSearchInteractor(this._placeRepository);
 
-  PlaceSearchInteractor(this.placeRepository);
+  void setFilters({
+    List<PlaceTypes>? typeFilter,
+    required double radius,
+    required CoordinatePoint userCoordinates,
+  }) {
+    _typeFilter = typeFilter;
+    _radius = radius;
+    _userCoordinates = userCoordinates;
+  }
 
   /// Получает список мест после фильтрации по имени (и другим ранее сохраненным параметрам).
-  Future<List<Place>> getFilteredPlaces(
-    String name,
-  ) async {
+  Future<List<Place>> getFilteredPlaces(String name) async {
     final placesFilterRequest = PlacesFilterRequest(
-      coordinatePoint: userCoordinates,
-      radius: radius,
-      typeFilter: typeFilter,
+      coordinatePoint: _userCoordinates,
+      radius: _radius,
+      typeFilter: _typeFilter,
       nameFilter: name,
     );
 
     final filteredPlaces =
-        await placeRepository.getFilteredPlaces(placesFilterRequest);
+        await _placeRepository.getFilteredPlaces(placesFilterRequest);
 
     return filteredPlaces;
-  }
-
-  /// Удаляет все места из списка истории поиска.
-  void clearSearchHistory() {
-    searchHistory.clear();
-  }
-
-  /// Удаляет место из списка истории поиска.
-  void removeFromSearchHistory(Place place) {
-    searchHistory.remove(place);
-  }
-
-  /// Добавляет место в список истории поиска.
-  void addToSearchHistory(Place place) {
-    searchHistory.add(place);
   }
 }
