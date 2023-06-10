@@ -2,36 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:places/API/dio_api.dart';
 import 'package:places/app/app.dart';
-import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/data/repository/network_place_repository.dart';
 import 'package:places/domain/repository/place_repository.dart';
-import 'package:places/providers/bottom_bar_provider.dart';
-import 'package:places/providers/place_interactor_provider.dart';
-import 'package:places/providers/settings_interactor_provider.dart';
-import 'package:places/providers/visiting_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:places/place_search/presentation/redux/place_search_middleware.dart';
+import 'package:places/place_search/presentation/redux/place_search_reducer.dart';
+import 'package:places/place_search/presentation/redux/place_search_state.dart';
+import 'package:redux/redux.dart';
 
 void main() {
   final networkPlaceRepository = NetworkPlaceRepository(DioApi());
+  final store = getReduxStore(networkPlaceRepository);
   GetIt.instance.registerSingleton<PlaceRepository>(networkPlaceRepository);
+  GetIt.instance.registerSingleton<Store<PlaceSearchState>>(store);
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => PlaceInteractorProvider(networkPlaceRepository),
+    const App(),
+  );
+}
+
+Store<PlaceSearchState> getReduxStore(NetworkPlaceRepository networkPlaceRepository) {
+  return Store<PlaceSearchState>(
+    placesSearchReducers,
+    initialState: PlaceSearchState.initial(),
+    middleware: [
+      PlaceSearchMiddleware(
+        PlaceSearchInteractor(
+          networkPlaceRepository,
         ),
-        ChangeNotifierProvider(create: (context) => BottomBarProvider()),
-        ChangeNotifierProvider(
-          create: (context) => SettingsInteractorProvider(SettingsInteractor()),
-        ),
-        ChangeNotifierProxyProvider<PlaceInteractorProvider, VisitingProvider>(
-          update: (context, interactor, previousMessages) =>
-              VisitingProvider(interactor),
-          create: (context) => VisitingProvider(null),
-        ),
-      ],
-      child: const App(),
-    ),
+      ),
+    ],
   );
 }
