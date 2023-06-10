@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
-import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/domain/repository/place_repository.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/mocks.dart' as mocked;
+import 'package:places/place_search/presentation/redux/place_search_actions.dart';
+import 'package:places/place_search/presentation/redux/place_search_state.dart';
 import 'package:places/place_search/presentation/widgets/place_search_bar.dart';
-import 'package:places/place_search/presentation/widgets/search_results.dart';
+import 'package:places/place_search/presentation/widgets/search_results_or_history.dart';
+import 'package:places/utils/redux_store_ext.dart';
 
 /// Экран поиска мест.
 ///
@@ -68,33 +69,13 @@ class _PlaceSearchBody extends StatefulWidget {
 
 /// Хранит состояние поиска мест.
 class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
-  final PlaceSearchInteractor _placeSearchInteractor =
-      PlaceSearchInteractor(GetIt.instance.get<PlaceRepository>());
-
   final TextEditingController _searchController = TextEditingController();
-
-  /// Найденные места.
-  late List<Place> _placesFoundList = [];
-
-  /// Флаг начала процесса поиска мест.
-  bool _isSearchQueryInProgress = false;
-
-  /// Данные строки поиска.
-  String _searchString = '';
 
   @override
   void initState() {
     super.initState();
-    _initializeFiltersAndUserCoordinates();
-    _addListenerToUpdatePlacesFoundList();
-  }
 
-  /// Устанавливает параметры поиска и координаты пользователя для интерактора.
-  void _initializeFiltersAndUserCoordinates() {
-    _placeSearchInteractor
-      ..typeFilter = widget.placeTypeFilters.toList()
-      ..radius = widget.radius
-      ..userCoordinates = mocked.userCoordinates;
+    _addListenerToUpdatePlacesFoundList();
   }
 
   /// Обновляет список найденных мест.
@@ -105,54 +86,20 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
     _searchController.addListener(_updatePlacesListener);
   }
 
-  void _updatePlacesListener() => _updatePlacesFoundList();
+  void _updatePlacesListener() {
+    final store = context.reduxStore;
+    final searchString = _searchController.text.trim();
+    store.dispatch(
+      UpdateSearchString(
+        searchString,
+      ),
+    );
 
-  Future<void> _updatePlacesFoundList() async {
-    _searchString = _searchController.text.trim();
-    if (_searchString.isNotEmpty) {
-      setState(() {
-        _isSearchQueryInProgress = true;
-      });
-
-      await _applyAllFilters(_searchString);
-      setState(() {
-        _isSearchQueryInProgress = false;
-      });
-    } else {
-      setState(() {});
+    if (searchString.isNotEmpty) {
+      store.dispatch(
+        MakeSearch(searchString),
+      );
     }
-  }
-
-  /// Очищает поле поиска.
-  void _clearSearchText() {
-    _searchController.clear();
-  }
-
-  /// Удаляет элемент из списка истории поиска.
-  void _deleteFromSearchHistory(Place place) {
-    _placeSearchInteractor.removeFromSearchHistory(place);
-
-    setState(() {});
-  }
-
-  /// Удаляет все элементы из списка истории поиска.
-  void _deleteAllItemsFromSet() {
-    _placeSearchInteractor.clearSearchHistory();
-
-    setState(() {});
-  }
-
-  /// Заполняет поле поиска переданной строкой.
-  void _fillSearchFieldWithItem(Place place) {
-    _searchController.text = place.name;
-
-    setState(() {});
-  }
-
-  /// Применяет фильтрацию по всем текущим параметрам.
-  Future<void> _applyAllFilters(String searchString) async {
-    _placesFoundList =
-        await _placeSearchInteractor.getFilteredPlaces(searchString);
   }
 
   @override
@@ -163,28 +110,45 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = this;
-    final isSearchStringEmpty = _searchString.isEmpty;
-    final searchHistory = _placeSearchInteractor.searchHistory;
-
     return Column(
       children: [
         PlaceSearchBar(
           controller: _searchController,
-          onPressed: _clearSearchText,
+          onPressed: _searchController.clear,
         ),
-        SearchResults(
-          searchHistory: searchHistory,
-          searchString: _searchString,
-          placesFoundList: _placesFoundList,
-          onPlacesFoundItemPressed:
-              dataStorage._placeSearchInteractor.addToSearchHistory,
-          isSearchStringEmpty: isSearchStringEmpty,
-          isSearchQueryInProgress: _isSearchQueryInProgress,
-          onClearHistoryPressed: dataStorage._deleteAllItemsFromSet,
-          onHistorySearchItemPressed: _fillSearchFieldWithItem,
-          onDeleteHistorySearchItemPressed:
-              dataStorage._deleteFromSearchHistory,
+        StoreBuilder<PlaceSearchState>(
+          onInit: (store) => store.dispatch(
+            InitializeSearchFilters(
+              placeTypeFilters: widget.placeTypeFilters.toList(),
+              radius: widget.radius,
+              userCoordinates: mocked.userCoordinates,
+            ),
+          ),
+          builder: (context, store) {
+            final state = store.state;
+
+            return SearchResultsOrHistory(
+              searchHistory: state.searchHistory,
+              searchString: state.searchString,
+              placesFoundList: state.placesFoundList,
+              onPlacesFoundItemPressed: (place) => store.dispatch(
+                ToggleSearchHistory(place),
+              ),
+              isSearchStringEmpty: state.isSearchStringEmpty,
+              isSearchQueryInProgress: state.isSearchInProgress,
+              onClearHistoryPressed: () => store.dispatch(
+                ClearSearchHistory(),
+              ),
+              onHistorySearchItemPressed: (place) => store.dispatch(
+                FillSearchString(place),
+              ),
+              onDeleteHistorySearchItemPressed: (place) => store.dispatch(
+                ToggleSearchHistory(
+                  place,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
