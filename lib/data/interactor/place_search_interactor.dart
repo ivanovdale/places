@@ -5,14 +5,11 @@ import 'package:places/domain/repository/place_repository.dart';
 
 /// Интерактор для работы с поиском мест.
 class PlaceSearchInteractor {
-  /// Найденные места.
-  final List<Place> placesFoundList = [];
-
-  /// История поиска мест.
-  final Set<Place> searchHistory = {};
+  /// Репозиторий работы с местами.
+  final PlaceRepository _placeRepository;
 
   /// Фильтр по типу мест.
-  late List<PlaceTypes>? typeFilter;
+  late List<PlaceTypes>? _typeFilter;
 
   /// Радиус поиска мест.
   late double radius;
