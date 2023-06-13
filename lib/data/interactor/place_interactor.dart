@@ -1,16 +1,19 @@
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
 import 'package:places/domain/repository/place_repository.dart';
+import 'package:places/favourite_places/domain/favourite_place_repository.dart';
 
 /// Интерактор для работы с местами.
 class PlaceInteractor {
-  // Список избранных мест пользователя.
-  final List<Place> _favoritePlaces = [];
-
   /// Репозиторий работы с местами.
-  PlaceRepository placeRepository;
+  final PlaceRepository placeRepository;
 
-  PlaceInteractor(this.placeRepository);
+  final FavouritePlaceRepository favouritePlaceRepository;
+
+  PlaceInteractor({
+    required this.placeRepository,
+    required this.favouritePlaceRepository,
+  });
 
   /// Получает список мест после фильтрации.
   /// Добавляет пометку добавления в избранное для каждого места.
@@ -27,12 +30,9 @@ class PlaceInteractor {
     }
 
     // Добавляем пометку добавления в избранное для каждого места.
-    getFavoritePlaces()
-        .map((favoritePlace) => favoritePlace.id)
-        .toList()
-        .forEach((favoritePlaceId) {
-      final indexOfFilteredPlace = filteredPlaces
-          .indexWhere((filteredPlace) => filteredPlace.id == favoritePlaceId);
+    favouritePlaceRepository.getPlaces().forEach((place) {
+      final indexOfFilteredPlace =
+          filteredPlaces.indexWhere((filteredPlace) => filteredPlace == place);
 
       filteredPlaces[indexOfFilteredPlace].isFavorite = true;
     });
@@ -43,37 +43,6 @@ class PlaceInteractor {
   /// Возвращает детали места.
   Future<Place> getPlaceDetails(int id) async {
     return placeRepository.getPlaceById(id.toString());
-  }
-
-  /// Возвращает список избранных мест.
-  List<Place> getFavoritePlaces() {
-    return _favoritePlaces;
-  }
-
-  /// Возвращает список мест, планируемых к посещению.
-  List<Place> getToVisitPlaces() {
-    return _favoritePlaces.where((place) => !place.visited).toList();
-  }
-
-  /// Возвращает список посещенных мест.
-  List<Place> getVisitedPlaces() {
-    return _favoritePlaces.where((place) => place.visited).toList();
-  }
-
-  /// Добавляет место в список избранных и делает пометку объекту, что место в избранном.
-  /// Удаляет место из списка избранных и снимает пометку объекту, что место в избранном.
-  void toggleFavorites(Place place) {
-    final isFavorite = place.isFavorite;
-    place.isFavorite = !place.isFavorite;
-    isFavorite
-        ? _favoritePlaces
-            .removeWhere((favoritePlace) => favoritePlace.id == place.id)
-        : _favoritePlaces.add(place);
-  }
-
-  /// Делает пометку, что место посещено.
-  void addToVisitedPlaces(Place place) {
-    place.visited = true;
   }
 
   /// Добавляет новое место.

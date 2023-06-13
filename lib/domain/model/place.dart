@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:places/domain/model/coordinate_point.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_strings.dart';
@@ -16,7 +17,7 @@ import 'package:places/helpers/app_strings.dart';
 /// * [isFavorite] - признак добавления в избранное;
 /// * [visited] - признак посещения;
 /// * [distance] - расстояние от пользователя до места.
-class Place {
+class Place with EquatableMixin {
   int? id;
   String name;
   CoordinatePoint coordinatePoint;
@@ -28,6 +29,9 @@ class Place {
   bool isFavorite;
   bool visited;
   double? distance;
+
+  @override
+  List<Object?> get props => [id];
 
   Place({
     this.id,

@@ -8,7 +8,7 @@ import 'package:places/UI/screens/place_type_selection_screen.dart';
 import 'package:places/UI/screens/settings_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/favourite_places/view/favourite_places_screen.dart';
+import 'package:places/favourite_places/presentation/favourite_places_screen.dart';
 import 'package:places/place_search/presentation/place_search_screen.dart';
 
 /// Роутер для именованных роутов.

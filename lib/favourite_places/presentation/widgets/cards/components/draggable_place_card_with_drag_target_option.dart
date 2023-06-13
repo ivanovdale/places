@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/place_card/draggable_place_card.dart';
+import 'package:places/UI/screens/components/place_card/base_place_card.dart';
+import 'package:places/domain/model/place.dart';
+import 'package:places/favourite_places/presentation/widgets/cards/components/draggable_place_card.dart';
+
 
 /// Перетаскиваемая карточка места с возможностью перетаскивать на неё другие карточки для сортировки списка мест.
 class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
   final int index;
-  final Widget placeCard;
+  final Place place;
+  final BasePlaceCard placeCard;
   final bool isDragged;
   final VoidCallback? onDragStarted;
   final ValueChanged<DraggableDetails> onDragEnd;
-  final ValueChanged<int>? onAccept;
+  final ValueChanged<Place>? onAccept;
   final ValueChanged<PointerMoveEvent>? scrollPlaceCardsWhenCardDragged;
 
   const DraggablePlaceCardWithDragTargetOption({
     Key? key,
     required this.index,
+    required this.place,
     this.onAccept,
     required this.placeCard,
     required this.isDragged,
@@ -24,7 +29,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<int>(
+    return DragTarget<Place>(
       onWillAccept: (data) {
         return true;
       },
@@ -40,6 +45,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
           child: DraggablePlaceCard(
             placeCard: placeCard,
             index: index,
+            place: place,
             candidateData: candidateData,
             onDragStarted: onDragStarted,
             onDragEnd: onDragEnd,
