@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:places/API/dio_api.dart';
 import 'package:places/UI/screens/res/themes.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/network_place_repository.dart';
+import 'package:places/domain/repository/place_repository.dart';
 import 'package:places/favourite_places/data/favourite_place_data_repository.dart';
 import 'package:places/favourite_places/data/favourite_place_interactor.dart';
+import 'package:places/favourite_places/domain/favourite_place_repository.dart';
 import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/helpers/app_router.dart';
@@ -50,19 +51,23 @@ class App extends StatelessWidget {
 }
 
 class AppProviders extends StatelessWidget {
+  late final FavouritePlaceRepository favouritePlaceDataRepository;
+  late final PlaceRepository networkPlaceRepository;
+  late final Store<PlaceSearchState> reduxStore;
   final Widget child;
 
-  const AppProviders({
+  AppProviders({
     Key? key,
     required this.child,
-  }) : super(key: key);
+  }) : super(key: key) {
+    final networkPlaceRepository = NetworkPlaceRepository(DioApi());
+    favouritePlaceDataRepository = FavouritePlaceDataRepository();
+    this.networkPlaceRepository = networkPlaceRepository;
+    reduxStore = _getReduxStore(networkPlaceRepository);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final favouritePlaceDataRepository = FavouritePlaceDataRepository();
-    final networkPlaceRepository = NetworkPlaceRepository(DioApi());
-    final reduxStore = _getReduxStore(networkPlaceRepository);
-
     return StoreProvider<PlaceSearchState>(
       store: reduxStore,
       child: BlocProvider(
