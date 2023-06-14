@@ -9,8 +9,8 @@ import 'package:places/place_search/presentation/widgets/search_history_list/com
 /// Позволяет удалить элемент из списка истории поиска.
 class SearchItem extends StatelessWidget {
   final Place place;
-  final OnHistorySearchItemPressed? onHistorySearchItemPressed;
-  final OnDeleteHistorySearchItemPressed? onDeleteHistorySearchItemPressed;
+  final ValueSetter<Place>? onHistorySearchItemPressed;
+  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchItem({
     Key? key,

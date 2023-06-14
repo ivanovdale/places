@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_icon_button.dart';
 import 'package:places/domain/model/place.dart';
 
-typedef OnDeleteHistorySearchItemPressed = ValueSetter<Place>;
-
 /// Кнопка удаления элемента истории поиска из списка.
 class DeleteHistorySearchItemFromListButton extends StatelessWidget {
   final Place place;
-  final OnDeleteHistorySearchItemPressed? onDeleteHistorySearchItemPressed;
+  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const DeleteHistorySearchItemFromListButton({
     Key? key,

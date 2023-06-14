@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/domain/model/place.dart';
 
-typedef OnHistorySearchItemPressed = ValueSetter<Place>;
-
 /// Текстовая кнопка элемента истории поиска.
 ///
 /// При нажатии заполняется поле поиска места.
 class HistorySearchItemTextButton extends StatelessWidget {
   final Place place;
-  final OnHistorySearchItemPressed? onHistorySearchItemPressed;
+  final ValueSetter<Place>? onHistorySearchItemPressed;
 
   const HistorySearchItemTextButton({
     Key? key,

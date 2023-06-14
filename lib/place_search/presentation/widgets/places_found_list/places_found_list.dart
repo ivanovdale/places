@@ -6,7 +6,7 @@ import 'package:places/place_search/presentation/widgets/places_found_list/compo
 /// Список найденных мест.
 class PlacesFoundList extends StatelessWidget {
   final List<Place> placesFoundList;
-  final OnPlaceFoundItemPressed? onPlacesFoundItemPressed;
+  final ValueSetter<Place>? onPlacesFoundItemPressed;
   final String searchString;
 
   const PlacesFoundList({

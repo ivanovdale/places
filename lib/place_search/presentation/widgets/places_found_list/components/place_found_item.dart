@@ -4,13 +4,11 @@ import 'package:places/domain/model/place.dart';
 import 'package:places/place_search/presentation/widgets/places_found_list/components/place_found_details.dart';
 import 'package:places/place_search/presentation/widgets/places_found_list/components/place_found_image.dart';
 
-typedef OnPlaceFoundItemPressed = ValueSetter<Place>;
-
 /// Найденное место.
 class PlaceFoundItem extends StatelessWidget {
   final Place place;
   final String searchString;
-  final OnPlaceFoundItemPressed? onPlaceFoundItemPressed;
+  final ValueSetter<Place>? onPlaceFoundItemPressed;
   final bool isLastItem;
 
   const PlaceFoundItem({

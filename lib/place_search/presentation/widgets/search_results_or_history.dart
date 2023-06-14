@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
-import 'package:places/place_search/presentation/widgets/places_found_list/components/place_found_item.dart';
 import 'package:places/place_search/presentation/widgets/places_found_list/places_found_list.dart';
-import 'package:places/place_search/presentation/widgets/search_history_list/components/delete_history_search_item_from_list_button.dart';
-import 'package:places/place_search/presentation/widgets/search_history_list/components/history_search_item_text_button.dart';
 import 'package:places/place_search/presentation/widgets/search_history_list/search_history_list.dart';
 
 /// Отображает результаты поиска - историю прошлых поисков или найденные места,
@@ -12,12 +9,12 @@ class SearchResultsOrHistory extends StatelessWidget {
   final Set<Place> searchHistory;
   final String searchString;
   final List<Place> placesFoundList;
-  final OnPlaceFoundItemPressed? onPlacesFoundItemPressed;
+  final ValueSetter<Place>? onPlacesFoundItemPressed;
   final bool isSearchStringEmpty;
   final bool isSearchQueryInProgress;
   final VoidCallback? onClearHistoryPressed;
-  final OnHistorySearchItemPressed? onHistorySearchItemPressed;
-  final OnDeleteHistorySearchItemPressed? onDeleteHistorySearchItemPressed;
+  final ValueSetter<Place>? onHistorySearchItemPressed;
+  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchResultsOrHistory({
     Key? key,
