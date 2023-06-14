@@ -14,6 +14,10 @@ class CoordinatePoint {
     required this.lon,
   });
 
+  CoordinatePoint.empty()
+      : lat = 0.0,
+        lon = 0.0;
+
   /// Возвращает признак, находится ли точка внутри окружности
   /// с нижней границей [radiusFrom] и верхней [radiusTo]. Центр окружности [centerPoint].
   bool isPointInsideRadius(

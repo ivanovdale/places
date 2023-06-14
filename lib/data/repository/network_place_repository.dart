@@ -4,9 +4,9 @@ import 'package:places/API/dio_api.dart';
 import 'package:places/API/dio_query_util.dart';
 import 'package:places/data/dto/place_dto.dart';
 import 'package:places/data/repository/place_mapper.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
+import 'package:places/domain/repository/place_repository.dart';
 
 /// Получает данные мест по сети.
 class NetworkPlaceRepository implements PlaceRepository {

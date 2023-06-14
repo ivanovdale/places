@@ -15,7 +15,6 @@ import 'package:places/favourite_places/presentation/widgets/cards/components/dr
 import 'package:places/favourite_places/presentation/widgets/cards/to_visit_place_card.dart';
 import 'package:places/favourite_places/presentation/widgets/cards/visited_place_card.dart';
 import 'package:places/favourite_places/presentation/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list.dart';
-
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_strings.dart';

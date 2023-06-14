@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/favourite_places/presentation/widgets/visiting_place_list/base_visiting_place_list/base_visiting_place_list_state.dart';
 
-
 typedef OnPlaceInserted = Function(Place, Place);
 typedef OnPlaceDeleted = Function(Place);
 
