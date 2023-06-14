@@ -27,9 +27,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Локализация форматирования даты в приложении.
-    initializeDateFormatting('ru', '');
-
     return AppProviders(
       child: Builder(
         builder: (context) {
