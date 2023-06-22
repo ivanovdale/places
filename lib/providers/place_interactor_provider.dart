@@ -1,6 +1,6 @@
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/repository/place_repository.dart';
-import 'package:places/favourite_places/domain/favourite_place_repository.dart';
+import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
 
 /// Провайдер для интерактора.
 ///
