@@ -46,6 +46,7 @@ class PlaceTypeSelectionField extends StatelessWidget {
   Future<void> selectPlaceTypeFromListOnNewScreen(BuildContext context) async {
     final dataStorage = InheritedAddPlaceBodyState.of(context);
 
+    // TODO(ivanovdale): Передавать тип места.
     final selectedPlaceType = await Navigator.pushNamed<PlaceTypes>(
       context,
       AppRouter.placeTypeSelection,
