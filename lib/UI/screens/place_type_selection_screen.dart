@@ -32,8 +32,8 @@ class PlaceTypeSelectionScreen extends StatelessWidget {
 class _InheritedPlaceTypeSelectionBodyState extends InheritedWidget {
   static _PlaceTypeSelectionBodyState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<
-        _InheritedPlaceTypeSelectionBodyState>()
-    as _InheritedPlaceTypeSelectionBodyState)
+                _InheritedPlaceTypeSelectionBodyState>()
+            as _InheritedPlaceTypeSelectionBodyState)
         .data;
   }
 
@@ -49,8 +49,6 @@ class _InheritedPlaceTypeSelectionBodyState extends InheritedWidget {
   bool updateShouldNotify(_InheritedPlaceTypeSelectionBodyState old) {
     return true;
   }
-
-
 }
 
 /// Выбор категории места.
@@ -63,8 +61,7 @@ class _PlaceTypeSelectionBody extends StatefulWidget {
 }
 
 /// Состояние выбора категории места. Хранит текущую выбранную категорию.
-class _PlaceTypeSelectionBodyState
-    extends State<_PlaceTypeSelectionBody> {
+class _PlaceTypeSelectionBodyState extends State<_PlaceTypeSelectionBody> {
   PlaceTypes? currentPlaceType;
 
   @override
@@ -91,16 +88,26 @@ class _PlaceTypesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const placeTypes = PlaceTypes.values;
+
     return Padding(
       padding: const EdgeInsets.only(top: 24.0),
       child: Column(
         children: [
-          Column(
-            children: PlaceTypes.values
-                .map((placeType) => _PlaceTypeItem(item: placeType))
-                .toList(),
+          Expanded(
+            child: Column(
+              children: placeTypes.map(
+                (placeType) {
+                  final isLastItem = placeTypes.last == placeType;
+
+                  return _PlaceTypeItem(
+                    item: placeType,
+                    useDivider: !isLastItem,
+                  );
+                },
+              ).toList(),
+            ),
           ),
-          const Spacer(),
           const _SaveButton(),
         ],
       ),
@@ -114,55 +121,61 @@ class _PlaceTypesList extends StatelessWidget {
 /// Устанавливает текущий выбранный тип места.
 class _PlaceTypeItem extends StatelessWidget {
   final PlaceTypes item;
+  final bool useDivider;
 
   const _PlaceTypeItem({
     Key? key,
     required this.item,
+    required this.useDivider,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage =
-        _InheritedPlaceTypeSelectionBodyState.of(context);
+    final dataStorage = _InheritedPlaceTypeSelectionBodyState.of(context);
     final currentPlaceType = dataStorage.currentPlaceType;
     final theme = Theme.of(context);
     final itemName = item.text;
+    final isItemChosen = item == currentPlaceType;
 
     return InkWell(
       onTap: () => dataStorage.setCurrentPlaceType(item),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Text(
+          Ink(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12.0,
+              horizontal: 16.0,
+            ),
+            child: Row(
+              children: [
+                Text(
                   itemName.capitalize(),
                   style: theme.textTheme.bodyLarge,
                 ),
-              ),
-              const Spacer(),
-              if (itemName == currentPlaceType?.text)
-                Padding(
-                  padding: const EdgeInsets.only(right: 24.0),
-                  child: Icon(
-                    Icons.done_outlined,
-                    color: theme.colorScheme.primary,
-                    size: 18,
+                const Spacer(),
+                if (isItemChosen)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.done_outlined,
+                      color: theme.colorScheme.primary,
+                      size: 18,
+                    ),
                   ),
-                )
-              else
-                const SizedBox(),
-            ],
-          ),
-          CustomDivider(
-            thickness: 0.8,
-            color: theme.colorScheme.secondary.withOpacity(0.15),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
+              ],
             ),
           ),
+          if (useDivider)
+            CustomDivider(
+              height: 0,
+              thickness: 0.8,
+              color: theme.colorScheme.secondary.withOpacity(0.15),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+              ),
+            ),
         ],
       ),
     );
@@ -177,8 +190,7 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage =
-        _InheritedPlaceTypeSelectionBodyState.of(context);
+    final dataStorage = _InheritedPlaceTypeSelectionBodyState.of(context);
     final currentPlaceType = dataStorage.currentPlaceType;
 
     // Логика изменения цвета кнопки в зависимости от выбранной категории.

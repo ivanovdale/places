@@ -12,8 +12,8 @@ import 'package:places/UI/screens/components/placeholders/error_placeholder.dart
 import 'package:places/UI/screens/components/search_bar.dart'
     as custom_search_bar;
 import 'package:places/domain/model/place.dart';
-import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
-import 'package:places/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/helpers/app_assets.dart';
 import 'package:places/helpers/app_colors.dart';
 import 'package:places/helpers/app_router.dart';
@@ -51,18 +51,14 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
   ///
   /// Если было создано новое место, добавляет его в список мест и обновляет экран.
   Future<void> _openAddPlaceScreen(BuildContext context) async {
-    var newPlace = await Navigator.pushNamed<Place?>(
+    var isPlaceCreated = await Navigator.pushNamed<bool>(
       context,
       AppRouter.addPlace,
     );
+    isPlaceCreated ??= false;
 
-    if (newPlace != null && mounted) {
-      newPlace = await context
-          .read<PlaceInteractorProvider>()
-          .placeInteractor
-          .addNewPlace(newPlace);
-
-      if (mounted) await context.read<PlaceListStore>().getFilteredPlaces();
+    if (isPlaceCreated && mounted) {
+      await context.read<PlaceListStore>().getFilteredPlaces();
     }
   }
 
