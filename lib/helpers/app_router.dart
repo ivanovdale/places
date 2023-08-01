@@ -113,8 +113,8 @@ abstract class AppRouter {
     );
   }
 
-  static MaterialPageRoute<Place?> _getAddPlaceMaterialRoute() {
-    return MaterialPageRoute<Place?>(
+  static MaterialPageRoute<bool> _getAddPlaceMaterialRoute() {
+    return MaterialPageRoute<bool>(
       builder: (_) => const AddPlaceScreen(),
     );
   }

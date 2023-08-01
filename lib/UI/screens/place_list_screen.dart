@@ -51,18 +51,14 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
   ///
   /// Если было создано новое место, добавляет его в список мест и обновляет экран.
   Future<void> _openAddPlaceScreen(BuildContext context) async {
-    var newPlace = await Navigator.pushNamed<Place?>(
+    var isPlaceCreated = await Navigator.pushNamed<bool>(
       context,
       AppRouter.addPlace,
     );
+    isPlaceCreated ??= false;
 
-    if (newPlace != null && mounted) {
-      newPlace = await context
-          .read<PlaceInteractorProvider>()
-          .placeInteractor
-          .addNewPlace(newPlace);
-
-      if (mounted) await context.read<PlaceListStore>().getFilteredPlaces();
+    if (isPlaceCreated && mounted) {
+      await context.read<PlaceListStore>().getFilteredPlaces();
     }
   }
 
