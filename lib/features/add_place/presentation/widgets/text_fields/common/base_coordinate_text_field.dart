@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/common/custom_text_form_field.dart';
 import 'package:places/helpers/app_strings.dart';
 import 'package:places/utils/replace_comma_formatter.dart';
@@ -15,8 +14,6 @@ import 'package:places/utils/replace_comma_formatter.dart';
 /// * [maxLength] - максимальную длину поля;
 /// * [padding] - отступ для поля.
 abstract class BaseCoordinateTextField extends StatelessWidget {
-  final BuildContext context;
-  abstract final AddPlaceBodyState dataStorage;
   abstract final TextEditingController controller;
   abstract final FocusNode focusNode;
   abstract final FocusNode? nextFocusNode;
@@ -25,7 +22,6 @@ abstract class BaseCoordinateTextField extends StatelessWidget {
 
   const BaseCoordinateTextField({
     Key? key,
-    required this.context,
   }) : super(key: key);
 
   @override

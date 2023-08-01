@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/add_new_photo_button.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/new_photo_card.dart';
 
@@ -7,25 +6,36 @@ import 'package:places/features/add_place/presentation/widgets/photo_carousel/co
 ///
 /// Позволяет добавить/удалить фотографии из списка.
 class PhotoCarousel extends StatelessWidget {
-  const PhotoCarousel({Key? key}) : super(key: key);
+  final List<String> newPhotoList;
+  final ValueSetter<String> onAddNewPhotoPressed;
+  final ValueSetter<int> onDeletePhotoPressed;
+
+  const PhotoCarousel({
+    Key? key,
+    required this.newPhotoList,
+    required this.onAddNewPhotoPressed,
+    required this.onDeletePhotoPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataStorage = InheritedAddPlaceBodyState.of(context);
-
     var currentPhotoIndex = 0;
-    final newPhotoList = dataStorage.newPhotoList;
-    List<Widget> newPhotoCardList;
-    newPhotoCardList = newPhotoList
-        .map((photoUrl) {
-          return NewPhotoCard(
+    final newPhotoCards = newPhotoList
+        .map(
+          (photoUrl) => NewPhotoCard(
             photoUrl: photoUrl,
             index: currentPhotoIndex++,
-          );
-        })
-        .cast<Widget>()
-        .toList()
-      ..insert(0, const AddNewPhotoButton());
+            onDeletePhotoPressed: onDeletePhotoPressed,
+          ),
+        )
+        .toList();
+
+    final newPhotoCardList = <Widget>[
+      AddNewPhotoButton(
+        onAddNewPhotoPressed: onAddNewPhotoPressed,
+      ),
+      ...newPhotoCards,
+    ];
 
     return Container(
       padding: const EdgeInsets.only(left: 16.0, top: 24),

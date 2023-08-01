@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/common/base_coordinate_text_field.dart';
 
 /// Поле ввода широты координат места.
@@ -7,17 +6,18 @@ import 'package:places/features/add_place/presentation/widgets/text_fields/commo
 /// Задаёт следующим полем для ввода - поле ввода долготы координат места.
 /// Максимальная длина поля - 9 символов.
 class LatitudeTextField extends BaseCoordinateTextField {
-  @override
-  AddPlaceBodyState get dataStorage => InheritedAddPlaceBodyState.of(context);
+  final TextEditingController latitudeController;
+  final FocusNode latitudeFocusNode;
+  final FocusNode longitudeFocusNode;
 
   @override
-  TextEditingController get controller => dataStorage.latitudeController;
+  TextEditingController get controller => latitudeController;
 
   @override
-  FocusNode get focusNode => dataStorage.latitudeFocusNode;
+  FocusNode get focusNode => latitudeFocusNode;
 
   @override
-  FocusNode? get nextFocusNode => dataStorage.longitudeFocusNode;
+  FocusNode? get nextFocusNode => longitudeFocusNode;
 
   @override
   int get maxLength => 9;
@@ -29,10 +29,9 @@ class LatitudeTextField extends BaseCoordinateTextField {
       );
 
   const LatitudeTextField({
-    Key? key,
-    required BuildContext context,
-  }) : super(
-          key: key,
-          context: context,
-        );
+    super.key,
+    required this.latitudeController,
+    required this.latitudeFocusNode,
+    required this.longitudeFocusNode,
+  });
 }

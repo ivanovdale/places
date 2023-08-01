@@ -4,7 +4,12 @@ import 'package:places/helpers/app_strings.dart';
 
 /// Кнопка отмены добавления нового места.
 class CancelButton extends StatelessWidget {
-  const CancelButton({Key? key}) : super(key: key);
+  final VoidCallback onCancelButtonPressed;
+
+  const CancelButton({
+    Key? key,
+    required this.onCancelButtonPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +23,7 @@ class CancelButton extends StatelessWidget {
       padding: const EdgeInsets.only(
         left: 16.0,
       ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
+      onPressed: onCancelButtonPressed,
     );
   }
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/photo_picker.dart';
 import 'package:places/mocks.dart' as mocked;
 
 /// Кнопка добавления новой фотографии.
 class AddNewPhotoButton extends StatelessWidget {
-  const AddNewPhotoButton({Key? key}) : super(key: key);
+  final ValueSetter<String> onAddNewPhotoPressed;
+
+  const AddNewPhotoButton({
+    Key? key,
+    required this.onAddNewPhotoPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class AddNewPhotoButton extends StatelessWidget {
     const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;
 
     if (context.mounted) {
-      InheritedAddPlaceBodyState.of(context).addPhotoToList(newPhotoUrl);
+      onAddNewPhotoPressed(newPhotoUrl);
     }
   }
 }
