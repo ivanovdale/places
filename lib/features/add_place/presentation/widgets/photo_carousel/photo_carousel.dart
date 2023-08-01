@@ -37,10 +37,10 @@ class PhotoCarousel extends StatelessWidget {
       ...newPhotoCards,
     ];
 
-    return Container(
-      padding: const EdgeInsets.only(left: 16.0, top: 24),
+    return SizedBox(
       height: 100,
       child: ListView(
+        padding: const EdgeInsets.only(left: 16.0, top: 24),
         scrollDirection: Axis.horizontal,
         children: newPhotoCardList,
       ),

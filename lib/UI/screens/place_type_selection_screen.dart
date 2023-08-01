@@ -126,7 +126,7 @@ class _PlaceTypeItem extends StatelessWidget {
   const _PlaceTypeItem({
     Key? key,
     required this.item,
-    this.useDivider = true,
+    required this.useDivider,
   }) : super(key: key);
 
   @override
@@ -162,9 +162,7 @@ class _PlaceTypeItem extends StatelessWidget {
                       color: theme.colorScheme.primary,
                       size: 18,
                     ),
-                  )
-                else
-                  const SizedBox.shrink(),
+                  ),
               ],
             ),
           ),

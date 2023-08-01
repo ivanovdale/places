@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/features/add_place/presentation/add_place_wm.dart';
+import 'package:places/features/add_place/presentation/app_place_wm_builder.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/cancel_button.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/create_button.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/mark_on_map_button.dart';

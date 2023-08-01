@@ -11,13 +11,28 @@ class AddNewPhotoButton extends StatelessWidget {
     required this.onAddNewPhotoPressed,
   }) : super(key: key);
 
+  /// Открывает диалог для добавления нового фото в список добавляемых фото.
+  Future<void> _addPhotoToList(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const PhotoPicker(),
+    );
+    // TODO(daniiliv): *Как будто сработал image picker*.
+    const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;
+
+    if (context.mounted) {
+      onAddNewPhotoPressed(newPhotoUrl);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorSchemePrimaryColor = theme.colorScheme.primary;
 
     return GestureDetector(
-      onTap: () => addPhotoToList(context),
+      onTap: () => _addPhotoToList(context),
       child: Container(
         width: 72,
         height: 72,
@@ -36,20 +51,5 @@ class AddNewPhotoButton extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Открывает диалог для добавления нового фото в список добавляемых фото.
-  Future<void> addPhotoToList(BuildContext context) async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const PhotoPicker(),
-    );
-    // TODO(daniiliv): *Как будто сработал image picker*.
-    const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;
-
-    if (context.mounted) {
-      onAddNewPhotoPressed(newPhotoUrl);
-    }
   }
 }

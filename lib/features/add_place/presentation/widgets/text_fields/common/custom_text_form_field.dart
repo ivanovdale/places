@@ -36,6 +36,18 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
   }) : super(key: key);
 
+  /// Выполняет активацию нужного поля в зависимости от условия.
+  ///
+  /// Если определено поле следующего фокуса, то устанавливает его в качестве следующего поля ввода.
+  /// Иначе если установлен признак отключения фокуса при завершении редактирования поля, то выполняет данное действие.
+  void _changeFocus() {
+    if (nextFocusNode != null) {
+      nextFocusNode!.requestFocus();
+    } else if (unfocusWhenEditingComplete) {
+      focusNode.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -70,31 +82,17 @@ class CustomTextFormField extends StatelessWidget {
             ),
             suffixIcon: focusNode.hasFocus
                 ? IconButton(
-              icon: const Icon(Icons.cancel),
-              color: theme.primaryColorDark,
-              onPressed: controller.clear,
-            )
+                    icon: const Icon(Icons.cancel),
+                    color: theme.primaryColorDark,
+                    onPressed: controller.clear,
+                  )
                 : null,
           ),
           textAlignVertical: TextAlignVertical.top,
           style: theme.textTheme.bodyLarge,
-          onEditingComplete: changeFocus,
+          onEditingComplete: _changeFocus,
         ),
       ),
     );
-  }
-
-  /// Выполняет активацию нужного поля в зависимости от условия.
-  ///
-  /// Если определено поле следующего фокуса, то устанавливает его в качестве следующего поля ввода.
-  /// Иначе если установлен признак отключения фокуса при завершении редактирования поля, то выполняет данное действие.
-  void changeFocus() {
-    if (nextFocusNode != null) {
-      nextFocusNode?.requestFocus();
-    } else {
-      if (unfocusWhenEditingComplete) {
-        focusNode.unfocus();
-      }
-    }
   }
 }

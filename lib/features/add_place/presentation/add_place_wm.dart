@@ -1,11 +1,9 @@
 import 'package:elementary/elementary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/features/add_place/presentation/add_place_model.dart';
 import 'package:places/features/add_place/presentation/add_place_screen.dart';
-import 'package:places/providers/place_interactor_provider.dart';
 
 class AddPlaceWM extends WidgetModel<AddPlaceScreen, AddPlaceModel> {
   final TextEditingController nameController = TextEditingController();
@@ -90,10 +88,3 @@ class AddPlaceWM extends WidgetModel<AddPlaceScreen, AddPlaceModel> {
     Navigator.of(context).pop(false);
   }
 }
-
-AddPlaceWM createAddPlaceWM(BuildContext context) => AddPlaceWM(
-      AddPlaceModel(
-        placeInteractor:
-            context.read<PlaceInteractorProvider>().placeInteractor,
-      ),
-    );
