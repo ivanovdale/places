@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/onboarding_screen.dart';
+import 'package:places/UI/screens/on_boarding_screen.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/UI/screens/place_filters_screen.dart';
 import 'package:places/UI/screens/place_list_screen.dart';
@@ -49,7 +49,7 @@ abstract class AppRouter {
 
     switch (settings.name) {
       case AppRouter.onboarding:
-        return _getOnboardingMaterialRoute();
+        return _getOnBoardingMaterialRoute();
       case AppRouter.placeList:
         return _getPlaceListMaterialRoute();
       case AppRouter.placeSearch:
@@ -78,9 +78,9 @@ abstract class AppRouter {
     );
   }
 
-  static MaterialPageRoute<Object?> _getOnboardingMaterialRoute() {
+  static MaterialPageRoute<Object?> _getOnBoardingMaterialRoute() {
     return MaterialPageRoute<Object?>(
-      builder: (_) => const OnboardingScreen(),
+      builder: (_) => const OnBoardingScreen(),
     );
   }
 

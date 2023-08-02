@@ -29,15 +29,15 @@ final List<Map<String, Object>> items = [
 /// Отображает подсказку - как пользоваться приложением.
 ///
 /// Экран отображается при первом запуске приложения или через экран настроек.
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
 /// Состояние экрана онбординга.
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
   int _activePage = 0;
 
