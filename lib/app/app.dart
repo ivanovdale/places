@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/API/dio_api.dart';
 import 'package:places/UI/screens/res/themes.dart';
 import 'package:places/data/interactor/place_search_interactor.dart';
-import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/network_place_repository.dart';
 import 'package:places/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
@@ -15,10 +14,11 @@ import 'package:places/features/favourite_places/presentation/bloc/favourite_pla
 import 'package:places/features/place_search/presentation/redux/place_search_middleware.dart';
 import 'package:places/features/place_search/presentation/redux/place_search_reducer.dart';
 import 'package:places/features/place_search/presentation/redux/place_search_state.dart';
+import 'package:places/features/settings/domain/settings_interactor.dart';
+import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/providers/bottom_bar_provider.dart';
 import 'package:places/providers/place_interactor_provider.dart';
-import 'package:places/providers/settings_interactor_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
@@ -36,10 +36,9 @@ class App extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: context
-                .watch<SettingsInteractorProvider>()
-                .settingsInteractor
-                .themeMode,
+            themeMode: context.watch<SettingsCubit>().state.isDarkModeEnabled
+                ? ThemeMode.dark
+                : ThemeMode.light,
           );
         },
       ),
@@ -67,14 +66,23 @@ class AppProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider<PlaceSearchState>(
       store: reduxStore,
-      child: BlocProvider(
-        create: (context) => FavouritePlacesBloc(
-          FavouritePlaceInteractor(
-            favouritePlaceDataRepository,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => FavouritePlacesBloc(
+              FavouritePlaceInteractor(
+                favouritePlaceDataRepository,
+              ),
+            )..add(
+                FavoritePlacesInitEvent(),
+              ),
           ),
-        )..add(
-            FavoritePlacesInitEvent(),
+          BlocProvider(
+            create: (context) => SettingsCubit(
+              SettingsInteractor(),
+            ),
           ),
+        ],
         child: MultiProvider(
           providers: [
             Provider(
@@ -84,11 +92,6 @@ class AppProviders extends StatelessWidget {
               ),
             ),
             ChangeNotifierProvider(create: (context) => BottomBarProvider()),
-            ChangeNotifierProvider(
-              create: (context) => SettingsInteractorProvider(
-                SettingsInteractor(),
-              ),
-            ),
           ],
           child: child,
         ),

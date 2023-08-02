@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
+import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:places/helpers/app_router.dart';
 import 'package:places/helpers/app_strings.dart';
-import 'package:places/providers/settings_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Экран настроек.
@@ -85,7 +85,7 @@ class _DarkModeSetting extends StatefulWidget {
 class _DarkModeSettingState extends State<_DarkModeSetting> {
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = context.watch<SettingsInteractorProvider>();
+    final settingsCubit = context.read<SettingsCubit>();
 
     return Row(
       children: [
@@ -95,8 +95,8 @@ class _DarkModeSettingState extends State<_DarkModeSetting> {
         ),
         const Spacer(),
         CupertinoSwitch(
-          value: settingsProvider.settingsInteractor.isDarkModeEnabled,
-          onChanged: (newValue) => settingsProvider.changeAppTheme(),
+          value: settingsCubit.state.isDarkModeEnabled,
+          onChanged: (newValue) => settingsCubit.changeAppTheme(),
         ),
       ],
     );

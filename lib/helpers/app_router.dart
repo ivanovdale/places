@@ -4,12 +4,12 @@ import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/UI/screens/place_filters_screen.dart';
 import 'package:places/UI/screens/place_list_screen.dart';
 import 'package:places/UI/screens/place_type_selection_screen.dart';
-import 'package:places/UI/screens/settings_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/favourite_places/presentation/favourite_places_screen.dart';
 import 'package:places/features/place_search/presentation/place_search_screen.dart';
+import 'package:places/features/settings/presentation/settings_screen.dart';
 
 /// Роутер для именованных роутов.
 abstract class AppRouter {
