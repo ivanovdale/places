@@ -31,7 +31,10 @@ class PlaceTypeSelectionField extends StatelessWidget {
         top: 14.0,
       ),
       child: InkWell(
-        onTap: () => selectPlaceTypeFromListOnNewScreen(context),
+        onTap: () => selectPlaceTypeFromListOnNewScreen(
+          context,
+          placeType: placeType,
+        ),
         child: Row(
           children: [
             Text(
@@ -47,11 +50,16 @@ class PlaceTypeSelectionField extends StatelessWidget {
   }
 
   /// Позволяет выбрать тип места из списка на новом экране.
-  Future<void> selectPlaceTypeFromListOnNewScreen(BuildContext context) async {
-    // TODO(ivanovdale): Передавать тип места.
+  Future<void> selectPlaceTypeFromListOnNewScreen(
+    BuildContext context, {
+    PlaceTypes? placeType,
+  }) async {
     final selectedPlaceType = await Navigator.pushNamed<PlaceTypes>(
       context,
       AppRouter.placeTypeSelection,
+      arguments: {
+        'placeType': placeType,
+      },
     );
 
     if (selectedPlaceType != null) {
