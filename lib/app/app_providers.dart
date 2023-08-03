@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/API/dio_api.dart';
 import 'package:places/UI/screens/components/custom_bottom_navigation_bar/cubit/bottom_navigation_cubit.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/repository/network_place_repository.dart';
 import 'package:places/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
@@ -11,7 +12,6 @@ import 'package:places/features/favourite_places/presentation/bloc/favourite_pla
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
-import 'package:places/providers/place_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
 class AppProviders extends StatelessWidget {
@@ -53,7 +53,7 @@ class AppProviders extends StatelessWidget {
       child: MultiProvider(
         providers: [
           Provider(
-            create: (context) => PlaceInteractorProvider(
+            create: (context) => PlaceInteractor(
               placeRepository: networkPlaceRepository,
               favouritePlaceRepository: favouritePlaceDataRepository,
             ),

@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/model/place.dart';
 import 'package:places/domain/model/places_filter_request.dart';
-import 'package:places/features/place_filters/presentation/place_filters_screen.dart';
+import 'package:places/helpers/app_constants.dart';
 import 'package:places/mocks.dart' as mocked;
 
 part 'place_list_store.g.dart';
@@ -25,7 +25,7 @@ abstract class PlaceListStoreBase with Store {
   Set<PlaceTypes> _placeTypeFilters = PlaceTypes.values.toSet();
 
   /// Радиус поиска.
-  double _radius = maxRangeValue;
+  double _radius = AppConstants.maxRangeValue;
 
   PlaceListStoreBase(this.placeInteractor);
 
