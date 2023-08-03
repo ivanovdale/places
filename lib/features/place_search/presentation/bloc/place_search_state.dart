@@ -1,11 +1,6 @@
-import 'package:places/domain/model/coordinate_point.dart';
-import 'package:places/domain/model/place.dart';
+part of 'place_search_bloc.dart';
 
 final class PlaceSearchState {
-  final List<PlaceTypes> placeTypeFilters;
-  final double radius;
-  final CoordinatePoint userCoordinates;
-
   /// Найденные места.
   List<Place> placesFoundList;
 
@@ -21,9 +16,6 @@ final class PlaceSearchState {
   bool get isSearchStringEmpty => searchString.isEmpty;
 
   PlaceSearchState({
-    required this.placeTypeFilters,
-    required this.radius,
-    required this.userCoordinates,
     required this.placesFoundList,
     required this.searchHistory,
     required this.isSearchInProgress,
@@ -31,27 +23,18 @@ final class PlaceSearchState {
   });
 
   PlaceSearchState.initial()
-      : placeTypeFilters = [],
-        radius = 0.0,
-        userCoordinates = CoordinatePoint.empty(),
-        placesFoundList = const [],
+      : placesFoundList = const [],
         searchHistory = const {},
         isSearchInProgress = false,
         searchString = '';
 
   PlaceSearchState copyWith({
-    List<PlaceTypes>? placeTypeFilters,
-    double? radius,
-    CoordinatePoint? userCoordinates,
     List<Place>? placesFoundList,
     Set<Place>? searchHistory,
     bool? isSearchInProgress,
     String? searchString,
   }) {
     return PlaceSearchState(
-      placeTypeFilters: placeTypeFilters ?? this.placeTypeFilters,
-      radius: radius ?? this.radius,
-      userCoordinates: userCoordinates ?? this.userCoordinates,
       placesFoundList: placesFoundList ?? this.placesFoundList,
       searchHistory: searchHistory ?? this.searchHistory,
       isSearchInProgress: isSearchInProgress ?? this.isSearchInProgress,

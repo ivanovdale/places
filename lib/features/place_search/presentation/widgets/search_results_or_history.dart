@@ -36,7 +36,7 @@ class SearchResultsOrHistory extends StatelessWidget {
             flex: 10,
             child: Column(
               children: [
-                // Не показывать историю поиска, если она пуста, или если начат поиск мест.
+                // Показывать историю поиска, если она заполнена, и если строка поиска пуста.
                 if (searchHistory.isNotEmpty && isSearchStringEmpty)
                   SearchHistoryList(
                     searchHistory: searchHistory,
@@ -45,8 +45,8 @@ class SearchResultsOrHistory extends StatelessWidget {
                     onDeleteHistorySearchItemPressed:
                         onDeleteHistorySearchItemPressed,
                   ),
-                // Не показывать список найденных мест, если ещё не начат их поиск.
-                if (searchString.isNotEmpty)
+                // Показывать список найденных мест, если строка поиска заполнена.
+                if (!isSearchStringEmpty)
                   PlacesFoundList(
                     placesFoundList: placesFoundList,
                     searchString: searchString,
