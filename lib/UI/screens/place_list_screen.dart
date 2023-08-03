@@ -5,20 +5,20 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
-import 'package:places/UI/screens/components/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
 import 'package:places/UI/screens/components/search_bar.dart'
     as custom_search_bar;
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
-import 'package:places/helpers/app_router.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_colors.dart';
+import 'package:places/core/helpers/app_router.dart';
+import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/stores/place_list_store/place_list_store_base.dart';
 import 'package:provider/provider.dart';
 

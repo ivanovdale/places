@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
-import 'package:places/helpers/app_router.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_colors.dart';
+import 'package:places/core/helpers/app_router.dart';
 
 /// Сплэш-экран с лого приложения.
 class SplashScreen extends StatefulWidget {

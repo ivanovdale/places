@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:elementary/elementary.dart';
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/add_place/presentation/add_place_wm.dart';
 import 'package:places/features/add_place/presentation/app_place_wm_builder.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/cancel_button.dart';
@@ -18,8 +19,7 @@ import 'package:places/features/add_place/presentation/widgets/place_type_select
 import 'package:places/features/add_place/presentation/widgets/text_fields/description_text_field.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/map_text_fields.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/name_text_field.dart';
-import 'package:places/helpers/app_strings.dart';
-import 'package:places/utils/string_extension.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Экран для добавления нового места.
 ///

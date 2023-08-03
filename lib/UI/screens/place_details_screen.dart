@@ -7,10 +7,10 @@ import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/model/place.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/providers/place_details_provider.dart';
 import 'package:provider/provider.dart';
 

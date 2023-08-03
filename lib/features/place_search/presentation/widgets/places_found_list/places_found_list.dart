@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_item.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/places_not_found_info.dart';
 

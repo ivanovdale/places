@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/clear_search_history_button.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_history_item_divider.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_item.dart';

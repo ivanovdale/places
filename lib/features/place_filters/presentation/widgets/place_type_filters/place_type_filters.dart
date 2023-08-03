@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/utils/screen_util.dart';
 import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/place_type_filters_grid_view.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/place_type_filters_scrollable_row.dart';
-import 'package:places/utils/screen_util.dart';
 
 /// Фильтрации по категории мест.
 ///

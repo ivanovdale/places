@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// TabBar для списка посещенных/планируемых к посещению мест.
 class VisitingTabBar extends StatelessWidget {

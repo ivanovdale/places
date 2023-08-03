@@ -1,5 +1,5 @@
-import 'package:places/domain/model/coordinate_point.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/coordinate_point.dart';
+import 'package:places/core/domain/model/place.dart';
 
 final List<Place> places = [
   Place(

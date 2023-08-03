@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Отображает информацию, что места не найдены.
 class PlacesNotFoundPlaceHolder extends InfoPlaceHolder {

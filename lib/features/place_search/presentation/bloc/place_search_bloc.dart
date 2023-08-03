@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/domain/model/coordinate_point.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/coordinate_point.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/domain/place_search_interactor.dart';
 
 part 'place_search_event.dart';

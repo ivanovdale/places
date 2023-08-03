@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_colors.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_colors.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Задний фон, когда происходит свайп карточки влево для удаления.
 class BackgroundOnDismiss extends StatelessWidget {

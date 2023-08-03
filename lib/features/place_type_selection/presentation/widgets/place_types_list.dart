@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_type_selection/presentation/widgets/place_type_item.dart';
 import 'package:places/features/place_type_selection/presentation/widgets/save_button.dart';
 

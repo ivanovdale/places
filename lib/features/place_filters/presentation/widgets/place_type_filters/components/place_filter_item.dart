@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/filter_circle.dart';
-import 'package:places/utils/string_extension.dart';
 
 /// Отображает кликабельную иконку фильтра и его наименование.
 class PlaceFilterItem extends StatelessWidget {

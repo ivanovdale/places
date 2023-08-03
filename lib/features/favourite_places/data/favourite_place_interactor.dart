@@ -1,4 +1,4 @@
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
 
 final class FavouritePlaceInteractor {

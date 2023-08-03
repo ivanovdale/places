@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/UI/screens/res/themes.dart';
 import 'package:places/app/app_providers.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
-import 'package:places/helpers/app_router.dart';
+import 'package:places/core/helpers/app_router.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {

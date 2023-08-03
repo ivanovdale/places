@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
-import 'package:places/helpers/app_constants.dart';
+import 'package:places/core/helpers/app_constants.dart';
 
 /// Слайдер для фильтрации по расстоянию до места.
 class DistanceFilterSlider extends StatelessWidget {

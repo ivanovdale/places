@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 
 /// Текстовая кнопка элемента истории поиска.
 ///

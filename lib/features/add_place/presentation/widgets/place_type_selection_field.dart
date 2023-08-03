@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/place_type_selection_button.dart';
-import 'package:places/helpers/app_router.dart';
-import 'package:places/helpers/app_strings.dart';
-import 'package:places/utils/string_extension.dart';
+import 'package:places/core/helpers/app_router.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Поле выбора категории места.
 class PlaceTypeSelectionField extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/helpers/app_assets.dart';
-import 'package:places/helpers/app_router.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/helpers/app_router.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Список с данными для страниц онбординга.
 final List<Map<String, Object>> items = [

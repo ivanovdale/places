@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_details.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_image.dart';
 

@@ -1,4 +1,4 @@
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 
 sealed class FavouritePlacesEvent {}
 

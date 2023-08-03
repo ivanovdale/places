@@ -1,8 +1,8 @@
 import 'package:elementary/elementary.dart';
 import 'package:flutter/foundation.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/model/coordinate_point.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/model/coordinate_point.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/mocks.dart' as mocked;
 
 class AddPlaceModel extends ElementaryModel {

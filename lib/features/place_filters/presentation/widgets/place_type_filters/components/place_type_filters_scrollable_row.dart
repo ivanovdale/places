@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/place_filter_item.dart';
 
 /// Отображает фильтры места в виде скролящейся строки.

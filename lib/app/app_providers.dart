@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/API/dio_api.dart';
-import 'package:places/UI/screens/components/custom_bottom_navigation_bar/cubit/bottom_navigation_cubit.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/network_place_repository.dart';
-import 'package:places/domain/repository/place_repository.dart';
+import 'package:places/core/api/dio_api.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/data/repository/network_place_repository.dart';
+import 'package:places/core/domain/repository/place_repository.dart';
+import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/cubit/bottom_navigation_cubit.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_interactor.dart';
 import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';

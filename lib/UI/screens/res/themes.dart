@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/helpers/app_colors.dart';
-import 'package:places/helpers/app_typography.dart';
+import 'package:places/core/helpers/app_colors.dart';
+import 'package:places/core/helpers/app_typography.dart';
 
 /// Основные цвета приложения.
 const _oxfordBlueColor = AppColors.oxfordBlue;

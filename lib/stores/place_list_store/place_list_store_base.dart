@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:mobx/mobx.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/model/place.dart';
-import 'package:places/domain/model/places_filter_request.dart';
-import 'package:places/helpers/app_constants.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/domain/model/places_filter_request.dart';
+import 'package:places/core/helpers/app_constants.dart';
 import 'package:places/mocks.dart' as mocked;
 
 part 'place_list_store.g.dart';

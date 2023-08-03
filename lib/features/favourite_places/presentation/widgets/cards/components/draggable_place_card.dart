@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/place_card_when_dragged.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/place_card_with_hover_ability.dart';
 

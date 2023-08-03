@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// Кнопка указания места на карте.
 class MarkOnMapButton extends StatelessWidget {

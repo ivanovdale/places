@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/domain/model/coordinate_point.dart';
-import 'package:places/domain/model/place.dart';
-import 'package:places/domain/model/places_filter_request.dart';
-import 'package:places/helpers/app_constants.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/model/coordinate_point.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/domain/model/places_filter_request.dart';
+import 'package:places/core/helpers/app_constants.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'place_filters_event.dart';
