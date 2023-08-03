@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/on_boarding_screen.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
-import 'package:places/UI/screens/place_filters_screen.dart';
+import 'package:places/features/place_filters/presentation/place_filters_screen.dart';
 import 'package:places/UI/screens/place_list_screen.dart';
 import 'package:places/UI/screens/splash_screen.dart';
 import 'package:places/domain/model/place.dart';
