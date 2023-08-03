@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/API/dio_api.dart';
+import 'package:places/UI/screens/components/custom_bottom_navigation_bar/cubit/bottom_navigation_cubit.dart';
 import 'package:places/data/repository/network_place_repository.dart';
 import 'package:places/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
@@ -10,7 +11,6 @@ import 'package:places/features/favourite_places/presentation/bloc/favourite_pla
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
-import 'package:places/providers/bottom_bar_provider.dart';
 import 'package:places/providers/place_interactor_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -33,13 +33,16 @@ class AppProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => BottomNavigationCubit(),
+        ),
+        BlocProvider(
           create: (context) => FavouritePlacesBloc(
             FavouritePlaceInteractor(
               favouritePlaceDataRepository,
             ),
           )..add(
-            FavoritePlacesInitEvent(),
-          ),
+              FavoritePlacesInitEvent(),
+            ),
         ),
         BlocProvider(
           create: (context) => SettingsCubit(
@@ -55,7 +58,6 @@ class AppProviders extends StatelessWidget {
               favouritePlaceRepository: favouritePlaceDataRepository,
             ),
           ),
-          ChangeNotifierProvider(create: (context) => BottomBarProvider()),
           Provider(create: (context) => networkPlaceRepository),
         ],
         child: child,

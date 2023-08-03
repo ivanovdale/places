@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
-import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
+import 'package:places/UI/screens/components/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/place_card/place_card.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
