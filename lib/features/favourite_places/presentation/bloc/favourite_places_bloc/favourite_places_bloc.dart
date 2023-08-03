@@ -12,7 +12,6 @@ final class FavouritePlacesBloc
       : super(FavouritePlacesState()) {
     on(_onInitialize);
     on(_onToggleFavourites);
-    on(_onRemoveFromFavourites);
     on(_onInsertPlace);
   }
 
@@ -36,19 +35,6 @@ final class FavouritePlacesBloc
     Emitter<FavouritePlacesState> emit,
   ) {
     final places = favouritePlaceInteractor.toggleFavourite(event.place);
-
-    emit(
-      state.copyWith(
-        places: places,
-      ),
-    );
-  }
-
-  void _onRemoveFromFavourites(
-    RemoveFromFavouritesEvent event,
-    Emitter<FavouritePlacesState> emit,
-  ) {
-    final places = favouritePlaceInteractor.removeFromFavourites(event.place);
 
     emit(
       state.copyWith(

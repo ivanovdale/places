@@ -10,12 +10,6 @@ final class ToggleFavouritesEvent extends FavouritePlacesEvent {
   ToggleFavouritesEvent(this.place);
 }
 
-final class RemoveFromFavouritesEvent extends FavouritePlacesEvent {
-  final Place place;
-
-  RemoveFromFavouritesEvent(this.place);
-}
-
 final class InsertPlaceEvent extends FavouritePlacesEvent {
   final Place place;
   final Place targetPlace;
