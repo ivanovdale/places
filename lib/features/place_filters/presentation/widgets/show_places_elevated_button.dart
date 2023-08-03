@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/helpers/app_strings.dart';
 
 /// Кнопка "Показать" отфильтрованные места.
@@ -10,9 +12,9 @@ class ShowPlacesElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(ivanovdale):  bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
-    final filteredPlacesNumber = dataStorage.filteredPlacesNumber;
+    final filteredPlacesAmount = context.select<PlaceFiltersBloc, int>(
+      (bloc) => bloc.state.filteredPlacesAmount,
+    );
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -26,7 +28,7 @@ class ShowPlacesElevatedButton extends StatelessWidget {
         bottom: 24.0,
       ),
       child: CustomElevatedButton(
-        '${AppStrings.show} ($filteredPlacesNumber)',
+        '${AppStrings.show} ($filteredPlacesAmount)',
         textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: buttonTextColor,
         ),
@@ -39,13 +41,12 @@ class ShowPlacesElevatedButton extends StatelessWidget {
 
   /// Возвращает выбранные фильтры на предыдущий экран, где они будут применены.
   void applyFilters(BuildContext context) {
-    // TODO(ivanovdale):  bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
-    final radius = dataStorage.radius;
+    final bloc = context.read<PlaceFiltersBloc>();
+    final state = bloc.state;
 
     final selectedFilters = <String, Object>{
-      'placeTypeFilters': dataStorage.selectedPlaceTypeFilters,
-      'radius': radius,
+      'placeTypeFilters': state.selectedPlaceTypeFilters,
+      'radius': state.radius,
     };
 
     Navigator.of(context).pop(selectedFilters);

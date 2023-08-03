@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/helpers/app_strings.dart';
 
 /// Заголовок фильтра по расстоянию. Отображает расстояние от и до.
@@ -9,10 +11,9 @@ class DistanceFilterTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // TODO(ivanovdale): bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
-    final radius = dataStorage.radius;
+    final radius = context.select<PlaceFiltersBloc, double>(
+      (bloc) => bloc.state.radius,
+    );
 
     final theme = Theme.of(context);
     final secondaryColor = theme.colorScheme.secondary;

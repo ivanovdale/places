@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/domain/model/place.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/place_type_filters_grid_view.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/components/place_type_filters_scrollable_row.dart';
 import 'package:places/utils/screen_util.dart';
@@ -14,9 +17,10 @@ class PlaceTypeFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(ivanovdale):  bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
-    final selectedPlaceTypeFilters = dataStorage.selectedPlaceTypeFilters;
+    final selectedPlaceTypeFilters =
+        context.select<PlaceFiltersBloc, Set<PlaceTypes>>(
+      (bloc) => bloc.state.selectedPlaceTypeFilters,
+    );
 
     // Для больших экранов отображать фильтры мест в виде сетки.
     // А для экранов малого размера - в виде скролящейся строки.

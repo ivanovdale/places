@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
+import 'package:places/helpers/app_constants.dart';
 
 /// Слайдер для фильтрации по расстоянию до места.
 class DistanceFilterSlider extends StatelessWidget {
@@ -8,9 +11,12 @@ class DistanceFilterSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(ivanovdale):  bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
-    final radiusInMeters = dataStorage.radius;
+    final bloc = context.read<PlaceFiltersBloc>();
+
+    final radius = context.select<PlaceFiltersBloc, double>(
+      (bloc) => bloc.state.radius,
+    );
+    final radiusInMeters = radius;
     final radiusInKilometers = radiusInMeters / 1000;
 
     final theme = Theme.of(context);
@@ -26,12 +32,18 @@ class DistanceFilterSlider extends StatelessWidget {
         inactiveColor: colorScheme.secondary.withOpacity(0.56),
         divisions: 99,
         min: 0.1,
-        max: maxRangeValue / 1000,
+        max: AppConstants.maxRangeValue / 1000,
         onChanged: (currentValue) {
           final radiusInMeters =
               double.parse(currentValue.toStringAsFixed(1)) * 1000;
           // + 0.1 к радиусу - костыль для работы бэкенда.
-          dataStorage.applyDistanceFilter(radiusInMeters + 0.1);
+          final radius = radiusInMeters + 0.1;
+
+          bloc.add(
+            PlaceFiltersRadiusSelected(
+              radius: radius,
+            ),
+          );
         },
         value: radiusInKilometers,
       ),

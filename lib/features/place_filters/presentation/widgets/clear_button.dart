@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/helpers/app_strings.dart';
+import 'package:provider/provider.dart';
 
 /// Кнопка "Очистить" все фильтры.
 class ClearButton extends StatelessWidget {
@@ -8,8 +10,7 @@ class ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(ivanovdale):  Bloc
-    final dataStorage = _InheritedFiltersScreenState.of(context);
+    final bloc = context.read<PlaceFiltersBloc>();
     final theme = Theme.of(context);
 
     return CustomTextButton(
@@ -18,7 +19,9 @@ class ClearButton extends StatelessWidget {
         color: theme.colorScheme.primary,
       ),
       padding: const EdgeInsets.only(right: 16.0),
-      onPressed: dataStorage.resetAllFilters,
+      onPressed: () => bloc.add(
+        PlaceFiltersAllFiltersReset(),
+      ),
     );
   }
 }

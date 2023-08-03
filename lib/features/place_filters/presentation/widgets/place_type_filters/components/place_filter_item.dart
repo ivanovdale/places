@@ -17,7 +17,7 @@ class PlaceFilterItem extends StatelessWidget {
     return Column(
       children: [
         FilterCircle(
-          placeFilter: placeType,
+          placeType: placeType,
         ),
         Padding(
           padding: const EdgeInsets.only(
