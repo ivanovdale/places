@@ -5,8 +5,6 @@ abstract interface class FavouritePlaceRepository {
 
   List<Place> toggleFavourite(Place place);
 
-  List<Place> removeFromFavourites(Place place);
-
   List<Place> insertPlace(
     Place place,
     Place targetPlace,

@@ -14,10 +14,6 @@ final class FavouritePlaceInteractor {
     return favouritePlaceRepository.toggleFavourite(place);
   }
 
-  List<Place> removeFromFavourites(Place place) {
-    return favouritePlaceRepository.removeFromFavourites(place);
-  }
-
   List<Place> insertPlace(
     Place place,
     Place targetPlace,

@@ -19,13 +19,6 @@ final class FavouritePlaceDataRepository implements FavouritePlaceRepository {
   }
 
   @override
-  List<Place> removeFromFavourites(Place place) {
-    _places.remove(place);
-
-    return _places;
-  }
-
-  @override
   List<Place> insertPlace(
     Place place,
     Place targetPlace,
