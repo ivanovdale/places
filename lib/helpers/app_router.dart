@@ -38,7 +38,7 @@ abstract class AppRouter {
   static const String placeDetails = '/placeDetails';
 
   /// Экран списка посещенных/планируемых к посещению мест.
-  static const String visitingPlaces = '/visitingPlaces';
+  static const String favouritePlaces = '/favouritePlaces';
 
   /// Экран настроек.
   static const String settings = '/settings';
@@ -62,8 +62,8 @@ abstract class AppRouter {
         return _getPlaceTypeSelectionMaterialRoute(arguments);
       case AppRouter.placeDetails:
         return _getPlaceDetailsMaterialRoute(arguments);
-      case AppRouter.visitingPlaces:
-        return _getVisitingPlacesMaterialRoute();
+      case AppRouter.favouritePlaces:
+        return _getFavouritePlacesMaterialRoute();
       case AppRouter.settings:
         return _getSettingsMaterialRoute();
       case AppRouter.root:
@@ -139,7 +139,7 @@ abstract class AppRouter {
     );
   }
 
-  static MaterialPageRoute<Object?> _getVisitingPlacesMaterialRoute() {
+  static MaterialPageRoute<Object?> _getFavouritePlacesMaterialRoute() {
     return MaterialPageRoute<Object?>(
       builder: (_) => const FavouritePlacesScreen(),
     );
