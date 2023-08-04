@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/utils/replace_comma_formatter.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/common/custom_text_form_field.dart';
-import 'package:places/core/helpers/app_strings.dart';
 
 /// Абстрактный класс для ввода координат места.
 ///

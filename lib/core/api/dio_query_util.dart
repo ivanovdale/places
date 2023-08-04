@@ -29,7 +29,7 @@ class DioQueryUtil {
           response = await apiUtil.httpClient.post<String>(uri, data: data);
           break;
       }
-    } on DioError catch (dioError, stackTrace) {
+    } on DioException catch (dioError, stackTrace) {
       final response = dioError.response;
       if (response?.statusCode == 500) {
         final queryName = '${apiUtil.httpClient.options.baseUrl}$uri';

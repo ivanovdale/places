@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:places/UI/screens/components/image_error_helper.dart';
 import 'package:places/UI/screens/place_details_screen.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/core/utils/visiting_date_formatter.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/utils/visiting_date_formatter.dart';
 
 /// Абстрактный класс [BasePlaceCard]. Отображает краткую информацию о месте.
 ///
@@ -107,9 +108,7 @@ class _PlaceCardTop extends StatelessWidget {
           imageBuilder: (context, imageProvider) {
             return Ink.image(image: imageProvider, fit: BoxFit.cover);
           },
-          errorWidget: (context, url, dynamic error) => const Center(
-            child: Icon(Icons.error),
-          ),
+          errorWidget: ImageErrorHelper.errorIcon,
           placeholder: (context, url) => const Center(
             child: SizedBox(
               width: 40,

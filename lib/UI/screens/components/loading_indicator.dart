@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 /// Индикатор загрузки картинки.
 class LoadingIndicator {
   static Widget progressIndicatorBuilder(
-    BuildContext context,
-    String url,
+    BuildContext _,
+    String __,
     DownloadProgress downloadProgress,
   ) {
     return Center(

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class ConflictException extends DioError {
+class ConflictException extends DioException {
   ConflictException(RequestOptions r) : super(requestOptions: r);
 
   @override

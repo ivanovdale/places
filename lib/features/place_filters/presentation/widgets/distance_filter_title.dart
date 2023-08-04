@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 
 /// Заголовок фильтра по расстоянию. Отображает расстояние от и до.
 class DistanceFilterTitle extends StatelessWidget {

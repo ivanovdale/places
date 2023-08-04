@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class NotFoundException extends DioError {
+class NotFoundException extends DioException {
   NotFoundException(RequestOptions r) : super(requestOptions: r);
 
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
-import 'package:places/core/utils/string_extension.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/utils/string_extension.dart';
 
 /// Отображает плейсхолдер ошибки.
 class ErrorPlaceHolder extends InfoPlaceHolder {

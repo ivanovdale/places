@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
-import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/add_photo_actions.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/add_photo_actions.dart';
 
 /// Позволяет выбрать фото из камеры, галереи или файлов.
 class PhotoPicker extends StatelessWidget {

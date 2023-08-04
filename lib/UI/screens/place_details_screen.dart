@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/UI/screens/components/custom_text_button.dart';
+import 'package:places/UI/screens/components/image_error_helper.dart';
 import 'package:places/UI/screens/components/loading_indicator.dart';
 import 'package:places/UI/screens/components/placeholders/error_placeholder.dart';
 import 'package:places/core/data/interactor/place_interactor.dart';
@@ -140,7 +141,7 @@ class _PhotoGallery extends StatelessWidget {
           imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
           progressIndicatorBuilder: LoadingIndicator.progressIndicatorBuilder,
-          errorWidget: (context, url, dynamic error) => const Icon(Icons.error),
+          errorWidget: ImageErrorHelper.errorIcon,
         );
       },
     );

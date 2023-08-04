@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class UnauthorizedException extends DioError {
+class UnauthorizedException extends DioException {
   UnauthorizedException(RequestOptions r) : super(requestOptions: r);
 
   @override

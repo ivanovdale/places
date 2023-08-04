@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/place_type_selection/presentation/cubit/place_type_selection_cubit.dart';
 import 'package:places/features/place_type_selection/presentation/widgets/place_types_list.dart';
-import 'package:places/core/helpers/app_strings.dart';
 
 /// Экран выбора категории места.
 class PlaceTypeSelectionScreen extends StatelessWidget {

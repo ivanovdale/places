@@ -1,6 +1,6 @@
-import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/domain/bottom_navigation_bar_data.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_router.dart';
+import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/domain/bottom_navigation_bar_data.dart';
 
 List<BottomNavigationBarData> bottomNavigationBarItems = const [
   BottomNavigationBarData(

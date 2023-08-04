@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/widgets/text_fields/common/custom_text_form_field.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/features/add_place/presentation/widgets/text_fields/common/custom_text_form_field.dart';
 
 /// Поле ввода описания места.
 class DescriptionTextField extends StatelessWidget {

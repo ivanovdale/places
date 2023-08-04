@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/UI/screens/components/custom_elevated_button.dart';
-import 'package:places/features/place_type_selection/presentation/cubit/place_type_selection_cubit.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/features/place_type_selection/presentation/cubit/place_type_selection_cubit.dart';
 
 /// Кнопка сохранения категории места.
 class SaveButton extends StatelessWidget {
