@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_divider.dart';
 import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/place_type_selection/presentation/cubit/place_type_selection_cubit.dart';
 

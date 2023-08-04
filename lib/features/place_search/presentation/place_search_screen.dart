@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/features/place_search/domain/place_search_interactor.dart';
 import 'package:places/features/place_search/presentation/bloc/place_search_bloc.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_icon_button.dart';
+import 'package:places/core/presentation/widgets/custom_buttons/custom_icon_button.dart';
 
 /// Кнопка возврата на экран добавления места.
 class BackButton extends StatelessWidget {

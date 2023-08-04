@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
+import 'package:places/core/presentation/widgets/rounded_cached_network_image.dart';
 
 /// Карточка добавляемой фотографии.
 class NewPhotoCard extends StatelessWidget {

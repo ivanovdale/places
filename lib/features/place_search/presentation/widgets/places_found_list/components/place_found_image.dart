@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/rounded_cached_network_image.dart';
 
 /// Картинка найденного места.
 class PlaceFoundImage extends StatelessWidget {

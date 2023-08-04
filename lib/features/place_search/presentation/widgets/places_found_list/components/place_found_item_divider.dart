@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_divider.dart';
+import 'package:places/core/presentation/widgets/custom_divider.dart';
 
 /// Разделитель между найденными местами.
 class PlaceFoundItemDivider extends StatelessWidget {

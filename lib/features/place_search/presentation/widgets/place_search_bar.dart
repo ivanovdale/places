@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/search_bar.dart'
+import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
 
 /// Поле ввода для поиска мест.

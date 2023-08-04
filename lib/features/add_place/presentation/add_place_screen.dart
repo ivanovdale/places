@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:elementary/elementary.dart';
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/add_place/presentation/add_place_wm.dart';
 import 'package:places/features/add_place/presentation/app_place_wm_builder.dart';

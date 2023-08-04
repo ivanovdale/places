@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_app_bar.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar.dart';
 import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar_view.dart';

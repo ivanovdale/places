@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_icon_button.dart';
+import 'package:places/core/presentation/widgets/custom_buttons/custom_icon_button.dart';
 
 /// Скругленная картинка, загруженная из интернета с кастомными параметрами.
 class RoundedCachedNetworkImage extends StatelessWidget {

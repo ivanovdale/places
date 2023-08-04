@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/UI/screens/components/place_card/base_place_card.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_pickers/utils/custom_date_time_picker_helper.dart';
+import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_place_cubit/favourite_place_cubit.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/draggable_place_card_with_drag_target_option.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/to_visit_place_card.dart';

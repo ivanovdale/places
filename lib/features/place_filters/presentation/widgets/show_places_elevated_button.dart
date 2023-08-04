@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/UI/screens/components/custom_elevated_button.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_buttons/custom_elevated_button.dart';
 import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 
 /// Кнопка "Показать" отфильтрованные места.

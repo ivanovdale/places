@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/placeholders/info_placeholder.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/placeholders/info_placeholder.dart';
 
 /// Отображает информацию о пустом списке планируемых к посещению мест.
 class EmptyToVisitPlaceHolder extends InfoPlaceHolder {

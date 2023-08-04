@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_app_bar.dart';
-import 'package:places/UI/screens/components/custom_divider.dart';
 import 'package:places/core/helpers/app_router.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
+import 'package:places/core/presentation/widgets/custom_divider.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:provider/provider.dart';
 
