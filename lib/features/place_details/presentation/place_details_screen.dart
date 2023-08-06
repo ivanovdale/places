@@ -5,8 +5,6 @@ import 'package:places/core/presentation/widgets/placeholders/error_placeholder.
 import 'package:places/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_app_bar_place_photos/sliver_app_bar_place_photos.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_place_details/sliver_place_details.dart';
-import 'package:places/providers/place_details_provider.dart';
-import 'package:provider/provider.dart';
 
 /// Экран подробностей места.
 ///
@@ -35,34 +33,31 @@ class PlaceDetailsScreen extends StatelessWidget {
           topRight: Radius.circular(12),
         ),
         child: Scaffold(
-          bottomSheet: ChangeNotifierProvider(
-            create: (context) => PlaceDetailsProvider(),
-            child: BlocProvider(
-              create: (context) => PlaceDetailsCubit(
-                context.read<PlaceInteractor>(),
-              )..loadPlaceDetails(
-                  placeId,
-                ),
-              child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-                builder: (context, state) {
-                  return switch (state) {
-                    PlaceDetailsInitial() => const SizedBox.shrink(),
-                    PlaceDetailsLoadInProgress() => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    PlaceDetailsLoadFailure() => const Center(
-                        child: ErrorPlaceHolder(),
-                      ),
-                    PlaceDetailsLoadSuccess() => CustomScrollView(
-                        controller: scrollController,
-                        slivers: [
-                          SliverAppBarPlacePhotos(state.place),
-                          SliverPlaceDetails(state.place),
-                        ],
-                      )
-                  };
-                },
+          bottomSheet: BlocProvider(
+            create: (context) => PlaceDetailsCubit(
+              context.read<PlaceInteractor>(),
+            )..loadPlaceDetails(
+                placeId,
               ),
+            child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+              builder: (context, state) {
+                return switch (state) {
+                  PlaceDetailsInitial() => const SizedBox.shrink(),
+                  PlaceDetailsLoadInProgress() => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  PlaceDetailsLoadFailure() => const Center(
+                      child: ErrorPlaceHolder(),
+                    ),
+                  PlaceDetailsLoadSuccess() => CustomScrollView(
+                      controller: scrollController,
+                      slivers: [
+                        SliverAppBarPlacePhotos(state.place),
+                        SliverPlaceDetails(state.place),
+                      ],
+                    )
+                };
+              },
             ),
           ),
         ),
