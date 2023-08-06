@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/data/interactor/place_interactor.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
+import 'package:places/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_app_bar_place_photos/sliver_app_bar_place_photos.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_place_details/sliver_place_details.dart';
 import 'package:places/providers/place_details_provider.dart';
@@ -22,48 +23,50 @@ class PlaceDetailsScreen extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// Получает детальную информацию места.
-  Future<Place> _getPlaceDetails(int placeId, BuildContext context) {
-    return context.read<PlaceInteractor>().getPlaceDetails(placeId);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Place>(
-      future: _getPlaceDetails(placeId, context),
-      builder: (context, snapshot) {
-        return snapshot.hasData || snapshot.hasError
-            ? DraggableScrollableSheet(
-                initialChildSize: 0.9,
-                maxChildSize: 0.9,
-                minChildSize: 0.5,
-                builder: (_, scrollController) => ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                  child: Scaffold(
-                    bottomSheet: snapshot.hasData
-                        ? ChangeNotifierProvider(
-                            create: (context) => PlaceDetailsProvider(),
-                            child: CustomScrollView(
-                              controller: scrollController,
-                              slivers: [
-                                SliverAppBarPlacePhotos(snapshot.data!),
-                                SliverPlaceDetails(snapshot.data!),
-                              ],
-                            ),
-                          )
-                        : const Center(
-                            child: ErrorPlaceHolder(),
-                          ),
-                  ),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      builder: (_, scrollController) => ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        child: Scaffold(
+          bottomSheet: ChangeNotifierProvider(
+            create: (context) => PlaceDetailsProvider(),
+            child: BlocProvider(
+              create: (context) => PlaceDetailsCubit(
+                context.read<PlaceInteractor>(),
+              )..loadPlaceDetails(
+                  placeId,
                 ),
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              );
-      },
+              child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    PlaceDetailsInitial() => const SizedBox.shrink(),
+                    PlaceDetailsLoadInProgress() => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    PlaceDetailsLoadFailure() => const Center(
+                        child: ErrorPlaceHolder(),
+                      ),
+                    PlaceDetailsLoadSuccess() => CustomScrollView(
+                        controller: scrollController,
+                        slivers: [
+                          SliverAppBarPlacePhotos(state.place),
+                          SliverPlaceDetails(state.place),
+                        ],
+                      )
+                  };
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
