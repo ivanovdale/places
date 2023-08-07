@@ -15,8 +15,10 @@ import 'package:places/features/settings/presentation/cubit/settings_cubit.dart'
 import 'package:provider/provider.dart';
 
 class AppProviders extends StatelessWidget {
-  late final FavouritePlaceRepository favouritePlaceDataRepository;
-  late final PlaceRepository networkPlaceRepository;
+  late final FavouritePlaceRepository _favouritePlaceDataRepository;
+  late final PlaceRepository _networkPlaceRepository;
+  late final PlaceInteractor _placeInteractor;
+
   final Widget child;
 
   AppProviders({
@@ -24,8 +26,12 @@ class AppProviders extends StatelessWidget {
     required this.child,
   }) : super(key: key) {
     final networkPlaceRepository = NetworkPlaceRepository(DioApi());
-    favouritePlaceDataRepository = FavouritePlaceDataRepository();
-    this.networkPlaceRepository = networkPlaceRepository;
+    _favouritePlaceDataRepository = FavouritePlaceDataRepository();
+    _networkPlaceRepository = networkPlaceRepository;
+    _placeInteractor = PlaceInteractor(
+      placeRepository: _networkPlaceRepository,
+      favouritePlaceRepository: _favouritePlaceDataRepository,
+    );
   }
 
   @override
@@ -38,7 +44,7 @@ class AppProviders extends StatelessWidget {
         BlocProvider(
           create: (context) => FavouritePlacesBloc(
             FavouritePlaceInteractor(
-              favouritePlaceDataRepository,
+              _favouritePlaceDataRepository,
             ),
           )..add(
               FavouritePlacesStarted(),
@@ -52,13 +58,12 @@ class AppProviders extends StatelessWidget {
       ],
       child: MultiProvider(
         providers: [
-          Provider(
-            create: (context) => PlaceInteractor(
-              placeRepository: networkPlaceRepository,
-              favouritePlaceRepository: favouritePlaceDataRepository,
-            ),
+          Provider.value(
+            value: _placeInteractor,
           ),
-          Provider(create: (context) => networkPlaceRepository),
+          Provider.value(
+            value: _networkPlaceRepository,
+          ),
         ],
         child: child,
       ),
