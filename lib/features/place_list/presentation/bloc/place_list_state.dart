@@ -40,3 +40,5 @@ final class PlaceListState {
 }
 
 enum PlaceListStatus { initial, loading, success, failure }
+
+typedef PlaceListStatusPlaces = ({PlaceListStatus status, List<Place> places});
