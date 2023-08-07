@@ -1,39 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/data/interactor/place_interactor.dart';
 import 'package:places/core/helpers/app_router.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
+import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
 import 'package:places/features/place_list/presentation/widgets/add_new_place_button.dart';
 import 'package:places/features/place_list/presentation/widgets/sliver_app_bar/sliver_app_bar.dart'
     as place_list;
 import 'package:places/features/place_list/presentation/widgets/sliver_place_list.dart';
-import 'package:places/stores/place_list_store/place_list_store_base.dart';
-import 'package:provider/provider.dart';
 
 /// Экран списка мест.
-class PlaceListScreen extends StatefulWidget {
+class PlaceListScreen extends StatelessWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
-
-  @override
-  State<PlaceListScreen> createState() => _PlaceListScreenState();
-}
-
-/// Состояние экрана списка мест.
-///
-/// Обновляет список при добавлении нового места.
-class _PlaceListScreenState extends State<PlaceListScreen> {
-  late PlaceListStore _store;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _store = PlaceListStore(
-      context.read<PlaceInteractor>(),
-    );
-    _store.getFilteredPlaces();
-  }
 
   /// Открывает экран добавления места.
   ///
@@ -45,8 +25,10 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
     );
     isPlaceCreated ??= false;
 
-    if (isPlaceCreated && mounted) {
-      await context.read<PlaceListStore>().getFilteredPlaces();
+    if (isPlaceCreated && context.mounted) {
+      context.read<PlaceListBloc>().add(
+            PlaceListLoaded(),
+          );
     }
   }
 
@@ -54,8 +36,12 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
 
-    return Provider<PlaceListStore>(
-      create: (context) => _store,
+    return BlocProvider(
+      create: (context) => PlaceListBloc(
+        context.read<PlaceInteractor>(),
+      )..add(
+          PlaceListStarted(),
+        ),
       child: Scaffold(
         // Скрываем боттом бар при горизонтальной ориентации.
         bottomNavigationBar: orientation == Orientation.landscape

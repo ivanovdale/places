@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_router.dart';
-import 'package:places/stores/place_list_store/place_list_store_base.dart';
+import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
 import 'package:provider/provider.dart';
 
 /// Кнопка фильтрации достопримечательностей.
@@ -19,26 +19,31 @@ class FilterButton extends StatelessWidget {
 
   /// Открывает экран фильтрации мест.
   ///
-  /// После выбора фильтров сохраняет их в стейте текущего экрана и затем применяет их.
+  /// После выбора фильтров применяет их на текущем экране.
   Future<void> _navigateToFiltersScreen(BuildContext context) async {
-    final store = context.read<PlaceListStore>();
+    final bloc = context.read<PlaceListBloc>();
+    final state = bloc.state;
 
     final selectedFilters = await Navigator.pushNamed<Map<String, Object>>(
       context,
       AppRouter.placeFilters,
       arguments: {
-        'placeTypeFilters': store.placeTypeFilters,
-        'radius': store.radius,
+        'placeTypeFilters': state.placeTypeFilters,
+        'radius': state.radius,
       },
     );
 
     if (selectedFilters != null) {
       final placeTypeFilters =
-      selectedFilters['placeTypeFilters'] as Set<PlaceTypes>;
+          selectedFilters['placeTypeFilters'] as Set<PlaceTypes>;
       final radius = selectedFilters['radius'] as double;
 
-      store.saveFilters(placeTypeFilters, radius);
-      await store.getFilteredPlaces();
+      bloc.add(
+        PlaceListWithFiltersLoaded(
+          placeTypeFilters: placeTypeFilters,
+          radius: radius,
+        ),
+      );
     }
   }
 
@@ -57,7 +62,7 @@ class FilterButton extends StatelessWidget {
       ),
       color: theme.primaryColorDark,
       onPressed:
-      isButtonDisabled ? null : () => _navigateToFiltersScreen(context),
+          isButtonDisabled ? null : () => _navigateToFiltersScreen(context),
     );
   }
 }
