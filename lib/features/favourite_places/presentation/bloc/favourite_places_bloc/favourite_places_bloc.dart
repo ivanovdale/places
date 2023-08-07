@@ -3,20 +3,19 @@ import 'package:places/features/favourite_places/data/favourite_place_interactor
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_state.dart';
 
-
 final class FavouritePlacesBloc
     extends Bloc<FavouritePlacesEvent, FavouritePlacesState> {
   final FavouritePlaceInteractor favouritePlaceInteractor;
 
   FavouritePlacesBloc(this.favouritePlaceInteractor)
       : super(FavouritePlacesState()) {
-    on(_onInitialize);
-    on(_onToggleFavourites);
-    on(_onInsertPlace);
+    on(_onFavouritePlacesStarted);
+    on(_onFavouritePlacesToFavouritesPressed);
+    on(_onFavouritePlacesPlaceInserted);
   }
 
-  Future<void> _onInitialize(
-    FavoritePlacesInitEvent event,
+  Future<void> _onFavouritePlacesStarted(
+    FavouritePlacesStarted event,
     Emitter<FavouritePlacesState> emit,
   ) async {
     // Имитация загрузки.
@@ -30,8 +29,8 @@ final class FavouritePlacesBloc
     );
   }
 
-  void _onToggleFavourites(
-    ToggleFavouritesEvent event,
+  void _onFavouritePlacesToFavouritesPressed(
+    FavouritePlacesToFavouritesPressed event,
     Emitter<FavouritePlacesState> emit,
   ) {
     final places = favouritePlaceInteractor.toggleFavourite(event.place);
@@ -43,8 +42,8 @@ final class FavouritePlacesBloc
     );
   }
 
-  void _onInsertPlace(
-    InsertPlaceEvent event,
+  void _onFavouritePlacesPlaceInserted(
+    FavouritePlacesPlaceInserted event,
     Emitter<FavouritePlacesState> emit,
   ) {
     final places = favouritePlaceInteractor.insertPlace(

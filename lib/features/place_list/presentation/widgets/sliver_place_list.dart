@@ -44,7 +44,7 @@ class SliverPlaceList extends StatelessWidget {
                       place,
                       toggleFavorites: () {
                         context.read<FavouritePlacesBloc>().add(
-                              ToggleFavouritesEvent(place),
+                              FavouritePlacesToFavouritesPressed(place),
                             );
                       },
                     ),

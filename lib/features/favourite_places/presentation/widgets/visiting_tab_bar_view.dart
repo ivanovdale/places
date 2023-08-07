@@ -36,11 +36,11 @@ class _TabBarView extends StatelessWidget {
     final bloc = context.read<FavouritePlacesBloc>();
 
     void onPlaceDeleted(Place place) => bloc.add(
-          ToggleFavouritesEvent(place),
+          FavouritePlacesToFavouritesPressed(place),
         );
 
     void onPlaceInserted(Place place, Place targetPlace) => bloc.add(
-          InsertPlaceEvent(
+          FavouritePlacesPlaceInserted(
             place: place,
             targetPlace: targetPlace,
           ),

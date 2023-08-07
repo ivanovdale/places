@@ -41,7 +41,7 @@ class AppProviders extends StatelessWidget {
               favouritePlaceDataRepository,
             ),
           )..add(
-              FavoritePlacesInitEvent(),
+              FavouritePlacesStarted(),
             ),
         ),
         BlocProvider(
