@@ -16,7 +16,7 @@ class AddNewPhotoButton extends StatelessWidget {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const PhotoPicker(),
+      builder: (_) => const PhotoPicker(),
     );
     // TODO(daniiliv): *Как будто сработал image picker*.
     const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;

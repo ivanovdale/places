@@ -15,7 +15,7 @@ class VisitingTabBarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
-        builder: (context, state) {
+        builder: (_, state) {
           return switch (state.status) {
             FavouritePlacesStatus.loading => const Center(
                 child: CircularProgressIndicator(),
@@ -56,7 +56,7 @@ class _TabBarView extends StatelessWidget {
     }
 
     return BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return TabBarView(
           children: [
             ToVisitPlaceList(

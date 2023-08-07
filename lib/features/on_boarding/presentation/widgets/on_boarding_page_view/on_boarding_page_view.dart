@@ -21,7 +21,7 @@ class OnBoardingPageView extends StatelessWidget {
         controller: controller,
         onPageChanged: onPageChanged,
         itemCount: items.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           return OnBoardingPageItem(
             data: items[index],
           );

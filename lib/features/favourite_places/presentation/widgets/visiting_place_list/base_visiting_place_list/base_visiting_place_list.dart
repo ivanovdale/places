@@ -116,7 +116,7 @@ class _BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     final listOfPlaces = widget.listOfPlaces;
 
     return listOfPlaces.isEmpty
@@ -124,7 +124,7 @@ class _BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
         : ListView.builder(
             controller: _scrollController,
             itemCount: listOfPlaces.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               final place = listOfPlaces[index];
 
               return Stack(
@@ -138,7 +138,7 @@ class _BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
                         widget.onPlaceDeleted?.call(place),
                     key: ObjectKey(place),
                     child: BlocProvider(
-                      create: (context) => FavouritePlaceCubit(place),
+                      create: (_) => FavouritePlaceCubit(place),
                       child:
                           BlocBuilder<FavouritePlaceCubit, FavouritePlaceState>(
                         builder: (context, state) {

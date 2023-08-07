@@ -39,10 +39,10 @@ class AppProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => BottomNavigationCubit(),
+          create: (_) => BottomNavigationCubit(),
         ),
         BlocProvider(
-          create: (context) => FavouritePlacesBloc(
+          create: (_) => FavouritePlacesBloc(
             FavouritePlaceInteractor(
               _favouritePlaceDataRepository,
             ),
@@ -51,7 +51,7 @@ class AppProviders extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (context) => SettingsCubit(
+          create: (_) => SettingsCubit(
             SettingsInteractor(),
           ),
         ),

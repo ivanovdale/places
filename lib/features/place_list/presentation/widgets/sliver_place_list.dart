@@ -20,7 +20,7 @@ class SliverPlaceList extends StatelessWidget {
 
     return BlocSelector<PlaceListBloc, PlaceListState, PlaceListStatusPlaces>(
       selector: (state) => (status: state.status, places: state.places),
-      builder: (context, statusPlaces) {
+      builder: (_, statusPlaces) {
         return switch (statusPlaces.status) {
           PlaceListStatus.initial => const SliverToBoxAdapter(
               child: SizedBox.shrink(),

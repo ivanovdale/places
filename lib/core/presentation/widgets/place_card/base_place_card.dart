@@ -105,7 +105,7 @@ class _PlaceCardTop extends StatelessWidget {
       children: [
         CachedNetworkImage(
           imageUrl: imageUrl,
-          imageBuilder: (context, imageProvider) {
+          imageBuilder: (_, imageProvider) {
             return Ink.image(image: imageProvider, fit: BoxFit.cover);
           },
           errorWidget: ImageErrorHelper.errorIcon,

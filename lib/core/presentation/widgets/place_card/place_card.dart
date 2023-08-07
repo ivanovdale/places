@@ -86,7 +86,7 @@ class _PlaceActionsState extends State<_PlaceActions> {
       ),
       child: StreamBuilder<bool>(
         stream: _actionStreamController.stream,
-        builder: (context, snapshot) {
+        builder: (_, snapshot) {
           final isFavorite = snapshot.data ?? false;
 
           // Переключение кнопок "В избранное"/"Убрать из избранного".

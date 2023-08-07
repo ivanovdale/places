@@ -43,7 +43,7 @@ class PlaceSearchScreen extends StatelessWidget {
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: BlocProvider(
-        create: (context) => PlaceSearchBloc(
+        create: (_) => PlaceSearchBloc(
           PlaceSearchInteractor(
             context.read<PlaceRepository>(),
           ),
@@ -129,7 +129,7 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
           onPressed: _searchController.clear,
         ),
         BlocBuilder<PlaceSearchBloc, PlaceSearchState>(
-          builder: (context, state) {
+          builder: (_, state) {
             final bloc = context.read<PlaceSearchBloc>();
 
             return SearchResultsOrHistory(

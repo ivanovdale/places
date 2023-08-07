@@ -84,7 +84,7 @@ abstract final class CustomDateTimePickerHelper {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 100)),
       initialDate: initialDate,
-      builder: (context, child) {
+      builder: (_, child) {
         final theme = Theme.of(context);
         final scaffoldBackgroundColor = theme.scaffoldBackgroundColor;
 
@@ -118,7 +118,7 @@ abstract final class CustomDateTimePickerHelper {
     final pickedTime = await showTimePicker(
       context: context,
       initialTime: initialTime,
-      builder: (context, child) {
+      builder: (_, child) {
         return ThemeConfiguredCustomTimePicker(
           child: child!,
         );

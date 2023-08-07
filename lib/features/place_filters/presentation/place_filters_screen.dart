@@ -39,7 +39,7 @@ class PlaceFiltersScreen extends StatelessWidget {
     final placeInteractor = context.read<PlaceInteractor>();
 
     return BlocProvider(
-      create: (context) => PlaceFiltersBloc(
+      create: (_) => PlaceFiltersBloc(
         placeInteractor: placeInteractor,
         userCoordinates: mocked.userCoordinates,
       )..add(

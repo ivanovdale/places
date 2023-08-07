@@ -37,7 +37,7 @@ class PlaceListScreen extends StatelessWidget {
     final orientation = MediaQuery.of(context).orientation;
 
     return BlocProvider(
-      create: (context) => PlaceListBloc(
+      create: (_) => PlaceListBloc(
         context.read<PlaceInteractor>(),
       )..add(
           PlaceListStarted(),

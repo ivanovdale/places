@@ -24,13 +24,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
       ),
       child: BlocConsumer<BottomNavigationCubit, BottomNavigationState>(
-        listener: (context, state) {
+        listener: (_, state) {
           Navigator.pushReplacementNamed(
             context,
             bottomNavigationBarItems[state.selectedTabIndex].routeName,
           );
         },
-        builder: (context, state) => BottomNavigationBar(
+        builder: (_, state) => BottomNavigationBar(
           items: bottomNavigationBarItems
               .map(
                 (item) => CustomBottomNavigationBarItem(

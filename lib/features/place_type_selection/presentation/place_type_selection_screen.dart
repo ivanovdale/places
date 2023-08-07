@@ -28,7 +28,7 @@ class PlaceTypeSelectionScreen extends StatelessWidget {
         leading: const BackButton(),
       ),
       body: BlocProvider(
-        create: (context) => PlaceTypeSelectionCubit(placeType),
+        create: (_) => PlaceTypeSelectionCubit(placeType),
         child: const PlaceTypesList(),
       ),
     );

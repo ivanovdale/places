@@ -44,10 +44,10 @@ class SearchHistoryItems extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: itemCount,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           return listOfItems[index];
         },
-        separatorBuilder: (context, index) {
+        separatorBuilder: (_, index) {
           // Не отрисовывать разделитель для последнего элемента.
           return (index != itemCount - 2)
               ? const SearchHistoryItemDivider()

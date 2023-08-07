@@ -34,13 +34,13 @@ class PlaceDetailsScreen extends StatelessWidget {
         ),
         child: Scaffold(
           bottomSheet: BlocProvider(
-            create: (context) => PlaceDetailsCubit(
+            create: (_) => PlaceDetailsCubit(
               context.read<PlaceInteractor>(),
             )..loadPlaceDetails(
                 placeId,
               ),
             child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-              builder: (context, state) {
+              builder: (_, state) {
                 return switch (state) {
                   PlaceDetailsInitial() => const SizedBox.shrink(),
                   PlaceDetailsLoadInProgress() => const Center(

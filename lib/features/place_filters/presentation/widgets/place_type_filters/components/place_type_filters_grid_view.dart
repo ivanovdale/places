@@ -25,7 +25,7 @@ class PlaceTypeFiltersGridView extends StatelessWidget {
           crossAxisSpacing: 25,
         ),
         itemCount: listOfFilters.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           final placeFilter = listOfFilters.elementAt(index);
 
           return PlaceFilterItem(placeType: placeFilter);

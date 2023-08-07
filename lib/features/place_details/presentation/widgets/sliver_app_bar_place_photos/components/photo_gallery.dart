@@ -27,7 +27,7 @@ class PhotoGallery extends StatelessWidget {
       controller: controller,
       onPageChanged: onPageChanged,
       itemCount: place.photoUrlList?.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (_, index) {
         return CachedNetworkImage(
           imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
