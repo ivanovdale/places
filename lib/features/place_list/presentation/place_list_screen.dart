@@ -48,8 +48,12 @@ class PlaceListScreen extends StatelessWidget {
             ? null
             : const CustomBottomNavigationBar(),
         body: const _PlaceListBody(),
-        floatingActionButton: AddNewPlaceButton(
-          onPressed: () => _openAddPlaceScreen(context),
+        floatingActionButton: Builder(
+          builder: (innerContext) {
+            return AddNewPlaceButton(
+              onPressed: () => _openAddPlaceScreen(innerContext),
+            );
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
