@@ -61,13 +61,26 @@ class PlaceListScreen extends StatelessWidget {
 class _PlaceListBody extends StatelessWidget {
   const _PlaceListBody({Key? key}) : super(key: key);
 
+  Future<void> _onRefresh(BuildContext context) {
+    final bloc = context.read<PlaceListBloc>()
+      ..add(
+        PlaceListLoaded(),
+      );
+
+    return bloc.stream.first;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
-      slivers: [
-        place_list.SliverAppBar(),
-        SliverPlaceList(),
-      ],
+    return RefreshIndicator.adaptive(
+      edgeOffset: 220,
+      onRefresh: () => _onRefresh(context),
+      child: const CustomScrollView(
+        slivers: [
+          place_list.SliverAppBar(),
+          SliverPlaceList(),
+        ],
+      ),
     );
   }
 }
