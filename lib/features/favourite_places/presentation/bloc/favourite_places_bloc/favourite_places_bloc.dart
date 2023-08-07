@@ -5,9 +5,9 @@ import 'package:places/features/favourite_places/presentation/bloc/favourite_pla
 
 final class FavouritePlacesBloc
     extends Bloc<FavouritePlacesEvent, FavouritePlacesState> {
-  final FavouritePlaceInteractor favouritePlaceInteractor;
+  final FavouritePlaceInteractor _favouritePlaceInteractor;
 
-  FavouritePlacesBloc(this.favouritePlaceInteractor)
+  FavouritePlacesBloc(this._favouritePlaceInteractor)
       : super(FavouritePlacesState()) {
     on(_onFavouritePlacesStarted);
     on(_onFavouritePlacesToFavouritesPressed);
@@ -23,7 +23,7 @@ final class FavouritePlacesBloc
 
     emit(
       FavouritePlacesState(
-        places: favouritePlaceInteractor.getPlaces(),
+        places: _favouritePlaceInteractor.getPlaces(),
         status: FavouritePlacesStatus.success,
       ),
     );
@@ -33,7 +33,7 @@ final class FavouritePlacesBloc
     FavouritePlacesToFavouritesPressed event,
     Emitter<FavouritePlacesState> emit,
   ) {
-    final places = favouritePlaceInteractor.toggleFavourite(event.place);
+    final places = _favouritePlaceInteractor.toggleFavourite(event.place);
 
     emit(
       state.copyWith(
@@ -46,7 +46,7 @@ final class FavouritePlacesBloc
     FavouritePlacesPlaceInserted event,
     Emitter<FavouritePlacesState> emit,
   ) {
-    final places = favouritePlaceInteractor.insertPlace(
+    final places = _favouritePlaceInteractor.insertPlace(
       event.place,
       event.targetPlace,
     );
