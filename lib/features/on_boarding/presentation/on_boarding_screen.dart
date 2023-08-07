@@ -21,6 +21,7 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
+  final OnBoardingCubit _cubit = OnBoardingCubit();
 
   /// Выполняет переход на главную страницу, если стек экранов пуст.
   void _goToPlaceListScreen(BuildContext context) {
@@ -38,17 +39,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _cubit.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => OnBoardingCubit(),
+      body: BlocProvider.value(
+        value: _cubit,
         child: BlocBuilder<OnBoardingCubit, OnBoardingState>(
-          builder: (context, state) {
+          bloc: _cubit,
+          builder: (_, state) {
             final activePage = state.activePage;
-            final cubit = context.read<OnBoardingCubit>();
 
             return Column(
               children: [
@@ -58,7 +60,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
                 OnBoardingPageView(
                   controller: _pageController,
-                  onPageChanged: cubit.setActivePage,
+                  onPageChanged: _cubit.setActivePage,
                 ),
                 OnBoardingPageIndicator(
                   length: items.length,

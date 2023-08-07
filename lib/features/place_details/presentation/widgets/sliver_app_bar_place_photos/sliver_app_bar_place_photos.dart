@@ -27,11 +27,13 @@ class SliverAppBarPlacePhotos extends StatefulWidget {
 
 class _SliverAppBarPlacePhotosState extends State<SliverAppBarPlacePhotos> {
   final PageController _pageController = PageController();
+  final PhotoGalleryCubit _cubit = PhotoGalleryCubit();
 
   @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _cubit.close();
   }
 
   @override
@@ -41,19 +43,18 @@ class _SliverAppBarPlacePhotosState extends State<SliverAppBarPlacePhotos> {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: BlocProvider(
-          create: (context) => PhotoGalleryCubit(),
+        background: BlocProvider.value(
+          value: _cubit,
           child: BlocBuilder<PhotoGalleryCubit, PhotoGalleryState>(
-            builder: (context, state) {
-              final cubit = context.read<PhotoGalleryCubit>();
-
+            bloc: _cubit,
+            builder: (_, state) {
               return Stack(
                 alignment: Alignment.center,
                 children: [
                   PhotoGallery(
                     place: widget.place,
                     controller: _pageController,
-                    onPageChanged: cubit.setActivePage,
+                    onPageChanged: _cubit.setActivePage,
                   ),
                   PageIndicator(
                     length: widget.place.photoUrlList?.length ?? 0,
