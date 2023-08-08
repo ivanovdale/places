@@ -3,7 +3,7 @@ import 'package:places/core/presentation/widgets/custom_divider.dart';
 
 /// Разделитель между элементами истории поиска.
 class SearchHistoryItemDivider extends StatelessWidget {
-  const SearchHistoryItemDivider({Key? key}) : super(key: key);
+  const SearchHistoryItemDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

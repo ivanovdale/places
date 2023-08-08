@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 /// Кастомный аппбар на сливере.
 class SliverAppBar extends StatelessWidget {
-  const SliverAppBar({Key? key}) : super(key: key);
+  const SliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

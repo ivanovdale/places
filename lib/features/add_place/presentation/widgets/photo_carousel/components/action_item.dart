@@ -10,11 +10,11 @@ class ActionItem extends StatelessWidget {
   final bool isLastItem;
 
   const ActionItem({
-    Key? key,
+    super.key,
     required this.text,
     required this.iconAsset,
     required this.isLastItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

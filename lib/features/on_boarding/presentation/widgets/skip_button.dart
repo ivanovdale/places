@@ -9,10 +9,10 @@ class SkipButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const SkipButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.activePage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

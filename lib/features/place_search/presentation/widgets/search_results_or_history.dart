@@ -17,7 +17,7 @@ class SearchResultsOrHistory extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchResultsOrHistory({
-    Key? key,
+    super.key,
     required this.searchHistory,
     required this.placesFoundList,
     this.onPlacesFoundItemPressed,
@@ -27,7 +27,7 @@ class SearchResultsOrHistory extends StatelessWidget {
     this.onDeleteHistorySearchItemPressed,
     required this.searchString,
     required this.isSearchQueryInProgress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

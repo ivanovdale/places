@@ -12,12 +12,12 @@ class PlaceFoundItem extends StatelessWidget {
   final bool isLastItem;
 
   const PlaceFoundItem({
-    Key? key,
+    super.key,
     required this.place,
     this.isLastItem = false,
     this.onPlaceFoundItemPressed,
     required this.searchString,
-  }) : super(key: key);
+  });
 
   /// Сохранение места в истории поиска и открытие боттомшита детализации места.
   void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {

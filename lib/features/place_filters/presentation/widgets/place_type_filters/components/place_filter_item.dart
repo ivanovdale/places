@@ -8,9 +8,9 @@ class PlaceFilterItem extends StatelessWidget {
   final PlaceTypes placeType;
 
   const PlaceFilterItem({
-    Key? key,
+    super.key,
     required this.placeType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

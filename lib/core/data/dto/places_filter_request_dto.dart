@@ -32,17 +32,17 @@ class PlacesFilterRequestDto {
     // Если все параметры широты, долготы и радиуса поиска заполнены, то добавим их в мапу.
     if (_isLatitudeFilled() && _isLongitudeFilled() && _isRadiusFilled()) {
       result
-        ..putIfAbsent('lat', () => lat as double)
-        ..putIfAbsent('lng', () => lng as double)
-        ..putIfAbsent('radius', () => radius as double);
+        ..putIfAbsent('lat', () => lat!)
+        ..putIfAbsent('lng', () => lng!)
+        ..putIfAbsent('radius', () => radius!);
     }
 
     if (typeFilter != null && typeFilter!.isNotEmpty) {
-      result.putIfAbsent('typeFilter', () => typeFilter as List<String>);
+      result.putIfAbsent('typeFilter', () => typeFilter!);
     }
 
     if (nameFilter != null && nameFilter!.isNotEmpty) {
-      result.putIfAbsent('nameFilter', () => nameFilter as String);
+      result.putIfAbsent('nameFilter', () => nameFilter!);
     }
 
     return result;

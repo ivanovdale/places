@@ -9,7 +9,7 @@ import 'package:places/features/favourite_places/presentation/widgets/visiting_t
 ///
 /// Имеет TabBar для переключения между списками.
 class FavouritePlacesScreen extends StatelessWidget {
-  const FavouritePlacesScreen({Key? key}) : super(key: key);
+  const FavouritePlacesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class FavouritePlacesScreen extends StatelessWidget {
         title: AppStrings.visitingScreenAppBarTitle,
         titleTextStyle: Theme.of(context).textTheme.titleMedium,
         centerTitle: true,
-        toolbarHeight: 56.0,
+        toolbarHeight: 56,
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: const Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
+          horizontal: 16,
         ),
         child: DefaultTabController(
           length: 2,

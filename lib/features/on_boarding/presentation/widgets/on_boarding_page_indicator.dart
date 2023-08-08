@@ -7,11 +7,11 @@ class OnBoardingPageIndicator extends StatelessWidget {
   final int activePage;
 
   const OnBoardingPageIndicator({
-    Key? key,
+    super.key,
     required this.length,
     required this.controller,
     required this.activePage,
-  }) : super(key: key);
+  });
 
   void _indicatorOnTap(int index) {
     controller.animateToPage(

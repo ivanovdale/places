@@ -22,8 +22,8 @@ abstract class BaseCoordinateTextField extends StatelessWidget {
   abstract final EdgeInsets? padding;
 
   const BaseCoordinateTextField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:places/features/favourite_places/presentation/widgets/visiting_p
 import 'package:places/features/favourite_places/presentation/widgets/visiting_place_list/visited_place_list.dart';
 
 class VisitingTabBarView extends StatelessWidget {
-  const VisitingTabBarView({Key? key}) : super(key: key);
+  const VisitingTabBarView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class VisitingTabBarView extends StatelessWidget {
 }
 
 class _TabBarView extends StatelessWidget {
-  const _TabBarView({Key? key}) : super(key: key);
+  const _TabBarView();
 
   @override
   Widget build(BuildContext context) {

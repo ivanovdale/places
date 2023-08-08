@@ -20,7 +20,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.padding,
     this.height,
     required this.controller,
@@ -35,7 +35,7 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();

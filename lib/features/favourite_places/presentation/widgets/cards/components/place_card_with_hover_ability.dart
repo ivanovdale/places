@@ -9,10 +9,10 @@ class PlaceCardWithHoverAbility extends StatelessWidget {
   final List<Place?> candidateData;
 
   const PlaceCardWithHoverAbility({
-    Key? key,
+    super.key,
     required this.placeCard,
     required this.candidateData,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

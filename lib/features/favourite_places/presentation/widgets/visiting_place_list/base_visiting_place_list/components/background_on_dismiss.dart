@@ -9,9 +9,9 @@ class BackgroundOnDismiss extends StatelessWidget {
   final bool isDraggingActive;
 
   const BackgroundOnDismiss({
-    Key? key,
+    super.key,
     required this.isDraggingActive,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class BackgroundOnDismiss extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.only(
-                right: 16.0,
-                bottom: 16.0,
-                top: 16.0,
+                right: 16,
+                bottom: 16,
+                top: 16,
               ),
               margin: const EdgeInsets.only(bottom: 0.1),
               child: Column(
@@ -40,7 +40,7 @@ class BackgroundOnDismiss extends StatelessWidget {
                     width: 24,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       AppStrings.delete,
                       style: theme.textTheme.bodySmall!.copyWith(

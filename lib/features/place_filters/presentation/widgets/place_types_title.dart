@@ -3,7 +3,7 @@ import 'package:places/core/helpers/app_strings.dart';
 
 /// Заголовок фильтров по категории места.
 class PlaceTypesTitle extends StatelessWidget {
-  const PlaceTypesTitle({Key? key}) : super(key: key);
+  const PlaceTypesTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +14,8 @@ class PlaceTypesTitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 24.0,
-          horizontal: 16.0,
+          vertical: 24,
+          horizontal: 16,
         ),
         child: Text(
           AppStrings.placeTypes,

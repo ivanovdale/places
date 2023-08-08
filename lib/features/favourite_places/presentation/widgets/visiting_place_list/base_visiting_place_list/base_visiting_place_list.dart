@@ -30,11 +30,11 @@ abstract class BaseVisitingPlaceList extends StatefulWidget {
   final OnPlaceDeleted? onPlaceDeleted;
 
   const BaseVisitingPlaceList({
-    Key? key,
+    super.key,
     required this.listOfPlaces,
     this.onPlaceInserted,
     this.onPlaceDeleted,
-  }) : super(key: key);
+  });
 
   @override
   State<BaseVisitingPlaceList> createState() => _BaseVisitingPlaceListState();

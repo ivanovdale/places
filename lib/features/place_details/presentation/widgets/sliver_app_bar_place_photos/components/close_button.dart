@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Кнопка "Закрыть" боттомшит.
 class CloseButton extends StatelessWidget {
-  const CloseButton({Key? key}) : super(key: key);
+  const CloseButton({super.key});
 
   @override
   Widget build(BuildContext context) {

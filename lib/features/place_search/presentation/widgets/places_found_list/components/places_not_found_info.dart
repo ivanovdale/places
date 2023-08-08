@@ -3,7 +3,7 @@ import 'package:places/core/presentation/widgets/placeholders/places_not_found_p
 
 /// Информация о том, что места не найдены.
 class PlacesNotFoundInfo extends StatelessWidget {
-  const PlacesNotFoundInfo({Key? key}) : super(key: key);
+  const PlacesNotFoundInfo({super.key});
 
   @override
   Widget build(BuildContext context) {

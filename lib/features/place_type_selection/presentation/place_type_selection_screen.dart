@@ -12,9 +12,9 @@ class PlaceTypeSelectionScreen extends StatelessWidget {
   final PlaceTypes? placeType;
 
   const PlaceTypeSelectionScreen({
-    Key? key,
+    super.key,
     this.placeType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

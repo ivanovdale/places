@@ -21,8 +21,8 @@ abstract class BasePlaceCard extends StatelessWidget {
 
   const BasePlaceCard(
     this.place, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Показывает боттомшит детализации места.
   void _showPlaceDetailsBottomSheet(BuildContext context, Place place) {
@@ -81,9 +81,8 @@ class _PlaceCardTop extends StatelessWidget {
 
   const _PlaceCardTop(
     this.place,
-    this.actions, {
-    Key? key,
-  }) : super(key: key);
+    this.actions,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +122,8 @@ class _PlaceCardTop extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 16.0,
+                left: 16,
+                top: 16,
               ),
               child: Text(
                 place.type.toString(),
@@ -162,9 +161,8 @@ class _PlaceCardBottom extends StatelessWidget {
 
   const _PlaceCardBottom(
     this.place, {
-    Key? key,
     required this.showDetails,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +214,7 @@ class _PlaceCardBottom extends StatelessWidget {
 class _PlaceDetailsInfo extends StatelessWidget {
   final Place place;
 
-  const _PlaceDetailsInfo(this.place, {Key? key}) : super(key: key);
+  const _PlaceDetailsInfo(this.place);
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +246,7 @@ class _PlaceDetailsInfo extends StatelessWidget {
 class _PlaceVisitingInfo extends StatelessWidget {
   final Place place;
 
-  const _PlaceVisitingInfo(this.place, {Key? key}) : super(key: key);
+  const _PlaceVisitingInfo(this.place);
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +262,9 @@ class _PlaceVisitingInfo extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: 16.0,
+        left: 16,
+        right: 16,
+        bottom: 16,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

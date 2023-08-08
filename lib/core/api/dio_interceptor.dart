@@ -18,8 +18,8 @@ class DioInterceptor extends Interceptor {
   DioInterceptor(this.dio);
 
   @override
-  Future onResponse(
-    Response response,
+  Future<dynamic> onResponse(
+    Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) async {
     logPrint('*** Api Response - Start ***');
@@ -36,7 +36,7 @@ class DioInterceptor extends Interceptor {
   }
 
   @override
-  Future onRequest(
+  Future<dynamic> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
@@ -74,7 +74,6 @@ class DioInterceptor extends Interceptor {
           case 500:
             throw InternalServerErrorException(err.requestOptions);
         }
-        break;
       case DioExceptionType.cancel:
         break;
       case DioExceptionType.badCertificate:
@@ -91,7 +90,7 @@ class DioInterceptor extends Interceptor {
   }
 
   void printAll(String message) {
-    message.toString().split('\n').forEach(logPrint);
+    message.split('\n').forEach(logPrint);
   }
 
   void logPrint(String text) {

@@ -7,9 +7,9 @@ class CancelButton extends StatelessWidget {
   final VoidCallback onCancelButtonPressed;
 
   const CancelButton({
-    Key? key,
+    super.key,
     required this.onCancelButtonPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class CancelButton extends StatelessWidget {
         color: theme.colorScheme.secondary,
       ),
       padding: const EdgeInsets.only(
-        left: 16.0,
+        left: 16,
       ),
       onPressed: onCancelButtonPressed,
     );

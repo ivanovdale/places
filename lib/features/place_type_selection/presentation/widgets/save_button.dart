@@ -7,8 +7,8 @@ import 'package:places/features/place_type_selection/presentation/cubit/place_ty
 /// Кнопка сохранения категории места.
 class SaveButton extends StatelessWidget {
   const SaveButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,8 @@ class SaveButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 24.0,
+        horizontal: 16,
+        vertical: 24,
       ),
       child: CustomElevatedButton(
         AppStrings.save,

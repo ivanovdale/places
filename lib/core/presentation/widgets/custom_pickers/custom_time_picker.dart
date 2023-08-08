@@ -18,7 +18,7 @@ class CustomTimePicker extends StatelessWidget {
   final Color textButtonForegroundColor;
 
   const CustomTimePicker({
-    Key? key,
+    super.key,
     required this.child,
     required this.theme,
     this.colorSchemePrimary,
@@ -33,7 +33,7 @@ class CustomTimePicker extends StatelessWidget {
     this.pickerDialTextColor,
     this.pickerEntryModeIconColor,
     required this.textButtonForegroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

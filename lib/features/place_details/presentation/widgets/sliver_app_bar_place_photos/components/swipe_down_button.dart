@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Кнопка скрытия боттомшита.
 class SwipeDownButton extends StatelessWidget {
-  const SwipeDownButton({Key? key}) : super(key: key);
+  const SwipeDownButton({super.key});
 
   @override
   Widget build(BuildContext context) {

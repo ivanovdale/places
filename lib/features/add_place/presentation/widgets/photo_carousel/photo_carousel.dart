@@ -11,11 +11,11 @@ class PhotoCarousel extends StatelessWidget {
   final ValueSetter<int> onDeletePhotoPressed;
 
   const PhotoCarousel({
-    Key? key,
+    super.key,
     required this.photoList,
     required this.onAddNewPhotoPressed,
     required this.onDeletePhotoPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class PhotoCarousel extends StatelessWidget {
     return SizedBox(
       height: 100,
       child: ListView(
-        padding: const EdgeInsets.only(left: 16.0, top: 24),
+        padding: const EdgeInsets.only(left: 16, top: 24),
         scrollDirection: Axis.horizontal,
         children: newPhotoCardList,
       ),

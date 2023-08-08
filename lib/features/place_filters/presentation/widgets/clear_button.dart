@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 /// Кнопка "Очистить" все фильтры.
 class ClearButton extends StatelessWidget {
-  const ClearButton({Key? key}) : super(key: key);
+  const ClearButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ClearButton extends StatelessWidget {
       textStyle: theme.textTheme.labelLarge?.copyWith(
         color: theme.colorScheme.primary,
       ),
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: const EdgeInsets.only(right: 16),
       onPressed: () => bloc.add(
         PlaceFiltersAllFiltersReset(),
       ),

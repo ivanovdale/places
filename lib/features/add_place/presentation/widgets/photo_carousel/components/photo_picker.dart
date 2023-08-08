@@ -22,7 +22,7 @@ class PhotoPicker extends StatelessWidget {
     },
   ];
 
-  const PhotoPicker({Key? key}) : super(key: key);
+  const PhotoPicker({super.key});
 
   @override
   Widget build(BuildContext context) {

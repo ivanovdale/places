@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 ///
 /// Отображает переключатель тёмной/светлой темы. Позволяет перейти на экран онбординга.
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +31,15 @@ class SettingsScreen extends StatelessWidget {
 
 /// Содержит переключатель тёмной темы и кнопку для перехода на экран онбординга.
 class _SettingsBody extends StatelessWidget {
-  const _SettingsBody({
-    Key? key,
-  }) : super(key: key);
+  const _SettingsBody();
 
   @override
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(
-        top: 42.0,
-        left: 16.0,
-        right: 16.0,
+        top: 42,
+        left: 16,
+        right: 16,
       ),
       child: Column(
         children: [
@@ -57,9 +55,7 @@ class _SettingsBody extends StatelessWidget {
 
 /// Кастомный разделитель с заданным отступом и толщиной.
 class _DividerWithPaddingAndThickness extends StatelessWidget {
-  const _DividerWithPaddingAndThickness({
-    Key? key,
-  }) : super(key: key);
+  const _DividerWithPaddingAndThickness();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +71,7 @@ class _DividerWithPaddingAndThickness extends StatelessWidget {
 
 /// Переключатель тёмной темы.
 class _DarkModeSetting extends StatefulWidget {
-  const _DarkModeSetting({Key? key}) : super(key: key);
+  const _DarkModeSetting();
 
   @override
   State<_DarkModeSetting> createState() => _DarkModeSettingState();
@@ -105,7 +101,7 @@ class _DarkModeSettingState extends State<_DarkModeSetting> {
 
 /// Позволяет перейти на экран онбординга.
 class _WatchTutorialInfo extends StatelessWidget {
-  const _WatchTutorialInfo({Key? key}) : super(key: key);
+  const _WatchTutorialInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +115,7 @@ class _WatchTutorialInfo extends StatelessWidget {
         ),
         const Spacer(),
         Padding(
-          padding: const EdgeInsets.only(right: 10.0),
+          padding: const EdgeInsets.only(right: 10),
           child: IconButton(
             icon: const Icon(Icons.info_outline),
             color: theme.colorScheme.primary,

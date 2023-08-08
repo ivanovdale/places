@@ -12,12 +12,12 @@ class SearchHistoryItems extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryItems({
-    Key? key,
+    super.key,
     required this.searchHistory,
     this.onClearHistoryPressed,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

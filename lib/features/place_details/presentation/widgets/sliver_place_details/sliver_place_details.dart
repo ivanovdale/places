@@ -15,7 +15,7 @@ import 'package:places/features/place_details/presentation/widgets/sliver_place_
 class SliverPlaceDetails extends StatelessWidget {
   final Place place;
 
-  const SliverPlaceDetails(this.place, {Key? key}) : super(key: key);
+  const SliverPlaceDetails(this.place, {super.key});
 
   @override
   Widget build(BuildContext context) {

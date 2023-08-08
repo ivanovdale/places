@@ -14,14 +14,14 @@ class DraggablePlaceCard extends StatelessWidget {
   final List<Place?> candidateData;
 
   const DraggablePlaceCard({
-    Key? key,
+    super.key,
     this.onDragStarted,
     this.onDragEnd,
     required this.placeCard,
     required this.index,
     required this.place,
     required this.candidateData,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

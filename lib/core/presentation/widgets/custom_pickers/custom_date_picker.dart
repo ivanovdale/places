@@ -10,14 +10,14 @@ class CustomDatePicker extends StatelessWidget {
   final ThemeData theme;
 
   const CustomDatePicker({
-    Key? key,
+    super.key,
     required this.child,
     required this.theme,
     this.colorSchemePrimary,
     this.colorSchemeOnPrimary,
     this.colorSchemeOnSurface,
     this.dialogBackgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

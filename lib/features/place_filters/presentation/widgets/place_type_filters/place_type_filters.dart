@@ -12,8 +12,8 @@ import 'package:places/features/place_filters/presentation/widgets/place_type_fi
 /// Показывает, установлен ли фильтр по той или иной категории.
 class PlaceTypeFilters extends StatelessWidget {
   const PlaceTypeFilters({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

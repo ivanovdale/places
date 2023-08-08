@@ -7,15 +7,15 @@ class OnBoardingPageItemIcon extends StatelessWidget {
   final Color color;
 
   const OnBoardingPageItemIcon({
-    Key? key,
+    super.key,
     required this.assetName,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 42.0),
+      padding: const EdgeInsets.only(bottom: 42),
       child: SvgPicture.asset(
         assetName,
         width: 100,

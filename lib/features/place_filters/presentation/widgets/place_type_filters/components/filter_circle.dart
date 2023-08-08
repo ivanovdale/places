@@ -9,9 +9,9 @@ class FilterCircle extends StatelessWidget {
   final PlaceTypes placeType;
 
   const FilterCircle({
-    Key? key,
+    super.key,
     required this.placeType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

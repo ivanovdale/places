@@ -6,15 +6,15 @@ import 'package:places/features/place_type_selection/presentation/widgets/save_b
 /// Список категорий места.
 class PlaceTypesList extends StatelessWidget {
   const PlaceTypesList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     const placeTypes = PlaceTypes.values;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
+      padding: const EdgeInsets.only(top: 24),
       child: Column(
         children: [
           Expanded(

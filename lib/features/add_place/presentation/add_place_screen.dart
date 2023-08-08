@@ -148,8 +148,8 @@ class _AddPlaceBodyState extends State<AddPlaceBody> {
   @override
   Widget build(BuildContext context) {
     const defaultLabelPadding = EdgeInsets.only(
-      left: 16.0,
-      bottom: 12.0,
+      left: 16,
+      bottom: 12,
     );
 
     return BlocProvider.value(

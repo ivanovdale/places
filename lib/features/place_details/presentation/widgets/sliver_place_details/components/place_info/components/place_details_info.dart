@@ -10,17 +10,17 @@ class PlaceDetailsInfo extends StatelessWidget {
 
   const PlaceDetailsInfo(
     this.text, {
-    Key? key,
+    super.key,
     required this.placeTypeTextStyle,
     required this.workTime,
     required this.workTimeTextStyle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
+        left: 16,
         top: 2,
       ),
       child: Row(
@@ -34,7 +34,7 @@ class PlaceDetailsInfo extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-              left: 16.0,
+              left: 16,
             ),
             child: Text(
               '${AppStrings.closedTo} $workTime',

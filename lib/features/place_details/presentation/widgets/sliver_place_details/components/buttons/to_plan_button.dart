@@ -7,7 +7,7 @@ import 'package:places/core/presentation/widgets/custom_buttons/custom_text_butt
 
 /// Кнопка "Запланировать" поход в указанное место.
 class ToPlanButton extends StatelessWidget {
-  const ToPlanButton({Key? key}) : super(key: key);
+  const ToPlanButton({super.key});
 
   @override
   Widget build(BuildContext context) {

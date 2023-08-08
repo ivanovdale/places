@@ -7,9 +7,9 @@ class NameLabel extends StatelessWidget {
   final EdgeInsets? padding;
 
   const NameLabel({
-    Key? key,
+    super.key,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -22,9 +22,9 @@ class AppProviders extends StatelessWidget {
   final Widget child;
 
   AppProviders({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key) {
+  }) {
     final networkPlaceRepository = NetworkPlaceRepository(DioApi());
     _favouritePlaceDataRepository = FavouritePlaceDataRepository();
     _networkPlaceRepository = networkPlaceRepository;

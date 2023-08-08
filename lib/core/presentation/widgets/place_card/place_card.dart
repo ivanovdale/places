@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 
@@ -26,16 +25,12 @@ class PlaceCard extends BasePlaceCard {
   bool get showDetails => true;
 
   PlaceCard(
-    Place place, {
-    Key? key,
+    super.place, {
+    super.key,
     required this.toggleFavorites,
-  })  : actions = _PlaceActions(
+  }) : actions = _PlaceActions(
           isFavorite: place.isFavorite,
           toggleFavorites: toggleFavorites,
-        ),
-        super(
-          place,
-          key: key,
         );
 }
 
@@ -45,10 +40,9 @@ class _PlaceActions extends StatefulWidget {
   final VoidCallback toggleFavorites;
 
   const _PlaceActions({
-    Key? key,
     required this.isFavorite,
     required this.toggleFavorites,
-  }) : super(key: key);
+  });
 
   @override
   State<_PlaceActions> createState() => _PlaceActionsState();
@@ -82,7 +76,7 @@ class _PlaceActionsState extends State<_PlaceActions> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 18.0,
+        left: 18,
       ),
       child: StreamBuilder<bool>(
         stream: _actionStreamController.stream,

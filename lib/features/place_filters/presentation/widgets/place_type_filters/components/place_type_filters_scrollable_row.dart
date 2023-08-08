@@ -7,9 +7,9 @@ class PlaceTypeFiltersScrollableRow extends StatelessWidget {
   final Set<PlaceTypes> selectedPlaceTypeFilters;
 
   const PlaceTypeFiltersScrollableRow({
-    Key? key,
+    super.key,
     required this.selectedPlaceTypeFilters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class PlaceTypeFiltersScrollableRow extends StatelessWidget {
         children: PlaceTypes.values
             .map(
               (placeType) => Padding(
-                padding: const EdgeInsets.only(right: 44.0),
+                padding: const EdgeInsets.only(right: 44),
                 child: PlaceFilterItem(
                   placeType: placeType,
                 ),

@@ -8,10 +8,10 @@ class DeleteHistorySearchItemFromListButton extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const DeleteHistorySearchItemFromListButton({
-    Key? key,
+    super.key,
     required this.place,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

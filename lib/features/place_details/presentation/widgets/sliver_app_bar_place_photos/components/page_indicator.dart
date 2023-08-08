@@ -7,11 +7,11 @@ class PageIndicator extends StatelessWidget {
   final int activePage;
 
   const PageIndicator({
-    Key? key,
+    super.key,
     required this.length,
     required this.controller,
     required this.activePage,
-  }) : super(key: key);
+  });
 
   /// Устанавливает текущую фотографию галлереи.
   void _indicatorOnTap(int index) {

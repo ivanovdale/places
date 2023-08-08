@@ -11,9 +11,9 @@ class PlaceFoundImage extends StatelessWidget {
   final Place place;
 
   const PlaceFoundImage({
-    Key? key,
+    super.key,
     required this.place,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:places/features/place_details/presentation/widgets/sliver_place_
 ///
 /// Предоставляет возможность запланировать поход в место и добавить его в список избранного.
 class PlaceActionsButtons extends StatelessWidget {
-  const PlaceActionsButtons({Key? key}) : super(key: key);
+  const PlaceActionsButtons({super.key});
 
   @override
   Widget build(BuildContext context) {

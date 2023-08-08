@@ -7,17 +7,17 @@ class PlaceDescription extends StatelessWidget {
 
   const PlaceDescription(
       this.text, {
-        Key? key,
+        super.key,
         required this.textStyle,
-      }) : super(key: key);
+      });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(
-        top: 24.0,
-        left: 16.0,
-        right: 16.0,
+        top: 24,
+        left: 16,
+        right: 16,
       ),
       height: 90,
       child: SingleChildScrollView(

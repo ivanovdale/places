@@ -7,9 +7,9 @@ class DescriptionLabel extends StatelessWidget {
   final EdgeInsets? padding;
 
   const DescriptionLabel({
-    Key? key,
+    super.key,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

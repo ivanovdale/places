@@ -13,9 +13,9 @@ class FilterButton extends StatelessWidget {
   final bool isButtonDisabled;
 
   const FilterButton({
-    Key? key,
+    super.key,
     this.isButtonDisabled = false,
-  }) : super(key: key);
+  });
 
   /// Открывает экран фильтрации мест.
   ///
@@ -35,8 +35,8 @@ class FilterButton extends StatelessWidget {
 
     if (selectedFilters != null) {
       final placeTypeFilters =
-          selectedFilters['placeTypeFilters'] as Set<PlaceTypes>;
-      final radius = selectedFilters['radius'] as double;
+          selectedFilters['placeTypeFilters']! as Set<PlaceTypes>;
+      final radius = selectedFilters['radius']! as double;
 
       bloc.add(
         PlaceListWithFiltersLoaded(

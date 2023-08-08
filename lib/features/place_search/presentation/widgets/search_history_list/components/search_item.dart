@@ -13,17 +13,17 @@ class SearchItem extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchItem({
-    Key? key,
+    super.key,
     required this.place,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        right: 8.0,
+        right: 8,
       ),
       child: Row(
         children: [

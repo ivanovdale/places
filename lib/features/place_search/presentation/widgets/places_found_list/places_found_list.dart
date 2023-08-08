@@ -10,11 +10,11 @@ class PlacesFoundList extends StatelessWidget {
   final String searchString;
 
   const PlacesFoundList({
-    Key? key,
+    super.key,
     required this.placesFoundList,
     this.onPlacesFoundItemPressed,
     required this.searchString,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

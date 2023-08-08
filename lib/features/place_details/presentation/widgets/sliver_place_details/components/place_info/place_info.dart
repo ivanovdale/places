@@ -12,7 +12,7 @@ import 'package:places/features/place_details/presentation/widgets/sliver_place_
 class PlaceInfo extends StatelessWidget {
   final Place place;
 
-  const PlaceInfo(this.place, {Key? key}) : super(key: key);
+  const PlaceInfo(this.place, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -17,13 +17,10 @@ class VisitedPlaceList extends BaseVisitingPlaceList {
 
   const VisitedPlaceList(
     List<Place> listOfPlaces, {
-    OnPlaceDeleted? onPlaceDeleted,
-    OnPlaceInserted? onPlaceInserted,
-    Key? key,
+    super.onPlaceDeleted,
+    super.onPlaceInserted,
+    super.key,
   }) : super(
           listOfPlaces: listOfPlaces,
-          key: key,
-          onPlaceDeleted: onPlaceDeleted,
-          onPlaceInserted: onPlaceInserted,
         );
 }

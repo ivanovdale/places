@@ -9,11 +9,11 @@ class PlaceFoundDetails extends StatelessWidget {
   final bool isLastItem;
 
   const PlaceFoundDetails({
-    Key? key,
+    super.key,
     required this.place,
     required this.isLastItem,
     required this.searchString,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

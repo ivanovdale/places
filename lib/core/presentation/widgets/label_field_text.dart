@@ -9,9 +9,9 @@ class LabelFieldText extends StatelessWidget {
 
   const LabelFieldText(
     this.labelText, {
-    Key? key,
+    super.key,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

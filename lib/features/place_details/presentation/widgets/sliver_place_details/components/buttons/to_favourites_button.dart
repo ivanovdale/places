@@ -7,7 +7,7 @@ import 'package:places/core/presentation/widgets/custom_buttons/custom_text_butt
 
 /// Кнопка "Добавить в избранное" указанное место.
 class ToFavouritesButton extends StatelessWidget {
-  const ToFavouritesButton({Key? key}) : super(key: key);
+  const ToFavouritesButton({super.key});
 
   @override
   Widget build(BuildContext context) {

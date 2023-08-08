@@ -4,8 +4,8 @@ import 'package:places/core/presentation/widgets/custom_buttons/custom_icon_butt
 /// Кнопка возврата на экран добавления места.
 class BackButton extends StatelessWidget {
   const BackButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +13,9 @@ class BackButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pop();
       },
-      padding: const EdgeInsets.only(left: 16.0),
+      padding: const EdgeInsets.only(left: 16),
       icon: Icons.arrow_back_ios_new_rounded,
-      size: 16.0,
+      size: 16,
       color: Theme.of(context).primaryColorDark,
     );
   }

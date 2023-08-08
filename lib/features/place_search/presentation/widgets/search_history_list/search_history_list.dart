@@ -14,12 +14,12 @@ class SearchHistoryList extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryList({
-    Key? key,
+    super.key,
     required this.searchHistory,
     this.onClearHistoryPressed,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class SearchHistoryList extends StatelessWidget {
 
 /// Заголовок "вы искали".
 class _SearchedByYouLabel extends StatelessWidget {
-  const _SearchedByYouLabel({Key? key}) : super(key: key);
+  const _SearchedByYouLabel();
 
   @override
   Widget build(BuildContext context) {

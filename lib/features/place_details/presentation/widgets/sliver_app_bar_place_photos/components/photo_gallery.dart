@@ -15,11 +15,11 @@ class PhotoGallery extends StatelessWidget {
   final Place place;
 
   const PhotoGallery({
-    Key? key,
+    super.key,
     this.onPageChanged,
     required this.controller,
     required this.place,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

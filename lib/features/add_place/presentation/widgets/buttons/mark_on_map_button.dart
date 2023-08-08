@@ -4,7 +4,7 @@ import 'package:places/core/presentation/widgets/custom_buttons/custom_text_butt
 
 /// Кнопка указания места на карте.
 class MarkOnMapButton extends StatelessWidget {
-  const MarkOnMapButton({Key? key}) : super(key: key);
+  const MarkOnMapButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,9 @@ class MarkOnMapButton extends StatelessWidget {
         color: theme.colorScheme.primary,
       ),
       padding: const EdgeInsets.only(
-        left: 16.0,
-        top: 12.0,
-        bottom: 37.0,
+        left: 16,
+        top: 12,
+        bottom: 37,
       ),
     );
   }

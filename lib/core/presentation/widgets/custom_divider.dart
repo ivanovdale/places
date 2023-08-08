@@ -9,12 +9,12 @@ class CustomDivider extends StatelessWidget {
   final double? height;
 
   const CustomDivider({
-    Key? key,
+    super.key,
     this.padding,
     this.thickness,
     this.color,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

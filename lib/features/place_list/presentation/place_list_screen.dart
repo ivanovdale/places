@@ -13,7 +13,7 @@ import 'package:places/features/place_list/presentation/widgets/sliver_place_lis
 
 /// Экран списка мест.
 class PlaceListScreen extends StatelessWidget {
-  const PlaceListScreen({Key? key}) : super(key: key);
+  const PlaceListScreen({super.key});
 
   /// Открывает экран добавления места.
   ///
@@ -63,7 +63,7 @@ class PlaceListScreen extends StatelessWidget {
 
 /// Отображает список мест.
 class _PlaceListBody extends StatelessWidget {
-  const _PlaceListBody({Key? key}) : super(key: key);
+  const _PlaceListBody();
 
   Future<void> _onRefresh(BuildContext context) {
     final bloc = context.read<PlaceListBloc>()

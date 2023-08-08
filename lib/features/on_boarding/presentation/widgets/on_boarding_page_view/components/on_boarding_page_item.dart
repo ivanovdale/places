@@ -11,9 +11,9 @@ class OnBoardingPageItem extends StatelessWidget {
   final OnBoardingData data;
 
   const OnBoardingPageItem({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

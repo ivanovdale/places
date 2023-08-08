@@ -6,8 +6,8 @@ import 'package:places/features/place_filters/presentation/bloc/place_filters_bl
 /// Слайдер для фильтрации по расстоянию до места.
 class DistanceFilterSlider extends StatelessWidget {
   const DistanceFilterSlider({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

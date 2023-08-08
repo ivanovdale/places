@@ -11,9 +11,9 @@ abstract class InfoPlaceHolder extends StatelessWidget {
   abstract final String descriptionText;
 
   const InfoPlaceHolder({
-    Key? key,
+    super.key,
     required this.iconSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

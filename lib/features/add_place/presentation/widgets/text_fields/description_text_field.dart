@@ -8,17 +8,17 @@ class DescriptionTextField extends StatelessWidget {
   final FocusNode descriptionFocusNode;
 
   const DescriptionTextField({
-    Key? key,
+    super.key,
     required this.descriptionController,
     required this.descriptionFocusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return CustomTextFormField(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 100,
       controller: descriptionController,
       focusNode: descriptionFocusNode,

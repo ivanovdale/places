@@ -8,8 +8,8 @@ import 'package:places/core/presentation/widgets/custom_buttons/custom_elevated_
 /// Кнопка "Построить маршрут".
 class BuildRouteButton extends StatelessWidget {
   const BuildRouteButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,9 @@ class BuildRouteButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        top: 24.0,
-        left: 16.0,
-        right: 16.0,
+        top: 24,
+        left: 16,
+        right: 16,
       ),
       child: CustomElevatedButton(
         AppStrings.buildRouteText,

@@ -7,16 +7,16 @@ class PlaceName extends StatelessWidget {
 
   const PlaceName(
     this.text, {
-    Key? key,
+    super.key,
     required this.textStyle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 24.0,
-        left: 16.0,
+        top: 24,
+        left: 16,
       ),
       child: Text(
         text,

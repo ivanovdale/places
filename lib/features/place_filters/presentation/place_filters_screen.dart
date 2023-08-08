@@ -29,10 +29,10 @@ class PlaceFiltersScreen extends StatelessWidget {
   final double radius;
 
   const PlaceFiltersScreen({
-    Key? key,
+    super.key,
     required this.selectedPlaceTypeFilters,
     required this.radius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class PlaceFiltersScreen extends StatelessWidget {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               PlaceTypesTitle(),

@@ -6,9 +6,9 @@ import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/re
 
 /// Кастомный BottomNavigationBar.
 class CustomBottomNavigationBar extends StatelessWidget {
-  static const double _itemIconSize = 24.0;
+  static const double _itemIconSize = 24;
 
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  const CustomBottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {

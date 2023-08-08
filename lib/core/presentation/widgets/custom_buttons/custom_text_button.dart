@@ -19,13 +19,13 @@ class CustomTextButton extends StatelessWidget {
 
   const CustomTextButton(
     this.text, {
-    Key? key,
+    super.key,
     this.buttonLabel,
     this.textStyle,
     this.padding,
     this.onPressed,
     this.alignment,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

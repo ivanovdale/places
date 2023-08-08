@@ -6,8 +6,8 @@ import 'package:places/features/place_filters/presentation/bloc/place_filters_bl
 /// Заголовок фильтра по расстоянию. Отображает расстояние от и до.
 class DistanceFilterTitle extends StatelessWidget {
   const DistanceFilterTitle({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,8 @@ class DistanceFilterTitle extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
+        left: 16,
+        right: 16,
         top: 40,
         bottom: 24,
       ),

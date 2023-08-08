@@ -7,16 +7,16 @@ class PlaceTypeFiltersGridView extends StatelessWidget {
   final Set<PlaceTypes> selectedPlaceTypeFilters;
 
   const PlaceTypeFiltersGridView({
-    Key? key,
+    super.key,
     required this.selectedPlaceTypeFilters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final listOfFilters = PlaceTypes.values.toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: GridView.builder(
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

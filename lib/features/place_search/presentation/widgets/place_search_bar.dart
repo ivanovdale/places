@@ -8,10 +8,10 @@ class PlaceSearchBar extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const PlaceSearchBar({
-    Key? key,
+    super.key,
     this.controller,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

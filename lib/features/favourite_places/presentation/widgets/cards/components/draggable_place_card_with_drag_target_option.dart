@@ -16,7 +16,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
   final ValueChanged<PointerMoveEvent>? scrollPlaceCardsWhenCardDragged;
 
   const DraggablePlaceCardWithDragTargetOption({
-    Key? key,
+    super.key,
     required this.index,
     required this.place,
     this.onAccept,
@@ -25,7 +25,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
     this.onDragStarted,
     required this.onDragEnd,
     this.scrollPlaceCardsWhenCardDragged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -24,10 +24,8 @@ class DioQueryUtil {
           response = await apiUtil.httpClient.get<String>(
             uri,
           );
-          break;
         case RequestType.post:
           response = await apiUtil.httpClient.post<String>(uri, data: data);
-          break;
       }
     } on DioException catch (dioError, stackTrace) {
       final response = dioError.response;

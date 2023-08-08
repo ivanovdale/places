@@ -11,13 +11,13 @@ class RoundedCachedNetworkImage extends StatelessWidget {
   final bool canDelete;
 
   const RoundedCachedNetworkImage({
-    Key? key,
+    super.key,
     required this.url,
     this.size,
     this.borderRadius,
     this.onDelete,
     this.canDelete = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

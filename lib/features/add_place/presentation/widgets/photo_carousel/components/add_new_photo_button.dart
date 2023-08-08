@@ -7,9 +7,9 @@ class AddNewPhotoButton extends StatelessWidget {
   final ValueSetter<String> onAddNewPhotoPressed;
 
   const AddNewPhotoButton({
-    Key? key,
+    super.key,
     required this.onAddNewPhotoPressed,
-  }) : super(key: key);
+  });
 
   /// Открывает диалог для добавления нового фото в список добавляемых фото.
   Future<void> _addPhotoToList(BuildContext context) async {

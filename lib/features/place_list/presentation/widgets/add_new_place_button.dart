@@ -8,9 +8,9 @@ class AddNewPlaceButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const AddNewPlaceButton({
-    Key? key,
+    super.key,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

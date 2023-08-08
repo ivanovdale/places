@@ -17,13 +17,13 @@ class CustomIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const CustomIconButton({
-    Key? key,
+    super.key,
     this.icon,
     this.size,
     this.color,
     this.padding,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -14,10 +14,10 @@ class PlaceTypeItem extends StatelessWidget {
   final bool useDivider;
 
   const PlaceTypeItem({
-    Key? key,
+    super.key,
     required this.item,
     required this.useDivider,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class PlaceTypeItem extends StatelessWidget {
         children: [
           Ink(
             padding: const EdgeInsets.symmetric(
-              vertical: 12.0,
-              horizontal: 16.0,
+              vertical: 12,
+              horizontal: 16,
             ),
             child: Row(
               children: [
@@ -46,7 +46,7 @@ class PlaceTypeItem extends StatelessWidget {
                 const Spacer(),
                 if (isItemChosen)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: const EdgeInsets.only(right: 8),
                     child: Icon(
                       Icons.done_outlined,
                       color: theme.colorScheme.primary,
@@ -62,8 +62,8 @@ class PlaceTypeItem extends StatelessWidget {
               thickness: 0.8,
               color: theme.colorScheme.secondary.withOpacity(0.15),
               padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
+                left: 16,
+                right: 16,
               ),
             ),
         ],

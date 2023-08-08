@@ -13,7 +13,7 @@ import 'package:places/features/on_boarding/res/on_boarding_items.dart';
 ///
 /// Экран отображается при первом запуске приложения или через экран настроек.
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({Key? key}) : super(key: key);
+  const OnBoardingScreen({super.key});
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();

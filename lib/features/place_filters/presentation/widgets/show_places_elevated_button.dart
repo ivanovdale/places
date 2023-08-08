@@ -7,8 +7,8 @@ import 'package:places/features/place_filters/presentation/bloc/place_filters_bl
 /// Кнопка "Показать" отфильтрованные места.
 class ShowPlacesElevatedButton extends StatelessWidget {
   const ShowPlacesElevatedButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,9 @@ class ShowPlacesElevatedButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: 24.0,
+        left: 16,
+        right: 16,
+        bottom: 24,
       ),
       child: CustomElevatedButton(
         '${AppStrings.show} ($filteredPlacesAmount)',

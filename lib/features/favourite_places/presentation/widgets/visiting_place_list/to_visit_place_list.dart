@@ -18,14 +18,11 @@ class ToVisitPlaceList extends BaseVisitingPlaceList {
 
   const ToVisitPlaceList(
     List<Place> listOfPlaces, {
-    OnPlaceDeleted? onPlaceDeleted,
-    OnPlaceInserted? onPlaceInserted,
+    super.onPlaceDeleted,
+    super.onPlaceInserted,
     required this.onPlaceDateTimePicked,
-    Key? key,
+    super.key,
   }) : super(
           listOfPlaces: listOfPlaces,
-          key: key,
-          onPlaceDeleted: onPlaceDeleted,
-          onPlaceInserted: onPlaceInserted,
         );
 }

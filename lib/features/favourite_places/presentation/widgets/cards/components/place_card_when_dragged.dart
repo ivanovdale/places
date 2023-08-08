@@ -5,9 +5,9 @@ class PlaceCardWhenDragged extends StatelessWidget {
   final Widget placeCard;
 
   const PlaceCardWhenDragged({
-    Key? key,
+    super.key,
     required this.placeCard,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

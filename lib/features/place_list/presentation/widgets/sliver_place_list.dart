@@ -9,8 +9,8 @@ import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dar
 /// Список достопримечательностей на сливере.
 class SliverPlaceList extends StatelessWidget {
   const SliverPlaceList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class SliverPlaceList extends StatelessWidget {
                   final place = statusPlaces.places[index];
 
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: PlaceCard(
                       place,
                       toggleFavorites: () {

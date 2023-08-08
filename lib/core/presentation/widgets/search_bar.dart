@@ -13,14 +13,14 @@ class SearchBar extends StatelessWidget {
   final bool autofocus;
 
   const SearchBar({
-    Key? key,
+    super.key,
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
     this.focusNode,
     this.controller,
     this.autofocus = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class SearchBar extends StatelessWidget {
     final secondaryColor = colorScheme.secondary.withOpacity(0.56);
 
     return Container(
-      height: 50.0,
+      height: 50,
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 6,

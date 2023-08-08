@@ -31,7 +31,7 @@ class NetworkPlaceRepository implements PlaceRepository {
       data: body,
     );
     final newPlaceDto = PlaceDTO.fromJson(
-      jsonDecode(response.data as String) as Map<String, dynamic>,
+      jsonDecode(response.data!) as Map<String, dynamic>,
     );
 
     return PlaceMapper.placeFromDto(newPlaceDto);
@@ -47,7 +47,7 @@ class NetworkPlaceRepository implements PlaceRepository {
       uri: uri,
     );
     final placeDto = PlaceDTO.fromJson(
-      jsonDecode(response.data as String) as Map<String, dynamic>,
+      jsonDecode(response.data!) as Map<String, dynamic>,
     );
 
     return PlaceMapper.placeFromDto(placeDto);
@@ -61,7 +61,7 @@ class NetworkPlaceRepository implements PlaceRepository {
       requestType: RequestType.get,
       uri: '/place',
     );
-    final rawPlacesJson = (jsonDecode(response.data as String) as List<dynamic>)
+    final rawPlacesJson = (jsonDecode(response.data!) as List<dynamic>)
         .cast<Map<String, dynamic>>();
     final placeList = rawPlacesJson
         .map((rawPlaceJson) =>
@@ -84,7 +84,7 @@ class NetworkPlaceRepository implements PlaceRepository {
       uri: '/filtered_places',
       data: body,
     );
-    final rawPlacesJson = (jsonDecode(response.data as String) as List<dynamic>)
+    final rawPlacesJson = (jsonDecode(response.data!) as List<dynamic>)
         .cast<Map<String, dynamic>>();
     final placeList = rawPlacesJson
         .map((rawPlaceJson) =>

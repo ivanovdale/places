@@ -10,10 +10,10 @@ class HistorySearchItemTextButton extends StatelessWidget {
   final ValueSetter<Place>? onHistorySearchItemPressed;
 
   const HistorySearchItemTextButton({
-    Key? key,
+    super.key,
     required this.place,
     this.onHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/placeholders/info_placeholder.dart';
@@ -15,7 +14,7 @@ class EmptyToVisitPlaceHolder extends InfoPlaceHolder {
   String get descriptionText => AppStrings.infoMarkLikedPlaces;
 
   const EmptyToVisitPlaceHolder({
-    Key? key,
-    double iconSize = 64.0,
-  }) : super(key: key, iconSize: iconSize);
+    super.key,
+    super.iconSize = 64.0,
+  });
 }

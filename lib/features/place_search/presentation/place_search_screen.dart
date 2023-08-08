@@ -23,10 +23,10 @@ class PlaceSearchScreen extends StatelessWidget {
   final double radius;
 
   const PlaceSearchScreen({
-    Key? key,
+    super.key,
     required this.placeTypeFilters,
     required this.radius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +64,7 @@ class PlaceSearchScreen extends StatelessWidget {
 /// Позволяет очистить историю поиска.
 /// Позволяет перейти в детальную информацию места.
 class _PlaceSearchBody extends StatefulWidget {
-  const _PlaceSearchBody({
-    Key? key,
-  }) : super(key: key);
+  const _PlaceSearchBody();
 
   @override
   State<_PlaceSearchBody> createState() => _PlaceSearchBodyState();

@@ -6,9 +6,9 @@ class AddPhotoActions extends StatelessWidget {
   final List<Map<String, String>> actions;
 
   const AddPhotoActions({
-    Key? key,
+    super.key,
     required this.actions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

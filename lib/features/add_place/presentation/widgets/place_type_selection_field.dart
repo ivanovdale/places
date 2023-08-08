@@ -11,10 +11,10 @@ class PlaceTypeSelectionField extends StatelessWidget {
   final ValueSetter<PlaceTypes> onPlaceTypeSelected;
 
   const PlaceTypeSelectionField({
-    Key? key,
+    super.key,
     this.placeType,
     required this.onPlaceTypeSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,8 @@ class PlaceTypeSelectionField extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        top: 14.0,
+        left: 16,
+        top: 14,
       ),
       child: InkWell(
         onTap: () => selectPlaceTypeFromListOnNewScreen(
