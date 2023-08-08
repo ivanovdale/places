@@ -40,6 +40,26 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     );
   }
 
+  @override
+  void onTransition(
+    Transition<PlaceFiltersEvent, PlaceFiltersState> transition,
+  ) {
+    super.onTransition(transition);
+    final event = transition.event;
+    final eventsToTriggerUpdate = [
+      PlaceFiltersStarted,
+      PlaceFiltersTypeFilterSelected,
+      PlaceFiltersAllFiltersReset,
+    ];
+    final isEventToTriggerUpdateWithDelay = event is PlaceFiltersRadiusSelected;
+
+    if (eventsToTriggerUpdate.contains(event.runtimeType)) {
+      add(_PlaceFiltersUpdated());
+    } else if (isEventToTriggerUpdateWithDelay) {
+      add(_PlaceFiltersWithDelayUpdated());
+    }
+  }
+
   Future<void> _onPlaceFiltersStarted(
     PlaceFiltersStarted event,
     Emitter<PlaceFiltersState> emit,
@@ -50,8 +70,6 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
         radius: event.radius,
       ),
     );
-
-    add(_PlaceFiltersUpdated());
   }
 
   Future<void> _onPlaceFiltersTypeFilterSelected(
@@ -71,8 +89,6 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
         selectedPlaceTypeFilters: selectedPlaceTypeFilters,
       ),
     );
-
-    add(_PlaceFiltersUpdated());
   }
 
   Future<void> _onPlaceFiltersRadiusSelected(
@@ -84,8 +100,6 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
         radius: event.radius,
       ),
     );
-
-    add(_PlaceFiltersWithDelayUpdated());
   }
 
   Future<void> _onPlaceFiltersAllFiltersReset(
@@ -93,8 +107,6 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     Emitter<PlaceFiltersState> emit,
   ) async {
     emit(PlaceFiltersState.initial());
-
-    add(_PlaceFiltersUpdated());
   }
 
   Future<void> _onPlaceFiltersUpdated(
