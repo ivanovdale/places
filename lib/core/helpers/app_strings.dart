@@ -73,6 +73,8 @@ abstract final class AppStrings {
   static const camera = 'Камера';
   static const photo = 'Фотография';
   static const file = 'Файл';
+  static const errorPlaceCreation = 'Произошла ошибка';
+  static const tryAgain = 'Повторить';
 
   // PlaceSearchScreen. Экран поиска мест.
   static const search = 'Поиск';

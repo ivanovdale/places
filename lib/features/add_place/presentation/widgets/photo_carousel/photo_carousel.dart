@@ -6,13 +6,13 @@ import 'package:places/features/add_place/presentation/widgets/photo_carousel/co
 ///
 /// Позволяет добавить/удалить фотографии из списка.
 class PhotoCarousel extends StatelessWidget {
-  final List<String> newPhotoList;
+  final List<String> photoList;
   final ValueSetter<String> onAddNewPhotoPressed;
   final ValueSetter<int> onDeletePhotoPressed;
 
   const PhotoCarousel({
     Key? key,
-    required this.newPhotoList,
+    required this.photoList,
     required this.onAddNewPhotoPressed,
     required this.onDeletePhotoPressed,
   }) : super(key: key);
@@ -20,7 +20,7 @@ class PhotoCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currentPhotoIndex = 0;
-    final newPhotoCards = newPhotoList
+    final newPhotoCards = photoList
         .map(
           (photoUrl) => NewPhotoCard(
             photoUrl: photoUrl,

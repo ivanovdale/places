@@ -28,7 +28,7 @@ class DescriptionTextField extends StatelessWidget {
       hintStyle: theme.textTheme.bodyLarge?.copyWith(
         color: theme.colorScheme.secondary.withOpacity(0.56),
       ),
-      unfocusWhenEditingComplete: true,
+      unFocusWhenEditingComplete: true,
     );
   }
 }

@@ -1,13 +1,12 @@
-import 'dart:async';
-
-import 'package:elementary/elementary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/core/data/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_colors.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/utils/string_extension.dart';
-import 'package:places/features/add_place/presentation/add_place_wm.dart';
-import 'package:places/features/add_place/presentation/app_place_wm_builder.dart';
+import 'package:places/features/add_place/presentation/bloc/add_place_bloc.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/cancel_button.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/create_button.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/mark_on_map_button.dart';
@@ -25,27 +24,37 @@ import 'package:places/features/add_place/presentation/widgets/text_fields/name_
 ///
 /// Позволяет выбрать категорию места, ввести его название, описание и географические координаты.
 /// Также координаты можно установить, указав точку на карте.
-class AddPlaceScreen extends ElementaryWidget<AddPlaceWM> {
-  const AddPlaceScreen({super.key}) : super(createAddPlaceWM);
+class AddPlaceScreen extends StatelessWidget {
+  const AddPlaceScreen({super.key});
+
+  void _onFormTap(BuildContext context) {
+    final currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
+  void _onCancelButtonPressed(BuildContext context) {
+    Navigator.of(context).pop(false);
+  }
 
   @override
-  Widget build(AddPlaceWM wm) {
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: wm.onFormTap,
+      onTap: () => _onFormTap(context),
       child: Scaffold(
         appBar: CustomAppBar(
           title: AppStrings.newPlace.capitalize(),
-          titleTextStyle: wm.appBarTextStyle,
+          titleTextStyle: Theme.of(context).textTheme.titleMedium,
           centerTitle: true,
           toolbarHeight: 56,
           leading: CancelButton(
-            onCancelButtonPressed: wm.onCancelButtonPressed,
+            onCancelButtonPressed: () => _onCancelButtonPressed(context),
           ),
           leadingWidth: 73,
         ),
-        body: AddPlaceBody(
-          wm: wm,
-        ),
+        body: const AddPlaceBody(),
       ),
     );
   }
@@ -54,13 +63,87 @@ class AddPlaceScreen extends ElementaryWidget<AddPlaceWM> {
 /// Отображает свойства добавленяемого места - категория, название, описание, координаты.
 /// Позволяет ввести географические координаты места, указав точку на карте.
 /// Имеет кнопку "Создать" для добавления нового места.
-class AddPlaceBody extends StatelessWidget {
-  final AddPlaceWM wm;
-
+class AddPlaceBody extends StatefulWidget {
   const AddPlaceBody({
     super.key,
-    required this.wm,
   });
+
+  @override
+  State<AddPlaceBody> createState() => _AddPlaceBodyState();
+}
+
+class _AddPlaceBodyState extends State<AddPlaceBody> {
+  late final AddPlaceBloc _bloc = AddPlaceBloc(
+    context.read<PlaceInteractor>(),
+  )..add(
+      AddPlaceStarted(),
+    );
+
+  /// Для валидации координат места.
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _latitudeFocusNode = FocusNode();
+  final FocusNode _longitudeFocusNode = FocusNode();
+  final FocusNode _descriptionFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _listener(BuildContext context, AddPlaceState state) {
+    return switch (state) {
+      AddPlaceFormValidation() => _validateAndCreatePlace(),
+      AddPlacePlaceCreation() => Navigator.of(context).pop(true),
+      AddPlacePlaceCreationError() => _showErrorSnackBar(),
+      _ => throw Exception('Unexpected event'),
+    };
+  }
+
+  void _validateAndCreatePlace() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _bloc.add(
+        AddPlacePlaceCreated(
+          name: _nameController.text,
+          lat: double.tryParse(_latitudeController.text) ?? 0.0,
+          lon: double.tryParse(_longitudeController.text) ?? 0.0,
+          description: _descriptionController.text,
+        ),
+      );
+    }
+  }
+
+  void _showErrorSnackBar() {
+    const snackBar = SnackBar(
+      content: Text(AppStrings.errorPlaceCreation),
+      showCloseIcon: true,
+      duration: Duration(
+        seconds: 30,
+      ),
+      backgroundColor: AppColors.flamingo,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _descriptionController.dispose();
+    _nameFocusNode.dispose();
+    _latitudeFocusNode.dispose();
+    _longitudeFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _bloc.close();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,66 +152,82 @@ class AddPlaceBody extends StatelessWidget {
       bottom: 12.0,
     );
 
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Form(
-              key: wm.formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ValueListenableBuilder<List<String>>(
-                    valueListenable: wm.newPhotoList,
-                    builder: (_, data, __) {
-                      return PhotoCarousel(
-                        newPhotoList: data,
-                        onAddNewPhotoPressed: wm.addPhotoToList,
-                        onDeletePhotoPressed: wm.deletePhotoFromList,
-                      );
-                    },
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocListener<AddPlaceBloc, AddPlaceState>(
+        bloc: _bloc,
+        listenWhen: (_, state) => state is! AddPlaceInitial,
+        listener: _listener,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BlocSelector<AddPlaceBloc, AddPlaceState, List<String>>(
+                        selector: (state) => state.photoList,
+                        builder: (_, photoList) {
+                          return PhotoCarousel(
+                            photoList: photoList,
+                            onAddNewPhotoPressed: (photoUrl) => _bloc.add(
+                              AddPlacePhotoAdded(photoUrl: photoUrl),
+                            ),
+                            onDeletePhotoPressed: (index) => _bloc.add(
+                              AddPlacePhotoDeleted(index: index),
+                            ),
+                          );
+                        },
+                      ),
+                      const PlaceTypeLabel(),
+                      BlocSelector<AddPlaceBloc, AddPlaceState, PlaceTypes?>(
+                        selector: (state) => state.placeType,
+                        builder: (_, placeType) {
+                          return PlaceTypeSelectionField(
+                            placeType: placeType,
+                            onPlaceTypeSelected: (placeType) => _bloc.add(
+                              AddPlaceTypeSet(placeType: placeType),
+                            ),
+                          );
+                        },
+                      ),
+                      const PlaceTypePaddedDivider(),
+                      const NameLabel(padding: defaultLabelPadding),
+                      NameTextField(
+                        nameController: _nameController,
+                        nameFocusNode: _nameFocusNode,
+                        latitudeFocusNode: _latitudeFocusNode,
+                      ),
+                      MapTextFields(
+                        latitudeController: _latitudeController,
+                        longitudeController: _longitudeController,
+                        latitudeFocusNode: _latitudeFocusNode,
+                        longitudeFocusNode: _longitudeFocusNode,
+                        descriptionFocusNode: _descriptionFocusNode,
+                      ),
+                      const MarkOnMapButton(),
+                      const DescriptionLabel(padding: defaultLabelPadding),
+                      DescriptionTextField(
+                        descriptionController: _descriptionController,
+                        descriptionFocusNode: _descriptionFocusNode,
+                      ),
+                    ],
                   ),
-                  const PlaceTypeLabel(),
-                  ValueListenableBuilder<PlaceTypes?>(
-                    valueListenable: wm.placeType,
-                    builder: (_, data, __) {
-                      return PlaceTypeSelectionField(
-                        placeType: data,
-                        onPlaceTypeSelected: wm.setPlaceType,
-                      );
-                    },
-                  ),
-                  const PlaceTypePaddedDivider(),
-                  const NameLabel(padding: defaultLabelPadding),
-                  NameTextField(
-                    nameController: wm.nameController,
-                    nameFocusNode: wm.nameFocusNode,
-                    latitudeFocusNode: wm.latitudeFocusNode,
-                  ),
-                  MapTextFields(
-                    latitudeController: wm.latitudeController,
-                    longitudeController: wm.longitudeController,
-                    latitudeFocusNode: wm.latitudeFocusNode,
-                    longitudeFocusNode: wm.longitudeFocusNode,
-                    descriptionFocusNode: wm.descriptionFocusNode,
-                  ),
-                  const MarkOnMapButton(),
-                  const DescriptionLabel(padding: defaultLabelPadding),
-                  DescriptionTextField(
-                    descriptionController: wm.descriptionController,
-                    descriptionFocusNode: wm.descriptionFocusNode,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            SafeArea(
+              child: CreateButton(
+                onButtonPressed: () => _bloc.add(
+                  AddPlaceFormValidated(),
+                ),
+              ),
+            ),
+          ],
         ),
-        SafeArea(
-          child: CreateButton(
-            onButtonPressed: () => unawaited(wm.createNewPlace()),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
