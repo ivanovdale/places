@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_colors.dart';
 import 'package:places/core/helpers/app_router.dart';
-import 'package:places/features/splash_screen/utils/animation_helper.dart';
+import 'package:places/features/splash_screen/utils/logo_animation_helper.dart';
 
 /// Сплэш-экран с лого приложения.
 class SplashScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    final (:controller, :animation) = AnimationHelper.getSettings(vsync: this);
+    final (:controller, :animation) = LogoAnimationHelper.getSettings(vsync: this);
     _animationController = controller;
     _rotationAnimation = animation;
 

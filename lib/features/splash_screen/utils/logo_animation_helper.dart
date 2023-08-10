@@ -5,7 +5,7 @@ typedef AnimationSettings = ({
   Animation<double> animation,
 });
 
-abstract final class AnimationHelper {
+abstract final class LogoAnimationHelper {
   static AnimationSettings getSettings({
     required TickerProvider vsync,
   }) {
