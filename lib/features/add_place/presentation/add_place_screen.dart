@@ -96,14 +96,12 @@ class _AddPlaceBodyState extends State<AddPlaceBody> {
     super.initState();
   }
 
-  void _listener(BuildContext context, AddPlaceState state) {
-    return switch (state) {
-      AddPlaceFormValidation() => _validateAndCreatePlace(),
-      AddPlacePlaceCreation() => Navigator.of(context).pop(true),
-      AddPlacePlaceCreationError() => _showErrorSnackBar(),
-      _ => throw Exception('Unexpected event'),
-    };
-  }
+  void _listener(BuildContext context, AddPlaceState state) => switch (state) {
+        AddPlaceFormValidation() => _validateAndCreatePlace(),
+        AddPlacePlaceCreation() => Navigator.of(context).pop(true),
+        AddPlacePlaceCreationError() => _showErrorSnackBar(),
+        _ => throw Exception('Unexpected event'),
+      };
 
   void _validateAndCreatePlace() {
     if (_formKey.currentState?.validate() ?? false) {
