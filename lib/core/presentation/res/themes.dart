@@ -7,7 +7,7 @@ const _oxfordBlueColor = AppColors.oxfordBlue;
 const _whiteColor = AppColors.white;
 const _martiniqueColor = AppColors.martinique;
 const _waterlooColor = AppColors.waterloo;
-const _charadeColor =  AppColors.charade;
+const _charadeColor = AppColors.charade;
 
 /// Настройки для светлой темы.
 final lightTheme = ThemeData(
@@ -75,7 +75,9 @@ final darkTheme = ThemeData(
 
 /// Общие настройки TabBar.
 final _generalTabBarTheme = TabBarTheme(
-  labelStyle: AppTypography.roboto14Regular,
+  labelStyle: AppTypography.roboto14Regular.copyWith(
+    fontWeight: FontWeight.w700,
+  ),
   indicatorSize: TabBarIndicatorSize.tab,
 );
 
