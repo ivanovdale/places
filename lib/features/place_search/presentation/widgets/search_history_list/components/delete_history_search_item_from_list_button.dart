@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_icon_button.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_buttons/custom_icon_button.dart';
 
 /// Кнопка удаления элемента истории поиска из списка.
 class DeleteHistorySearchItemFromListButton extends StatelessWidget {
@@ -8,10 +8,10 @@ class DeleteHistorySearchItemFromListButton extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const DeleteHistorySearchItemFromListButton({
-    Key? key,
+    super.key,
     required this.place,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

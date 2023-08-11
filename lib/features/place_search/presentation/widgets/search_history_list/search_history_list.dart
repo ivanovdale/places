@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/label_field_text.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/label_field_text.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_history_items.dart';
-import 'package:places/helpers/app_strings.dart';
 
 /// Список истории поиска.
 ///
@@ -14,12 +14,12 @@ class SearchHistoryList extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryList({
-    Key? key,
+    super.key,
     required this.searchHistory,
     this.onClearHistoryPressed,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class SearchHistoryList extends StatelessWidget {
 
 /// Заголовок "вы искали".
 class _SearchedByYouLabel extends StatelessWidget {
-  const _SearchedByYouLabel({Key? key}) : super(key: key);
+  const _SearchedByYouLabel();
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:places/core/helpers/app_colors.dart';
 
 /// Произвольное поле ввода с настройками.
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final EdgeInsets? padding;
   final double? height;
   final TextEditingController controller;
@@ -10,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? nextFocusNode;
   final int maxLength;
   final bool autofocus;
-  final bool unfocusWhenEditingComplete;
+  final bool unFocusWhenEditingComplete;
   final String? hintText;
   final TextStyle? hintStyle;
   final int? maxLines;
@@ -19,7 +20,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.padding,
     this.height,
     required this.controller,
@@ -27,25 +28,47 @@ class CustomTextFormField extends StatelessWidget {
     this.nextFocusNode,
     required this.maxLength,
     this.autofocus = false,
-    this.unfocusWhenEditingComplete = false,
+    this.unFocusWhenEditingComplete = false,
     this.hintText,
     this.maxLines = 1,
     this.hintStyle,
     this.keyboardType,
     this.inputFormatters,
     this.validator,
-  }) : super(key: key);
+  });
+
+  @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(_focusNodeListener);
+  }
+
+  /// Необходим для появления кнопки очистки поля.
+  void _focusNodeListener() {
+    setState(() {});
+  }
 
   /// Выполняет активацию нужного поля в зависимости от условия.
   ///
   /// Если определено поле следующего фокуса, то устанавливает его в качестве следующего поля ввода.
   /// Иначе если установлен признак отключения фокуса при завершении редактирования поля, то выполняет данное действие.
   void _changeFocus() {
-    if (nextFocusNode != null) {
-      nextFocusNode!.requestFocus();
-    } else if (unfocusWhenEditingComplete) {
-      focusNode.unfocus();
+    if (widget.nextFocusNode != null) {
+      widget.nextFocusNode!.requestFocus();
+    } else if (widget.unFocusWhenEditingComplete) {
+      widget.focusNode.unfocus();
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.focusNode.removeListener(_focusNodeListener);
   }
 
   @override
@@ -54,23 +77,30 @@ class CustomTextFormField extends StatelessWidget {
     final colorSchemePrimaryColor = theme.colorScheme.primary.withOpacity(0.4);
 
     return Padding(
-      padding: padding ?? EdgeInsets.zero,
+      padding: widget.padding ?? EdgeInsets.zero,
       child: SizedBox(
-        height: height ?? 0,
+        height: widget.height ?? 0,
         child: TextFormField(
-          validator: validator,
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
-          autofocus: autofocus,
-          textInputAction: (maxLines ?? 0) > 1 ? TextInputAction.done : null,
-          maxLines: maxLines,
-          maxLength: maxLength,
+          validator: widget.validator,
+          inputFormatters: widget.inputFormatters,
+          keyboardType: widget.keyboardType,
+          autofocus: widget.autofocus,
+          textInputAction:
+              (widget.maxLines ?? 0) > 1 ? TextInputAction.done : null,
+          maxLines: widget.maxLines,
+          maxLength: widget.maxLength,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          focusNode: focusNode,
-          controller: controller,
+          focusNode: widget.focusNode,
+          controller: widget.controller,
           decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: hintStyle,
+            hintText: widget.hintText,
+            hintStyle: widget.hintStyle,
+            errorStyle: theme.textTheme.bodySmall?.copyWith(
+              color: AppColors.flamingo,
+            ),
+            errorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.flamingo),
+            ),
             counterText: '',
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: colorSchemePrimaryColor),
@@ -80,11 +110,11 @@ class CustomTextFormField extends StatelessWidget {
               borderSide: BorderSide(width: 2, color: colorSchemePrimaryColor),
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: focusNode.hasFocus
+            suffixIcon: widget.focusNode.hasFocus
                 ? IconButton(
                     icon: const Icon(Icons.cancel),
                     color: theme.primaryColorDark,
-                    onPressed: controller.clear,
+                    onPressed: widget.controller.clear,
                   )
                 : null,
           ),

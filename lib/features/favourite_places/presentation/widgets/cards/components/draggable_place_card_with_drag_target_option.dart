@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/draggable_place_card.dart';
 
 
@@ -16,7 +16,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
   final ValueChanged<PointerMoveEvent>? scrollPlaceCardsWhenCardDragged;
 
   const DraggablePlaceCardWithDragTargetOption({
-    Key? key,
+    super.key,
     required this.index,
     required this.place,
     this.onAccept,
@@ -25,7 +25,7 @@ class DraggablePlaceCardWithDragTargetOption extends StatelessWidget {
     this.onDragStarted,
     required this.onDragEnd,
     this.scrollPlaceCardsWhenCardDragged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

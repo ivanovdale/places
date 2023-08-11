@@ -1,5 +1,5 @@
-import 'package:places/domain/model/place.dart';
-import 'package:places/utils/place_list_ext.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/utils/place_list_ext.dart';
 
 final class FavouritePlacesState {
   final FavouritePlacesStatus status;

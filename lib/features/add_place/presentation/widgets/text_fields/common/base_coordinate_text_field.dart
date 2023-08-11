@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/utils/replace_comma_formatter.dart';
 import 'package:places/features/add_place/presentation/widgets/text_fields/common/custom_text_form_field.dart';
-import 'package:places/helpers/app_strings.dart';
-import 'package:places/utils/replace_comma_formatter.dart';
+import 'package:places/features/add_place/presentation/widgets/text_fields/latitude_text_field.dart';
 
 /// Абстрактный класс для ввода координат места.
 ///
@@ -21,8 +22,8 @@ abstract class BaseCoordinateTextField extends StatelessWidget {
   abstract final EdgeInsets? padding;
 
   const BaseCoordinateTextField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +44,11 @@ abstract class BaseCoordinateTextField extends StatelessWidget {
 
   /// Валидирует поля ввода, позволяя вводить только десятичные числа.
   String? coordinatePointValidator(String? value) {
-    final digitsAndDots = RegExp(r'^(?=\D*(?:\d\D*){1,10}$)\d+(?:\.\d{1,7})?$');
+    final regExpLat = RegExp(r'^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)$');
+    final regExpLon = RegExp(r'^[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$');
+    final regExp = this is LatitudeTextField ? regExpLat : regExpLon;
 
-    if (value == null || value.isEmpty || !digitsAndDots.hasMatch(value)) {
+    if (value == null || value.isEmpty || !regExp.hasMatch(value)) {
       return AppStrings.coordinatesValidationMessage;
     }
 

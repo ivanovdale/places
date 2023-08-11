@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/place_details_screen.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/features/place_details/presentation/place_details_screen.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_details.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_image.dart';
 
@@ -12,12 +12,12 @@ class PlaceFoundItem extends StatelessWidget {
   final bool isLastItem;
 
   const PlaceFoundItem({
-    Key? key,
+    super.key,
     required this.place,
     this.isLastItem = false,
     this.onPlaceFoundItemPressed,
     required this.searchString,
-  }) : super(key: key);
+  });
 
   /// Сохранение места в истории поиска и открытие боттомшита детализации места.
   void _showPlacesDetailsBottomSheet(BuildContext context, Place place) {

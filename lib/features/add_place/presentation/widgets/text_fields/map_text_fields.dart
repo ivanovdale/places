@@ -13,13 +13,13 @@ class MapTextFields extends StatelessWidget {
   final FocusNode descriptionFocusNode;
 
   const MapTextFields({
-    Key? key,
+    super.key,
     required this.latitudeController,
     required this.latitudeFocusNode,
     required this.longitudeFocusNode,
     required this.longitudeController,
     required this.descriptionFocusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

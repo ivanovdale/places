@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/clear_search_history_button.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_history_item_divider.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_item.dart';
@@ -12,12 +12,12 @@ class SearchHistoryItems extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryItems({
-    Key? key,
+    super.key,
     required this.searchHistory,
     this.onClearHistoryPressed,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +44,10 @@ class SearchHistoryItems extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: itemCount,
-        itemBuilder: (context, index) {
+        itemBuilder: (_, index) {
           return listOfItems[index];
         },
-        separatorBuilder: (context, index) {
+        separatorBuilder: (_, index) {
           // Не отрисовывать разделитель для последнего элемента.
           return (index != itemCount - 2)
               ? const SearchHistoryItemDivider()

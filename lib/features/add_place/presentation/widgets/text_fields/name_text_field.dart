@@ -8,16 +8,16 @@ class NameTextField extends StatelessWidget {
   final FocusNode latitudeFocusNode;
 
   const NameTextField({
-    Key? key,
+    super.key,
     required this.nameController,
     required this.nameFocusNode,
     required this.latitudeFocusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 40,
       controller: nameController,
       focusNode: nameFocusNode,

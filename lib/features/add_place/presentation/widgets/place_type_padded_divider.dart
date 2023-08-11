@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_divider.dart';
+import 'package:places/core/presentation/widgets/custom_divider.dart';
 
 /// Разделитель для типа достопримечательности с заданной толщиной и отступами.
 class PlaceTypePaddedDivider extends StatelessWidget {
-  const PlaceTypePaddedDivider({Key? key}) : super(key: key);
+  const PlaceTypePaddedDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

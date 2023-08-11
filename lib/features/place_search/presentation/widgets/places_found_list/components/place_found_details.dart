@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/components/place_found_item_divider.dart';
 
 /// Детали найденного места.
@@ -9,11 +9,11 @@ class PlaceFoundDetails extends StatelessWidget {
   final bool isLastItem;
 
   const PlaceFoundDetails({
-    Key? key,
+    super.key,
     required this.place,
     required this.isLastItem,
     required this.searchString,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

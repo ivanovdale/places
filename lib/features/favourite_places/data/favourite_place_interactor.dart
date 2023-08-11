@@ -1,4 +1,4 @@
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
 
 final class FavouritePlaceInteractor {
@@ -12,10 +12,6 @@ final class FavouritePlaceInteractor {
 
   List<Place> toggleFavourite(Place place) {
     return favouritePlaceRepository.toggleFavourite(place);
-  }
-
-  List<Place> removeFromFavourites(Place place) {
-    return favouritePlaceRepository.removeFromFavourites(place);
   }
 
   List<Place> insertPlace(

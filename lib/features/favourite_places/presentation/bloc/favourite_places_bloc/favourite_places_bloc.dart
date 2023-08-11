@@ -3,21 +3,19 @@ import 'package:places/features/favourite_places/data/favourite_place_interactor
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_state.dart';
 
-
 final class FavouritePlacesBloc
     extends Bloc<FavouritePlacesEvent, FavouritePlacesState> {
-  final FavouritePlaceInteractor favouritePlaceInteractor;
+  final FavouritePlaceInteractor _favouritePlaceInteractor;
 
-  FavouritePlacesBloc(this.favouritePlaceInteractor)
+  FavouritePlacesBloc(this._favouritePlaceInteractor)
       : super(FavouritePlacesState()) {
-    on(_onInitialize);
-    on(_onToggleFavourites);
-    on(_onRemoveFromFavourites);
-    on(_onInsertPlace);
+    on(_onFavouritePlacesStarted);
+    on(_onFavouritePlacesToFavouritesPressed);
+    on(_onFavouritePlacesPlaceInserted);
   }
 
-  Future<void> _onInitialize(
-    FavoritePlacesInitEvent event,
+  Future<void> _onFavouritePlacesStarted(
+    FavouritePlacesStarted event,
     Emitter<FavouritePlacesState> emit,
   ) async {
     // Имитация загрузки.
@@ -25,17 +23,17 @@ final class FavouritePlacesBloc
 
     emit(
       FavouritePlacesState(
-        places: favouritePlaceInteractor.getPlaces(),
+        places: _favouritePlaceInteractor.getPlaces(),
         status: FavouritePlacesStatus.success,
       ),
     );
   }
 
-  void _onToggleFavourites(
-    ToggleFavouritesEvent event,
+  void _onFavouritePlacesToFavouritesPressed(
+    FavouritePlacesToFavouritesPressed event,
     Emitter<FavouritePlacesState> emit,
   ) {
-    final places = favouritePlaceInteractor.toggleFavourite(event.place);
+    final places = _favouritePlaceInteractor.toggleFavourite(event.place);
 
     emit(
       state.copyWith(
@@ -44,24 +42,11 @@ final class FavouritePlacesBloc
     );
   }
 
-  void _onRemoveFromFavourites(
-    RemoveFromFavouritesEvent event,
+  void _onFavouritePlacesPlaceInserted(
+    FavouritePlacesPlaceInserted event,
     Emitter<FavouritePlacesState> emit,
   ) {
-    final places = favouritePlaceInteractor.removeFromFavourites(event.place);
-
-    emit(
-      state.copyWith(
-        places: places,
-      ),
-    );
-  }
-
-  void _onInsertPlace(
-    InsertPlaceEvent event,
-    Emitter<FavouritePlacesState> emit,
-  ) {
-    final places = favouritePlaceInteractor.insertPlace(
+    final places = _favouritePlaceInteractor.insertPlace(
       event.place,
       event.targetPlace,
     );

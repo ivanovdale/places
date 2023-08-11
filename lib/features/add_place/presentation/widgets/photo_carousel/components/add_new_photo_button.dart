@@ -7,16 +7,16 @@ class AddNewPhotoButton extends StatelessWidget {
   final ValueSetter<String> onAddNewPhotoPressed;
 
   const AddNewPhotoButton({
-    Key? key,
+    super.key,
     required this.onAddNewPhotoPressed,
-  }) : super(key: key);
+  });
 
   /// Открывает диалог для добавления нового фото в список добавляемых фото.
   Future<void> _addPhotoToList(BuildContext context) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const PhotoPicker(),
+      builder: (_) => const PhotoPicker(),
     );
     // TODO(daniiliv): *Как будто сработал image picker*.
     const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;

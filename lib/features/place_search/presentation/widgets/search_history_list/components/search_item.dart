@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/delete_history_search_item_from_list_button.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/history_search_item_text_button.dart';
 
@@ -13,17 +13,17 @@ class SearchItem extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchItem({
-    Key? key,
+    super.key,
     required this.place,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        right: 8.0,
+        right: 8,
       ),
       child: Row(
         children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/place_card_when_dragged.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/place_card_with_hover_ability.dart';
 
@@ -14,14 +14,14 @@ class DraggablePlaceCard extends StatelessWidget {
   final List<Place?> candidateData;
 
   const DraggablePlaceCard({
-    Key? key,
+    super.key,
     this.onDragStarted,
     this.onDragEnd,
     required this.placeCard,
     required this.index,
     required this.place,
     required this.candidateData,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

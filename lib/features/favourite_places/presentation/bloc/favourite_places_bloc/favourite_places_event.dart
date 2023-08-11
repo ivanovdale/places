@@ -1,26 +1,20 @@
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 
 sealed class FavouritePlacesEvent {}
 
-final class FavoritePlacesInitEvent extends FavouritePlacesEvent {}
+final class FavouritePlacesStarted extends FavouritePlacesEvent {}
 
-final class ToggleFavouritesEvent extends FavouritePlacesEvent {
+final class FavouritePlacesToFavouritesPressed extends FavouritePlacesEvent {
   final Place place;
 
-  ToggleFavouritesEvent(this.place);
+  FavouritePlacesToFavouritesPressed(this.place);
 }
 
-final class RemoveFromFavouritesEvent extends FavouritePlacesEvent {
-  final Place place;
-
-  RemoveFromFavouritesEvent(this.place);
-}
-
-final class InsertPlaceEvent extends FavouritePlacesEvent {
+final class FavouritePlacesPlaceInserted extends FavouritePlacesEvent {
   final Place place;
   final Place targetPlace;
 
-  InsertPlaceEvent({
+  FavouritePlacesPlaceInserted({
     required this.place,
     required this.targetPlace,
   });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/rounded_cached_network_image.dart';
+import 'package:places/core/presentation/widgets/rounded_cached_network_image.dart';
 
 /// Карточка добавляемой фотографии.
 class NewPhotoCard extends StatelessWidget {
@@ -8,16 +8,16 @@ class NewPhotoCard extends StatelessWidget {
   final ValueSetter<int> onDeletePhotoPressed;
 
   const NewPhotoCard({
-    Key? key,
+    super.key,
     required this.photoUrl,
     required this.index,
     required this.onDeletePhotoPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: const EdgeInsets.only(right: 16),
       child: Dismissible(
         key: ObjectKey(this),
         direction: DismissDirection.up,

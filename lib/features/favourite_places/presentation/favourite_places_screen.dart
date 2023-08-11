@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/UI/screens/components/custom_app_bar.dart';
-import 'package:places/UI/screens/components/custom_bottom_navigation_bar.dart';
-import 'package:places/domain/model/place.dart';
-import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
-import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
-import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_state.dart';
-import 'package:places/features/favourite_places/presentation/widgets/visiting_place_list/to_visit_place_list.dart';
-import 'package:places/features/favourite_places/presentation/widgets/visiting_place_list/visited_place_list.dart';
+import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/presentation/widgets/custom_app_bar.dart';
+import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar_view.dart';
 
 /// Экран списка посещенных/планируемых к посещению мест.
 ///
 /// Имеет TabBar для переключения между списками.
 class FavouritePlacesScreen extends StatelessWidget {
-  const FavouritePlacesScreen({Key? key}) : super(key: key);
+  const FavouritePlacesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,77 +18,23 @@ class FavouritePlacesScreen extends StatelessWidget {
         title: AppStrings.visitingScreenAppBarTitle,
         titleTextStyle: Theme.of(context).textTheme.titleMedium,
         centerTitle: true,
-        toolbarHeight: 56.0,
+        toolbarHeight: 56,
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: const Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
+          horizontal: 16,
         ),
         child: DefaultTabController(
           length: 2,
           child: Column(
             children: [
               VisitingTabBar(),
-              _VisitingTabBarView(),
+              VisitingTabBarView(),
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class _VisitingTabBarView extends StatelessWidget {
-  const _VisitingTabBarView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
-        builder: (context, state) {
-          return switch (state.status) {
-            FavouritePlacesStatus.loading => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            FavouritePlacesStatus.success => const _TabBarView(),
-          };
-        },
-      ),
-    );
-  }
-}
-
-class _TabBarView extends StatelessWidget {
-  const _TabBarView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.watch<FavouritePlacesBloc>();
-    final state = bloc.state;
-
-    void onPlaceDeleted(Place place) => bloc.add(
-          RemoveFromFavouritesEvent(place),
-        );
-
-    void onPlaceInserted(Place place, Place targetPlace) => bloc.add(
-          InsertPlaceEvent(
-            place: place,
-            targetPlace: targetPlace,
-          ),
-        );
-
-    return TabBarView(children: [
-      ToVisitPlaceList(
-        state.notVisitedPlaces,
-        onPlaceDeleted: onPlaceDeleted,
-        onPlaceInserted: onPlaceInserted,
-      ),
-      VisitedPlaceList(
-        state.visitedPlaces,
-        onPlaceDeleted: onPlaceDeleted,
-        onPlaceInserted: onPlaceInserted,
-      ),
-    ]);
   }
 }

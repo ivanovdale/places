@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_text_button.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_buttons/custom_text_button.dart';
 
 /// Текстовая кнопка элемента истории поиска.
 ///
@@ -10,10 +10,10 @@ class HistorySearchItemTextButton extends StatelessWidget {
   final ValueSetter<Place>? onHistorySearchItemPressed;
 
   const HistorySearchItemTextButton({
-    Key? key,
+    super.key,
     required this.place,
     this.onHistorySearchItemPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

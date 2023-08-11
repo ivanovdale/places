@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/helpers/app_strings.dart';
+import 'package:places/core/helpers/app_strings.dart';
 
 /// TabBar для списка посещенных/планируемых к посещению мест.
 class VisitingTabBar extends StatelessWidget {
-  const VisitingTabBar({Key? key}) : super(key: key);
+  const VisitingTabBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +12,8 @@ class VisitingTabBar extends StatelessWidget {
     return Container(
       height: 40,
       margin: const EdgeInsets.only(
-        top: 6.0,
-        bottom: 30.0,
+        top: 6,
+        bottom: 30,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.secondaryContainer,
@@ -24,7 +24,7 @@ class VisitingTabBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(40),
           color: theme.primaryColor,
         ),
-        indicatorWeight: 0.0,
+        indicatorWeight: 0,
         tabs: const [
           Tab(
             text: AppStrings.wantToVisit,

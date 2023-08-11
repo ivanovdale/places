@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/placeholders/places_not_found_placeholder.dart';
+import 'package:places/core/presentation/widgets/placeholders/places_not_found_placeholder.dart';
 
 /// Информация о том, что места не найдены.
 class PlacesNotFoundInfo extends StatelessWidget {
-  const PlacesNotFoundInfo({Key? key}) : super(key: key);
+  const PlacesNotFoundInfo({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/places_found_list.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/search_history_list.dart';
 
@@ -17,7 +17,7 @@ class SearchResultsOrHistory extends StatelessWidget {
   final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
 
   const SearchResultsOrHistory({
-    Key? key,
+    super.key,
     required this.searchHistory,
     required this.placesFoundList,
     this.onPlacesFoundItemPressed,
@@ -27,7 +27,7 @@ class SearchResultsOrHistory extends StatelessWidget {
     this.onDeleteHistorySearchItemPressed,
     required this.searchString,
     required this.isSearchQueryInProgress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class SearchResultsOrHistory extends StatelessWidget {
             flex: 10,
             child: Column(
               children: [
-                // Не показывать историю поиска, если она пуста, или если начат поиск мест.
+                // Показывать историю поиска, если она заполнена, и если строка поиска пуста.
                 if (searchHistory.isNotEmpty && isSearchStringEmpty)
                   SearchHistoryList(
                     searchHistory: searchHistory,
@@ -45,8 +45,8 @@ class SearchResultsOrHistory extends StatelessWidget {
                     onDeleteHistorySearchItemPressed:
                         onDeleteHistorySearchItemPressed,
                   ),
-                // Не показывать список найденных мест, если ещё не начат их поиск.
-                if (searchString.isNotEmpty)
+                // Показывать список найденных мест, если строка поиска заполнена.
+                if (!isSearchStringEmpty)
                   PlacesFoundList(
                     placesFoundList: placesFoundList,
                     searchString: searchString,

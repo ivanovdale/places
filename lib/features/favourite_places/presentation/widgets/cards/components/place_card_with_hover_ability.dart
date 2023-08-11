@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 
 /// Карточка места с подсветкой в момент, когда над ней происходит перетаскивание другой карточки.
 /// Идентифицирует о возможности сделать дроп в эту область.
@@ -9,10 +9,10 @@ class PlaceCardWithHoverAbility extends StatelessWidget {
   final List<Place?> candidateData;
 
   const PlaceCardWithHoverAbility({
-    Key? key,
+    super.key,
     required this.placeCard,
     required this.candidateData,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

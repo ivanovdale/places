@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/search_bar.dart'
+import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
 
 /// Поле ввода для поиска мест.
@@ -8,10 +8,10 @@ class PlaceSearchBar extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const PlaceSearchBar({
-    Key? key,
+    super.key,
     this.controller,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

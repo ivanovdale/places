@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/UI/screens/components/custom_divider.dart';
+import 'package:places/core/presentation/widgets/custom_divider.dart';
 
 /// Разделитель для действия добавления фото с заданной толщиной и отступами.
 class AddPhotoActionPaddedDivider extends StatelessWidget {
-  const AddPhotoActionPaddedDivider({Key? key}) : super(key: key);
+  const AddPhotoActionPaddedDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

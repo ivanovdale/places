@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/model/place.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_router.dart';
+import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/core/utils/string_extension.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/place_type_selection_button.dart';
-import 'package:places/helpers/app_router.dart';
-import 'package:places/helpers/app_strings.dart';
-import 'package:places/utils/string_extension.dart';
 
 /// Поле выбора категории места.
 class PlaceTypeSelectionField extends StatelessWidget {
@@ -11,10 +11,10 @@ class PlaceTypeSelectionField extends StatelessWidget {
   final ValueSetter<PlaceTypes> onPlaceTypeSelected;
 
   const PlaceTypeSelectionField({
-    Key? key,
+    super.key,
     this.placeType,
     required this.onPlaceTypeSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,14 @@ class PlaceTypeSelectionField extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16.0,
-        top: 14.0,
+        left: 16,
+        top: 14,
       ),
       child: InkWell(
-        onTap: () => selectPlaceTypeFromListOnNewScreen(context),
+        onTap: () => selectPlaceTypeFromListOnNewScreen(
+          context,
+          placeType: placeType,
+        ),
         child: Row(
           children: [
             Text(
@@ -47,11 +50,16 @@ class PlaceTypeSelectionField extends StatelessWidget {
   }
 
   /// Позволяет выбрать тип места из списка на новом экране.
-  Future<void> selectPlaceTypeFromListOnNewScreen(BuildContext context) async {
-    // TODO(ivanovdale): Передавать тип места.
+  Future<void> selectPlaceTypeFromListOnNewScreen(
+    BuildContext context, {
+    PlaceTypes? placeType,
+  }) async {
     final selectedPlaceType = await Navigator.pushNamed<PlaceTypes>(
       context,
       AppRouter.placeTypeSelection,
+      arguments: {
+        'placeType': placeType,
+      },
     );
 
     if (selectedPlaceType != null) {

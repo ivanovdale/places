@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/UI/screens/components/place_card/base_place_card.dart';
-import 'package:places/domain/model/place.dart';
-import 'package:places/helpers/app_assets.dart';
+import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_assets.dart';
+import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
 
 typedef OnDeletePressed = Function(Place);
 
@@ -24,17 +24,13 @@ class VisitedPlaceCard extends BasePlaceCard {
   bool get showDetails => false;
 
   VisitedPlaceCard(
-    Place place, {
+    super.place, {
     OnDeletePressed? onDeletePressed,
     required this.onSharePressed,
-    Key? key,
+    super.key,
   })  : actions = _PlaceActions(
           onSharePressed: onSharePressed,
           onDeletePressed: onDeletePressed,
-        ),
-        super(
-          place,
-          key: key,
         );
 }
 
@@ -44,10 +40,9 @@ class _PlaceActions extends StatelessWidget {
   final OnDeletePressed? onDeletePressed;
 
   const _PlaceActions({
-    Key? key,
     required this.onSharePressed,
     required this.onDeletePressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +61,7 @@ class _PlaceActions extends StatelessWidget {
       children: actionButtons.map((action) {
         return Padding(
           padding: const EdgeInsets.only(
-            left: 18.0,
+            left: 18,
           ),
           child: action,
         );

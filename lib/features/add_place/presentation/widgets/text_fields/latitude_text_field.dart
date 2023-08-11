@@ -24,8 +24,8 @@ class LatitudeTextField extends BaseCoordinateTextField {
 
   @override
   EdgeInsets? get padding => const EdgeInsets.only(
-        left: 16.0,
-        right: 8.0,
+        left: 16,
+        right: 8,
       );
 
   const LatitudeTextField({
