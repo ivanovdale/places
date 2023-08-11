@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/core/presentation/widgets/utils/image_error_helper.dart';
-import 'package:places/core/presentation/widgets/utils/loading_indicator_helper.dart';
+import 'package:places/core/presentation/widgets/error_icon.dart';
 
 /// Галерея фотографии места.
 class PhotoGallery extends StatelessWidget {
@@ -31,9 +30,12 @@ class PhotoGallery extends StatelessWidget {
         return CachedNetworkImage(
           imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
           fit: BoxFit.cover,
-          progressIndicatorBuilder:
-              LoadingIndicatorHelper.progressIndicatorBuilder,
-          errorWidget: ImageErrorHelper.errorIcon,
+          progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+            child: CupertinoActivityIndicator.partiallyRevealed(
+              progress: downloadProgress.progress ?? 0,
+            ),
+          ),
+          errorWidget: (_, __, ___) => const ErrorIcon(),
         );
       },
     );

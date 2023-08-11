@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_strings.dart';
-import 'package:places/core/presentation/widgets/utils/image_error_helper.dart';
+import 'package:places/core/presentation/widgets/error_icon.dart';
 import 'package:places/core/utils/visiting_date_formatter.dart';
 import 'package:places/features/place_details/presentation/place_details_screen.dart';
 
@@ -107,7 +107,7 @@ class _PlaceCardTop extends StatelessWidget {
           imageBuilder: (_, imageProvider) {
             return Ink.image(image: imageProvider, fit: BoxFit.cover);
           },
-          errorWidget: ImageErrorHelper.errorIcon,
+          errorWidget: (_, __, ___) => const ErrorIcon(),
           placeholder: (context, url) => const Center(
             child: SizedBox(
               width: 40,

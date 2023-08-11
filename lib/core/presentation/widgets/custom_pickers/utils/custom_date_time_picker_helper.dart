@@ -28,14 +28,12 @@ abstract final class CustomDateTimePickerHelper {
         savedToVisitDate,
         onTimePicked,
       );
-    } else {
-      if (Platform.isIOS) {
-        await _showCupertinoToVisitDateTimePicker(
-          context,
-          savedToVisitDate,
-          onTimePicked,
-        );
-      }
+    } else if (Platform.isIOS) {
+      await _showCupertinoToVisitDateTimePicker(
+        context,
+        savedToVisitDate,
+        onTimePicked,
+      );
     }
   }
 
@@ -161,11 +159,8 @@ abstract final class CustomDateTimePickerHelper {
     DateTime currentDateTime,
     DateTime? savedToVisitDate,
   ) {
-    var initialDate = currentDateTime;
-    if (savedToVisitDate != null && savedToVisitDate.isAfter(DateTime.now())) {
-      initialDate = savedToVisitDate;
-    }
-
-    return initialDate;
+    return savedToVisitDate?.isAfter(currentDateTime) ?? false
+        ? savedToVisitDate!
+        : currentDateTime;
   }
 }
