@@ -9,10 +9,12 @@ import 'package:places/features/on_boarding/presentation/widgets/on_boarding_pag
 /// Содержит приветственную картинку и краткую информацию о возможностях приложения.
 class OnBoardingPageItem extends StatelessWidget {
   final OnBoardingData data;
+  final PageController pageController;
 
   const OnBoardingPageItem({
     super.key,
     required this.data,
+    required this.pageController,
   });
 
   @override
@@ -32,6 +34,7 @@ class OnBoardingPageItem extends StatelessWidget {
         OnBoardingPageItemIcon(
           assetName: data.icon,
           color: primaryColorDark,
+          pageController: pageController,
         ),
         OnBoardingPageItemTitle(
           data: data.title,
