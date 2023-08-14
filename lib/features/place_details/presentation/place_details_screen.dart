@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
 import 'package:places/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_app_bar_place_photos/sliver_app_bar_place_photos.dart';
@@ -40,23 +41,21 @@ class PlaceDetailsScreen extends StatelessWidget {
                 placeId,
               ),
             child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-              builder: (_, state) {
-                return switch (state) {
-                  PlaceDetailsInitial() => const SizedBox.shrink(),
-                  PlaceDetailsLoadInProgress() => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  PlaceDetailsLoadFailure() => const Center(
-                      child: ErrorPlaceHolder(),
-                    ),
-                  PlaceDetailsLoadSuccess() => CustomScrollView(
-                      controller: scrollController,
-                      slivers: [
-                        SliverAppBarPlacePhotos(state.place),
-                        SliverPlaceDetails(state.place),
-                      ],
-                    )
-                };
+              builder: (_, state) => switch (state) {
+                PlaceDetailsInitial() => const SizedBox.shrink(),
+                PlaceDetailsLoadInProgress() => const Center(
+                    child: CustomCircularLoadingIndicator(),
+                  ),
+                PlaceDetailsLoadFailure() => const Center(
+                    child: ErrorPlaceHolder(),
+                  ),
+                PlaceDetailsLoadSuccess() => CustomScrollView(
+                    controller: scrollController,
+                    slivers: [
+                      SliverAppBarPlacePhotos(state.place),
+                      SliverPlaceDetails(state.place),
+                    ],
+                  )
               },
             ),
           ),
