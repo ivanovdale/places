@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/places_found_list.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/search_history_list.dart';
 
@@ -57,7 +58,7 @@ class SearchResultsOrHistory extends StatelessWidget {
           )
         : const Expanded(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CustomCircularLoadingIndicator(),
             ),
           );
   }
