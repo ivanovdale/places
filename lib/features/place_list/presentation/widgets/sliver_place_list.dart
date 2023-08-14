@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/core/presentation/widgets/place_card/place_card.dart';
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
@@ -27,7 +28,7 @@ class SliverPlaceList extends StatelessWidget {
             ),
           PlaceListStatus.loading => const SliverFillRemaining(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularLoadingIndicator(),
               ),
             ),
           PlaceListStatus.failure => const SliverFillRemaining(
