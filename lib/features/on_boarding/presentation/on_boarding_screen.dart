@@ -47,33 +47,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Scaffold(
       body: BlocProvider.value(
         value: _cubit,
-        child: BlocBuilder<OnBoardingCubit, OnBoardingState>(
-          bloc: _cubit,
-          builder: (_, state) {
-            final activePage = state.activePage;
-
-            return Column(
-              children: [
-                SkipButton(
-                  activePage: activePage,
+        child: Column(
+          children: [
+            BlocBuilder<OnBoardingCubit, OnBoardingState>(
+              bloc: _cubit,
+              builder: (context, state) {
+                return SkipButton(
+                  activePage: state.activePage,
                   onPressed: () => _goToPlaceListScreen(context),
-                ),
-                OnBoardingPageView(
-                  controller: _pageController,
-                  onPageChanged: _cubit.setActivePage,
-                ),
-                OnBoardingPageIndicator(
+                );
+              },
+            ),
+            OnBoardingPageView(
+              pageController: _pageController,
+              onPageChanged: _cubit.setActivePage,
+            ),
+            BlocBuilder<OnBoardingCubit, OnBoardingState>(
+              builder: (context, state) {
+                return OnBoardingPageIndicator(
                   length: items.length,
                   controller: _pageController,
-                  activePage: activePage,
-                ),
-                StartButton(
-                  activePage: activePage,
+                  activePage: state.activePage,
+                );
+              },
+            ),
+            BlocBuilder<OnBoardingCubit, OnBoardingState>(
+              builder: (context, state) {
+                return StartButton(
+                  activePage: state.activePage,
                   onPressed: () => _goToPlaceListScreen(context),
-                ),
-              ],
-            );
-          },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

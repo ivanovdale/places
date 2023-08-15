@@ -4,12 +4,12 @@ import 'package:places/features/on_boarding/res/on_boarding_items.dart';
 
 /// Прокручивающийся список страниц.
 class OnBoardingPageView extends StatelessWidget {
-  final PageController controller;
+  final PageController pageController;
   final ValueChanged<int>? onPageChanged;
 
   const OnBoardingPageView({
     super.key,
-    required this.controller,
+    required this.pageController,
     this.onPageChanged,
   });
 
@@ -18,14 +18,13 @@ class OnBoardingPageView extends StatelessWidget {
     return Expanded(
       flex: MediaQuery.of(context).orientation == Orientation.portrait ? 5 : 10,
       child: PageView.builder(
-        controller: controller,
+        controller: pageController,
         onPageChanged: onPageChanged,
         itemCount: items.length,
-        itemBuilder: (_, index) {
-          return OnBoardingPageItem(
-            data: items[index],
-          );
-        },
+        itemBuilder: (_, index) => OnBoardingPageItem(
+          data: items[index],
+          pageController: pageController,
+        ),
       ),
     );
   }
