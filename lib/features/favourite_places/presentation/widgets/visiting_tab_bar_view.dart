@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_place_cubit/favourite_place_cubit.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
@@ -22,8 +23,8 @@ class VisitingTabBarView extends StatelessWidget {
       child: BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
         builder: (_, state) => switch (state.status) {
           FavouritePlacesStatus.loading => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: CustomCircularLoadingIndicator(),
+          ),
           FavouritePlacesStatus.success => _TabBarView(
               tabController: tabController,
             ),

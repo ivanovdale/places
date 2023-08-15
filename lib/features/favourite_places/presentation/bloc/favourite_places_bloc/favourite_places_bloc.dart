@@ -19,7 +19,7 @@ final class FavouritePlacesBloc
     Emitter<FavouritePlacesState> emit,
   ) async {
     // Имитация загрузки.
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 3));
 
     emit(
       FavouritePlacesState(

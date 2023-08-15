@@ -58,8 +58,13 @@ class _PlaceActions extends StatelessWidget {
         child: BlocBuilder<PlaceCardFavouriteCubit, PlaceCardFavouriteState>(
           builder: (context, state) {
             return InkWell(
-              child: SvgPicture.asset(
-                state.isFavourite ? AppAssets.heartFilled : AppAssets.heart,
+              splashFactory: NoSplash.splashFactory,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: SvgPicture.asset(
+                  state.isFavourite ? AppAssets.heartFilled : AppAssets.heart,
+                  key: ValueKey(state.isFavourite),
+                ),
               ),
               onTap: () =>
                   context.read<PlaceCardFavouriteCubit>().toggleFavorites(),
