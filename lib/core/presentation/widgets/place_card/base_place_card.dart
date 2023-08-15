@@ -106,6 +106,9 @@ class _PlaceCardTop extends StatelessWidget {
       children: [
         Hero(
           tag: 'place_card_${place.id}',
+          flightShuttleBuilder: (_, __, ___, ____, toHeroContext) => Material(
+            child: toHeroContext.widget,
+          ),
           child: CachedNetworkImage(
             imageUrl: imageUrl,
             imageBuilder: (_, imageProvider) => Ink.image(
