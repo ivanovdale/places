@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
-import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar.dart';
-import 'package:places/features/favourite_places/presentation/widgets/visiting_tab_bar_view.dart';
+import 'package:places/features/favourite_places/presentation/widgets/visiting_tabs.dart';
 
 /// Экран списка посещенных/планируемых к посещению мест.
 ///
@@ -27,12 +26,7 @@ class FavouritePlacesScreen extends StatelessWidget {
         ),
         child: DefaultTabController(
           length: 2,
-          child: Column(
-            children: [
-              VisitingTabBar(),
-              VisitingTabBarView(),
-            ],
-          ),
+          child: VisitingTabs(),
         ),
       ),
     );

@@ -10,19 +10,24 @@ import 'package:places/features/favourite_places/presentation/widgets/visiting_p
 import 'package:places/features/favourite_places/presentation/widgets/visiting_place_list/visited_place_list.dart';
 
 class VisitingTabBarView extends StatelessWidget {
-  const VisitingTabBarView({super.key});
+  final TabController tabController;
+
+  const VisitingTabBarView({
+    super.key,
+    required this.tabController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
-        builder: (_, state) {
-          return switch (state.status) {
-            FavouritePlacesStatus.loading => const Center(
-                child: CustomCircularLoadingIndicator(),
-              ),
-            FavouritePlacesStatus.success => const _TabBarView(),
-          };
+        builder: (_, state) => switch (state.status) {
+          FavouritePlacesStatus.loading => const Center(
+            child: CustomCircularLoadingIndicator(),
+          ),
+          FavouritePlacesStatus.success => _TabBarView(
+              tabController: tabController,
+            ),
         },
       ),
     );
@@ -30,7 +35,11 @@ class VisitingTabBarView extends StatelessWidget {
 }
 
 class _TabBarView extends StatelessWidget {
-  const _TabBarView();
+  final TabController tabController;
+
+  const _TabBarView({
+    required this.tabController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +59,16 @@ class _TabBarView extends StatelessWidget {
     void onPlaceDateTimePicked(
       BuildContext context,
       DateTime pickedDateTime,
-    ) {
-      context
-          .read<FavouritePlaceCubit>()
-          .updateToVisitPlaceDateTime(pickedDateTime);
-    }
+    ) =>
+        context
+            .read<FavouritePlaceCubit>()
+            .updateToVisitPlaceDateTime(pickedDateTime);
 
     return BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
       builder: (_, state) {
         return TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: tabController,
           children: [
             ToVisitPlaceList(
               state.notVisitedPlaces,
