@@ -1,17 +1,31 @@
 part of 'place_details_cubit.dart';
 
-sealed class PlaceDetailsState {}
-
-final class PlaceDetailsInitial extends PlaceDetailsState {}
-
-final class PlaceDetailsLoadInProgress extends PlaceDetailsState {}
-
-final class PlaceDetailsLoadSuccess extends PlaceDetailsState {
+sealed class PlaceDetailsState {
   final Place place;
 
-  PlaceDetailsLoadSuccess({
+  PlaceDetailsState({
     required this.place,
   });
 }
 
-final class PlaceDetailsLoadFailure extends PlaceDetailsState {}
+final class PlaceDetailsInitial extends PlaceDetailsState {
+  PlaceDetailsInitial({
+    required super.place,
+  });
+}
+
+final class PlaceDetailsLoadInProgress extends PlaceDetailsState {
+  PlaceDetailsLoadInProgress({
+    required super.place,
+  });
+}
+
+final class PlaceDetailsLoadSuccess extends PlaceDetailsState {
+  PlaceDetailsLoadSuccess({
+    required super.place,
+  });
+}
+
+final class PlaceDetailsLoadFailure extends PlaceDetailsState {
+  PlaceDetailsLoadFailure({required super.place});
+}
