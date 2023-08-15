@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/error_icon.dart';
 
@@ -27,15 +28,22 @@ class PhotoGallery extends StatelessWidget {
       onPageChanged: onPageChanged,
       itemCount: place.photoUrlList?.length,
       itemBuilder: (_, index) {
-        return CachedNetworkImage(
-          imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
-          fit: BoxFit.cover,
-          progressIndicatorBuilder: (_, __, downloadProgress) => Center(
-            child: CupertinoActivityIndicator.partiallyRevealed(
-              progress: downloadProgress.progress ?? 0,
-            ),
+        return Hero(
+          tag: 'place_card_${place.id}',
+          // Для исправления ошибки с Image.Ink.
+          flightShuttleBuilder: (_, __, ___, ____, toHeroContext) => Material(
+            child: toHeroContext.widget,
           ),
-          errorWidget: (_, __, ___) => const ErrorIcon(),
+          child: CachedNetworkImage(
+            imageUrl: place.photoUrlList?[index] ?? defaultImageUrl,
+            fit: BoxFit.cover,
+            progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+              child: CupertinoActivityIndicator.partiallyRevealed(
+                progress: downloadProgress.progress ?? 0,
+              ),
+            ),
+            errorWidget: (_, __, ___) => const ErrorIcon(),
+          ),
         );
       },
     );

@@ -104,18 +104,21 @@ class _PlaceCardTop extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CachedNetworkImage(
-          imageUrl: imageUrl,
-          imageBuilder: (_, imageProvider) => Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
+        Hero(
+          tag: 'place_card_${place.id}',
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            imageBuilder: (_, imageProvider) => Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            placeholder: (_, __) => Container(
+              color: Colors.black,
+            ),
+            errorWidget: (_, __, ___) => const ErrorIcon(),
+            fadeOutDuration: const Duration(milliseconds: 350),
+            fadeOutCurve: Curves.easeIn,
           ),
-          placeholder: (_, __) => Container(
-            color: Colors.black,
-          ),
-          errorWidget: (_, __, ___) => const ErrorIcon(),
-          fadeOutDuration: const Duration(milliseconds: 350),
-          fadeOutCurve: Curves.easeIn,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
