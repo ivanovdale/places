@@ -7,12 +7,19 @@ part 'place_details_state.dart';
 class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
   final PlaceInteractor _placeInteractor;
 
-  PlaceDetailsCubit(this._placeInteractor) : super(PlaceDetailsInitial());
+  PlaceDetailsCubit(
+    this._placeInteractor,
+    Place _initialPlace,
+  ) : super(
+          PlaceDetailsInitial(place: _initialPlace),
+        );
 
   /// Получает детальную информацию места.
   Future<void> loadPlaceDetails(int placeId) async {
     emit(
-      PlaceDetailsLoadInProgress(),
+      PlaceDetailsLoadInProgress(
+        place: state.place,
+      ),
     );
 
     try {
@@ -23,7 +30,7 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
       );
     } on Exception catch (error, stackTrace) {
       emit(
-        PlaceDetailsLoadFailure(),
+        PlaceDetailsLoadFailure(place: state.place),
       );
 
       Error.throwWithStackTrace(

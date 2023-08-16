@@ -132,10 +132,14 @@ abstract final class AppRouter {
   static MaterialPageRoute<Object?> _getPlaceDetailsMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
-    final id = arguments!['id'] as int;
+    final place = arguments!['place'] as Place;
+    final isBottomSheet = arguments['isBottomSheet'] as bool;
 
     return MaterialPageRoute<Object?>(
-      builder: (_) => PlaceDetailsScreen(id),
+      builder: (_) => PlaceDetailsScreen(
+        place,
+        isBottomSheet: isBottomSheet,
+      ),
     );
   }
 

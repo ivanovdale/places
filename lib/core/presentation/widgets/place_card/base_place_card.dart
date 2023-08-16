@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/helpers/app_router.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/error_icon.dart';
 import 'package:places/core/utils/visiting_date_formatter.dart';
-import 'package:places/features/place_details/presentation/place_details_screen.dart';
 
 /// Абстрактный класс [BasePlaceCard]. Отображает краткую информацию о месте.
 ///
@@ -25,12 +25,14 @@ abstract class BasePlaceCard extends StatelessWidget {
   });
 
   /// Показывает боттомшит детализации места.
-  void _showPlaceDetailsBottomSheet(BuildContext context, Place place) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
+  void _openPlaceDetailsScreen(BuildContext context, Place place) {
+    Navigator.pushNamed<void>(
+      context,
+      AppRouter.placeDetails,
+      arguments: {
+        'place': place,
+        'isBottomSheet': false,
+      },
     );
   }
 
@@ -44,7 +46,7 @@ abstract class BasePlaceCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => _showPlaceDetailsBottomSheet(context, place),
+            onTap: () => _openPlaceDetailsScreen(context, place),
             child: Column(
               children: [
                 Expanded(
@@ -102,18 +104,24 @@ class _PlaceCardTop extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CachedNetworkImage(
-          imageUrl: imageUrl,
-          imageBuilder: (_, imageProvider) => Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
+        Hero(
+          tag: 'place_card_${place.id}',
+          flightShuttleBuilder: (_, __, ___, ____, toHeroContext) => Material(
+            child: toHeroContext.widget,
           ),
-          placeholder: (_, __) => Container(
-            color: Colors.black,
+          child: CachedNetworkImage(
+            imageUrl: imageUrl,
+            imageBuilder: (_, imageProvider) => Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            placeholder: (_, __) => Container(
+              color: Colors.black,
+            ),
+            errorWidget: (_, __, ___) => const ErrorIcon(),
+            fadeOutDuration: const Duration(milliseconds: 350),
+            fadeOutCurve: Curves.easeIn,
           ),
-          errorWidget: (_, __, ___) => const ErrorIcon(),
-          fadeOutDuration: const Duration(milliseconds: 350),
-          fadeOutCurve: Curves.easeIn,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

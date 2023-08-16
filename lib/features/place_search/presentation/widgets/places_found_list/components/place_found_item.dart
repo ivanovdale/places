@@ -28,7 +28,7 @@ class PlaceFoundItem extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => PlaceDetailsScreen(place.id ?? 0),
+      builder: (_) => PlaceDetailsScreen(place),
     );
   }
 

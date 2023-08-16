@@ -14,10 +14,12 @@ import 'package:places/features/place_details/presentation/widgets/sliver_app_ba
 /// Сворачивается при скроллинге.
 class SliverAppBarPlacePhotos extends StatefulWidget {
   final Place place;
+  final bool showCloseButton;
 
   const SliverAppBarPlacePhotos(
     this.place, {
     super.key,
+    required this.showCloseButton,
   });
 
   @override
@@ -61,7 +63,7 @@ class _SliverAppBarPlacePhotosState extends State<SliverAppBarPlacePhotos> {
                     controller: _pageController,
                     activePage: state.activePage,
                   ),
-                  const app_bar.CloseButton(),
+                  if (widget.showCloseButton) const app_bar.CloseButton(),
                   const SwipeDownButton(),
                 ],
               );
