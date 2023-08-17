@@ -5,6 +5,7 @@ import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
+import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 import 'package:places/features/place_search/domain/place_search_interactor.dart';
 import 'package:places/features/place_search/presentation/bloc/place_search_bloc.dart';
 import 'package:places/features/place_search/presentation/widgets/place_search_bar.dart';
@@ -19,13 +20,11 @@ import 'package:places/mocks.dart' as mocked;
 ///
 /// Хранит фильтры, которые будут учитываться при поиске мест.
 class PlaceSearchScreen extends StatelessWidget {
-  final Set<PlaceTypes> placeTypeFilters;
-  final double radius;
+  final PlaceFilters placeFilters;
 
   const PlaceSearchScreen({
     super.key,
-    required this.placeTypeFilters,
-    required this.radius,
+    required this.placeFilters,
   });
 
   @override
@@ -49,8 +48,7 @@ class PlaceSearchScreen extends StatelessWidget {
           ),
         )..add(
             PlaceSearchStarted(
-              placeTypeFilters: placeTypeFilters.toList(),
-              radius: radius,
+              placeFilters: placeFilters,
               userCoordinates: mocked.userCoordinates,
             ),
           ),

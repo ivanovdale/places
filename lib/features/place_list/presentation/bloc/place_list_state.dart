@@ -5,36 +5,31 @@ final class PlaceListState {
 
   final List<Place> places;
 
-  /// Фильтры мест.
-  final Set<PlaceTypes> placeTypeFilters;
-
-  /// Радиус поиска.
-  final double radius;
+  final PlaceFilters placeFilters;
 
   const PlaceListState({
     required this.status,
     required this.places,
-    required this.placeTypeFilters,
-    required this.radius,
+    required this.placeFilters,
   });
 
   PlaceListState.initial()
       : status = PlaceListStatus.initial,
         places = const <Place>[],
-        placeTypeFilters = PlaceTypes.values.toSet(),
-        radius = AppConstants.maxRangeValue;
+        placeFilters = (
+          types: PlaceTypes.values.toSet(),
+          radius: AppConstants.maxRangeValue,
+        );
 
   PlaceListState copyWith({
     PlaceListStatus? status,
     List<Place>? places,
-    Set<PlaceTypes>? placeTypeFilters,
-    double? radius,
+    PlaceFilters? placeFilters,
   }) {
     return PlaceListState(
       status: status ?? this.status,
       places: places ?? this.places,
-      placeTypeFilters: placeTypeFilters ?? this.placeTypeFilters,
-      radius: radius ?? this.radius,
+      placeFilters: placeFilters ?? this.placeFilters,
     );
   }
 }

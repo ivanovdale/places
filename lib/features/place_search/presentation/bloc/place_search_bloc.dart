@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 import 'package:places/features/place_search/domain/place_search_interactor.dart';
 
 part 'place_search_event.dart';
@@ -26,8 +27,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     Emitter<PlaceSearchState> emit,
   ) {
     _placeSearchInteractor.setFilters(
-      typeFilter: event.placeTypeFilters,
-      radius: event.radius,
+      typeFilter: event.placeFilters.types.toList(),
+      radius: event.placeFilters.radius,
       userCoordinates: event.userCoordinates,
     );
   }

@@ -38,6 +38,20 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
     required this.expandedHeight,
   });
 
+  /// Открывает экран поиска мест.
+  void _navigateToPlaceSearchScreen(BuildContext context) {
+    final bloc = context.read<PlaceListBloc>();
+    final state = bloc.state;
+
+    Navigator.pushNamed(
+      context,
+      AppRouter.placeSearch,
+      arguments: {
+        'placeFilters': state.placeFilters,
+      },
+    );
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -94,20 +108,5 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
-  }
-
-  /// Открывает экран поиска мест.
-  void _navigateToPlaceSearchScreen(BuildContext context) {
-    final bloc = context.read<PlaceListBloc>();
-    final state = bloc.state;
-
-    Navigator.pushNamed(
-      context,
-      AppRouter.placeSearch,
-      arguments: {
-        'placeTypeFilters': state.placeTypeFilters,
-        'radius': state.radius,
-      },
-    );
   }
 }
