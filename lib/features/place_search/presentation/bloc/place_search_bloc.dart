@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/features/place_filters/domain/place_filters_repository.dart';
+import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_search/domain/place_search_interactor.dart';
 
 part 'place_search_event.dart';
@@ -10,9 +10,14 @@ part 'place_search_state.dart';
 
 class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
   final PlaceSearchInteractor _placeSearchInteractor;
+  final PlaceFiltersInteractor _placeFiltersInteractor;
 
-  PlaceSearchBloc(this._placeSearchInteractor)
-      : super(PlaceSearchState.initial()) {
+  PlaceSearchBloc({
+    required PlaceSearchInteractor placeSearchInteractor,
+    required PlaceFiltersInteractor placeFiltersInteractor,
+  })  : _placeSearchInteractor = placeSearchInteractor,
+        _placeFiltersInteractor = placeFiltersInteractor,
+        super(PlaceSearchState.initial()) {
     on<PlaceSearchStarted>(_onPlaceSearchStarted);
     on<UpdateSearchString>(_onUpdateSearchString);
     on<MakeSearch>(_onMakeSearch);
@@ -22,13 +27,14 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     on<FillSearchString>(_onFillSearchString);
   }
 
-  void _onPlaceSearchStarted(
+  Future<void> _onPlaceSearchStarted(
     PlaceSearchStarted event,
     Emitter<PlaceSearchState> emit,
-  ) {
+  ) async {
+    final placeFilters = await _placeFiltersInteractor.placeFilters;
     _placeSearchInteractor.setFilters(
-      typeFilter: event.placeFilters.types.toList(),
-      radius: event.placeFilters.radius,
+      typeFilter: placeFilters.types.toList(),
+      radius: placeFilters.radius,
       userCoordinates: event.userCoordinates,
     );
   }

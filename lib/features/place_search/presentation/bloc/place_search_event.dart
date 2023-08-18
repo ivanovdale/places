@@ -3,11 +3,9 @@ part of 'place_search_bloc.dart';
 sealed class PlaceSearchEvent {}
 
 final class PlaceSearchStarted extends PlaceSearchEvent {
-  final PlaceFilters placeFilters;
   final CoordinatePoint userCoordinates;
 
   PlaceSearchStarted({
-    required this.placeFilters,
     required this.userCoordinates,
   });
 }
