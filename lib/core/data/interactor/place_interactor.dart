@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
+import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 
 /// Интерактор для работы с местами.
 class PlaceInteractor {
@@ -10,32 +13,58 @@ class PlaceInteractor {
 
   final FavouritePlaceRepository favouritePlaceRepository;
 
+  final PlaceFiltersRepository placeFiltersRepository;
+
   PlaceInteractor({
     required this.placeRepository,
     required this.favouritePlaceRepository,
+    required this.placeFiltersRepository,
   });
 
   /// Получает список мест после фильтрации.
-  /// Добавляет пометку добавления в избранное для каждого места.
+  ///
+  /// [placesFilterRequest] - фильтр мест,
+  /// [useSavedFilters] - использует сохраненные фильтры из репозитория,
+  /// [sortByDistance] - сортирует по расстоянию,
+  /// [addFavouriteMark] - добавляет пометку добавления в избранное для каждого места.
   Future<List<Place>> getFilteredPlaces(
-    PlacesFilterRequest placesFilterRequest,
-  ) async {
-    final filteredPlaces =
-        await placeRepository.getFilteredPlaces(placesFilterRequest);
-
-    // Сортировка по удалённости, если есть значение расстояния.
-    if (filteredPlaces.isNotEmpty && filteredPlaces[0].distance != null) {
-      filteredPlaces
-          .sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+    PlacesFilterRequest placesFilterRequest, {
+    bool useSavedFilters = false,
+    bool sortByDistance = false,
+    bool addFavouriteMark = false,
+  }) async {
+    var filterRequest = placesFilterRequest;
+    if (useSavedFilters) {
+      final savedFilters = await placeFiltersRepository.placeFilters;
+      filterRequest = placesFilterRequest.copyWith(
+        typeFilter: savedFilters.types.toList(),
+        radius: savedFilters.radius,
+      );
     }
 
-    // Добавляем пометку добавления в избранное для каждого места.
-    favouritePlaceRepository.getPlaces().forEach((place) {
-      final indexOfFilteredPlace =
-          filteredPlaces.indexWhere((filteredPlace) => filteredPlace == place);
+    final filteredPlaces =
+        await placeRepository.getFilteredPlaces(filterRequest);
 
-      filteredPlaces[indexOfFilteredPlace].isFavorite = true;
-    });
+    if (sortByDistance) {
+      // Сортировка по удалённости, если есть значение расстояния.
+      if (filteredPlaces.isNotEmpty && filteredPlaces[0].distance != null) {
+        filteredPlaces
+            .sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+      }
+    }
+
+    if (addFavouriteMark) {
+      // Добавляем пометку добавления в избранное для каждого места.
+      final favouritePlaces = favouritePlaceRepository.getPlaces();
+      for (final favouritePlace in favouritePlaces) {
+        final indexOfFilteredPlace = filteredPlaces
+            .indexWhere((filteredPlace) => filteredPlace == favouritePlace);
+
+        if (indexOfFilteredPlace == -1) continue;
+
+        filteredPlaces[indexOfFilteredPlace].isFavorite = true;
+      }
+    }
 
     return filteredPlaces;
   }
