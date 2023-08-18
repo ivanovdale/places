@@ -44,6 +44,9 @@ class PlaceListScreen extends StatelessWidget {
       )
         ..add(
           PlaceListStarted(),
+        )
+        ..add(
+          PlaceFiltersSubscriptionRequested(),
         ),
       child: Scaffold(
         // Скрываем боттом бар при горизонтальной ориентации.
