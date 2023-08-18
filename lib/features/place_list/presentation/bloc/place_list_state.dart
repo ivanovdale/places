@@ -5,31 +5,22 @@ final class PlaceListState {
 
   final List<Place> places;
 
-  final PlaceFilters placeFilters;
-
   const PlaceListState({
     required this.status,
     required this.places,
-    required this.placeFilters,
   });
 
   PlaceListState.initial()
       : status = PlaceListStatus.initial,
-        places = const <Place>[],
-        placeFilters = (
-          types: PlaceTypes.values.toSet(),
-          radius: AppConstants.maxRangeValue,
-        );
+        places = const <Place>[];
 
   PlaceListState copyWith({
     PlaceListStatus? status,
     List<Place>? places,
-    PlaceFilters? placeFilters,
   }) {
     return PlaceListState(
       status: status ?? this.status,
       places: places ?? this.places,
-      placeFilters: placeFilters ?? this.placeFilters,
     );
   }
 }
