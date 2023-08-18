@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/data/interactor/place_interactor.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
-import 'package:places/features/place_filters/domain/place_filters_repository.dart';
+import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/presentation/bloc/place_filters_bloc.dart';
 import 'package:places/features/place_filters/presentation/widgets/back_button.dart'
     as filters;
@@ -19,14 +19,9 @@ import 'package:places/mocks.dart' as mocked;
 /// Отображает возможные фильтры мест - категория места и расстояние до места.
 /// Показывает количество мест после фильтрации.
 /// Позволяет очистить все фильтры сразу.
-///
-/// В конструктор передаются фильтры, которые нужно активировать при отрисовке экрана.
 class PlaceFiltersScreen extends StatelessWidget {
-  final PlaceFilters placeFilters;
-
   const PlaceFiltersScreen({
     super.key,
-    required this.placeFilters,
   });
 
   @override
@@ -36,12 +31,10 @@ class PlaceFiltersScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => PlaceFiltersBloc(
         placeInteractor: placeInteractor,
+        placeFiltersInteractor: context.read<PlaceFiltersInteractor>(),
         userCoordinates: mocked.userCoordinates,
       )..add(
-          PlaceFiltersStarted(
-            selectedPlaceTypeFilters: placeFilters.types,
-            radius: placeFilters.radius,
-          ),
+          PlaceFiltersStarted(),
         ),
       child: const Scaffold(
         appBar: CustomAppBar(

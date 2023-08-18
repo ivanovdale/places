@@ -3,7 +3,8 @@ import 'package:places/core/data/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
-import 'package:places/core/helpers/app_constants.dart';
+import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
+import 'package:places/features/place_filters/utils/place_filters_helper.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'place_filters_event.dart';
@@ -16,6 +17,7 @@ EventTransformer<T> debounce<T>(Duration duration) {
 
 class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
   final PlaceInteractor _placeInteractor;
+  final PlaceFiltersInteractor _placeFiltersInteractor;
   final CoordinatePoint _userCoordinates;
 
   /// Время активации фильтра по расстоянию до места.
@@ -23,14 +25,17 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
 
   PlaceFiltersBloc({
     required PlaceInteractor placeInteractor,
+    required PlaceFiltersInteractor placeFiltersInteractor,
     required CoordinatePoint userCoordinates,
   })  : _placeInteractor = placeInteractor,
+        _placeFiltersInteractor = placeFiltersInteractor,
         _userCoordinates = userCoordinates,
         super(PlaceFiltersState.initial()) {
     on(_onPlaceFiltersStarted);
     on(_onPlaceFiltersTypeFilterSelected);
     on(_onPlaceFiltersRadiusSelected);
     on(_onPlaceFiltersAllFiltersReset);
+    on(_onPlaceFiltersSaved);
     on(_onPlaceFiltersUpdated);
     on(
       _onPlaceFiltersWithDelayUpdated,
@@ -64,10 +69,11 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     PlaceFiltersStarted event,
     Emitter<PlaceFiltersState> emit,
   ) async {
+    final placeFilters = await _placeFiltersInteractor.placeFilters;
     emit(
       state.copyWith(
-        selectedPlaceTypeFilters: event.selectedPlaceTypeFilters,
-        radius: event.radius,
+        selectedPlaceTypeFilters: placeFilters.types,
+        radius: placeFilters.radius,
       ),
     );
   }
@@ -107,6 +113,19 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     Emitter<PlaceFiltersState> emit,
   ) async {
     emit(PlaceFiltersState.initial());
+  }
+
+  Future<void> _onPlaceFiltersSaved(
+    PlaceFiltersSaved event,
+    Emitter<PlaceFiltersState> emit,
+  ) async {
+    // TODO(ivanovdale): обработка ошибок
+    await _placeFiltersInteractor.saveFilters(
+      (
+        types: state.selectedPlaceTypeFilters,
+        radius: state.radius,
+      ),
+    );
   }
 
   Future<void> _onPlaceFiltersUpdated(
