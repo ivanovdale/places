@@ -8,6 +8,7 @@ import 'package:places/features/favourite_places/domain/favourite_place_reposito
 import 'package:places/features/place_filters/data/place_filters_shared_preferences_repository.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
+import 'package:places/features/settings/data/settings_shared_preferences_repository.dart';
 import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +43,10 @@ final class AppDependencies {
     final placeFiltersRepository = PlaceFiltersSharedPreferencesRepository(
       sharedPreferences: sharedPreferences,
     );
+    final settingsSharedPreferencesRepository =
+        SettingsSharedPreferencesRepository(
+      sharedPreferences: sharedPreferences,
+    );
 
     final favouritePlaceInteractor = FavouritePlaceInteractor(
       favouritePlaceDataRepository,
@@ -51,7 +56,9 @@ final class AppDependencies {
       favouritePlaceRepository: favouritePlaceDataRepository,
       placeFiltersRepository: placeFiltersRepository,
     );
-    final settingsInteractor = SettingsInteractor();
+    final settingsInteractor = SettingsInteractor(
+      settingsRepository: settingsSharedPreferencesRepository,
+    );
     final placeFiltersInteractor = PlaceFiltersInteractor(
       placeFiltersRepository: placeFiltersRepository,
     );

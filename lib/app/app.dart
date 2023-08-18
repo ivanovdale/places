@@ -26,8 +26,7 @@ class App extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode:
-                state.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+            themeMode: state.themeMode,
           );
         },
       ),

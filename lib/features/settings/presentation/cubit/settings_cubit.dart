@@ -1,27 +1,26 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/features/settings/domain/settings_interactor.dart';
 
 part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
-  final SettingsInteractor settingsInteractor;
+  final SettingsInteractor _settingsInteractor;
 
-  bool get _isDarkModeEnabled => settingsInteractor.isDarkModeEnabled;
+  Future<bool> get _isDarkModeEnabled => _settingsInteractor.isDarkModeEnabled;
 
-  SettingsCubit(this.settingsInteractor)
-      : super(
-          SettingsState(
-            isDarkModeEnabled: settingsInteractor.isDarkModeEnabled,
-          ),
-        );
+  SettingsCubit({
+    required SettingsInteractor settingsInteractor,
+  })  : _settingsInteractor = settingsInteractor,
+        super(const SettingsState(isDarkModeEnabled: false));
 
-  void changeAppTheme() {
-    settingsInteractor.changeAppTheme();
+  Future<void> initialize() async {
+    emit(SettingsState(isDarkModeEnabled: await _isDarkModeEnabled));
+  }
 
-    emit(
-      SettingsState(
-        isDarkModeEnabled: _isDarkModeEnabled,
-      ),
-    );
+  Future<void> changeAppTheme() async {
+    emit(SettingsState(isDarkModeEnabled: !state.isDarkModeEnabled));
+
+    await _settingsInteractor.changeAppTheme();
   }
 }

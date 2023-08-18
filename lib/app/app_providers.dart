@@ -33,8 +33,8 @@ class AppProviders extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => SettingsCubit(
-            _appDependencies.settingsInteractor,
-          ),
+            settingsInteractor: _appDependencies.settingsInteractor,
+          )..initialize(),
         ),
       ],
       child: MultiProvider(
