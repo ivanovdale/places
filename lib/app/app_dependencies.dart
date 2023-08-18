@@ -1,6 +1,6 @@
 import 'package:places/core/api/dio_api.dart';
-import 'package:places/core/data/interactor/place_interactor.dart';
 import 'package:places/core/data/repository/network_place_repository.dart';
+import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_interactor.dart';

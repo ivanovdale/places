@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
