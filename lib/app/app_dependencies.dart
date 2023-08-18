@@ -1,5 +1,7 @@
 import 'package:places/core/api/dio_api.dart';
+import 'package:places/core/data/repository/first_enter_shared_preferences_repository.dart';
 import 'package:places/core/data/repository/network_place_repository.dart';
+import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
@@ -23,6 +25,7 @@ final class AppDependencies {
   final PlaceInteractor placeInteractor;
   final SettingsInteractor settingsInteractor;
   final PlaceFiltersInteractor placeFiltersInteractor;
+  final FirstEnterInteractor firstEnterInteractor;
 
   AppDependencies._({
     required this.sharedPreferences,
@@ -33,6 +36,7 @@ final class AppDependencies {
     required this.placeInteractor,
     required this.settingsInteractor,
     required this.placeFiltersInteractor,
+    required this.firstEnterInteractor,
   });
 
   static Future<AppDependencies> getDependencies() async {
@@ -45,6 +49,10 @@ final class AppDependencies {
     );
     final settingsSharedPreferencesRepository =
         SettingsSharedPreferencesRepository(
+      sharedPreferences: sharedPreferences,
+    );
+    final firstEnterSharedPreferencesRepository =
+        FirstEnterSharedPreferencesRepository(
       sharedPreferences: sharedPreferences,
     );
 
@@ -62,6 +70,9 @@ final class AppDependencies {
     final placeFiltersInteractor = PlaceFiltersInteractor(
       placeFiltersRepository: placeFiltersRepository,
     );
+    final firstEnterInteractor = FirstEnterInteractor(
+      firstEnterRepository: firstEnterSharedPreferencesRepository,
+    );
 
     return AppDependencies._(
       sharedPreferences: sharedPreferences,
@@ -72,6 +83,7 @@ final class AppDependencies {
       placeInteractor: placeInteractor,
       settingsInteractor: settingsInteractor,
       placeFiltersInteractor: placeFiltersInteractor,
+      firstEnterInteractor: firstEnterInteractor,
     );
   }
 }

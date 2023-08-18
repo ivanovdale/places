@@ -48,6 +48,9 @@ class AppProviders extends StatelessWidget {
           Provider.value(
             value: _appDependencies.placeFiltersInteractor,
           ),
+          Provider.value(
+            value: _appDependencies.firstEnterInteractor,
+          ),
         ],
         child: child,
       ),
