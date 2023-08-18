@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_router.dart';
-import 'package:places/features/place_filters/domain/place_filters_repository.dart';
-import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
-import 'package:provider/provider.dart';
 
 /// Кнопка фильтрации достопримечательностей.
 ///
@@ -18,25 +15,11 @@ class FilterButton extends StatelessWidget {
   });
 
   /// Открывает экран фильтрации мест.
-  ///
-  /// После выбора фильтров применяет их на текущем экране.
   Future<void> _navigateToFiltersScreen(BuildContext context) async {
-    final bloc = context.read<PlaceListBloc>();
-    final state = bloc.state;
-
-    final selectedFilters = await Navigator.pushNamed<PlaceFilters>(
+    await Navigator.pushNamed<void>(
       context,
       AppRouter.placeFilters,
-      arguments: {
-        'placeFilters': state.placeFilters,
-      },
     );
-
-    if (selectedFilters != null) {
-      bloc.add(
-        PlaceListWithFiltersLoaded(placeFilters: selectedFilters),
-      );
-    }
   }
 
   @override

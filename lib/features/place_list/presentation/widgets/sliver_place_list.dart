@@ -21,47 +21,45 @@ class SliverPlaceList extends StatelessWidget {
 
     return BlocSelector<PlaceListBloc, PlaceListState, PlaceListStatusPlaces>(
       selector: (state) => (status: state.status, places: state.places),
-      builder: (_, statusPlaces) {
-        return switch (statusPlaces.status) {
-          PlaceListStatus.initial => const SliverToBoxAdapter(
-              child: SizedBox.shrink(),
+      builder: (_, statusPlaces) => switch (statusPlaces.status) {
+        PlaceListStatus.initial => const SliverToBoxAdapter(
+            child: SizedBox.shrink(),
+          ),
+        PlaceListStatus.loading => const SliverFillRemaining(
+            child: Center(
+              child: CustomCircularLoadingIndicator(),
             ),
-          PlaceListStatus.loading => const SliverFillRemaining(
-              child: Center(
-                child: CustomCircularLoadingIndicator(),
-              ),
-            ),
-          PlaceListStatus.failure => const SliverFillRemaining(
-              child: ErrorPlaceHolder(),
-            ),
-          PlaceListStatus.success => SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                childCount: statusPlaces.places.length,
-                (_, index) {
-                  final place = statusPlaces.places[index];
+          ),
+        PlaceListStatus.failure => const SliverFillRemaining(
+            child: ErrorPlaceHolder(),
+          ),
+        PlaceListStatus.success => SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              childCount: statusPlaces.places.length,
+              (_, index) {
+                final place = statusPlaces.places[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: PlaceCard(
-                      place,
-                      toggleFavorites: () {
-                        context.read<FavouritePlacesBloc>().add(
-                              FavouritePlacesToFavouritesPressed(place),
-                            );
-                      },
-                    ),
-                  );
-                },
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                // Для горизонтальной ориентации отображаем 2 ряда карточек.
-                crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
-                mainAxisExtent: orientation == Orientation.portrait
-                    ? screenHeight * 0.3
-                    : screenHeight * 0.65,
-              ),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: PlaceCard(
+                    place,
+                    toggleFavorites: () {
+                      context.read<FavouritePlacesBloc>().add(
+                            FavouritePlacesToFavouritesPressed(place),
+                          );
+                    },
+                  ),
+                );
+              },
             ),
-        };
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              // Для горизонтальной ориентации отображаем 2 ряда карточек.
+              crossAxisCount: orientation == Orientation.portrait ? 1 : 2,
+              mainAxisExtent: orientation == Orientation.portrait
+                  ? screenHeight * 0.3
+                  : screenHeight * 0.65,
+            ),
+          ),
       },
     );
   }

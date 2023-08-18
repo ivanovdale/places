@@ -95,9 +95,7 @@ abstract final class AppRouter {
     Map<String, dynamic>? arguments,
   ) {
     return MaterialPageRoute<Object?>(
-      builder: (_) => PlaceSearchScreen(
-        placeFilters: arguments!['placeFilters'] as PlaceFilters,
-      ),
+      builder: (_) => const PlaceSearchScreen(),
     );
   }
 
@@ -105,9 +103,7 @@ abstract final class AppRouter {
     Map<String, dynamic>? arguments,
   ) {
     return MaterialPageRoute<PlaceFilters>(
-      builder: (_) => PlaceFiltersScreen(
-        placeFilters: arguments!['placeFilters'] as PlaceFilters,
-      ),
+      builder: (_) => const PlaceFiltersScreen(),
     );
   }
 

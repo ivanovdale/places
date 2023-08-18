@@ -12,15 +12,9 @@ class ShowPlacesElevatedButton extends StatelessWidget {
 
   /// Возвращает выбранные фильтры на предыдущий экран, где они будут применены.
   void _applyFilters(BuildContext context) {
-    final bloc = context.read<PlaceFiltersBloc>();
-    final state = bloc.state;
+    context.read<PlaceFiltersBloc>().add(PlaceFiltersSaved());
 
-    final selectedFilters = (
-      types: state.selectedPlaceTypeFilters,
-      radius: state.radius,
-    );
-
-    Navigator.of(context).pop(selectedFilters);
+    Navigator.of(context).pop();
   }
 
   @override
