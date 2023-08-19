@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
+import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 import 'package:places/mocks.dart' as mocked;
 
 part 'place_list_event.dart';
@@ -12,6 +15,7 @@ part 'place_list_state.dart';
 class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
   final PlaceInteractor _placeInteractor;
   final PlaceFiltersInteractor _placeFiltersInteractor;
+  late final StreamSubscription<PlaceFilters> _streamSubscription;
 
   PlaceListBloc({
     required PlaceInteractor placeInteractor,
@@ -23,13 +27,28 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     on(_onPlaceListLoadedOrFiltersUpdated);
   }
 
-  Future<void> _onPlaceFiltersSubscriptionRequested(
+  @override
+  Future<void> close() {
+    _streamSubscription.cancel();
+    return super.close();
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+
+    Error.throwWithStackTrace(
+      error.toString(),
+      stackTrace,
+    );
+  }
+
+  void _onPlaceFiltersSubscriptionRequested(
     PlaceFiltersSubscriptionRequested event,
     Emitter<PlaceListState> emit,
-  ) async {
-    _placeFiltersInteractor.placeFiltersStream
-        .listen((event) => add(_PlaceFiltersUpdated()));
-  }
+  ) =>
+      _streamSubscription = _placeFiltersInteractor.placeFiltersStream
+          .listen((event) => add(_PlaceFiltersUpdated()));
 
   Future<void> _onPlaceListLoadedOrFiltersUpdated(
     PlaceListEvent event,
@@ -64,16 +83,6 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     return state.copyWith(
       status: PlaceListStatus.success,
       places: places,
-    );
-  }
-
-  @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-
-    Error.throwWithStackTrace(
-      error.toString(),
-      stackTrace,
     );
   }
 }
