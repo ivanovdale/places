@@ -92,4 +92,6 @@ final class AppDependencies {
       firstEnterInteractor: firstEnterInteractor,
     );
   }
+
+  void dispose() => placeFiltersRepository.dispose();
 }

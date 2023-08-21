@@ -6,7 +6,7 @@ import 'package:places/core/helpers/app_router.dart';
 import 'package:places/core/presentation/res/themes.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final AppDependencies _appDependencies;
 
   const App({
@@ -15,9 +15,20 @@ class App extends StatelessWidget {
   }) : _appDependencies = appDependencies;
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void dispose() {
+    widget._appDependencies.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppProviders(
-      appDependencies: _appDependencies,
+      appDependencies: widget._appDependencies,
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return MaterialApp(

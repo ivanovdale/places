@@ -10,4 +10,6 @@ abstract interface class PlaceFiltersRepository {
   FutureOr<PlaceFilters> get placeFilters;
 
   FutureOr<bool> save(PlaceFilters placeFilters);
+
+  void dispose();
 }
