@@ -43,7 +43,7 @@ class AppProviders extends StatelessWidget {
             value: _appDependencies.placeInteractor,
           ),
           Provider.value(
-            value: _appDependencies.networkPlaceRepository,
+            value: _appDependencies.placeRepository,
           ),
           Provider.value(
             value: _appDependencies.placeFiltersInteractor,

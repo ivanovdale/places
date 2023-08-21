@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:places/core/domain/storage/key_value_storage.dart';
-import 'package:places/core/helpers/shared_prefs_keys.dart';
+import 'package:places/core/helpers/key_value_storage_keys.dart';
 import 'package:places/features/settings/domain/settings_repository.dart';
 
 final class SettingsDataRepository implements SettingsRepository {
@@ -9,7 +9,7 @@ final class SettingsDataRepository implements SettingsRepository {
 
   @override
   FutureOr<bool> get isDarkModeEnabled async =>
-      (await _keyValueStorage.getBool(SharedPrefsKeys.isDarkModeEnabled)) ??
+      (await _keyValueStorage.getBool(KeyValueStorageKeys.isDarkModeEnabled)) ??
       false;
 
   const SettingsDataRepository({
@@ -19,6 +19,6 @@ final class SettingsDataRepository implements SettingsRepository {
   @override
   Future<bool> changeAppTheme() async {
     return _keyValueStorage.setBool(
-        SharedPrefsKeys.isDarkModeEnabled, !(await isDarkModeEnabled));
+        KeyValueStorageKeys.isDarkModeEnabled, !(await isDarkModeEnabled));
   }
 }

@@ -17,10 +17,8 @@ import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final class AppDependencies {
-  final SharedPreferences sharedPreferences;
-
-  final FavouritePlaceRepository favouritePlaceDataRepository;
-  final PlaceRepository networkPlaceRepository;
+  final FavouritePlaceRepository favouritePlaceRepository;
+  final PlaceRepository placeRepository;
   final PlaceFiltersRepository placeFiltersRepository;
 
   final FavouritePlaceInteractor favouritePlaceInteractor;
@@ -30,9 +28,8 @@ final class AppDependencies {
   final FirstEnterInteractor firstEnterInteractor;
 
   AppDependencies._({
-    required this.sharedPreferences,
-    required this.favouritePlaceDataRepository,
-    required this.networkPlaceRepository,
+    required this.favouritePlaceRepository,
+    required this.placeRepository,
     required this.placeFiltersRepository,
     required this.favouritePlaceInteractor,
     required this.placeInteractor,
@@ -44,7 +41,7 @@ final class AppDependencies {
   static Future<AppDependencies> getDependencies() async {
     // Хранилища.
     final sharedPreferences = await SharedPreferences.getInstance();
-    final KeyValueStorage sharedPreferencesStorage = SharedPreferencesStorage(
+    final KeyValueStorage keyValueStorage = SharedPreferencesStorage(
       sharedPreferences: sharedPreferences,
     );
 
@@ -52,13 +49,13 @@ final class AppDependencies {
     final placeRepository = NetworkPlaceRepository(DioApi());
     final favouritePlaceRepository = FavouritePlaceDataRepository();
     final placeFiltersRepository = PlaceFiltersDataRepository(
-      keyValueStorage: sharedPreferencesStorage,
+      keyValueStorage: keyValueStorage,
     );
     final settingsRepository = SettingsDataRepository(
-      keyValueStorage: sharedPreferencesStorage,
+      keyValueStorage: keyValueStorage,
     );
     final firstEnterRepository = FirstEnterDataRepository(
-      keyValueStorage: sharedPreferencesStorage,
+      keyValueStorage: keyValueStorage,
     );
 
     // Use cases.
@@ -81,10 +78,9 @@ final class AppDependencies {
     );
 
     return AppDependencies._(
-      sharedPreferences: sharedPreferences,
-      favouritePlaceDataRepository: favouritePlaceRepository,
+      favouritePlaceRepository: favouritePlaceRepository,
       favouritePlaceInteractor: favouritePlaceInteractor,
-      networkPlaceRepository: placeRepository,
+      placeRepository: placeRepository,
       placeFiltersRepository: placeFiltersRepository,
       placeInteractor: placeInteractor,
       settingsInteractor: settingsInteractor,
