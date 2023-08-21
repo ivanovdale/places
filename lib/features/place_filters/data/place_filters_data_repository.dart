@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:places/core/domain/model/place.dart';
+import 'package:places/core/domain/storage/key_value_storage.dart';
 import 'package:places/core/helpers/app_constants.dart';
 import 'package:places/core/helpers/shared_prefs_keys.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-final class PlaceFiltersSharedPreferencesRepository
-    implements PlaceFiltersRepository {
-  final SharedPreferences _sharedPreferences;
+final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
+  final KeyValueStorage _keyValueStorage;
   final StreamController<PlaceFilters> _placeFiltersStreamController;
 
   @override
@@ -17,26 +16,28 @@ final class PlaceFiltersSharedPreferencesRepository
       _placeFiltersStreamController.stream.asBroadcastStream();
 
   @override
-  PlaceFilters get placeFilters => _getPlaceFiltersFromSharedPreferences();
+  Future<PlaceFilters> get placeFilters =>
+      _getPlaceFiltersFromSharedPreferences();
 
-  PlaceFiltersSharedPreferencesRepository({
-    required SharedPreferences sharedPreferences,
-  })  : _sharedPreferences = sharedPreferences,
+  PlaceFiltersDataRepository({
+    required KeyValueStorage keyValueStorage,
+  })  : _keyValueStorage = keyValueStorage,
         _placeFiltersStreamController = BehaviorSubject<PlaceFilters>() {
     _initialize();
   }
 
-  void _initialize() {
-    _placeFiltersStreamController.add(placeFilters);
-  }
+  Future<void> _initialize() async =>
+      _placeFiltersStreamController.add(await placeFilters);
 
-  PlaceFilters _getPlaceFiltersFromSharedPreferences() {
-    var types = _sharedPreferences
-        .getStringList(SharedPrefsKeys.types)
+  @override
+  void dispose() => _placeFiltersStreamController.close();
+
+  Future<PlaceFilters> _getPlaceFiltersFromSharedPreferences() async {
+    var types = (await _keyValueStorage.getStringList(SharedPrefsKeys.types))
         ?.map(PlaceTypes.fromString);
     types ??= PlaceTypes.values;
 
-    final radius = _sharedPreferences.getDouble(SharedPrefsKeys.radius) ??
+    final radius = await _keyValueStorage.getDouble(SharedPrefsKeys.radius) ??
         AppConstants.maxRangeValue;
 
     return (
@@ -48,11 +49,11 @@ final class PlaceFiltersSharedPreferencesRepository
   @override
   Future<bool> save(PlaceFilters placeFilters) async {
     var isSaved = false;
-    isSaved = await _sharedPreferences.setStringList(
+    isSaved = await _keyValueStorage.setStringList(
       SharedPrefsKeys.types,
       placeFilters.types.map((type) => type.name).toList(),
     );
-    isSaved = await _sharedPreferences.setDouble(
+    isSaved = await _keyValueStorage.setDouble(
       SharedPrefsKeys.radius,
       placeFilters.radius,
     );

@@ -1,16 +1,18 @@
 import 'package:places/core/api/dio_api.dart';
-import 'package:places/core/data/repository/first_enter_shared_preferences_repository.dart';
+import 'package:places/core/data/repository/first_enter_data_repository.dart';
 import 'package:places/core/data/repository/network_place_repository.dart';
+import 'package:places/core/data/storage/shared_preferences_storage.dart';
 import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
+import 'package:places/core/domain/storage/key_value_storage.dart';
 import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
 import 'package:places/features/favourite_places/data/favourite_place_interactor.dart';
 import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
-import 'package:places/features/place_filters/data/place_filters_shared_preferences_repository.dart';
+import 'package:places/features/place_filters/data/place_filters_data_repository.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
-import 'package:places/features/settings/data/settings_shared_preferences_repository.dart';
+import 'package:places/features/settings/data/settings_data_repository.dart';
 import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,45 +42,49 @@ final class AppDependencies {
   });
 
   static Future<AppDependencies> getDependencies() async {
+    // Хранилища.
     final sharedPreferences = await SharedPreferences.getInstance();
-
-    final networkPlaceRepository = NetworkPlaceRepository(DioApi());
-    final favouritePlaceDataRepository = FavouritePlaceDataRepository();
-    final placeFiltersRepository = PlaceFiltersSharedPreferencesRepository(
-      sharedPreferences: sharedPreferences,
-    );
-    final settingsSharedPreferencesRepository =
-        SettingsSharedPreferencesRepository(
-      sharedPreferences: sharedPreferences,
-    );
-    final firstEnterSharedPreferencesRepository =
-        FirstEnterSharedPreferencesRepository(
+    final KeyValueStorage sharedPreferencesStorage = SharedPreferencesStorage(
       sharedPreferences: sharedPreferences,
     );
 
+    // Репозитории.
+    final placeRepository = NetworkPlaceRepository(DioApi());
+    final favouritePlaceRepository = FavouritePlaceDataRepository();
+    final placeFiltersRepository = PlaceFiltersDataRepository(
+      keyValueStorage: sharedPreferencesStorage,
+    );
+    final settingsRepository = SettingsDataRepository(
+      keyValueStorage: sharedPreferencesStorage,
+    );
+    final firstEnterRepository = FirstEnterDataRepository(
+      keyValueStorage: sharedPreferencesStorage,
+    );
+
+    // Use cases.
     final favouritePlaceInteractor = FavouritePlaceInteractor(
-      favouritePlaceDataRepository,
+      favouritePlaceRepository,
     );
     final placeInteractor = PlaceInteractor(
-      placeRepository: networkPlaceRepository,
-      favouritePlaceRepository: favouritePlaceDataRepository,
+      placeRepository: placeRepository,
+      favouritePlaceRepository: favouritePlaceRepository,
       placeFiltersRepository: placeFiltersRepository,
     );
     final settingsInteractor = SettingsInteractor(
-      settingsRepository: settingsSharedPreferencesRepository,
+      settingsRepository: settingsRepository,
     );
     final placeFiltersInteractor = PlaceFiltersInteractor(
       placeFiltersRepository: placeFiltersRepository,
     );
     final firstEnterInteractor = FirstEnterInteractor(
-      firstEnterRepository: firstEnterSharedPreferencesRepository,
+      firstEnterRepository: firstEnterRepository,
     );
 
     return AppDependencies._(
       sharedPreferences: sharedPreferences,
-      favouritePlaceDataRepository: favouritePlaceDataRepository,
+      favouritePlaceDataRepository: favouritePlaceRepository,
       favouritePlaceInteractor: favouritePlaceInteractor,
-      networkPlaceRepository: networkPlaceRepository,
+      networkPlaceRepository: placeRepository,
       placeFiltersRepository: placeFiltersRepository,
       placeInteractor: placeInteractor,
       settingsInteractor: settingsInteractor,
