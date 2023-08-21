@@ -47,7 +47,7 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     PlaceFiltersSubscriptionRequested event,
     Emitter<PlaceListState> emit,
   ) =>
-      _streamSubscription = _placeFiltersInteractor.placeFiltersStream
+      _streamSubscription = _placeFiltersInteractor.placeFilters
           .listen((event) => add(_PlaceFiltersUpdated()));
 
   Future<void> _onPlaceListLoadedOrFiltersUpdated(

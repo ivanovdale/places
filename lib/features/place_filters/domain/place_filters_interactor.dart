@@ -5,11 +5,7 @@ import 'package:places/features/place_filters/domain/place_filters_repository.da
 final class PlaceFiltersInteractor {
   final PlaceFiltersRepository _placeFiltersRepository;
 
-  Stream<PlaceFilters> get placeFiltersStream =>
-      _placeFiltersRepository.placeFiltersStream;
-
-  FutureOr<PlaceFilters> get placeFilters =>
-      _placeFiltersRepository.placeFilters;
+  Stream<PlaceFilters> get placeFilters => _placeFiltersRepository.placeFilters;
 
   const PlaceFiltersInteractor({
     required PlaceFiltersRepository placeFiltersRepository,

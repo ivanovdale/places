@@ -35,7 +35,7 @@ class PlaceInteractor {
   }) async {
     var filterRequest = placesFilterRequest;
     if (useSavedFilters) {
-      final savedFilters = await placeFiltersRepository.placeFilters;
+      final savedFilters = await placeFiltersRepository.placeFilters.first;
       filterRequest = placesFilterRequest.copyWith(
         typeFilter: savedFilters.types.toList(),
         radius: savedFilters.radius,

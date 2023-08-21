@@ -69,7 +69,7 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     PlaceFiltersStarted event,
     Emitter<PlaceFiltersState> emit,
   ) async {
-    final placeFilters = await _placeFiltersInteractor.placeFilters;
+    final placeFilters = await _placeFiltersInteractor.placeFilters.first;
     emit(
       state.copyWith(
         selectedPlaceTypeFilters: placeFilters.types,

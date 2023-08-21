@@ -31,7 +31,7 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     PlaceSearchStarted event,
     Emitter<PlaceSearchState> emit,
   ) async {
-    final placeFilters = await _placeFiltersInteractor.placeFilters;
+    final placeFilters = await _placeFiltersInteractor.placeFilters.first;
     _placeSearchInteractor.setFilters(
       typeFilter: placeFilters.types.toList(),
       radius: placeFilters.radius,

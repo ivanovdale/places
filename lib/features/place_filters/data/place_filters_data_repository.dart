@@ -12,11 +12,8 @@ final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
   final StreamController<PlaceFilters> _placeFiltersStreamController;
 
   @override
-  Stream<PlaceFilters> get placeFiltersStream =>
+  Stream<PlaceFilters> get placeFilters =>
       _placeFiltersStreamController.stream.asBroadcastStream();
-
-  @override
-  Future<PlaceFilters> get placeFilters => _getPlaceFiltersFromStorage();
 
   PlaceFiltersDataRepository({
     required KeyValueStorage keyValueStorage,
@@ -26,26 +23,10 @@ final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
   }
 
   Future<void> _initialize() async =>
-      _placeFiltersStreamController.add(await placeFilters);
+      _placeFiltersStreamController.add(await _getPlaceFiltersFromStorage());
 
   @override
   void dispose() => _placeFiltersStreamController.close();
-
-  Future<PlaceFilters> _getPlaceFiltersFromStorage() async {
-    var types =
-        (await _keyValueStorage.getStringList(KeyValueStorageKeys.types))
-            ?.map(PlaceTypes.fromString);
-    types ??= PlaceTypes.values;
-
-    final radius =
-        await _keyValueStorage.getDouble(KeyValueStorageKeys.radius) ??
-            AppConstants.maxRangeValue;
-
-    return (
-      types: types.toSet(),
-      radius: radius,
-    );
-  }
 
   @override
   Future<bool> save(PlaceFilters placeFilters) async {
@@ -62,5 +43,21 @@ final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
     if (isSaved) _placeFiltersStreamController.add(placeFilters);
 
     return isSaved;
+  }
+
+  Future<PlaceFilters> _getPlaceFiltersFromStorage() async {
+    var types =
+        (await _keyValueStorage.getStringList(KeyValueStorageKeys.types))
+            ?.map(PlaceTypes.fromString);
+    types ??= PlaceTypes.values;
+
+    final radius =
+        await _keyValueStorage.getDouble(KeyValueStorageKeys.radius) ??
+            AppConstants.maxRangeValue;
+
+    return (
+      types: types.toSet(),
+      radius: radius,
+    );
   }
 }
