@@ -10,34 +10,34 @@ final class PlaceSearchStarted extends PlaceSearchEvent {
   });
 }
 
-final class UpdateSearchString extends PlaceSearchEvent {
+final class SearchStringUpdated extends PlaceSearchEvent {
   final String searchString;
 
-  UpdateSearchString(this.searchString);
+  SearchStringUpdated(this.searchString);
 }
 
-final class MakeSearch extends PlaceSearchEvent {
+final class SearchMade extends PlaceSearchEvent {
   final String searchQuery;
 
-  MakeSearch(this.searchQuery);
+  SearchMade(this.searchQuery);
 }
 
-final class AddToSearchHistory extends PlaceSearchEvent {
+final class ToSearchHistoryAdded extends PlaceSearchEvent {
   final Place place;
 
-  AddToSearchHistory(this.place);
+  ToSearchHistoryAdded(this.place);
 }
 
-final class RemoveFromSearchHistory extends PlaceSearchEvent {
+final class FromSearchHistoryRemoved extends PlaceSearchEvent {
   final Place place;
 
-  RemoveFromSearchHistory(this.place);
+  FromSearchHistoryRemoved(this.place);
 }
 
-final class ClearSearchHistory extends PlaceSearchEvent {}
+final class SearchHistoryCleared extends PlaceSearchEvent {}
 
-final class FillSearchString extends PlaceSearchEvent {
+final class SearchStringFilled extends PlaceSearchEvent {
   final Place place;
 
-  FillSearchString(this.place);
+  SearchStringFilled(this.place);
 }

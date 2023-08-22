@@ -19,12 +19,12 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
         _placeFiltersInteractor = placeFiltersInteractor,
         super(PlaceSearchState.initial()) {
     on<PlaceSearchStarted>(_onPlaceSearchStarted);
-    on<UpdateSearchString>(_onUpdateSearchString);
-    on<MakeSearch>(_onMakeSearch);
-    on<AddToSearchHistory>(_onAddToSearchHistory);
-    on<RemoveFromSearchHistory>(_onRemoveFromSearchHistory);
-    on<ClearSearchHistory>(_onClearSearchHistory);
-    on<FillSearchString>(_onFillSearchString);
+    on<SearchStringUpdated>(_onSearchStringUpdated);
+    on<SearchMade>(_onSearchMade);
+    on<ToSearchHistoryAdded>(_onToSearchHistoryAdded);
+    on<FromSearchHistoryRemoved>(_onFromSearchHistoryRemoved);
+    on<SearchHistoryCleared>(_onSearchHistoryCleared);
+    on<SearchStringFilled>(_onSearchStringFilled);
   }
 
   Future<void> _onPlaceSearchStarted(
@@ -39,8 +39,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onUpdateSearchString(
-    UpdateSearchString event,
+  void _onSearchStringUpdated(
+    SearchStringUpdated event,
     Emitter<PlaceSearchState> emit,
   ) {
     final newState = state.copyWith(
@@ -50,8 +50,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     emit(newState);
   }
 
-  Future<void> _onMakeSearch(
-    MakeSearch event,
+  Future<void> _onSearchMade(
+    SearchMade event,
     Emitter<PlaceSearchState> emit,
   ) async {
     emit(
@@ -70,8 +70,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onAddToSearchHistory(
-    AddToSearchHistory event,
+  void _onToSearchHistoryAdded(
+    ToSearchHistoryAdded event,
     Emitter<PlaceSearchState> emit,
   ) {
     final place = event.place;
@@ -87,8 +87,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onRemoveFromSearchHistory(
-    RemoveFromSearchHistory event,
+  void _onFromSearchHistoryRemoved(
+    FromSearchHistoryRemoved event,
     Emitter<PlaceSearchState> emit,
   ) {
     final place = event.place;
@@ -101,8 +101,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onClearSearchHistory(
-    ClearSearchHistory event,
+  void _onSearchHistoryCleared(
+    SearchHistoryCleared event,
     Emitter<PlaceSearchState> emit,
   ) {
     emit(
@@ -110,8 +110,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onFillSearchString(
-    FillSearchString event,
+  void _onSearchStringFilled(
+    SearchStringFilled event,
     Emitter<PlaceSearchState> emit,
   ) {
     emit(

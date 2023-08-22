@@ -88,12 +88,12 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
     final bloc = context.read<PlaceSearchBloc>();
     final searchString = _searchController.text.trim();
     bloc.add(
-      UpdateSearchString(searchString),
+      SearchStringUpdated(searchString),
     );
 
     if (searchString.isNotEmpty) {
       bloc.add(
-        MakeSearch(searchString),
+        SearchMade(searchString),
       );
     }
   }
@@ -132,13 +132,13 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
               isSearchStringEmpty: state.isSearchStringEmpty,
               isSearchQueryInProgress: state.isSearchInProgress,
               onPlacesFoundItemPressed: (place) => bloc.add(
-                AddToSearchHistory(place),
+                ToSearchHistoryAdded(place),
               ),
               onDeleteHistorySearchItemPressed: (place) => bloc.add(
-                RemoveFromSearchHistory(place),
+                FromSearchHistoryRemoved(place),
               ),
               onClearHistoryPressed: () => bloc.add(
-                ClearSearchHistory(),
+                SearchHistoryCleared(),
               ),
               onHistorySearchItemPressed: _fillSearchField,
             );
