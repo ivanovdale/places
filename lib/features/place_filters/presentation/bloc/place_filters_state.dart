@@ -17,8 +17,8 @@ final class PlaceFiltersState {
   });
 
   PlaceFiltersState.initial()
-      : selectedPlaceTypeFilters = PlaceTypes.values.toSet(),
-        radius = AppConstants.maxRangeValue,
+      : selectedPlaceTypeFilters = PlaceFiltersHelper.getDefaults().types,
+        radius = PlaceFiltersHelper.getDefaults().radius,
         filteredPlacesAmount = 0;
 
   PlaceFiltersState copyWith({

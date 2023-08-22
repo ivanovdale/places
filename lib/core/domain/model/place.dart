@@ -102,6 +102,11 @@ enum PlaceTypes {
     this.imagePath,
   );
 
+  factory PlaceTypes.fromString(String name) => PlaceTypes.values.firstWhere(
+        (type) => type.name == name,
+        orElse: () => PlaceTypes.other,
+      );
+
   final String text;
   final String name;
   final String imagePath;

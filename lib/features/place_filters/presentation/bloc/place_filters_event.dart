@@ -3,16 +3,7 @@ part of 'place_filters_bloc.dart';
 sealed class PlaceFiltersEvent {}
 
 final class PlaceFiltersStarted extends PlaceFiltersEvent {
-  /// Список выбранных фильтров по категории мест.
-  final Set<PlaceTypes> selectedPlaceTypeFilters;
-
-  /// Радиус поиска места.
-  final double radius;
-
-  PlaceFiltersStarted({
-    required this.selectedPlaceTypeFilters,
-    required this.radius,
-  });
+  PlaceFiltersStarted();
 }
 
 final class PlaceFiltersAllFiltersReset extends PlaceFiltersEvent {
@@ -33,6 +24,10 @@ final class PlaceFiltersRadiusSelected extends PlaceFiltersEvent {
   PlaceFiltersRadiusSelected({
     required this.radius,
   });
+}
+
+final class PlaceFiltersSaved extends PlaceFiltersEvent {
+  PlaceFiltersSaved();
 }
 
 /// Внутреннее событие обновления фильтров поиска места.

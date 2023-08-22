@@ -4,6 +4,7 @@ import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/favourite_places/presentation/favourite_places_screen.dart';
 import 'package:places/features/on_boarding/presentation/on_boarding_screen.dart';
 import 'package:places/features/place_details/presentation/place_details_screen.dart';
+import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 import 'package:places/features/place_filters/presentation/place_filters_screen.dart';
 import 'package:places/features/place_list/presentation/place_list_screen.dart';
 import 'package:places/features/place_search/presentation/place_search_screen.dart';
@@ -94,22 +95,15 @@ abstract final class AppRouter {
     Map<String, dynamic>? arguments,
   ) {
     return MaterialPageRoute<Object?>(
-      builder: (_) => PlaceSearchScreen(
-        placeTypeFilters: arguments!['placeTypeFilters'] as Set<PlaceTypes>,
-        radius: arguments['radius'] as double,
-      ),
+      builder: (_) => const PlaceSearchScreen(),
     );
   }
 
-  static MaterialPageRoute<Map<String, Object>> _getPlaceFiltersMaterialRoute(
+  static MaterialPageRoute<PlaceFilters?> _getPlaceFiltersMaterialRoute(
     Map<String, dynamic>? arguments,
   ) {
-    return MaterialPageRoute<Map<String, Object>>(
-      builder: (_) => PlaceFiltersScreen(
-        selectedPlaceTypeFilters:
-            arguments!['placeTypeFilters'] as Set<PlaceTypes>,
-        radius: arguments['radius'] as double,
-      ),
+    return MaterialPageRoute<PlaceFilters>(
+      builder: (_) => const PlaceFiltersScreen(),
     );
   }
 

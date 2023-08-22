@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 
 part 'place_details_state.dart';

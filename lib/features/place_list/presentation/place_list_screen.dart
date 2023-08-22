@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/core/data/interactor/place_interactor.dart';
+import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/helpers/app_router.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
+import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
 import 'package:places/features/place_list/presentation/widgets/add_new_place_button.dart';
 import 'package:places/features/place_list/presentation/widgets/sliver_app_bar/sliver_app_bar.dart'
@@ -38,9 +39,14 @@ class PlaceListScreen extends StatelessWidget {
 
     return BlocProvider(
       create: (_) => PlaceListBloc(
-        context.read<PlaceInteractor>(),
-      )..add(
+        placeInteractor: context.read<PlaceInteractor>(),
+        placeFiltersInteractor: context.read<PlaceFiltersInteractor>(),
+      )
+        ..add(
           PlaceListStarted(),
+        )
+        ..add(
+          PlaceFiltersSubscriptionRequested(),
         ),
       child: Scaffold(
         // Скрываем боттом бар при горизонтальной ориентации.

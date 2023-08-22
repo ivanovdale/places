@@ -28,6 +28,8 @@ dependencies:
 
   rxdart: ^0.27.7
 
+  shared_preferences: ^2.2.0
+
   surf_lint_rules: ^3.0.0
 
 dev_dependencies:

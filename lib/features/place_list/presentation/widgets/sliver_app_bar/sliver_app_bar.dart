@@ -4,9 +4,7 @@ import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
-import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
 import 'package:places/features/place_list/presentation/widgets/sliver_app_bar/components/filter_button.dart';
-import 'package:provider/provider.dart';
 
 /// Кастомный аппбар на сливере.
 class SliverAppBar extends StatelessWidget {
@@ -37,6 +35,14 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   const _CustomAppBarDelegate({
     required this.expandedHeight,
   });
+
+  /// Открывает экран поиска мест.
+  Future<void> _navigateToPlaceSearchScreen(BuildContext context) async {
+    await Navigator.pushNamed<void>(
+      context,
+      AppRouter.placeSearch,
+    );
+  }
 
   @override
   Widget build(
@@ -94,20 +100,5 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
-  }
-
-  /// Открывает экран поиска мест.
-  void _navigateToPlaceSearchScreen(BuildContext context) {
-    final bloc = context.read<PlaceListBloc>();
-    final state = bloc.state;
-
-    Navigator.pushNamed(
-      context,
-      AppRouter.placeSearch,
-      arguments: {
-        'placeTypeFilters': state.placeTypeFilters,
-        'radius': state.radius,
-      },
-    );
   }
 }

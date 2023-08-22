@@ -10,6 +10,13 @@ class ShowPlacesElevatedButton extends StatelessWidget {
     super.key,
   });
 
+  /// Возвращает выбранные фильтры на предыдущий экран, где они будут применены.
+  void _applyFilters(BuildContext context) {
+    context.read<PlaceFiltersBloc>().add(PlaceFiltersSaved());
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredPlacesAmount = context.select<PlaceFiltersBloc, int>(
@@ -34,21 +41,8 @@ class ShowPlacesElevatedButton extends StatelessWidget {
         ),
         backgroundColor: buttonBackgroundColor,
         height: 48,
-        onPressed: () => applyFilters(context),
+        onPressed: () => _applyFilters(context),
       ),
     );
-  }
-
-  /// Возвращает выбранные фильтры на предыдущий экран, где они будут применены.
-  void applyFilters(BuildContext context) {
-    final bloc = context.read<PlaceFiltersBloc>();
-    final state = bloc.state;
-
-    final selectedFilters = <String, Object>{
-      'placeTypeFilters': state.selectedPlaceTypeFilters,
-      'radius': state.radius,
-    };
-
-    Navigator.of(context).pop(selectedFilters);
   }
 }

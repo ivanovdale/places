@@ -55,4 +55,18 @@ class PlacesFilterRequest {
 
     return placesFilterRequestDto;
   }
+
+  PlacesFilterRequest copyWith({
+    CoordinatePoint? coordinatePoint,
+    double? radius,
+    List<PlaceTypes>? typeFilter,
+    String? nameFilter,
+  }) {
+    return PlacesFilterRequest(
+      coordinatePoint: coordinatePoint ?? this.coordinatePoint,
+      radius: radius ?? this.radius,
+      typeFilter: typeFilter ?? this.typeFilter,
+      nameFilter: nameFilter ?? this.nameFilter,
+    );
+  }
 }

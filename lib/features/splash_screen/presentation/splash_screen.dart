@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_colors.dart';
 import 'package:places/core/helpers/app_router.dart';
@@ -27,7 +29,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    final (:controller, :animation) = LogoAnimationHelper.getSettings(vsync: this);
+    final (:controller, :animation) =
+        LogoAnimationHelper.getSettings(vsync: this);
     _animationController = controller;
     _rotationAnimation = animation;
 
@@ -36,17 +39,18 @@ class _SplashScreenState extends State<SplashScreen>
 
   // Дожидаемся инициализации приложения для перехода на следующий экран.
   Future<void> _navigateToNextScreen() async {
+    final navigator = Navigator.of(context);
+    final firstEnterInteractor = context.read<FirstEnterInteractor>();
+    final isFirstEnter = await firstEnterInteractor.isFirstEnter;
+    if (isFirstEnter) firstEnterInteractor.saveFirstEnter();
+
     await Future.delayed(
       const Duration(milliseconds: 3200),
-      () => true,
     );
 
-    if (context.mounted) {
-      await Navigator.pushReplacementNamed(
-        context,
-        AppRouter.onboarding,
-      );
-    }
+    await navigator.pushReplacementNamed(
+      isFirstEnter ? AppRouter.onboarding : AppRouter.placeList,
+    );
   }
 
   @override

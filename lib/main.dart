@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:places/app/app.dart';
+import 'package:places/app/app_dependencies.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // Локализация форматирования даты в приложении.
-  initializeDateFormatting('ru', '');
+  await initializeDateFormatting('ru', '');
+  final dependencies = await AppDependencies.getDependencies();
 
   runApp(
-    const App(),
+    App(
+      appDependencies: dependencies,
+    ),
   );
 }
