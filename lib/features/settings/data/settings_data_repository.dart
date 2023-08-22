@@ -17,8 +17,6 @@ final class SettingsDataRepository implements SettingsRepository {
   }) : _keyValueStorage = keyValueStorage;
 
   @override
-  Future<bool> changeAppTheme() async {
-    return _keyValueStorage.setBool(
-        KeyValueStorageKeys.isDarkModeEnabled, !(await isDarkModeEnabled));
-  }
+  Future<bool> changeAppTheme() async => _keyValueStorage.setBool(
+      KeyValueStorageKeys.isDarkModeEnabled, !(await isDarkModeEnabled));
 }

@@ -9,7 +9,8 @@ import 'package:rxdart/rxdart.dart';
 
 final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
   final KeyValueStorage _keyValueStorage;
-  final StreamController<PlaceFilters> _placeFiltersStreamController;
+  final StreamController<PlaceFilters> _placeFiltersStreamController =
+      BehaviorSubject<PlaceFilters>();
 
   @override
   Stream<PlaceFilters> get placeFilters =>
@@ -17,8 +18,7 @@ final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
 
   PlaceFiltersDataRepository({
     required KeyValueStorage keyValueStorage,
-  })  : _keyValueStorage = keyValueStorage,
-        _placeFiltersStreamController = BehaviorSubject<PlaceFilters>() {
+  }) : _keyValueStorage = keyValueStorage {
     _initialize();
   }
 
@@ -30,19 +30,19 @@ final class PlaceFiltersDataRepository implements PlaceFiltersRepository {
 
   @override
   Future<bool> save(PlaceFilters placeFilters) async {
-    var isSaved = false;
-    isSaved = await _keyValueStorage.setStringList(
+    final isTypesSaved = await _keyValueStorage.setStringList(
       KeyValueStorageKeys.types,
       placeFilters.types.map((type) => type.name).toList(),
     );
-    isSaved = await _keyValueStorage.setDouble(
+    final isRadiusSaved = await _keyValueStorage.setDouble(
       KeyValueStorageKeys.radius,
       placeFilters.radius,
     );
 
-    if (isSaved) _placeFiltersStreamController.add(placeFilters);
+    final isFiltersSaved = isTypesSaved && isRadiusSaved;
+    if (isFiltersSaved) _placeFiltersStreamController.add(placeFilters);
 
-    return isSaved;
+    return isFiltersSaved;
   }
 
   Future<PlaceFilters> _getPlaceFiltersFromStorage() async {
