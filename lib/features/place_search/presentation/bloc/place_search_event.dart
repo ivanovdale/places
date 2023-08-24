@@ -2,42 +2,30 @@ part of 'place_search_bloc.dart';
 
 sealed class PlaceSearchEvent {}
 
-final class PlaceSearchStarted extends PlaceSearchEvent {
+final class PlaceSearchSubscriptionRequested extends PlaceSearchEvent {
   final CoordinatePoint userCoordinates;
 
-  PlaceSearchStarted({
+  PlaceSearchSubscriptionRequested({
     required this.userCoordinates,
   });
 }
 
-final class SearchStringUpdated extends PlaceSearchEvent {
+final class PlaceSearchStringUpdated extends PlaceSearchEvent {
   final String searchString;
 
-  SearchStringUpdated(this.searchString);
+  PlaceSearchStringUpdated(this.searchString);
 }
 
-final class SearchMade extends PlaceSearchEvent {
-  final String searchQuery;
-
-  SearchMade(this.searchQuery);
-}
-
-final class ToSearchHistoryAdded extends PlaceSearchEvent {
+final class PlaceSearchToSearchHistoryAdded extends PlaceSearchEvent {
   final Place place;
 
-  ToSearchHistoryAdded(this.place);
+  PlaceSearchToSearchHistoryAdded(this.place);
 }
 
-final class FromSearchHistoryRemoved extends PlaceSearchEvent {
-  final Place place;
+final class PlaceSearchFromSearchHistoryRemoved extends PlaceSearchEvent {
+  final SearchHistoryItem searchHistoryItem;
 
-  FromSearchHistoryRemoved(this.place);
+  PlaceSearchFromSearchHistoryRemoved(this.searchHistoryItem);
 }
 
-final class SearchHistoryCleared extends PlaceSearchEvent {}
-
-final class SearchStringFilled extends PlaceSearchEvent {
-  final Place place;
-
-  SearchStringFilled(this.place);
-}
+final class PlaceSearchSearchHistoryCleared extends PlaceSearchEvent {}
