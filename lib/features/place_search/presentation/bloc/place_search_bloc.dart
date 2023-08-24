@@ -11,12 +11,15 @@ part 'place_search_state.dart';
 class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
   final PlaceSearchInteractor _placeSearchInteractor;
   final PlaceFiltersInteractor _placeFiltersInteractor;
+  final PlaceSearchHistoryInteractor _placeSearchHistoryInteractor;
 
   PlaceSearchBloc({
     required PlaceSearchInteractor placeSearchInteractor,
     required PlaceFiltersInteractor placeFiltersInteractor,
+    required PlaceSearchHistoryInteractor placeSearchHistoryInteractor,
   })  : _placeSearchInteractor = placeSearchInteractor,
         _placeFiltersInteractor = placeFiltersInteractor,
+        _placeSearchHistoryInteractor = placeSearchHistoryInteractor,
         super(PlaceSearchState.initial()) {
     on<PlaceSearchStarted>(_onPlaceSearchStarted);
     on<SearchStringUpdated>(_onSearchStringUpdated);
@@ -27,8 +30,8 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     on<SearchStringFilled>(_onSearchStringFilled);
   }
 
-  Future<void> _onPlaceSearchStarted(
-    PlaceSearchStarted event,
+  Future<void> _onSubscriptionRequested(
+    PlaceSearchSubscriptionRequested event,
     Emitter<PlaceSearchState> emit,
   ) async {
     final placeFilters = await _placeFiltersInteractor.placeFilters.first;
@@ -39,12 +42,11 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onSearchStringUpdated(
-    SearchStringUpdated event,
-    Emitter<PlaceSearchState> emit,
-  ) {
-    final newState = state.copyWith(
-      searchString: event.searchString,
+    await emit.forEach<List<SearchHistoryItem>>(
+      _placeSearchHistoryInteractor.getSearchHistory(),
+      onData: (searchHistory) => state.copyWith(
+        searchHistory: searchHistory.toSet(),
+      ),
     );
 
     emit(newState);
