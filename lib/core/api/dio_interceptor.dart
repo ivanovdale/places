@@ -14,8 +14,12 @@ import 'package:places/core/api/exceptions/unauthorized_exception.dart';
 /// Позволяет вывести в консоль полученные данные и также выводит ошибки, если они есть.
 class DioInterceptor extends Interceptor {
   final Dio dio;
+  final bool useLogger;
 
-  DioInterceptor(this.dio);
+  DioInterceptor(
+    this.dio, {
+    this.useLogger = false,
+  });
 
   @override
   Future<dynamic> onResponse(
@@ -94,6 +98,6 @@ class DioInterceptor extends Interceptor {
   }
 
   void logPrint(String text) {
-    developer.log(text, name: 'place.dio');
+    if (useLogger) developer.log(text, name: 'place.dio');
   }
 }
