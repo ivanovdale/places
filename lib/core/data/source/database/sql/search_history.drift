@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS [search_history_items] (
+   [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   [name] TEXT NOT NULL,
+   [image_url] TEXT NOT NULL,
+   [place_id] INTEGER NOT NULL
+);
+
+_getSearchHistory:
+    SELECT * FROM [search_history_items];
+_insertSearchHistoryItem:
+    INSERT INTO [search_history_items] (name, image_url, place_id)
+    VALUES (:name, :image_url, :place_id);
+_deleteSearchHistoryItem:
+    DELETE FROM [search_history_items]
+    WHERE place_id = :id;
+_deleteAllSearchHistory:
+    DELETE FROM [search_history_items];
