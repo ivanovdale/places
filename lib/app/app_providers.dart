@@ -40,10 +40,13 @@ class AppProviders extends StatelessWidget {
       child: MultiProvider(
         providers: [
           Provider.value(
-            value: _appDependencies.placeInteractor,
+            value: _appDependencies.database,
           ),
           Provider.value(
             value: _appDependencies.placeRepository,
+          ),
+          Provider.value(
+            value: _appDependencies.placeInteractor,
           ),
           Provider.value(
             value: _appDependencies.placeFiltersInteractor,
