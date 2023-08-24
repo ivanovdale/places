@@ -23,8 +23,12 @@ class DatabaseImpl extends _$DatabaseImpl implements Database {
   int get schemaVersion => 1;
 
   @override
-  Future<List<SearchHistoryItemDao>> getSearchHistory() =>
-      _getSearchHistory().get();
+  Stream<List<SearchHistoryItemDao>> getSearchHistory() =>
+      _getSearchHistory().watch();
+
+  @override
+  Future<SearchHistoryItemDao?> getSearchHistoryItemById(int id) =>
+      _getSearchHistoryItemById(id).getSingleOrNull();
 
   @override
   Future<void> addToSearchHistory(

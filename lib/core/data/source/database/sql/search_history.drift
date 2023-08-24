@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS [search_history_items] (
 
 _getSearchHistory:
     SELECT * FROM [search_history_items];
+_getSearchHistoryItemById:
+    SELECT * FROM [search_history_items]
+     WHERE place_id = :id
+     LIMIT 1;
 _insertSearchHistoryItem:
     INSERT INTO [search_history_items] (name, image_url, place_id)
     VALUES (:name, :image_url, :place_id);

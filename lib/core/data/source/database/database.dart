@@ -2,7 +2,9 @@ import 'package:places/core/data/source/database/database_impl.dart';
 import 'package:places/features/place_search/data/dao/search_history_item_dao.dart';
 
 abstract interface class Database {
-  Future<List<SearchHistoryItemDao>> getSearchHistory();
+  Stream<List<SearchHistoryItemDao>> getSearchHistory();
+
+  Future<SearchHistoryItemDao?> getSearchHistoryItemById(int id);
 
   Future<void> addToSearchHistory(
     SearchHistoryItemsCompanion searchHistoryItem,
