@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
+
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 
 /// Модель места.
 ///
@@ -46,6 +48,16 @@ class Place with EquatableMixin {
     this.photoUrlList,
     this.distance,
   });
+
+  factory Place.fromSearchHistoryItem(SearchHistoryItem searchHistoryItem) =>
+      Place(
+        id: searchHistoryItem.id,
+        name: searchHistoryItem.name,
+        coordinatePoint: CoordinatePoint.empty(),
+        details: '',
+        type: PlaceTypes.other,
+        photoUrlList: [searchHistoryItem.imageUrl],
+      );
 }
 
 /// Типы мест с названиями и иконками.
