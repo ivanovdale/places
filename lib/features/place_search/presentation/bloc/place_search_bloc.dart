@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
-import 'package:places/features/place_search/domain/place_search_interactor.dart';
+import 'package:places/features/place_search/domain/interactor/place_search_history_interactor.dart';
+import 'package:places/features/place_search/domain/interactor/place_search_interactor.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 
 part 'place_search_event.dart';
 
@@ -21,13 +23,11 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
         _placeFiltersInteractor = placeFiltersInteractor,
         _placeSearchHistoryInteractor = placeSearchHistoryInteractor,
         super(PlaceSearchState.initial()) {
-    on<PlaceSearchStarted>(_onPlaceSearchStarted);
-    on<SearchStringUpdated>(_onSearchStringUpdated);
-    on<SearchMade>(_onSearchMade);
-    on<ToSearchHistoryAdded>(_onToSearchHistoryAdded);
-    on<FromSearchHistoryRemoved>(_onFromSearchHistoryRemoved);
-    on<SearchHistoryCleared>(_onSearchHistoryCleared);
-    on<SearchStringFilled>(_onSearchStringFilled);
+    on<PlaceSearchSubscriptionRequested>(_onSubscriptionRequested);
+    on<PlaceSearchStringUpdated>(_onSearchStringUpdated);
+    on<PlaceSearchToSearchHistoryAdded>(_onToSearchHistoryAdded);
+    on<PlaceSearchFromSearchHistoryRemoved>(_onFromSearchHistoryRemoved);
+    on<PlaceSearchSearchHistoryCleared>(_onSearchHistoryCleared);
   }
 
   Future<void> _onSubscriptionRequested(
@@ -40,7 +40,6 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
       radius: placeFilters.radius,
       userCoordinates: event.userCoordinates,
     );
-  }
 
     await emit.forEach<List<SearchHistoryItem>>(
       _placeSearchHistoryInteractor.getSearchHistory(),
@@ -48,22 +47,19 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
         searchHistory: searchHistory.toSet(),
       ),
     );
-
-    emit(newState);
   }
 
-  Future<void> _onSearchMade(
-    SearchMade event,
+  Future<void> _onSearchStringUpdated(
+    PlaceSearchStringUpdated event,
     Emitter<PlaceSearchState> emit,
   ) async {
-    emit(
-      state.copyWith(isSearchInProgress: true),
-    );
+    final searchString = event.searchString;
+    emit(state.copyWith(searchString: searchString));
 
-    final placesFound = await _placeSearchInteractor.getFilteredPlaces(
-      event.searchQuery,
-    );
+    if (searchString.isEmpty) return;
 
+    final placesFound =
+        await _placeSearchInteractor.getFilteredPlaces(searchString);
     emit(
       state.copyWith(
         placesFoundList: placesFound,
@@ -72,52 +68,31 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     );
   }
 
-  void _onToSearchHistoryAdded(
-    ToSearchHistoryAdded event,
+  Future<void> _onToSearchHistoryAdded(
+    PlaceSearchToSearchHistoryAdded event,
     Emitter<PlaceSearchState> emit,
-  ) {
+  ) async {
     final place = event.place;
-    final searchHistory = {...state.searchHistory};
-    if (!searchHistory.contains(place)) {
-      searchHistory.add(place);
-    }
+    final isInHistory = await _placeSearchHistoryInteractor
+        .getSearchHistoryItemById(place.id!)
+        .then((value) => value != null);
 
-    emit(
-      state.copyWith(
-        searchHistory: searchHistory,
-      ),
-    );
+    if (!isInHistory) {
+      await _placeSearchHistoryInteractor
+          .addToSearchHistory(SearchHistoryItem.fromPlace(place));
+    }
   }
 
   void _onFromSearchHistoryRemoved(
-    FromSearchHistoryRemoved event,
+    PlaceSearchFromSearchHistoryRemoved event,
     Emitter<PlaceSearchState> emit,
-  ) {
-    final place = event.place;
-    final searchHistory = {...state.searchHistory}..remove(place);
-
-    emit(
-      state.copyWith(
-        searchHistory: searchHistory,
-      ),
-    );
-  }
+  ) =>
+      _placeSearchHistoryInteractor
+          .removeFromSearchHistory(event.searchHistoryItem.id);
 
   void _onSearchHistoryCleared(
-    SearchHistoryCleared event,
+    PlaceSearchSearchHistoryCleared event,
     Emitter<PlaceSearchState> emit,
-  ) {
-    emit(
-      state.copyWith(searchHistory: {}),
-    );
-  }
-
-  void _onSearchStringFilled(
-    SearchStringFilled event,
-    Emitter<PlaceSearchState> emit,
-  ) {
-    emit(
-      state.copyWith(searchString: event.place.name),
-    );
-  }
+  ) =>
+      _placeSearchHistoryInteractor.clearSearchHistory();
 }
