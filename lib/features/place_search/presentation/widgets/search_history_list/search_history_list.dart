@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/label_field_text.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_history_items.dart';
 
 /// Список истории поиска.
 ///
 /// Содержит элементы истории поиска, кнопку очистки истории поиска.
 class SearchHistoryList extends StatelessWidget {
-  final Set<Place> searchHistory;
+  final Set<SearchHistoryItem> searchHistory;
   final VoidCallback? onClearHistoryPressed;
-  final ValueSetter<Place>? onHistorySearchItemPressed;
-  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryList({
     super.key,

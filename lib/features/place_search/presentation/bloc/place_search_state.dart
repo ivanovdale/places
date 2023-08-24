@@ -5,7 +5,7 @@ final class PlaceSearchState {
   List<Place> placesFoundList;
 
   /// История поиска мест.
-  Set<Place> searchHistory;
+  Set<SearchHistoryItem> searchHistory;
 
   /// Флаг начала процесса поиска мест.
   bool isSearchInProgress;
@@ -30,7 +30,7 @@ final class PlaceSearchState {
 
   PlaceSearchState copyWith({
     List<Place>? placesFoundList,
-    Set<Place>? searchHistory,
+    Set<SearchHistoryItem>? searchHistory,
     bool? isSearchInProgress,
     String? searchString,
   }) {
