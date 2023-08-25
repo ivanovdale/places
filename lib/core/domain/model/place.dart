@@ -18,7 +18,8 @@ import 'package:places/features/place_search/domain/model/search_history_item.da
 /// * [visitDate] - запланированная дата посещения. Например, 12 окт. 2022;
 /// * [isFavorite] - признак добавления в избранное;
 /// * [visited] - признак посещения;
-/// * [distance] - расстояние от пользователя до места.
+/// * [distance] - расстояние от пользователя до места;
+/// * [position] - позиция места в списке избранного.
 class Place with EquatableMixin {
   int? id;
   String name;
@@ -31,6 +32,7 @@ class Place with EquatableMixin {
   bool isFavorite;
   bool visited;
   double? distance;
+  int? position;
 
   @override
   List<Object?> get props => [id];
@@ -47,6 +49,7 @@ class Place with EquatableMixin {
     this.visited = false,
     this.photoUrlList,
     this.distance,
+    this.position,
   });
 
   factory Place.fromSearchHistoryItem(SearchHistoryItem searchHistoryItem) =>
