@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
-import 'package:places/features/favourite_places/presentation/bloc/favourite_place_cubit/favourite_place_cubit.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_place_bloc/favourite_place_bloc.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_place_bloc/favourite_place_event.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_state.dart';
@@ -23,8 +24,8 @@ class VisitingTabBarView extends StatelessWidget {
       child: BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
         builder: (_, state) => switch (state.status) {
           FavouritePlacesStatus.loading => const Center(
-            child: CustomCircularLoadingIndicator(),
-          ),
+              child: CustomCircularLoadingIndicator(),
+            ),
           FavouritePlacesStatus.success => _TabBarView(
               tabController: tabController,
             ),
@@ -59,10 +60,13 @@ class _TabBarView extends StatelessWidget {
     void onPlaceDateTimePicked(
       BuildContext context,
       DateTime pickedDateTime,
-    ) =>
-        context
-            .read<FavouritePlaceCubit>()
-            .updateToVisitPlaceDateTime(pickedDateTime);
+    ) {
+      context.read<FavouritePlaceBloc>().add(
+            FavouritePlaceToVisitPlaceDateTimeUpdated(
+              dateTime: pickedDateTime,
+            ),
+          );
+    }
 
     return BlocBuilder<FavouritePlacesBloc, FavouritePlacesState>(
       builder: (_, state) {

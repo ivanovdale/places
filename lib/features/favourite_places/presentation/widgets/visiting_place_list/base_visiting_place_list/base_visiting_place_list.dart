@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_pickers/utils/custom_date_time_picker_helper.dart';
 import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
-import 'package:places/features/favourite_places/presentation/bloc/favourite_place_cubit/favourite_place_cubit.dart';
+import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_place_bloc/favourite_place_bloc.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/components/draggable_place_card_with_drag_target_option.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/to_visit_place_card.dart';
 import 'package:places/features/favourite_places/presentation/widgets/cards/visited_place_card.dart';
@@ -136,11 +137,15 @@ class _BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) =>
                         widget.onPlaceDeleted?.call(place),
-                    key: ObjectKey(place),
+                    key: ValueKey(place.id),
                     child: BlocProvider(
-                      create: (_) => FavouritePlaceCubit(place),
+                      create: (_) => FavouritePlaceBloc(
+                        place: place,
+                        favouritePlaceInteractor:
+                            context.read<FavouritePlaceInteractor>(),
+                      ),
                       child:
-                          BlocBuilder<FavouritePlaceCubit, FavouritePlaceState>(
+                          BlocBuilder<FavouritePlaceBloc, FavouritePlaceState>(
                         builder: (context, state) {
                           final placeCard = _getPlaceCard(context, place);
                           final currentPlace = state.place;
