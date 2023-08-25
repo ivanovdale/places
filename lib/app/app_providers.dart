@@ -54,6 +54,9 @@ class AppProviders extends StatelessWidget {
           Provider.value(
             value: _appDependencies.firstEnterInteractor,
           ),
+          Provider.value(
+            value: _appDependencies.favouritePlaceInteractor,
+          ),
         ],
         child: child,
       ),

@@ -8,9 +8,9 @@ import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/domain/storage/key_value_storage.dart';
-import 'package:places/features/favourite_places/data/favourite_place_data_repository.dart';
-import 'package:places/features/favourite_places/data/favourite_place_interactor.dart';
-import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
+import 'package:places/features/favourite_places/data/repository/favourite_place_data_repository.dart';
+import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
+import 'package:places/features/favourite_places/domain/repository/favourite_place_repository.dart';
 import 'package:places/features/place_filters/data/place_filters_data_repository.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
@@ -58,7 +58,9 @@ final class AppDependencies {
 
     // Репозитории.
     final placeRepository = NetworkPlaceRepository(DioApi());
-    final favouritePlaceRepository = FavouritePlaceDataRepository();
+    final favouritePlaceRepository = FavouritePlaceDataRepository(
+      database: database,
+    );
     final placeFiltersRepository = PlaceFiltersDataRepository(
       keyValueStorage: keyValueStorage,
     );
@@ -71,7 +73,7 @@ final class AppDependencies {
 
     // Use cases.
     final favouritePlaceInteractor = FavouritePlaceInteractor(
-      favouritePlaceRepository,
+      favouritePlaceRepository: favouritePlaceRepository,
     );
     final placeInteractor = PlaceInteractor(
       placeRepository: placeRepository,
