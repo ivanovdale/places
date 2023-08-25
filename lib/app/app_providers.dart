@@ -28,7 +28,7 @@ class AppProviders extends StatelessWidget {
           create: (_) => FavouritePlacesBloc(
             _appDependencies.favouritePlaceInteractor,
           )..add(
-              FavouritePlacesStarted(),
+              FavouritePlacesSubscriptionRequested(),
             ),
         ),
         BlocProvider(

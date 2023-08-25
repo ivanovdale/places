@@ -2,7 +2,7 @@ import 'package:places/core/domain/model/place.dart';
 
 sealed class FavouritePlacesEvent {}
 
-final class FavouritePlacesStarted extends FavouritePlacesEvent {}
+final class FavouritePlacesSubscriptionRequested extends FavouritePlacesEvent {}
 
 final class FavouritePlacesToFavouritesPressed extends FavouritePlacesEvent {
   final Place place;
