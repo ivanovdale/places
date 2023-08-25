@@ -3,12 +3,12 @@ import 'package:places/features/place_search/domain/model/search_history_item.da
 abstract interface class PlaceSearchHistoryRepository {
   Stream<List<SearchHistoryItem>> getSearchHistory();
 
-  Future<SearchHistoryItem?> getSearchHistoryItemById(int placeId);
+  Future<SearchHistoryItem?> getSearchHistoryItemById(int id);
 
   Future<void> addToSearchHistory(SearchHistoryItem searchHistoryItem);
 
-  /// [placeId] - id бэкенда.
-  Future<void> removeFromSearchHistory(int placeId);
+  /// [id] - id бэкенда.
+  Future<void> removeFromSearchHistory(int id);
 
   Future<void> clearSearchHistory();
 }

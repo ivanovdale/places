@@ -20,7 +20,7 @@ class DatabaseImpl extends _$DatabaseImpl implements Database {
         );
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   Stream<List<SearchHistoryItemDao>> getSearchHistory() =>
@@ -35,9 +35,9 @@ class DatabaseImpl extends _$DatabaseImpl implements Database {
     SearchHistoryItemsCompanion searchHistoryItem,
   ) =>
       _insertSearchHistoryItem(
+        searchHistoryItem.id.value,
         searchHistoryItem.name.value,
         searchHistoryItem.imageUrl.value,
-        searchHistoryItem.placeId.value,
       );
 
   @override

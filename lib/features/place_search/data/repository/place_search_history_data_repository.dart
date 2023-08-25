@@ -17,8 +17,8 @@ final class PlaceSearchHistoryDataRepository
       .map((searchHistory) => searchHistory.toModelList());
 
   @override
-  Future<SearchHistoryItem?> getSearchHistoryItemById(int placeId) =>
-      _database.getSearchHistoryItemById(placeId).then(
+  Future<SearchHistoryItem?> getSearchHistoryItemById(int id) =>
+      _database.getSearchHistoryItemById(id).then(
             (value) => value?.toModel(),
           );
 
@@ -30,6 +30,6 @@ final class PlaceSearchHistoryDataRepository
   Future<void> clearSearchHistory() => _database.clearSearchHistory();
 
   @override
-  Future<void> removeFromSearchHistory(int placeId) =>
-      _database.removeFromSearchHistory(placeId);
+  Future<void> removeFromSearchHistory(int id) =>
+      _database.removeFromSearchHistory(id);
 }

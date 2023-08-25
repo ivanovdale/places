@@ -11,14 +11,14 @@ final class PlaceSearchHistoryInteractor {
   Stream<List<SearchHistoryItem>> getSearchHistory() =>
       _placeSearchHistoryRepository.getSearchHistory();
 
-  Future<SearchHistoryItem?> getSearchHistoryItemById(int placeId) =>
-      _placeSearchHistoryRepository.getSearchHistoryItemById(placeId);
+  Future<SearchHistoryItem?> getSearchHistoryItemById(int id) =>
+      _placeSearchHistoryRepository.getSearchHistoryItemById(id);
 
   Future<void> addToSearchHistory(SearchHistoryItem searchHistoryItem) =>
       _placeSearchHistoryRepository.addToSearchHistory(searchHistoryItem);
 
-  Future<void> removeFromSearchHistory(int placeId) =>
-      _placeSearchHistoryRepository.removeFromSearchHistory(placeId);
+  Future<void> removeFromSearchHistory(int id) =>
+      _placeSearchHistoryRepository.removeFromSearchHistory(id);
 
   Future<void> clearSearchHistory() =>
       _placeSearchHistoryRepository.clearSearchHistory();
