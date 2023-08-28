@@ -1,0 +1,35 @@
+CREATE TABLE IF NOT EXISTS [favourites] (
+   [id] INTEGER PRIMARY KEY NOT NULL,
+   [name] TEXT NOT NULL,
+   [image_url] TEXT NOT NULL,
+   [type] TEXT NOT NULL,
+   [date] INTEGER,
+   [visited] INTEGER NOT NULL,
+   [position] INTEGER NOT NULL
+);
+
+_getFavourites:
+    SELECT * FROM [favourites]
+    ORDER BY position ASC;
+_getFavouriteById:
+    SELECT * FROM [favourites]
+    WHERE id = :id
+    LIMIT 1;
+_insertFavourite:
+    INSERT INTO [favourites] (id, name, image_url, type, date, visited, position)
+    VALUES (:id, :name, :image_url, :type, :date, :visited, (SELECT IFNULL(MAX(position), 0) + 1 FROM favourites));
+_updateFavouriteVisited:
+    UPDATE [favourites]
+    SET visited = :visited
+    WHERE id = :id;
+_updateFavouriteDate:
+    UPDATE [favourites]
+    SET date = :date
+    WHERE id = :id;
+_updateFavouritePosition:
+    UPDATE [favourites]
+    SET position = :position
+    WHERE id = :id;
+_deleteFavourite:
+    DELETE FROM [favourites]
+    WHERE id = :id;

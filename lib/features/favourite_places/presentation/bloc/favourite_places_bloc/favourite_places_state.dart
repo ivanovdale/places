@@ -3,26 +3,26 @@ import 'package:places/core/utils/place_list_ext.dart';
 
 final class FavouritePlacesState {
   final FavouritePlacesStatus status;
-  final List<Place> places;
+  final List<Place> _favourites;
 
-  List<Place> get visitedPlaces => places.filterByVisited();
+  List<Place> get visitedPlaces => _favourites.filterByVisited();
 
-  List<Place> get notVisitedPlaces => places.filterByNotVisited();
+  List<Place> get notVisitedPlaces => _favourites.filterByNotVisited();
 
   FavouritePlacesState({
     this.status = FavouritePlacesStatus.loading,
-    this.places = const [],
-  });
+    List<Place> favourites = const [],
+  }) : _favourites = favourites;
 
   FavouritePlacesState copyWith({
     FavouritePlacesStatus? status,
-    List<Place>? places,
+    List<Place>? favourites,
   }) {
     return FavouritePlacesState(
       status: status ?? this.status,
-      places: places ?? this.places,
+      favourites: favourites ?? _favourites,
     );
   }
 }
 
-enum FavouritePlacesStatus { loading, success, }
+enum FavouritePlacesStatus { loading, success }

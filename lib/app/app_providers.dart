@@ -28,7 +28,7 @@ class AppProviders extends StatelessWidget {
           create: (_) => FavouritePlacesBloc(
             _appDependencies.favouritePlaceInteractor,
           )..add(
-              FavouritePlacesStarted(),
+              FavouritePlacesSubscriptionRequested(),
             ),
         ),
         BlocProvider(
@@ -40,16 +40,22 @@ class AppProviders extends StatelessWidget {
       child: MultiProvider(
         providers: [
           Provider.value(
-            value: _appDependencies.placeInteractor,
+            value: _appDependencies.database,
           ),
           Provider.value(
             value: _appDependencies.placeRepository,
+          ),
+          Provider.value(
+            value: _appDependencies.placeInteractor,
           ),
           Provider.value(
             value: _appDependencies.placeFiltersInteractor,
           ),
           Provider.value(
             value: _appDependencies.firstEnterInteractor,
+          ),
+          Provider.value(
+            value: _appDependencies.favouritePlaceInteractor,
           ),
         ],
         child: child,

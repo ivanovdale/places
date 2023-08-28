@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_buttons/custom_text_button.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 
 /// Текстовая кнопка элемента истории поиска.
 ///
 /// При нажатии заполняется поле поиска места.
 class HistorySearchItemTextButton extends StatelessWidget {
-  final Place place;
-  final ValueSetter<Place>? onHistorySearchItemPressed;
+  final SearchHistoryItem searchHistoryItem;
+  final ValueSetter<SearchHistoryItem>? onHistorySearchItemPressed;
 
   const HistorySearchItemTextButton({
     super.key,
-    required this.place,
+    required this.searchHistoryItem,
     this.onHistorySearchItemPressed,
   });
 
@@ -21,14 +21,14 @@ class HistorySearchItemTextButton extends StatelessWidget {
     final secondaryColor = theme.colorScheme.secondary;
 
     return CustomTextButton(
-      place.name,
+      searchHistoryItem.name,
       textStyle: theme.textTheme.bodyLarge?.copyWith(
         color: secondaryColor,
       ),
       alignment: Alignment.centerLeft,
 
       // Заполняет поле поиска заданным элементом.
-      onPressed: () => onHistorySearchItemPressed?.call(place),
+      onPressed: () => onHistorySearchItemPressed?.call(searchHistoryItem),
     );
   }
 }

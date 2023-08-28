@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/core/domain/model/place.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/delete_history_search_item_from_list_button.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/history_search_item_text_button.dart';
 
@@ -8,13 +8,13 @@ import 'package:places/features/place_search/presentation/widgets/search_history
 /// Содержит имя искомого ранее места.
 /// Позволяет удалить элемент из списка истории поиска.
 class SearchItem extends StatelessWidget {
-  final Place place;
-  final ValueSetter<Place>? onHistorySearchItemPressed;
-  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
+  final SearchHistoryItem searchHistoryItem;
+  final ValueSetter<SearchHistoryItem>? onHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onDeleteHistorySearchItemPressed;
 
   const SearchItem({
     super.key,
-    required this.place,
+    required this.searchHistoryItem,
     this.onHistorySearchItemPressed,
     this.onDeleteHistorySearchItemPressed,
   });
@@ -28,12 +28,12 @@ class SearchItem extends StatelessWidget {
       child: Row(
         children: [
           HistorySearchItemTextButton(
-            place: place,
+            searchHistoryItem: searchHistoryItem,
             onHistorySearchItemPressed: onHistorySearchItemPressed,
           ),
           const Spacer(),
           DeleteHistorySearchItemFromListButton(
-            place: place,
+            searchHistoryItem: searchHistoryItem,
             onDeleteHistorySearchItemPressed: onDeleteHistorySearchItemPressed,
           ),
         ],

@@ -1,4 +1,4 @@
-part of 'favourite_place_cubit.dart';
+part of 'favourite_place_bloc.dart';
 
 final class FavouritePlaceState {
   final Place place;

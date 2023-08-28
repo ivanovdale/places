@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 import 'package:places/features/place_search/presentation/widgets/places_found_list/places_found_list.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/search_history_list.dart';
 
 /// Отображает результаты поиска - историю прошлых поисков или найденные места,
 /// если в строке поиска начат ввод текста.
 class SearchResultsOrHistory extends StatelessWidget {
-  final Set<Place> searchHistory;
+  final Set<SearchHistoryItem> searchHistory;
   final String searchString;
   final List<Place> placesFoundList;
   final ValueSetter<Place>? onPlacesFoundItemPressed;
   final bool isSearchStringEmpty;
   final bool isSearchQueryInProgress;
   final VoidCallback? onClearHistoryPressed;
-  final ValueSetter<Place>? onHistorySearchItemPressed;
-  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onDeleteHistorySearchItemPressed;
 
   const SearchResultsOrHistory({
     super.key,

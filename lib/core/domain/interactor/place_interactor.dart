@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
-import 'package:places/features/favourite_places/domain/favourite_place_repository.dart';
+import 'package:places/features/favourite_places/domain/repository/favourite_place_repository.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
 
 /// Интерактор для работы с местами.
@@ -55,7 +55,7 @@ class PlaceInteractor {
 
     if (addFavouriteMark) {
       // Добавляем пометку добавления в избранное для каждого места.
-      final favouritePlaces = favouritePlaceRepository.getPlaces();
+      final favouritePlaces = await favouritePlaceRepository.getFavourites().first;
       for (final favouritePlace in favouritePlaces) {
         final indexOfFilteredPlace = filteredPlaces
             .indexWhere((filteredPlace) => filteredPlace == favouritePlace);

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:places/core/domain/model/place.dart';
+import 'package:places/features/place_search/domain/model/search_history_item.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/clear_search_history_button.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_history_item_divider.dart';
 import 'package:places/features/place_search/presentation/widgets/search_history_list/components/search_item.dart';
 
 /// Элементы истории поиска.
 class SearchHistoryItems extends StatelessWidget {
-  final Set<Place> searchHistory;
+  final Set<SearchHistoryItem> searchHistory;
   final VoidCallback? onClearHistoryPressed;
-  final ValueSetter<Place>? onHistorySearchItemPressed;
-  final ValueSetter<Place>? onDeleteHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onHistorySearchItemPressed;
+  final ValueSetter<SearchHistoryItem>? onDeleteHistorySearchItemPressed;
 
   const SearchHistoryItems({
     super.key,
@@ -24,8 +24,8 @@ class SearchHistoryItems extends StatelessWidget {
     List<Widget> listOfItems;
     listOfItems = searchHistory
         .map(
-          (place) => SearchItem(
-            place: place,
+          (searchHistoryItem) => SearchItem(
+            searchHistoryItem: searchHistoryItem,
             onHistorySearchItemPressed: onHistorySearchItemPressed,
             onDeleteHistorySearchItemPressed: onDeleteHistorySearchItemPressed,
           ),
