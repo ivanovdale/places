@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:places/core/api/dio_api.dart';
 import 'package:places/core/data/repository/first_enter_data_repository.dart';
 import 'package:places/core/data/repository/network_place_repository.dart';
@@ -8,6 +9,9 @@ import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/domain/storage/key_value_storage.dart';
+import 'package:places/features/add_place/data/api/image_picker_api.dart';
+import 'package:places/features/add_place/data/repository/photo_data_repository.dart';
+import 'package:places/features/add_place/domain/interactor/photo_interactor.dart';
 import 'package:places/features/favourite_places/data/repository/favourite_place_data_repository.dart';
 import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
 import 'package:places/features/favourite_places/domain/repository/favourite_place_repository.dart';
@@ -30,6 +34,7 @@ final class AppDependencies {
   final SettingsInteractor settingsInteractor;
   final PlaceFiltersInteractor placeFiltersInteractor;
   final FirstEnterInteractor firstEnterInteractor;
+  final PhotoInteractor photoInteractor;
 
   AppDependencies._({
     required this.database,
@@ -41,9 +46,13 @@ final class AppDependencies {
     required this.settingsInteractor,
     required this.placeFiltersInteractor,
     required this.firstEnterInteractor,
+    required this.photoInteractor,
   });
 
   static Future<AppDependencies> getDependencies() async {
+    // Http-клиент.
+    final dioApi = DioApi();
+
     // База данных.
     final database = DatabaseImpl(
       dbName: 'database.db',
@@ -57,7 +66,7 @@ final class AppDependencies {
     );
 
     // Репозитории.
-    final placeRepository = NetworkPlaceRepository(DioApi());
+    final placeRepository = NetworkPlaceRepository(dioApi);
     final favouritePlaceRepository = FavouritePlaceDataRepository(
       database: database,
     );
@@ -89,6 +98,14 @@ final class AppDependencies {
     final firstEnterInteractor = FirstEnterInteractor(
       firstEnterRepository: firstEnterRepository,
     );
+    final photoInteractor = PhotoInteractor(
+      photoRepository: PhotoDataRepository(
+        imagePickerApi: ImagePickerApiImpl(
+          imagePicker: ImagePicker(),
+        ),
+        apiUtil: dioApi,
+      ),
+    );
 
     return AppDependencies._(
       database: database,
@@ -100,6 +117,7 @@ final class AppDependencies {
       settingsInteractor: settingsInteractor,
       placeFiltersInteractor: placeFiltersInteractor,
       firstEnterInteractor: firstEnterInteractor,
+      photoInteractor: photoInteractor,
     );
   }
 

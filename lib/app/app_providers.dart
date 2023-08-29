@@ -57,6 +57,9 @@ class AppProviders extends StatelessWidget {
           Provider.value(
             value: _appDependencies.favouritePlaceInteractor,
           ),
+          Provider.value(
+            value: _appDependencies.photoInteractor,
+          ),
         ],
         child: child,
       ),
