@@ -165,13 +165,15 @@ class _AddPlaceBodyState extends State<AddPlaceBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocSelector<AddPlaceBloc, AddPlaceState, List<String>>(
+                      BlocSelector<AddPlaceBloc, AddPlaceState, List<File>>(
                         selector: (state) => state.photoList,
                         builder: (_, photoList) {
                           return PhotoCarousel(
                             photoList: photoList,
-                            onAddNewPhotoPressed: (photoUrl) => _bloc.add(
-                              AddPlacePhotoAdded(photoUrl: photoUrl),
+                            onAddNewPhotoPressed: (source) => _bloc.add(
+                              AddPlacePhotoAdded(
+                                source: source,
+                              ),
                             ),
                             onDeletePhotoPressed: (index) => _bloc.add(
                               AddPlacePhotoDeleted(index: index),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:places/features/add_place/domain/model/action_type.dart';
+import 'package:places/features/add_place/domain/model/image_source.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/photo_picker.dart';
-import 'package:places/mocks.dart' as mocked;
 
 /// Кнопка добавления новой фотографии.
 class AddNewPhotoButton extends StatelessWidget {
-  final ValueSetter<String> onAddNewPhotoPressed;
+  final ValueSetter<ImageSource> onAddNewPhotoPressed;
 
   const AddNewPhotoButton({
     super.key,
@@ -12,18 +13,17 @@ class AddNewPhotoButton extends StatelessWidget {
   });
 
   /// Открывает диалог для добавления нового фото в список добавляемых фото.
-  Future<void> _addPhotoToList(BuildContext context) async {
+  Future<void> _showImagePicker(BuildContext context) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const PhotoPicker(),
+      builder: (_) => PhotoPicker(
+        onActionPressed: (action) => onAddNewPhotoPressed(
+          action.type.toImageSource(),
+        ),
+        closeOnPressed: true,
+      ),
     );
-    // TODO(daniiliv): *Как будто сработал image picker*.
-    const newPhotoUrl = mocked.newPhotoOnAddPlaceScreen;
-
-    if (context.mounted) {
-      onAddNewPhotoPressed(newPhotoUrl);
-    }
   }
 
   @override
@@ -32,7 +32,7 @@ class AddNewPhotoButton extends StatelessWidget {
     final colorSchemePrimaryColor = theme.colorScheme.primary;
 
     return GestureDetector(
-      onTap: () => _addPhotoToList(context),
+      onTap: () => _showImagePicker(context),
       child: Container(
         width: 72,
         height: 72,

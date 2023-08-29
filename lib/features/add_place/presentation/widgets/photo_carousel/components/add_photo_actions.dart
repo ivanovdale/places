@@ -5,10 +5,12 @@ import 'package:places/features/add_place/presentation/widgets/photo_carousel/co
 /// Возможные действия для добавления фото.
 class AddPhotoActions extends StatelessWidget {
   final List<ActionElement> actions;
+  final ValueSetter<ActionElement> onActionPressed;
 
   const AddPhotoActions({
     super.key,
     required this.actions,
+    required this.onActionPressed,
   });
 
   @override
@@ -27,8 +29,8 @@ class AddPhotoActions extends StatelessWidget {
         children: actions
             .map(
               (action) => ActionItem(
-                text: action.text,
-                iconAsset: action.icon,
+                action: action,
+                onActionPressed: onActionPressed,
                 isLastItem: action == actions.last,
               ),
             )
