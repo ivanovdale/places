@@ -21,19 +21,17 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
   /// Режим работы места по умолчанию.
   String get _defaultWorkTimeFrom => '9:00';
 
-  // TODO(ivanovdale):  fix naming
-
   AddPlaceBloc({
     required PlaceInteractor placeInteractor,
     required PhotoInteractor photoInteractor,
   })  : _placeInteractor = placeInteractor,
         _photoInteractor = photoInteractor,
         super(AddPlaceInitial()) {
-    on(_onAddPlaceTypeSet);
-    on(_onAddPlacePhotoAdded);
-    on(_onAddPlacePhotoDeleted);
-    on(_onAddPlaceFormValidated);
-    on(_onAddPlacePlaceCreated);
+    on<AddPlaceTypeSet>(_onTypeSet);
+    on<AddPlacePhotoAdded>(_onPhotoAdded);
+    on<AddPlacePhotoDeleted>(_onPhotoDeleted);
+    on<AddPlaceFormValidated>(_onFormValidated);
+    on<AddPlacePlaceCreated>(_onPlaceCreated);
   }
 
   @override
@@ -45,18 +43,17 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
     );
   }
 
-  void _onAddPlaceTypeSet(
+  void _onTypeSet(
     AddPlaceTypeSet event,
     Emitter<AddPlaceState> emit,
-  ) {
-    final newState = state.copyWith(
-      placeType: event.placeType,
-    );
+  ) =>
+      emit(
+        state.copyWith(
+          placeType: event.placeType,
+        ),
+      );
 
-    emit(newState);
-  }
-
-  Future<void> _onAddPlacePhotoAdded(
+  Future<void> _onPhotoAdded(
     AddPlacePhotoAdded event,
     Emitter<AddPlaceState> emit,
   ) async {
@@ -66,30 +63,28 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
     emit(state.copyWith(photoList: [...state.photoList, file]));
   }
 
-  void _onAddPlacePhotoDeleted(
+  void _onPhotoDeleted(
     AddPlacePhotoDeleted event,
     Emitter<AddPlaceState> emit,
-  ) {
-    final newState = state.copyWith(
-      photoList: [...state.photoList]..removeAt(event.index),
-    );
+  ) =>
+      emit(
+        state.copyWith(
+          photoList: [...state.photoList]..removeAt(event.index),
+        ),
+      );
 
-    emit(newState);
-  }
-
-  void _onAddPlaceFormValidated(
+  void _onFormValidated(
     AddPlaceFormValidated event,
     Emitter<AddPlaceState> emit,
-  ) {
-    final newState = AddPlaceFormValidation(
-      photoList: state.photoList,
-      placeType: state.placeType,
-    );
+  ) =>
+      emit(
+        AddPlaceFormValidation(
+          photoList: state.photoList,
+          placeType: state.placeType,
+        ),
+      );
 
-    emit(newState);
-  }
-
-  Future<void> _onAddPlacePlaceCreated(
+  Future<void> _onPlaceCreated(
     AddPlacePlaceCreated event,
     Emitter<AddPlaceState> emit,
   ) async {
