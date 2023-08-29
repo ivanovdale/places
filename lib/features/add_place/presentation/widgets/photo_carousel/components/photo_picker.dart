@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_buttons/custom_elevated_button.dart';
+import 'package:places/features/add_place/domain/action_type.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/add_photo_actions.dart';
+
+typedef ActionElement = ({String icon, String text, ActionType type});
 
 /// Позволяет выбрать фото из камеры, галереи или файлов.
 class PhotoPicker extends StatelessWidget {
   /// Действия добавления фотографии.
-  List<Map<String, String>> get actions => [
-    {
-      'icon': AppAssets.camera,
-      'text': AppStrings.camera,
-    },
-    {
-      'icon': AppAssets.photo,
-      'text': AppStrings.photo,
-    },
-    {
-      'icon': AppAssets.file,
-      'text': AppStrings.file,
-    },
-  ];
+  List<ActionElement> get _actions => [
+        (
+          icon: AppAssets.camera,
+          text: AppStrings.camera,
+          type: ActionType.camera,
+        ),
+        (
+          icon: AppAssets.photo,
+          text: AppStrings.photo,
+          type: ActionType.photo,
+        ),
+        (
+          icon: AppAssets.file,
+          text: AppStrings.file,
+          type: ActionType.file,
+        ),
+      ];
 
   const PhotoPicker({super.key});
 
@@ -41,7 +47,7 @@ class PhotoPicker extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            AddPhotoActions(actions: actions),
+            AddPhotoActions(actions: _actions),
             const SizedBox(
               height: 8,
             ),
