@@ -2,8 +2,6 @@ part of 'add_place_bloc.dart';
 
 sealed class AddPlaceEvent {}
 
-final class AddPlaceStarted extends AddPlaceEvent {}
-
 final class AddPlaceTypeSet extends AddPlaceEvent {
   final PlaceTypes placeType;
 
@@ -13,10 +11,10 @@ final class AddPlaceTypeSet extends AddPlaceEvent {
 }
 
 final class AddPlacePhotoAdded extends AddPlaceEvent {
-  final String photoUrl;
+  final ImageSource source;
 
   AddPlacePhotoAdded({
-    required this.photoUrl,
+    required this.source,
   });
 }
 

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/mocks.dart' as mocked;
+import 'package:places/features/add_place/domain/interactor/photo_interactor.dart';
+import 'package:places/features/add_place/domain/model/image_source.dart';
 
 part 'add_place_event.dart';
 
@@ -10,6 +13,7 @@ part 'add_place_state.dart';
 
 class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
   final PlaceInteractor _placeInteractor;
+  final PhotoInteractor _photoInteractor;
 
   /// Тип достопримечательности по умолчанию.
   PlaceTypes get _defaultPlaceType => PlaceTypes.other;
@@ -17,8 +21,14 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
   /// Режим работы места по умолчанию.
   String get _defaultWorkTimeFrom => '9:00';
 
-  AddPlaceBloc(this._placeInteractor) : super(AddPlaceInitial()) {
-    on(_onAddPlaceStarted);
+  // TODO(ivanovdale):  fix naming
+
+  AddPlaceBloc({
+    required PlaceInteractor placeInteractor,
+    required PhotoInteractor photoInteractor,
+  })  : _placeInteractor = placeInteractor,
+        _photoInteractor = photoInteractor,
+        super(AddPlaceInitial()) {
     on(_onAddPlaceTypeSet);
     on(_onAddPlacePhotoAdded);
     on(_onAddPlacePhotoDeleted);
@@ -26,15 +36,13 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
     on(_onAddPlacePlaceCreated);
   }
 
-  void _onAddPlaceStarted(
-    AddPlaceStarted event,
-    Emitter<AddPlaceState> emit,
-  ) {
-    final newState = AddPlaceInitial(
-      photoList: mocked.photoCarouselOnAddPlaceScreen,
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    Error.throwWithStackTrace(
+      error.toString(),
+      stackTrace,
     );
-
-    emit(newState);
   }
 
   void _onAddPlaceTypeSet(
@@ -48,15 +56,14 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
     emit(newState);
   }
 
-  void _onAddPlacePhotoAdded(
+  Future<void> _onAddPlacePhotoAdded(
     AddPlacePhotoAdded event,
     Emitter<AddPlaceState> emit,
-  ) {
-    final newState = state.copyWith(
-      photoList: [...state.photoList, event.photoUrl],
-    );
+  ) async {
+    final file = await _photoInteractor.pickImage(source: event.source);
+    if (file == null) return;
 
-    emit(newState);
+    emit(state.copyWith(photoList: [...state.photoList, file]));
   }
 
   void _onAddPlacePhotoDeleted(
@@ -86,6 +93,18 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
     AddPlacePlaceCreated event,
     Emitter<AddPlaceState> emit,
   ) async {
+    var photoUrlList = <String>[];
+    try {
+      photoUrlList = await _photoInteractor.uploadImages(state.photoList);
+    } on Exception {
+      return emit(
+        AddPlacePlaceCreationError(
+          photoList: state.photoList,
+          placeType: state.placeType,
+        ),
+      );
+    }
+
     final newPlace = Place(
       name: event.name,
       coordinatePoint: CoordinatePoint(
@@ -95,7 +114,7 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
       type: state.placeType ?? _defaultPlaceType,
       details: event.description,
       workTimeFrom: _defaultWorkTimeFrom,
-      photoUrlList: state.photoList,
+      photoUrlList: photoUrlList,
     );
 
     try {
@@ -104,17 +123,12 @@ class AddPlaceBloc extends Bloc<AddPlaceEvent, AddPlaceState> {
       emit(
         AddPlacePlaceCreation(),
       );
-    } on Exception catch (error, stackTrace) {
+    } on Exception {
       emit(
         AddPlacePlaceCreationError(
           photoList: state.photoList,
           placeType: state.placeType,
         ),
-      );
-
-      Error.throwWithStackTrace(
-        error.toString(),
-        stackTrace,
       );
     }
   }
