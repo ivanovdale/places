@@ -6,15 +6,11 @@ import 'package:places/core/helpers/app_urls.dart';
 ///
 /// Позволяет создать http-клиента.
 class DioApi {
-  static final DioApi _singleton = DioApi._internal();
+  final Dio httpClient;
 
-  Dio get httpClient => createDio();
+  DioApi() : httpClient = _createDio();
 
-  factory DioApi() => _singleton;
-
-  DioApi._internal();
-
-  static Dio createDio() {
+  static Dio _createDio() {
     const timeOut = Duration(milliseconds: 5000);
 
     final dio = Dio(BaseOptions(

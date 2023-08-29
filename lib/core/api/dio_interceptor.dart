@@ -32,7 +32,7 @@ class DioInterceptor extends Interceptor {
     printKeyValue('STATUS CODE', response.statusCode ?? '');
     printKeyValue('REDIRECT', response.isRedirect);
     logPrint('BODY:');
-    printAll(response.data as String);
+    printAll(response.data.toString());
 
     logPrint('*** Api Response - End ***');
 
@@ -50,7 +50,7 @@ class DioInterceptor extends Interceptor {
     printKeyValue('METHOD', options.method);
     if (options.data != null) {
       logPrint('BODY:');
-      printAll(options.data as String);
+      printAll(options.data.toString());
     }
 
     logPrint('*** API Request - End ***');
