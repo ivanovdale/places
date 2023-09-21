@@ -18,7 +18,7 @@ abstract final class AppRouter {
   static const String root = '/';
 
   /// Экран онбординга.
-  static const String onboarding = '/onboarding';
+  static const String onBoarding = '/onBoarding';
 
   /// Экран списка мест.
   static const String placeList = '/placeList';
@@ -49,7 +49,7 @@ abstract final class AppRouter {
     final arguments = settings.arguments as Map<String, dynamic>?;
 
     switch (settings.name) {
-      case AppRouter.onboarding:
+      case AppRouter.onBoarding:
         return _getOnBoardingMaterialRoute();
       case AppRouter.placeList:
         return _getPlaceListMaterialRoute();
