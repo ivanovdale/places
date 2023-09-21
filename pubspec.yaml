@@ -44,6 +44,8 @@ dependencies:
 
   surf_lint_rules: ^3.0.0
 
+  yandex_mapkit: ^3.3.3
+
 dev_dependencies:
   build_runner: ^2.4.6
 
