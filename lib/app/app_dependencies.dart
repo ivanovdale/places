@@ -1,11 +1,14 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:places/core/api/dio_api.dart';
 import 'package:places/core/data/repository/first_enter_data_repository.dart';
+import 'package:places/core/data/repository/geolocation_data_repository.dart';
 import 'package:places/core/data/repository/network_place_repository.dart';
 import 'package:places/core/data/source/database/database.dart';
 import 'package:places/core/data/source/database/database_impl.dart';
+import 'package:places/core/data/source/geolocation/geolocation_api_impl.dart';
 import 'package:places/core/data/source/storage/shared_preferences_storage.dart';
 import 'package:places/core/domain/interactor/first_enter_interactor.dart';
+import 'package:places/core/domain/interactor/geolocation_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/domain/source/storage/key_value_storage.dart';
@@ -35,6 +38,7 @@ final class AppDependencies {
   final PlaceFiltersInteractor placeFiltersInteractor;
   final FirstEnterInteractor firstEnterInteractor;
   final PhotoInteractor photoInteractor;
+  final GeolocationInteractor geolocationInteractor;
 
   AppDependencies._({
     required this.database,
@@ -47,6 +51,7 @@ final class AppDependencies {
     required this.placeFiltersInteractor,
     required this.firstEnterInteractor,
     required this.photoInteractor,
+    required this.geolocationInteractor,
   });
 
   static Future<AppDependencies> getDependencies() async {
@@ -79,6 +84,9 @@ final class AppDependencies {
     final firstEnterRepository = FirstEnterDataRepository(
       keyValueStorage: keyValueStorage,
     );
+    final geolocationRepository = GeolocationDataRepository(
+      geolocationApi: GeolocationApiImpl(),
+    );
 
     // Use cases.
     final favouritePlaceInteractor = FavouritePlaceInteractor(
@@ -88,6 +96,7 @@ final class AppDependencies {
       placeRepository: placeRepository,
       favouritePlaceRepository: favouritePlaceRepository,
       placeFiltersRepository: placeFiltersRepository,
+      geolocationRepository: geolocationRepository,
     );
     final settingsInteractor = SettingsInteractor(
       settingsRepository: settingsRepository,
@@ -106,6 +115,9 @@ final class AppDependencies {
         apiUtil: dioApi,
       ),
     );
+    final geolocationInteractor = GeolocationInteractor(
+      geolocationRepository: geolocationRepository,
+    );
 
     return AppDependencies._(
       database: database,
@@ -118,6 +130,7 @@ final class AppDependencies {
       placeFiltersInteractor: placeFiltersInteractor,
       firstEnterInteractor: firstEnterInteractor,
       photoInteractor: photoInteractor,
+      geolocationInteractor: geolocationInteractor,
     );
   }
 

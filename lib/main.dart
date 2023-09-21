@@ -8,6 +8,7 @@ void main() async {
   // Локализация форматирования даты в приложении.
   await initializeDateFormatting('ru', '');
   final dependencies = await AppDependencies.getDependencies();
+  await dependencies.geolocationInteractor.requestPermission();
 
   runApp(
     App(

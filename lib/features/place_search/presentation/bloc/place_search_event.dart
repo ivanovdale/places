@@ -3,11 +3,7 @@ part of 'place_search_bloc.dart';
 sealed class PlaceSearchEvent {}
 
 final class PlaceSearchSubscriptionRequested extends PlaceSearchEvent {
-  final CoordinatePoint userCoordinates;
-
-  PlaceSearchSubscriptionRequested({
-    required this.userCoordinates,
-  });
+  PlaceSearchSubscriptionRequested();
 }
 
 final class PlaceSearchStringUpdated extends PlaceSearchEvent {
