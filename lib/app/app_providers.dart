@@ -4,6 +4,7 @@ import 'package:places/app/app_dependencies.dart';
 import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/cubit/bottom_navigation_cubit.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
+import 'package:places/features/place_list/presentation/bloc/place_list_bloc.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +36,18 @@ class AppProviders extends StatelessWidget {
           create: (_) => SettingsCubit(
             settingsInteractor: _appDependencies.settingsInteractor,
           )..initialize(),
+        ),
+        BlocProvider(
+          create: (_) => PlaceListBloc(
+            placeInteractor: _appDependencies.placeInteractor,
+            placeFiltersInteractor: _appDependencies.placeFiltersInteractor,
+          )
+            ..add(
+              PlaceListStarted(),
+            )
+            ..add(
+              PlaceFiltersSubscriptionRequested(),
+            ),
         ),
       ],
       child: MultiProvider(
