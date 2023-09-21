@@ -8,7 +8,7 @@ import 'package:places/core/data/source/storage/shared_preferences_storage.dart'
 import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
-import 'package:places/core/domain/storage/key_value_storage.dart';
+import 'package:places/core/domain/source/storage/key_value_storage.dart';
 import 'package:places/features/add_place/data/api/image_picker_api.dart';
 import 'package:places/features/add_place/data/repository/photo_data_repository.dart';
 import 'package:places/features/add_place/domain/interactor/photo_interactor.dart';
