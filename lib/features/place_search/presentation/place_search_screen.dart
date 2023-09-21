@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/data/source/database/database.dart';
+import 'package:places/core/domain/interactor/geolocation_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/helpers/app_strings.dart';
@@ -14,7 +15,6 @@ import 'package:places/features/place_search/domain/interactor/place_search_inte
 import 'package:places/features/place_search/presentation/bloc/place_search_bloc.dart';
 import 'package:places/features/place_search/presentation/widgets/place_search_bar.dart';
 import 'package:places/features/place_search/presentation/widgets/search_results_or_history.dart';
-import 'package:places/mocks.dart' as mocked;
 
 /// Экран поиска мест.
 ///
@@ -53,11 +53,8 @@ class PlaceSearchScreen extends StatelessWidget {
               database: context.read<Database>(),
             ),
           ),
-        )..add(
-            PlaceSearchSubscriptionRequested(
-              userCoordinates: mocked.userCoordinates,
-            ),
-          ),
+          geolocationInteractor: context.read<GeolocationInteractor>()
+        )..add(PlaceSearchSubscriptionRequested()),
         child: const _PlaceSearchBody(),
       ),
     );
@@ -134,7 +131,8 @@ class _PlaceSearchBodyState extends State<_PlaceSearchBody> {
               onDeleteHistorySearchItemPressed: (searchHistoryItem) => bloc.add(
                 PlaceSearchFromSearchHistoryRemoved(searchHistoryItem),
               ),
-              onClearHistoryPressed: () => bloc.add(PlaceSearchSearchHistoryCleared()),
+              onClearHistoryPressed: () =>
+                  bloc.add(PlaceSearchSearchHistoryCleared()),
               onHistorySearchItemPressed: (searchHistoryItem) {
                 showModalBottomSheet<void>(
                   context: context,

@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
-import 'package:places/mocks.dart' as mocked;
 
 part 'place_list_event.dart';
 
@@ -69,12 +67,7 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
   }
 
   Future<PlaceListState> _getStateWithLoadedData() async {
-    final placeFilterRequest = PlacesFilterRequest(
-      coordinatePoint: mocked.userCoordinates,
-    );
-
     final places = await _placeInteractor.getFilteredPlaces(
-      placeFilterRequest,
       useSavedFilters: true,
       sortByDistance: true,
       addFavouriteMark: true,
