@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/core/domain/repository/geolocation_repository.dart';
@@ -52,12 +51,8 @@ class PlaceInteractor {
     }
 
     // Используем координаты пользователя для фильтрации.
-    CoordinatePoint userCoordinates;
-    if (await _geolocationRepository.isLocationPermissionAllowed()) {
-      userCoordinates = await _geolocationRepository.getUserCurrentLocation();
-    } else {
-      userCoordinates = CoordinatePoint.defaults();
-    }
+    final userCoordinates =
+        await _geolocationRepository.userCurrentLocation.first;
     filterRequest = filterRequest.copyWith(coordinatePoint: userCoordinates);
 
     final filteredPlaces =

@@ -10,6 +10,7 @@ import 'package:places/core/data/source/storage/shared_preferences_storage.dart'
 import 'package:places/core/domain/interactor/first_enter_interactor.dart';
 import 'package:places/core/domain/interactor/geolocation_interactor.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
+import 'package:places/core/domain/repository/geolocation_repository.dart';
 import 'package:places/core/domain/repository/place_repository.dart';
 import 'package:places/core/domain/source/storage/key_value_storage.dart';
 import 'package:places/features/add_place/data/api/image_picker_api.dart';
@@ -31,6 +32,7 @@ final class AppDependencies {
   final FavouritePlaceRepository favouritePlaceRepository;
   final PlaceRepository placeRepository;
   final PlaceFiltersRepository placeFiltersRepository;
+  final GeolocationRepository geolocationRepository;
 
   final FavouritePlaceInteractor favouritePlaceInteractor;
   final PlaceInteractor placeInteractor;
@@ -45,6 +47,7 @@ final class AppDependencies {
     required this.favouritePlaceRepository,
     required this.placeRepository,
     required this.placeFiltersRepository,
+    required this.geolocationRepository,
     required this.favouritePlaceInteractor,
     required this.placeInteractor,
     required this.settingsInteractor,
@@ -125,6 +128,7 @@ final class AppDependencies {
       favouritePlaceInteractor: favouritePlaceInteractor,
       placeRepository: placeRepository,
       placeFiltersRepository: placeFiltersRepository,
+      geolocationRepository: geolocationRepository,
       placeInteractor: placeInteractor,
       settingsInteractor: settingsInteractor,
       placeFiltersInteractor: placeFiltersInteractor,
@@ -134,5 +138,8 @@ final class AppDependencies {
     );
   }
 
-  void dispose() => placeFiltersRepository.dispose();
+  void dispose() {
+    placeFiltersRepository.dispose();
+    geolocationRepository.dispose();
+  }
 }

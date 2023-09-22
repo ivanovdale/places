@@ -73,6 +73,9 @@ class AppProviders extends StatelessWidget {
           Provider.value(
             value: _appDependencies.photoInteractor,
           ),
+          Provider.value(
+            value: _appDependencies.geolocationInteractor,
+          ),
         ],
         child: child,
       ),

@@ -50,4 +50,8 @@ abstract final class AppAssets {
 
   // Иконка ошибки.
   static const error = 'assets/icons/error.svg';
+
+  // Иконки для карты.
+  static const mapPlaceDot = 'assets/images/map_place_dot.png';
+  static const mapUserMark = 'assets/images/map_user_mark.png';
 }

@@ -20,6 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final double? leadingWidth;
   final List<Widget>? actions;
+  final PreferredSizeWidget? bottom;
 
   @override
   Size get preferredSize => Size.fromHeight(toolbarHeight);
@@ -34,6 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.leadingWidth,
     this.actions,
+    this.bottom,
   });
 
   @override
@@ -53,6 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       leadingWidth: leadingWidth,
       actions: actions,
+      bottom: bottom,
     );
   }
 }

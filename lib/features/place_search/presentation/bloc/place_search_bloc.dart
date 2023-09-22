@@ -42,7 +42,7 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     _placeSearchInteractor.setFilters(
       typeFilter: placeFilters.types.toList(),
       radius: placeFilters.radius,
-      userCoordinates: await _geolocationInteractor.getUserCurrentLocation(),
+      userCoordinates: await _geolocationInteractor.userCurrentLocation.first,
     );
 
     // Подписка на историю поиска.
