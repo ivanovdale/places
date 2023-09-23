@@ -76,7 +76,7 @@ class CustomElevatedButton extends StatelessWidget {
         borderRadius: borderRadius ?? BorderRadius.circular(12),
       ),
       height: height,
-      width: width,
+      width: width ?? double.infinity,
       child: ElevatedButton(
         onPressed: onPressed ??
             () {
