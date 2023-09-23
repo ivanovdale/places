@@ -23,7 +23,7 @@ class ToVisitPlaceCard extends BasePlaceCard {
     VoidCallback? onCalendarPressed,
     VoidCallback? onDeletePressed,
     super.key,
-  })  : actions = _PlaceActions(
+  }) : actions = _PlaceActions(
           onCalendarPressed: onCalendarPressed,
           onDeletePressed: onDeletePressed,
         );
@@ -43,10 +43,12 @@ class _PlaceActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final actionButtons = [
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.calendar),
         onTap: onCalendarPressed,
       ),
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.close),
         onTap: onDeletePressed,
       ),

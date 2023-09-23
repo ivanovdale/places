@@ -48,10 +48,12 @@ class _PlaceActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final actionButtons = [
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.share),
         onTap: onSharePressed,
       ),
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.close),
         onTap: () => onDeletePressed,
       ),
