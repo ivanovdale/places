@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_assets.dart';
@@ -12,9 +13,16 @@ abstract final class PlacemarkMapObjectHelper {
     required List<Place> places,
     CoordinatePoint? userLocation,
     required bool addUserPlacemark,
+    required ValueSetter<Place> onPlacemarkObjectTap,
   }) {
-    final mapObjects =
-        places.map((place) => place.toPlacemarkMapObject()).toList();
+    final mapObjects = places
+        .map(
+          (place) => place.toPlacemarkMapObject(
+            onPlacemarkObjectTap: onPlacemarkObjectTap,
+          ),
+        )
+        .toList();
+
     if (addUserPlacemark) {
       final userCoordinates = userLocation ?? CoordinatePoint.defaults();
       final userPlacemark = userCoordinates.toPlacemarkMapObject(

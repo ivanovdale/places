@@ -41,6 +41,7 @@ class AppProviders extends StatelessWidget {
           create: (_) => PlaceListBloc(
             placeInteractor: _appDependencies.placeInteractor,
             placeFiltersInteractor: _appDependencies.placeFiltersInteractor,
+            favouritePlaceInteractor: _appDependencies.favouritePlaceInteractor,
           )
             ..add(
               PlaceListStarted(),
