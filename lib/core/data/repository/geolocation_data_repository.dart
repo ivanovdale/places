@@ -42,6 +42,9 @@ final class GeolocationDataRepository implements GeolocationRepository {
   }
 
   @override
+  Future<void> reinitializeUserCurrentLocation() => _initialize();
+
+  @override
   Future<bool> requestPermission() async {
     final permission = await _geolocationApi.requestPermission();
 

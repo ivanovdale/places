@@ -11,6 +11,9 @@ final class GeolocationInteractor {
   Future<bool> requestPermission() =>
       _geolocationRepository.requestPermission();
 
+  Future<void> reinitializeUserCurrentLocation() =>
+      _geolocationRepository.reinitializeUserCurrentLocation();
+
   Stream<CoordinatePoint> get userCurrentLocation =>
       _geolocationRepository.userCurrentLocation;
 }

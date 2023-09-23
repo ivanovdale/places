@@ -4,5 +4,6 @@ import 'package:places/core/domain/model/coordinate_point.dart';
 abstract interface class GeolocationRepository {
   Future<bool> requestPermission();
   Stream<CoordinatePoint> get userCurrentLocation;
+  Future<void> reinitializeUserCurrentLocation();
   void dispose();
 }

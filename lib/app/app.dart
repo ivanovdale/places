@@ -20,6 +20,19 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
+  void initState() {
+    super.initState();
+    final geolocationInteractor = widget._appDependencies.geolocationInteractor;
+    geolocationInteractor
+        .requestPermission()
+        .then((isLocationPermissionAllowed) {
+      if (isLocationPermissionAllowed) {
+        geolocationInteractor.reinitializeUserCurrentLocation();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     widget._appDependencies.dispose();
     super.dispose();
