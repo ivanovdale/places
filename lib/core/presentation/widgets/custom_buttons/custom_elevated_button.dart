@@ -11,10 +11,11 @@ import 'package:flutter/material.dart';
 /// * [buttonLabel] - виджет-лейбл кнопки;
 /// * [textStyle] - стиль текста кнопки;
 /// * [onPressed] - коллбэк после нажатия кнопки;
-/// * [BorderRadiusGeometry] - скругление кнопки.
-/// * [gradient] - градиент цвета кнопки.
+/// * [borderRadius] - скругление кнопки;
+/// * [gradient] - градиент цвета кнопки;
+/// * [padding] - отступ внутри кнопки.
 class CustomElevatedButton extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? backgroundColor;
   final double? width;
   final double? height;
@@ -23,10 +24,11 @@ class CustomElevatedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final BorderRadiusGeometry? borderRadius;
   final Gradient? gradient;
+  final EdgeInsetsGeometry? padding;
 
-  const CustomElevatedButton(
-    this.text, {
+  const CustomElevatedButton({
     super.key,
+    this.text,
     this.backgroundColor,
     this.width,
     this.height,
@@ -35,10 +37,39 @@ class CustomElevatedButton extends StatelessWidget {
     this.onPressed,
     this.borderRadius,
     this.gradient,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasTextAndButtonLabel = text != null && buttonLabel != null;
+
+    Widget childWidget;
+    if (hasTextAndButtonLabel) {
+      childWidget = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          buttonLabel!,
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            text!,
+            style: textStyle,
+          ),
+        ],
+      );
+    } else if (text != null) {
+      childWidget = Text(
+        text!,
+        style: textStyle,
+      );
+    } else if (buttonLabel != null) {
+      childWidget = buttonLabel!;
+    } else {
+      childWidget = const SizedBox.shrink();
+    }
+
     return Container(
       decoration: BoxDecoration(
         gradient: gradient,
@@ -47,7 +78,6 @@ class CustomElevatedButton extends StatelessWidget {
       height: height,
       width: width,
       child: ElevatedButton(
-        // TODO(daniiliv): Здесь будет вызов реальной функции.
         onPressed: onPressed ??
             () {
               if (kDebugMode) {
@@ -60,22 +90,9 @@ class CustomElevatedButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
           ),
+          padding: padding
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttonLabel ?? const SizedBox(),
-            // Если есть лейбл кнопки, то сделать отступ.
-            if (buttonLabel != null)
-              const SizedBox(
-                width: 10,
-              ),
-            Text(
-              text,
-              style: textStyle,
-            ),
-          ],
-        ),
+        child: childWidget,
       ),
     );
   }

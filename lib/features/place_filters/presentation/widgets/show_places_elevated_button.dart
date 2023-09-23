@@ -35,7 +35,7 @@ class ShowPlacesElevatedButton extends StatelessWidget {
         bottom: 24,
       ),
       child: CustomElevatedButton(
-        '${AppStrings.show} ($filteredPlacesAmount)',
+        text: '${AppStrings.show} ($filteredPlacesAmount)',
         textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: buttonTextColor,
         ),

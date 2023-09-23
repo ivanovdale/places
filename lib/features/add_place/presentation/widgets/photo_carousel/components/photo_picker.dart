@@ -65,7 +65,7 @@ class PhotoPicker extends StatelessWidget {
               height: 8,
             ),
             CustomElevatedButton(
-              AppStrings.cancel,
+              text: AppStrings.cancel,
               backgroundColor: onBackgroundColor,
               height: 48,
               textStyle: theme.textTheme.bodyMedium!.copyWith(

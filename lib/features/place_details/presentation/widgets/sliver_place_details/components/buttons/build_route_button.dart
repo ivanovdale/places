@@ -24,7 +24,7 @@ class BuildRouteButton extends StatelessWidget {
         right: 16,
       ),
       child: CustomElevatedButton(
-        AppStrings.buildRouteText,
+        text: AppStrings.buildRouteText,
         textStyle: theme.textTheme.bodyMedium?.copyWith(
           color: onSecondaryColor,
         ),
