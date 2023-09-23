@@ -44,6 +44,8 @@ dependencies:
 
   shared_preferences: ^2.2.1
 
+  sqlite3_flutter_libs: ^0.5.17
+
   surf_lint_rules: ^3.0.0
 
   yandex_mapkit: ^3.3.3
