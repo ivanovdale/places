@@ -55,7 +55,7 @@ class PlaceInteractor {
         await _geolocationRepository.userCurrentLocation.first;
     filterRequest = filterRequest.copyWith(coordinatePoint: userCoordinates);
 
-    final filteredPlaces =
+    var filteredPlaces =
         await _placeRepository.getFilteredPlaces(filterRequest);
 
     if (sortByDistance) {
@@ -67,20 +67,31 @@ class PlaceInteractor {
     }
 
     if (addFavouriteMark) {
-      // Добавляем пометку добавления в избранное для каждого места.
       final favouritePlaces =
           await _favouritePlaceRepository.getFavourites().first;
-      for (final favouritePlace in favouritePlaces) {
-        final indexOfFilteredPlace = filteredPlaces
-            .indexWhere((filteredPlace) => filteredPlace == favouritePlace);
-
-        if (indexOfFilteredPlace == -1) continue;
-
-        filteredPlaces[indexOfFilteredPlace].isFavorite = true;
-      }
+      filteredPlaces = addFavouriteMarks(filteredPlaces, favouritePlaces);
     }
 
     return filteredPlaces;
+  }
+
+  /// Добавляет пометку добавления в избранное для каждого места.
+  List<Place> addFavouriteMarks(
+    List<Place> places,
+    List<Place> favouritePlaces,
+  ) {
+    for (final place in places) {
+      final indexOfFilteredPlace =
+          favouritePlaces.indexWhere((favouritePlace) => favouritePlace == place);
+
+      if (indexOfFilteredPlace != -1) {
+        place.isFavorite = true;
+      } else {
+        place.isFavorite = false;
+      }
+    }
+
+    return places;
   }
 
   /// Возвращает детали места.
