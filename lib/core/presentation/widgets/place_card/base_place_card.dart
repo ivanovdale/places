@@ -19,6 +19,14 @@ abstract class BasePlaceCard extends StatelessWidget {
   abstract final bool showDetails;
   abstract final Widget actions;
 
+  int get topWidgetFlex => 1;
+
+  int get bottomWidgetFlex => 1;
+
+  bool get showVisitDate => true;
+
+  Widget? get bottomActions => null;
+
   const BasePlaceCard(
     this.place, {
     super.key,
@@ -49,16 +57,20 @@ abstract class BasePlaceCard extends StatelessWidget {
             onTap: () => _openPlaceDetailsScreen(context, place),
             child: Column(
               children: [
-                Expanded(
+                Flexible(
+                  flex: topWidgetFlex,
                   child: _PlaceCardTop(
                     place,
                     actions,
                   ),
                 ),
-                Expanded(
+                Flexible(
+                  flex: bottomWidgetFlex,
                   child: _PlaceCardBottom(
                     place,
                     showDetails: showDetails,
+                    showVisitDate: showVisitDate,
+                    bottomActions: bottomActions,
                   ),
                 ),
               ],
@@ -161,14 +173,20 @@ class _PlaceCardTop extends StatelessWidget {
 ///
 /// Имеет параметры:
 /// * [place] - модель места;
-/// * [showDetails] - отображать детали места (если стоит false, то будет отображена информация о будущем/произошедшем посещении).
+/// * [showDetails] - отображать детали места
+/// (если стоит false, то будет отображена информация о будущем/произошедшем посещении);
+/// * [showVisitDate] - отображать дату посещения.
 class _PlaceCardBottom extends StatelessWidget {
   final Place place;
   final bool showDetails;
+  final bool showVisitDate;
+  final Widget? bottomActions;
 
   const _PlaceCardBottom(
     this.place, {
     required this.showDetails,
+    required this.showVisitDate,
+    this.bottomActions,
   });
 
   @override
@@ -181,35 +199,76 @@ class _PlaceCardBottom extends StatelessWidget {
         color: theme.colorScheme.secondaryContainer,
       ),
       child: Ink(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 16,
-                right: 16,
-              ),
-              child: Text(
-                place.name,
-                style: theme.textTheme.labelLarge,
-              ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            // Показывать информацию о месте.
-            if (showDetails)
-              Expanded(
-                child: _PlaceDetailsInfo(place),
+        child: bottomActions != null
+            ? Row(
+                children: [
+                  Expanded(
+                    child: _PlaceCardBottomText(
+                      place: place,
+                      theme: theme,
+                      showDetails: showDetails,
+                      showVisitDate: showVisitDate,
+                    ),
+                  ),
+                  bottomActions!,
+                ],
               )
-            else
-              Expanded(
-                child: _PlaceVisitingInfo(place),
+            : _PlaceCardBottomText(
+                place: place,
+                theme: theme,
+                showDetails: showDetails,
+                showVisitDate: showVisitDate,
               ),
-          ],
-        ),
       ),
+    );
+  }
+}
+
+class _PlaceCardBottomText extends StatelessWidget {
+  const _PlaceCardBottomText({
+    required this.place,
+    required this.theme,
+    required this.showDetails,
+    required this.showVisitDate,
+  });
+
+  final Place place;
+  final ThemeData theme;
+  final bool showDetails;
+  final bool showVisitDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 16,
+            left: 16,
+            right: 16,
+          ),
+          child: Text(
+            place.name,
+            style: theme.textTheme.labelLarge,
+          ),
+        ),
+        const SizedBox(
+          height: 2,
+        ),
+        // Показывать информацию о месте.
+        if (showDetails)
+          Expanded(
+            child: _PlaceDetailsInfo(place),
+          )
+        else
+          Expanded(
+            child: _PlaceVisitingInfo(
+              place,
+              showVisitDate: showVisitDate,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -249,11 +308,16 @@ class _PlaceDetailsInfo extends StatelessWidget {
 /// Отображает информацию о предстоящем/завершенном посещении. Также отображает режим работы места.
 ///
 /// Имеет параметры:
-/// * [place] - модель места.
+/// * [place] - модель места;
+/// * [showVisitDate] - отображать дату посещения.
 class _PlaceVisitingInfo extends StatelessWidget {
   final Place place;
+  final bool showVisitDate;
 
-  const _PlaceVisitingInfo(this.place);
+  const _PlaceVisitingInfo(
+    this.place, {
+    required this.showVisitDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -276,14 +340,15 @@ class _PlaceVisitingInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            visitDateFormatted,
-            maxLines: 2,
-            style: themeBodyText2?.copyWith(
-              color:
-                  place.visited ? colorScheme.secondary : colorScheme.primary,
+          if (showVisitDate)
+            Text(
+              visitDateFormatted,
+              maxLines: 2,
+              style: themeBodyText2?.copyWith(
+                color:
+                    place.visited ? colorScheme.secondary : colorScheme.primary,
+              ),
             ),
-          ),
           const Spacer(),
           Text(
             '${AppStrings.closedTo} ${place.workTimeFrom}',
