@@ -10,8 +10,11 @@ class ChosenPlaceCubit extends Cubit<ChosenPlaceState> {
         state.copyWith(
           place: place,
           isPlaceChosen: true,
+          isPlaceLayerHidden: false,
         ),
       );
 
   void resetChosenPlace() => emit(state.copyWith(isPlaceChosen: false));
+
+  void hidePlaceLayer() => emit(state.copyWith(isPlaceLayerHidden: true));
 }

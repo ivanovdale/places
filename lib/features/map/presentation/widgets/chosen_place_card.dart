@@ -22,7 +22,13 @@ class ChosenPlaceCard extends StatelessWidget {
             opacity: state.isPlaceChosen ? 1 : 0,
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeInOut,
-            child: place != null
+            onEnd: () {
+              // Скрываем слой выбранной карточки.
+              if (!state.isPlaceChosen) {
+                context.read<ChosenPlaceCubit>().hidePlaceLayer();
+              }
+            },
+            child: place != null && !state.isPlaceLayerHidden
                 ? MapPlaceCard(
                     key: ValueKey(place.id),
                     place,

@@ -28,7 +28,6 @@ final lightTheme = ThemeData(
     // Не используется.
     error: _whiteColor,
     primary: AppColors.fruitSalad,
-    // Не используется.
     primaryContainer: _whiteColor,
     secondary: _waterlooColor,
     secondaryContainer: AppColors.wildSand,
@@ -61,8 +60,7 @@ final darkTheme = ThemeData(
     // Не используется.
     error: _whiteColor,
     primary: AppColors.pastelGreen,
-    // Не используется.
-    primaryContainer: _whiteColor,
+    primaryContainer: _oxfordBlueColor,
     secondary: _waterlooColor,
     secondaryContainer: AppColors.shark,
     // Не используется.

@@ -10,16 +10,19 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class PlacesMap extends StatelessWidget {
   final List<Place> places;
   final CoordinatePoint? userLocation;
+  final MapCreatedCallback? onMapCreated;
 
   const PlacesMap({
     super.key,
     required this.places,
     this.userLocation,
+    this.onMapCreated,
   });
 
   @override
   Widget build(BuildContext context) {
     return YandexMap(
+      onMapCreated: onMapCreated,
       onCameraPositionChanged: (
         cameraPosition,
         reason,

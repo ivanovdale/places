@@ -54,4 +54,6 @@ abstract final class AppAssets {
   // Иконки для карты.
   static const mapPlaceDot = 'assets/images/map_place_dot.png';
   static const mapUserMark = 'assets/images/map_user_mark.png';
+  static const geolocation = 'assets/icons/geolocation.svg';
+  static const refresh = 'assets/icons/refresh.svg';
 }
