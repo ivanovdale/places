@@ -32,6 +32,8 @@ dependencies:
 
   intl: ^0.18.1
 
+  map_launcher: ^2.5.0+1
+
   mime: ^1.0.4
 
   path: ^1.8.3
