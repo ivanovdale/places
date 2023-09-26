@@ -8,8 +8,18 @@ final class GeolocationInteractor {
 
   final GeolocationRepository _geolocationRepository;
 
-  Future<bool> requestPermission() =>
-      _geolocationRepository.requestPermission();
+  Future<bool> isLocationPermissionAllowed() =>
+      _geolocationRepository.isLocationPermissionAllowed();
+
+  Future<bool> requestPermission() async {
+    final isLocationPermissionAllowed =
+        await _geolocationRepository.requestPermission();
+    if (isLocationPermissionAllowed) {
+      await _geolocationRepository.reinitializeUserCurrentLocation();
+    }
+
+    return isLocationPermissionAllowed;
+  }
 
   Future<void> reinitializeUserCurrentLocation() =>
       _geolocationRepository.reinitializeUserCurrentLocation();

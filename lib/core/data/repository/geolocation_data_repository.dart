@@ -23,7 +23,7 @@ final class GeolocationDataRepository implements GeolocationRepository {
       _geolocationStreamController.stream.asBroadcastStream();
 
   Future<void> _initialize() async {
-    if (await _isLocationPermissionAllowed()) {
+    if (await isLocationPermissionAllowed()) {
       final position = await _geolocationApi.getCurrentPosition();
       final currentLocation = CoordinatePoint(
         lat: position.latitude,
@@ -35,7 +35,8 @@ final class GeolocationDataRepository implements GeolocationRepository {
     }
   }
 
-  Future<bool> _isLocationPermissionAllowed() async {
+  @override
+  Future<bool> isLocationPermissionAllowed() async {
     final permission = await _geolocationApi.checkPermission();
 
     return permission.isAllowed;

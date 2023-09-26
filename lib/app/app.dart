@@ -22,14 +22,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    final geolocationInteractor = widget._appDependencies.geolocationInteractor;
-    geolocationInteractor
-        .requestPermission()
-        .then((isLocationPermissionAllowed) {
-      if (isLocationPermissionAllowed) {
-        geolocationInteractor.reinitializeUserCurrentLocation();
-      }
-    });
+    widget._appDependencies.geolocationInteractor.requestPermission().ignore();
   }
 
   @override
