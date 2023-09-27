@@ -9,6 +9,7 @@ import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/cu
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
 import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
+import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
 import 'package:places/features/map/data/api/map_launcher_api.dart';
 import 'package:places/features/map/data/repository/map_launcher_data_repository.dart';
 import 'package:places/features/map/domain/interactor/map_launcher_interactor.dart';
@@ -188,6 +189,7 @@ class _MapBlocProviders extends StatelessWidget {
               ),
             ),
             geolocationInteractor: context.read<GeolocationInteractor>(),
+            favouritePlaceInteractor: context.read<FavouritePlaceInteractor>(),
           ),
         ),
       ],

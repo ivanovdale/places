@@ -11,6 +11,10 @@ final class FavouritePlaceDataRepository implements FavouritePlaceRepository {
   final Database _database;
 
   @override
+  Future<Place?> getFavouritePlaceById(int id) =>
+      _database.getFavouriteById(id).then((value) => value?.toModel());
+
+  @override
   Stream<List<Place>> getFavourites() =>
       _database.getFavourites().map((favourite) => favourite.toModelList());
 
@@ -25,6 +29,10 @@ final class FavouritePlaceDataRepository implements FavouritePlaceRepository {
         ? _database.deleteFavourite(placeId)
         : _database.addToFavourites(place.toCompanion());
   }
+
+  @override
+  Future<void> addToFavourites(Place place) =>
+      _database.addToFavourites(place.toCompanion());
 
   @override
   Future<void> updateFavouriteVisited(int id, {required bool visited}) =>
