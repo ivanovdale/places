@@ -106,7 +106,7 @@ class _BaseVisitingPlaceListState extends State<BaseVisitingPlaceList> {
             key: ObjectKey(place),
             // TODO(daniiliv): Вызов реальной функции.
             onSharePressed: () {},
-            onDeletePressed: (place) => widget.onPlaceDeleted?.call(place),
+            onDeletePressed: () => widget.onPlaceDeleted?.call(place),
           );
   }
 
