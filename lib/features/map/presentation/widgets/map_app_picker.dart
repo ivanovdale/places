@@ -9,22 +9,19 @@ import 'package:places/features/map/presentation/map_launcher_cubit/map_launcher
 class MapAppPicker extends StatelessWidget {
   final CoordinatePoint destination;
   final List<AvailableMap> maps;
+  final ValueSetter<ActionElement<MapType>> onMapPressed;
 
   const MapAppPicker({
     super.key,
     required this.destination,
     required this.maps,
+    required this.onMapPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomActionPicker<MapType>(
-      onActionPressed: (action) {
-        context.read<MapLauncherCubit>().showDirections(
-              mapType: action.type,
-              destination: destination,
-            );
-      },
+      onActionPressed: onMapPressed,
       closeOnPressed: true,
       actions: maps
           .map(

@@ -64,8 +64,13 @@ class ChosenPlaceCard extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (_) => MapAppPicker(
-          destination: place.coordinatePoint,
+          place: place,
           maps: state.installedMaps,
+          onMapPressed: (action) =>
+              context.read<MapLauncherCubit>().showDirections(
+                    mapType: action.type,
+                    place: place,
+                  ),
         ),
       );
     }
