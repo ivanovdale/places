@@ -9,7 +9,11 @@ import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/cu
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
 import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
+import 'package:places/features/map/data/api/map_launcher_api.dart';
+import 'package:places/features/map/data/repository/map_launcher_data_repository.dart';
+import 'package:places/features/map/domain/interactor/map_launcher_interactor.dart';
 import 'package:places/features/map/presentation/chosen_place_cubit/chosen_place_cubit.dart';
+import 'package:places/features/map/presentation/map_launcher_cubit/map_launcher_cubit.dart';
 import 'package:places/features/map/presentation/widgets/buttons/geolocation_button/cubit/map_geolocation_cubit.dart';
 import 'package:places/features/map/presentation/widgets/buttons/geolocation_button/geolocation_button.dart';
 import 'package:places/features/map/presentation/widgets/buttons/refresh_button.dart';
@@ -65,19 +69,9 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => ChosenPlaceCubit(),
-          ),
-          BlocProvider(
-            create: (context) => MapGeolocationCubit(
-              geolocationInteractor: context.read<GeolocationInteractor>(),
-            ),
-          ),
-        ],
-        child: BlocListener<MapGeolocationCubit, MapGeolocationState>(
-          listener: _mapGeolocationCubitListener,
+      body: _MapBlocProviders(
+        child: _MapListeners(
+          controller: _controller,
           child: BlocBuilder<PlaceListBloc, PlaceListState>(
             builder: (context, state) => switch (state.status) {
               PlaceListStatus.failure => const ErrorPlaceHolder(),
@@ -93,7 +87,9 @@ class _MapScreenState extends State<MapScreen> {
                       PlacesMap(
                         places: state.places,
                         userLocation: userLocation.data,
-                        onMapCreated: (controller) => _controller = controller,
+                        onMapCreated: (controller) => setState(
+                          () => _controller = controller,
+                        ),
                       ),
                       ..._buildButtons(context),
                       const ChosenPlaceCard(),
@@ -115,7 +111,7 @@ class _MapScreenState extends State<MapScreen> {
       AnimatedPositioned(
         left: 16,
         bottom: buttonsBottomPositionValue,
-        duration: const Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 250),
         curve: Curves.easeInCirc,
         child: RefreshButton(
           showLoadingIndicator: _arePlacesRefreshing,
@@ -163,12 +159,57 @@ class _MapScreenState extends State<MapScreen> {
       context.read<PlaceListBloc>().add(PlaceListLoaded());
     }
   }
+}
+
+class _MapBlocProviders extends StatelessWidget {
+  final Widget child;
+
+  const _MapBlocProviders({
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => ChosenPlaceCubit(),
+        ),
+        BlocProvider(
+          create: (_) => MapGeolocationCubit(
+            geolocationInteractor: context.read<GeolocationInteractor>(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => MapLauncherCubit(
+            mapLauncherInteractor: MapLauncherInteractor(
+              mapLauncherRepository: MapLauncherDataRepository(
+                mapLauncherApi: MapLauncherApiImpl(),
+              ),
+            ),
+            geolocationInteractor: context.read<GeolocationInteractor>(),
+          ),
+        ),
+      ],
+      child: child,
+    );
+  }
+}
+
+class _MapListeners extends StatelessWidget {
+  final Widget child;
+  final YandexMapController? controller;
+
+  const _MapListeners({
+    required this.child,
+    this.controller,
+  });
 
   void _mapGeolocationCubitListener(
       BuildContext context, MapGeolocationState state) {
     if (state is MapGeolocationStartMovingCamera) {
       final coordinatePoint = state.coordinatePoint;
-      _controller?.moveCamera(
+      controller?.moveCamera(
         animation: const MapAnimation(duration: 0.5),
         CameraUpdate.newCameraPosition(
           CameraPosition(
@@ -181,5 +222,13 @@ class _MapScreenState extends State<MapScreen> {
         ),
       );
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<MapGeolocationCubit, MapGeolocationState>(
+      listener: _mapGeolocationCubitListener,
+      child: child,
+    );
   }
 }
