@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
 import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/map/presentation/chosen_place_cubit/chosen_place_cubit.dart';
 import 'package:places/features/map/presentation/map_launcher_cubit/map_launcher_cubit.dart';
-import 'package:places/features/map/presentation/widgets/map_app_picker.dart';
+import 'package:places/features/map/presentation/utils/map_launcher_listener.dart';
 import 'package:places/features/map/presentation/widgets/map_place_card.dart';
 
 class ChosenPlaceCard extends StatelessWidget {
@@ -18,7 +17,7 @@ class ChosenPlaceCard extends StatelessWidget {
         final place = state.place;
 
         return BlocListener<MapLauncherCubit, MapLauncherState>(
-          listener: (context, state) => _mapLauncherListener(
+          listener: (context, state) => mapLauncherListener(
             context,
             state,
             place,
@@ -52,27 +51,5 @@ class ChosenPlaceCard extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<void> _mapLauncherListener(
-    BuildContext context,
-    MapLauncherState state,
-    Place? place,
-  ) async {
-    if (state is MapLauncherShowInstalledMapsPicker && place != null) {
-      await showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => MapAppPicker(
-          place: place,
-          maps: state.installedMaps,
-          onMapPressed: (action) =>
-              context.read<MapLauncherCubit>().showDirections(
-                    mapType: action.type,
-                    place: place,
-                  ),
-        ),
-      );
-    }
   }
 }

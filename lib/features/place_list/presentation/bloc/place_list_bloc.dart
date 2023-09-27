@@ -46,14 +46,14 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
     // Подписка на избранное.
     await emit.forEach(
       _favouritePlaceInteractor.getFavourites(),
-      onData: (favourites) => state.copyWith(
-        places: [
-          ..._placeInteractor.addFavouriteMarks(
-            state.places,
-            favourites,
-          )
-        ],
-      ),
+      onData: (favourites) {
+        final places = _placeInteractor.addFavouriteMarks(
+          state.places,
+          favourites,
+        );
+
+        return state.copyWith(places: [...places]);
+      },
     );
   }
 

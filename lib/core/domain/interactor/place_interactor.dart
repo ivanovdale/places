@@ -81,8 +81,8 @@ class PlaceInteractor {
     List<Place> favouritePlaces,
   ) {
     for (final place in places) {
-      final indexOfFilteredPlace =
-          favouritePlaces.indexWhere((favouritePlace) => favouritePlace == place);
+      final indexOfFilteredPlace = favouritePlaces
+          .indexWhere((favouritePlace) => favouritePlace == place);
 
       if (indexOfFilteredPlace != -1) {
         place.isFavorite = true;
@@ -96,7 +96,16 @@ class PlaceInteractor {
 
   /// Возвращает детали места.
   Future<Place> getPlaceDetails(int id) async {
-    return _placeRepository.getPlaceById(id.toString());
+    final place = await _placeRepository.getPlaceById(id.toString());
+    final isInFavourites = await _favouritePlaceRepository
+        .getFavouritePlaceById(id)
+        .then((value) => value != null);
+
+    if (isInFavourites) {
+      place.isFavorite = true;
+    }
+
+    return place;
   }
 
   /// Добавляет новое место.

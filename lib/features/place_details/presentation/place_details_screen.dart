@@ -4,6 +4,9 @@ import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_circular_loading_indicator.dart';
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
+import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
+import 'package:places/features/map/presentation/map_launcher_cubit/map_launcher_cubit.dart';
+import 'package:places/features/map/presentation/utils/map_launcher_listener.dart';
 import 'package:places/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:places/features/place_details/presentation/widgets/bottom_sheet_or_scaffold.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_app_bar_place_photos/sliver_app_bar_place_photos.dart';
@@ -56,27 +59,35 @@ class _PlaceDetailsScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PlaceDetailsCubit(
-        context.read<PlaceInteractor>(),
+    return BlocListener<MapLauncherCubit, MapLauncherState>(
+      listener: (context, state) => mapLauncherListener(
+        context,
+        state,
         place,
-      )..loadPlaceDetails(
-          place.id!,
+      ),
+      child: BlocProvider(
+        create: (_) => PlaceDetailsCubit(
+          placeInteractor: context.read<PlaceInteractor>(),
+          favouritePlaceInteractor: context.read<FavouritePlaceInteractor>(),
+          initialPlace: place,
+        )..loadPlaceDetails(
+            place.id!,
+          )..subscribeToFavourites(),
+        child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+          builder: (_, state) => switch (state) {
+            PlaceDetailsInitial() ||
+            PlaceDetailsLoadInProgress() ||
+            PlaceDetailsLoadSuccess() =>
+              _PlacePhotosAndDetails(
+                state: state,
+                scrollController: scrollController,
+                isBottomSheet: isBottomSheet,
+              ),
+            PlaceDetailsLoadFailure() => const Center(
+                child: ErrorPlaceHolder(),
+              ),
+          },
         ),
-      child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-        builder: (_, state) => switch (state) {
-          PlaceDetailsInitial() ||
-          PlaceDetailsLoadInProgress() ||
-          PlaceDetailsLoadSuccess() =>
-            _PlacePhotosAndDetails(
-              state: state,
-              scrollController: scrollController,
-              isBottomSheet: isBottomSheet,
-            ),
-          PlaceDetailsLoadFailure() => const Center(
-              child: ErrorPlaceHolder(),
-            ),
-        },
       ),
     );
   }

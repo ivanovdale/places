@@ -9,12 +9,7 @@ import 'package:places/core/presentation/widgets/custom_bottom_navigation_bar/cu
 import 'package:places/core/presentation/widgets/placeholders/error_placeholder.dart';
 import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
-import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
-import 'package:places/features/map/data/api/map_launcher_api.dart';
-import 'package:places/features/map/data/repository/map_launcher_data_repository.dart';
-import 'package:places/features/map/domain/interactor/map_launcher_interactor.dart';
 import 'package:places/features/map/presentation/chosen_place_cubit/chosen_place_cubit.dart';
-import 'package:places/features/map/presentation/map_launcher_cubit/map_launcher_cubit.dart';
 import 'package:places/features/map/presentation/widgets/buttons/geolocation_button/cubit/map_geolocation_cubit.dart';
 import 'package:places/features/map/presentation/widgets/buttons/geolocation_button/geolocation_button.dart';
 import 'package:places/features/map/presentation/widgets/buttons/refresh_button.dart';
@@ -179,17 +174,6 @@ class _MapBlocProviders extends StatelessWidget {
         BlocProvider(
           create: (_) => MapGeolocationCubit(
             geolocationInteractor: context.read<GeolocationInteractor>(),
-          ),
-        ),
-        BlocProvider(
-          create: (_) => MapLauncherCubit(
-            mapLauncherInteractor: MapLauncherInteractor(
-              mapLauncherRepository: MapLauncherDataRepository(
-                mapLauncherApi: MapLauncherApiImpl(),
-              ),
-            ),
-            geolocationInteractor: context.read<GeolocationInteractor>(),
-            favouritePlaceInteractor: context.read<FavouritePlaceInteractor>(),
           ),
         ),
       ],

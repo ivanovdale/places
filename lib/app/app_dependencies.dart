@@ -19,6 +19,9 @@ import 'package:places/features/add_place/domain/interactor/photo_interactor.dar
 import 'package:places/features/favourite_places/data/repository/favourite_place_data_repository.dart';
 import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
 import 'package:places/features/favourite_places/domain/repository/favourite_place_repository.dart';
+import 'package:places/features/map/data/api/map_launcher_api.dart';
+import 'package:places/features/map/data/repository/map_launcher_data_repository.dart';
+import 'package:places/features/map/domain/interactor/map_launcher_interactor.dart';
 import 'package:places/features/place_filters/data/place_filters_data_repository.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
@@ -41,6 +44,7 @@ final class AppDependencies {
   final FirstEnterInteractor firstEnterInteractor;
   final PhotoInteractor photoInteractor;
   final GeolocationInteractor geolocationInteractor;
+  final MapLauncherInteractor mapLauncherInteractor;
 
   AppDependencies._({
     required this.database,
@@ -55,6 +59,7 @@ final class AppDependencies {
     required this.firstEnterInteractor,
     required this.photoInteractor,
     required this.geolocationInteractor,
+    required this.mapLauncherInteractor,
   });
 
   static Future<AppDependencies> getDependencies() async {
@@ -90,6 +95,9 @@ final class AppDependencies {
     final geolocationRepository = GeolocationDataRepository(
       geolocationApi: GeolocationApiImpl(),
     );
+    final mapLauncherRepository = MapLauncherDataRepository(
+      mapLauncherApi: MapLauncherApiImpl(),
+    );
 
     // Use cases.
     final favouritePlaceInteractor = FavouritePlaceInteractor(
@@ -121,6 +129,9 @@ final class AppDependencies {
     final geolocationInteractor = GeolocationInteractor(
       geolocationRepository: geolocationRepository,
     );
+    final mapLauncherInteractor = MapLauncherInteractor(
+      mapLauncherRepository: mapLauncherRepository,
+    );
 
     return AppDependencies._(
       database: database,
@@ -135,6 +146,7 @@ final class AppDependencies {
       firstEnterInteractor: firstEnterInteractor,
       photoInteractor: photoInteractor,
       geolocationInteractor: geolocationInteractor,
+      mapLauncherInteractor: mapLauncherInteractor,
     );
   }
 

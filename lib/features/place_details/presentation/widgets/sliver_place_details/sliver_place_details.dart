@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/presentation/widgets/custom_divider.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_bloc.dart';
+import 'package:places/features/favourite_places/presentation/bloc/favourite_places_bloc/favourite_places_event.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_place_details/components/buttons/build_route_button.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_place_details/components/buttons/place_actions_buttons.dart';
 import 'package:places/features/place_details/presentation/widgets/sliver_place_details/components/place_info/place_info.dart';
@@ -35,7 +38,13 @@ class SliverPlaceDetails extends StatelessWidget {
               ),
               thickness: 0.8,
             ),
-            const PlaceActionsButtons(),
+            PlaceActionsButtons(
+              isPlaceInFavourites: place.isFavorite,
+              onFavouritesPressed: () =>
+                  context.read<FavouritePlacesBloc>().add(
+                        FavouritePlacesToFavouritesPressed(place),
+                      ),
+            ),
           ],
         ),
       ),

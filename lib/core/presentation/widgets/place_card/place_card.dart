@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
-import 'package:places/core/presentation/widgets/place_card/cubit/place_card_favourite_cubit.dart';
+import 'package:places/core/presentation/widgets/place_card/components/to_favourites_icon_button.dart';
 
 /// Виджет карточки места. Наследуется от [BasePlaceCard].
 ///
@@ -50,27 +47,10 @@ class _PlaceActions extends StatelessWidget {
       padding: const EdgeInsets.only(
         left: 18,
       ),
-      child: BlocProvider(
-        create: (_) => PlaceCardFavouriteCubit(
-          initialValue: isFavorite,
-          toggleFavoritesCallback: toggleFavorites,
-        ),
-        child: BlocBuilder<PlaceCardFavouriteCubit, PlaceCardFavouriteState>(
-          builder: (context, state) {
-            return InkWell(
-              splashFactory: NoSplash.splashFactory,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                child: SvgPicture.asset(
-                  state.isFavourite ? AppAssets.heartFilled : AppAssets.heart,
-                  key: ValueKey(state.isFavourite),
-                ),
-              ),
-              onTap: () =>
-                  context.read<PlaceCardFavouriteCubit>().toggleFavorites(),
-            );
-          },
-        ),
+      child: ToFavouritesIconButton(
+        key: UniqueKey(),
+        isFavorite: isFavorite,
+        toggleFavorites: toggleFavorites,
       ),
     );
   }
