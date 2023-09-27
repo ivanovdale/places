@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/domain/model/action_type.dart';
 import 'package:places/features/add_place/domain/model/image_source.dart';
+import 'package:places/features/add_place/domain/model/photo_action_type.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/photo_picker.dart';
 
 /// Кнопка добавления новой фотографии.

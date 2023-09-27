@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/action_item.dart';
-import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/photo_picker.dart';
+import 'package:places/core/presentation/widgets/custom_pickers/custom_action_picker/components/action_item.dart';
 
-/// Возможные действия для добавления фото.
-class AddPhotoActions extends StatelessWidget {
-  final List<ActionElement> actions;
-  final ValueSetter<ActionElement> onActionPressed;
+typedef ActionElement<T> = ({String? icon, String text, T type});
 
-  const AddPhotoActions({
+/// Возможные действия.
+class PickerActions<T> extends StatelessWidget {
+  final List<ActionElement<T>> actions;
+  final ValueSetter<ActionElement<T>> onActionPressed;
+
+  const PickerActions({
     super.key,
     required this.actions,
     required this.onActionPressed,
