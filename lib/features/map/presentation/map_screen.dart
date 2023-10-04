@@ -39,12 +39,6 @@ class _MapScreenState extends State<MapScreen> {
       );
 
   @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
