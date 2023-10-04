@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 extension ScreenUtil on BuildContext {
   static const _smallScreenWidth = 340;
-  static const _smallScreenHeight = 670;
+  static const _smallScreenHeight = 685;
 
   bool get _isSmallScreenWidth =>
       MediaQuery.sizeOf(this).width <= _smallScreenWidth;
