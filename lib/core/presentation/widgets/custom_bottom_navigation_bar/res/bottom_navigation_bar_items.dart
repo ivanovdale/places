@@ -11,7 +11,7 @@ List<BottomNavigationBarData> bottomNavigationBarItems = const [
   BottomNavigationBarData(
     icon: AppAssets.map,
     activeIcon: AppAssets.mapFilled,
-    routeName: AppRouter.placeList, // Пока экрана нет.
+    routeName: AppRouter.map, 
   ),
   BottomNavigationBarData(
     icon: AppAssets.heart,

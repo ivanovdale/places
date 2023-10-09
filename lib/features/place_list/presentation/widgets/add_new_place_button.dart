@@ -18,7 +18,7 @@ class AddNewPlaceButton extends StatelessWidget {
     final colorSchemeOnBackgroundColor = theme.colorScheme.onBackground;
 
     return CustomElevatedButton(
-      AppStrings.newPlace,
+      text: AppStrings.newPlace,
       width: 177,
       height: 48,
       buttonLabel: Icon(

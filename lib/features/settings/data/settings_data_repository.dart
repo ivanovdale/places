@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:places/core/domain/storage/key_value_storage.dart';
+import 'package:places/core/domain/source/storage/key_value_storage.dart';
 import 'package:places/core/helpers/key_value_storage_keys.dart';
 import 'package:places/features/settings/domain/settings_repository.dart';
 

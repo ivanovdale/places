@@ -1,7 +1,7 @@
 part of 'add_place_bloc.dart';
 
 sealed class AddPlaceState {
-  final List<String> photoList;
+  final List<File> photoList;
   final PlaceTypes? placeType;
 
   const AddPlaceState({
@@ -10,7 +10,7 @@ sealed class AddPlaceState {
   });
 
   AddPlaceState copyWith({
-    List<String>? photoList,
+    List<File>? photoList,
     PlaceTypes? placeType,
   });
 }
@@ -23,7 +23,7 @@ final class AddPlaceInitial extends AddPlaceState {
 
   @override
   AddPlaceState copyWith({
-    List<String>? photoList,
+    List<File>? photoList,
     PlaceTypes? placeType,
   }) {
     return AddPlaceInitial(
@@ -41,7 +41,7 @@ final class AddPlaceFormValidation extends AddPlaceState {
 
   @override
   AddPlaceState copyWith({
-    List<String>? photoList,
+    List<File>? photoList,
     PlaceTypes? placeType,
   }) {
     return AddPlaceFormValidation(
@@ -59,7 +59,7 @@ final class AddPlacePlaceCreation extends AddPlaceState {
 
   @override
   AddPlaceState copyWith({
-    List<String>? photoList,
+    List<File>? photoList,
     PlaceTypes? placeType,
   }) {
     return AddPlacePlaceCreation(
@@ -77,7 +77,7 @@ final class AddPlacePlaceCreationError extends AddPlaceState {
 
   @override
   AddPlaceState copyWith({
-    List<String>? photoList,
+    List<File>? photoList,
     PlaceTypes? placeType,
   }) {
     return AddPlacePlaceCreationError(

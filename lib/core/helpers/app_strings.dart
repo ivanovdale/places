@@ -96,6 +96,9 @@ abstract final class AppStrings {
   static const skip = 'Пропустить';
   static const start = 'на старт';
 
+  // Map. Карта.
+  static const mapScreenAppBarTitle = 'Карта';
+
   // Общие строковые константы.
   static const newPlace = 'новое место';
   static const error = 'ошибка';

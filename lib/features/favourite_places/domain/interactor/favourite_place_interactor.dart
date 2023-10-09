@@ -27,10 +27,29 @@ final class FavouritePlaceInteractor {
         date,
       );
 
-  // TODO(ivanovdale): Будет использовано позже.
-  Future<void> updateFavouriteVisited(Place place, {required bool visited}) =>
-      _favouritePlaceRepository.updateFavouriteVisited(
-        place.id!,
-        visited: visited,
-      );
+  /// Обновляет флаг посещения места.
+  ///
+  /// Если место не в избранном, то сначала добавляет его в список избранного.
+  /// Дата посещения - текущая дата.
+  Future<void> updateFavouriteVisited(
+    Place place, {
+    required bool visited,
+  }) async {
+    final isFavourite = await _favouritePlaceRepository
+        .getFavouritePlaceById(place.id!)
+        .then((value) => value != null);
+
+    if (!isFavourite) {
+      await _favouritePlaceRepository.addToFavourites(place);
+    }
+    await _favouritePlaceRepository.updateFavouriteDate(
+      place.id!,
+      DateTime.now(),
+    );
+
+    return _favouritePlaceRepository.updateFavouriteVisited(
+      place.id!,
+      visited: visited,
+    );
+  }
 }

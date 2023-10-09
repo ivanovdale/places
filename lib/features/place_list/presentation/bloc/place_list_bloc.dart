@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
-import 'package:places/core/domain/model/places_filter_request.dart';
+import 'package:places/features/favourite_places/domain/interactor/favourite_place_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
-import 'package:places/mocks.dart' as mocked;
 
 part 'place_list_event.dart';
 
@@ -15,13 +14,16 @@ part 'place_list_state.dart';
 class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
   final PlaceInteractor _placeInteractor;
   final PlaceFiltersInteractor _placeFiltersInteractor;
-  late final StreamSubscription<PlaceFilters> _streamSubscription;
+  final FavouritePlaceInteractor _favouritePlaceInteractor;
+  late final StreamSubscription<PlaceFilters> _filtersStreamSubscription;
 
   PlaceListBloc({
     required PlaceInteractor placeInteractor,
     required PlaceFiltersInteractor placeFiltersInteractor,
+    required FavouritePlaceInteractor favouritePlaceInteractor,
   })  : _placeInteractor = placeInteractor,
         _placeFiltersInteractor = placeFiltersInteractor,
+        _favouritePlaceInteractor = favouritePlaceInteractor,
         super(PlaceListState.initial()) {
     on(_onPlaceFiltersSubscriptionRequested);
     on(_onPlaceListLoadedOrFiltersUpdated);
@@ -29,26 +31,31 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
 
   @override
   Future<void> close() {
-    _streamSubscription.cancel();
+    _filtersStreamSubscription.cancel();
     return super.close();
   }
 
-  @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-
-    Error.throwWithStackTrace(
-      error.toString(),
-      stackTrace,
-    );
-  }
-
-  void _onPlaceFiltersSubscriptionRequested(
+  Future<void> _onPlaceFiltersSubscriptionRequested(
     PlaceFiltersSubscriptionRequested event,
     Emitter<PlaceListState> emit,
-  ) =>
-      _streamSubscription = _placeFiltersInteractor.placeFilters
-          .listen((event) => add(_PlaceFiltersUpdated()));
+  ) async {
+    // Подписка на фильтры.
+    _filtersStreamSubscription = _placeFiltersInteractor.placeFilters
+        .listen((event) => add(_PlaceFiltersUpdated()));
+
+    // Подписка на избранное.
+    await emit.forEach(
+      _favouritePlaceInteractor.getFavourites(),
+      onData: (favourites) {
+        final places = _placeInteractor.addFavouriteMarks(
+          state.places,
+          favourites,
+        );
+
+        return state.copyWith(places: [...places]);
+      },
+    );
+  }
 
   Future<void> _onPlaceListLoadedOrFiltersUpdated(
     PlaceListEvent event,
@@ -65,16 +72,13 @@ class PlaceListBloc extends Bloc<PlaceListEvent, PlaceListState> {
       emit(newState);
     } on Exception {
       emit(state.copyWith(status: PlaceListStatus.failure));
+
+      rethrow;
     }
   }
 
   Future<PlaceListState> _getStateWithLoadedData() async {
-    final placeFilterRequest = PlacesFilterRequest(
-      coordinatePoint: mocked.userCoordinates,
-    );
-
     final places = await _placeInteractor.getFilteredPlaces(
-      placeFilterRequest,
       useSavedFilters: true,
       sortByDistance: true,
       addFavouriteMark: true,

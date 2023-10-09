@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/helpers/app_assets.dart';
 import 'package:places/core/presentation/widgets/place_card/base_place_card.dart';
-
-typedef OnDeletePressed = Function(Place);
 
 /// Виджет карточки посещённого места. Наследуется от [BasePlaceCard].
 ///
@@ -15,8 +12,6 @@ typedef OnDeletePressed = Function(Place);
 /// Имеет параметры:
 /// * [place] - модель места (обязательный).
 class VisitedPlaceCard extends BasePlaceCard {
-  final VoidCallback onSharePressed;
-
   @override
   final Widget actions;
 
@@ -25,10 +20,10 @@ class VisitedPlaceCard extends BasePlaceCard {
 
   VisitedPlaceCard(
     super.place, {
-    OnDeletePressed? onDeletePressed,
-    required this.onSharePressed,
+    VoidCallback? onDeletePressed,
+    VoidCallback? onSharePressed,
     super.key,
-  })  : actions = _PlaceActions(
+  }) : actions = _PlaceActions(
           onSharePressed: onSharePressed,
           onDeletePressed: onDeletePressed,
         );
@@ -36,8 +31,8 @@ class VisitedPlaceCard extends BasePlaceCard {
 
 /// Список кнопок для работы с карточкой.
 class _PlaceActions extends StatelessWidget {
-  final VoidCallback onSharePressed;
-  final OnDeletePressed? onDeletePressed;
+  final VoidCallback? onSharePressed;
+  final VoidCallback? onDeletePressed;
 
   const _PlaceActions({
     required this.onSharePressed,
@@ -48,12 +43,14 @@ class _PlaceActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final actionButtons = [
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.share),
         onTap: onSharePressed,
       ),
       InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: SvgPicture.asset(AppAssets.close),
-        onTap: () => onDeletePressed,
+        onTap: onDeletePressed,
       ),
     ];
 

@@ -19,9 +19,8 @@ class SliverPlaceList extends StatelessWidget {
     final orientation = mediaQuery.orientation;
     final screenHeight = mediaQuery.size.height;
 
-    return BlocSelector<PlaceListBloc, PlaceListState, PlaceListStatusPlaces>(
-      selector: (state) => (status: state.status, places: state.places),
-      builder: (_, statusPlaces) => switch (statusPlaces.status) {
+    return BlocBuilder<PlaceListBloc, PlaceListState>(
+      builder: (_, state) => switch (state.status) {
         PlaceListStatus.initial => const SliverToBoxAdapter(
             child: SizedBox.shrink(),
           ),
@@ -35,9 +34,9 @@ class SliverPlaceList extends StatelessWidget {
           ),
         PlaceListStatus.success => SliverGrid(
             delegate: SliverChildBuilderDelegate(
-              childCount: statusPlaces.places.length,
+              childCount: state.places.length,
               (_, index) {
-                final place = statusPlaces.places[index];
+                final place = state.places[index];
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

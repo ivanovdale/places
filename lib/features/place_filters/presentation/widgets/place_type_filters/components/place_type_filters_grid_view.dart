@@ -23,6 +23,7 @@ class PlaceTypeFiltersGridView extends StatelessWidget {
           crossAxisCount: 3,
           mainAxisSpacing: 40,
           crossAxisSpacing: 25,
+          mainAxisExtent: 90,
         ),
         itemCount: listOfFilters.length,
         itemBuilder: (_, index) {

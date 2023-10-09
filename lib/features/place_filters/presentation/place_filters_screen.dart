@@ -12,7 +12,6 @@ import 'package:places/features/place_filters/presentation/widgets/distance_filt
 import 'package:places/features/place_filters/presentation/widgets/place_type_filters/place_type_filters.dart';
 import 'package:places/features/place_filters/presentation/widgets/place_types_title.dart';
 import 'package:places/features/place_filters/presentation/widgets/show_places_elevated_button.dart';
-import 'package:places/mocks.dart' as mocked;
 
 /// Экран выбора фильтров места.
 ///
@@ -32,7 +31,6 @@ class PlaceFiltersScreen extends StatelessWidget {
       create: (_) => PlaceFiltersBloc(
         placeInteractor: placeInteractor,
         placeFiltersInteractor: context.read<PlaceFiltersInteractor>(),
-        userCoordinates: mocked.userCoordinates,
       )..add(
           PlaceFiltersStarted(),
         ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
@@ -6,6 +8,7 @@ import 'package:places/core/helpers/app_colors.dart';
 import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/utils/string_extension.dart';
+import 'package:places/features/add_place/domain/interactor/photo_interactor.dart';
 import 'package:places/features/add_place/presentation/bloc/add_place_bloc.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/cancel_button.dart';
 import 'package:places/features/add_place/presentation/widgets/buttons/create_button.dart';
@@ -74,10 +77,9 @@ class AddPlaceBody extends StatefulWidget {
 
 class _AddPlaceBodyState extends State<AddPlaceBody> {
   late final AddPlaceBloc _bloc = AddPlaceBloc(
-    context.read<PlaceInteractor>(),
-  )..add(
-      AddPlaceStarted(),
-    );
+    placeInteractor: context.read<PlaceInteractor>(),
+    photoInteractor: context.read<PhotoInteractor>(),
+  );
 
   /// Для валидации координат места.
   final _formKey = GlobalKey<FormState>();
@@ -165,13 +167,15 @@ class _AddPlaceBodyState extends State<AddPlaceBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocSelector<AddPlaceBloc, AddPlaceState, List<String>>(
+                      BlocSelector<AddPlaceBloc, AddPlaceState, List<File>>(
                         selector: (state) => state.photoList,
                         builder: (_, photoList) {
                           return PhotoCarousel(
                             photoList: photoList,
-                            onAddNewPhotoPressed: (photoUrl) => _bloc.add(
-                              AddPlacePhotoAdded(photoUrl: photoUrl),
+                            onAddNewPhotoPressed: (source) => _bloc.add(
+                              AddPlacePhotoAdded(
+                                source: source,
+                              ),
                             ),
                             onDeletePhotoPressed: (index) => _bloc.add(
                               AddPlacePhotoDeleted(index: index),

@@ -6,17 +6,27 @@ import 'package:places/features/place_details/presentation/widgets/sliver_place_
 ///
 /// Предоставляет возможность запланировать поход в место и добавить его в список избранного.
 class PlaceActionsButtons extends StatelessWidget {
-  const PlaceActionsButtons({super.key});
+  final VoidCallback onFavouritesPressed;
+  final bool isPlaceInFavourites;
+
+  const PlaceActionsButtons({
+    super.key,
+    required this.onFavouritesPressed,
+    required this.isPlaceInFavourites,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Expanded(
+        const Expanded(
           child: ToPlanButton(),
         ),
         Expanded(
-          child: ToFavouritesButton(),
+          child: ToFromFavouritesButton(
+            onPressed: onFavouritesPressed,
+            isInFavourites: isPlaceInFavourites,
+          ),
         ),
       ],
     );

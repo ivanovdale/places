@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     await navigator.pushReplacementNamed(
-      isFirstEnter ? AppRouter.onboarding : AppRouter.placeList,
+      isFirstEnter ? AppRouter.onBoarding : AppRouter.placeList,
     );
   }
 

@@ -24,7 +24,7 @@ class PlaceTypeFilters extends StatelessWidget {
 
     // Для больших экранов отображать фильтры мест в виде сетки.
     // А для экранов малого размера - в виде скролящейся строки.
-    return !context.isSmallScreenWidth
+    return !context.isSmallScreen
         ? PlaceTypeFiltersGridView(
             selectedPlaceTypeFilters: selectedPlaceTypeFilters,
           )

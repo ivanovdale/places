@@ -1,15 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:places/core/presentation/widgets/rounded_cached_network_image.dart';
+import 'package:places/core/presentation/widgets/rounded_file_image.dart';
 
 /// Карточка добавляемой фотографии.
 class NewPhotoCard extends StatelessWidget {
-  final String photoUrl;
+  final File photoFile;
   final int index;
   final ValueSetter<int> onDeletePhotoPressed;
 
   const NewPhotoCard({
     super.key,
-    required this.photoUrl,
+    required this.photoFile,
     required this.index,
     required this.onDeletePhotoPressed,
   });
@@ -22,8 +24,8 @@ class NewPhotoCard extends StatelessWidget {
         key: ObjectKey(this),
         direction: DismissDirection.up,
         onDismissed: (direction) => onDeletePhotoPressed(index),
-        child: RoundedCachedNetworkImage(
-          url: photoUrl,
+        child: RoundedFileImage(
+          file: photoFile,
           canDelete: true,
           size: 72,
           onDelete: () => onDeletePhotoPressed(index),

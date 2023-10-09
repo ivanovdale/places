@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/core/domain/model/coordinate_point.dart';
+import 'package:places/core/domain/interactor/geolocation_interactor.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
 import 'package:places/features/place_search/domain/interactor/place_search_history_interactor.dart';
@@ -14,14 +14,17 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
   final PlaceSearchInteractor _placeSearchInteractor;
   final PlaceFiltersInteractor _placeFiltersInteractor;
   final PlaceSearchHistoryInteractor _placeSearchHistoryInteractor;
+  final GeolocationInteractor _geolocationInteractor;
 
   PlaceSearchBloc({
     required PlaceSearchInteractor placeSearchInteractor,
     required PlaceFiltersInteractor placeFiltersInteractor,
     required PlaceSearchHistoryInteractor placeSearchHistoryInteractor,
+    required GeolocationInteractor geolocationInteractor,
   })  : _placeSearchInteractor = placeSearchInteractor,
         _placeFiltersInteractor = placeFiltersInteractor,
         _placeSearchHistoryInteractor = placeSearchHistoryInteractor,
+        _geolocationInteractor = geolocationInteractor,
         super(PlaceSearchState.initial()) {
     on<PlaceSearchSubscriptionRequested>(_onSubscriptionRequested);
     on<PlaceSearchStringUpdated>(_onSearchStringUpdated);
@@ -34,13 +37,15 @@ class PlaceSearchBloc extends Bloc<PlaceSearchEvent, PlaceSearchState> {
     PlaceSearchSubscriptionRequested event,
     Emitter<PlaceSearchState> emit,
   ) async {
+    // Инициализация фильтров для поиска места.
     final placeFilters = await _placeFiltersInteractor.placeFilters.first;
     _placeSearchInteractor.setFilters(
       typeFilter: placeFilters.types.toList(),
       radius: placeFilters.radius,
-      userCoordinates: event.userCoordinates,
+      userCoordinates: await _geolocationInteractor.userCurrentLocation.first,
     );
 
+    // Подписка на историю поиска.
     await emit.forEach<List<SearchHistoryItem>>(
       _placeSearchHistoryInteractor.getSearchHistory(),
       onData: (searchHistory) => state.copyWith(

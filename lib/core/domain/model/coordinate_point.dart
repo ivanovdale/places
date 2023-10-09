@@ -18,6 +18,11 @@ class CoordinatePoint {
       : lat = 0.0,
         lon = 0.0;
 
+  /// Санкт-Петербург.
+  CoordinatePoint.defaults()
+      : lat = 59.9375,
+        lon = 30.308611;
+
   /// Возвращает признак, находится ли точка внутри окружности
   /// с нижней границей [radiusFrom] и верхней [radiusTo]. Центр окружности [centerPoint].
   bool isPointInsideRadius(

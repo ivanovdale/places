@@ -30,7 +30,7 @@ class SaveButton extends StatelessWidget {
         vertical: 24,
       ),
       child: CustomElevatedButton(
-        AppStrings.save,
+        text: AppStrings.save,
         backgroundColor: saveButtonBackgroundColor,
         height: 48,
         textStyle: theme.textTheme.bodyMedium?.copyWith(

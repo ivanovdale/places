@@ -28,7 +28,7 @@ class StartButton extends StatelessWidget {
               bottom: 16,
             ),
             child: CustomElevatedButton(
-              AppStrings.start,
+              text: AppStrings.start,
               backgroundColor: colorScheme.primary,
               height: 48,
               textStyle: theme.textTheme.bodyMedium!.copyWith(

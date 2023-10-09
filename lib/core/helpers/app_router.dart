@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/features/add_place/presentation/add_place_screen.dart';
 import 'package:places/features/favourite_places/presentation/favourite_places_screen.dart';
+import 'package:places/features/map/presentation/map_screen.dart';
 import 'package:places/features/on_boarding/presentation/on_boarding_screen.dart';
 import 'package:places/features/place_details/presentation/place_details_screen.dart';
 import 'package:places/features/place_filters/domain/place_filters_repository.dart';
@@ -18,7 +19,7 @@ abstract final class AppRouter {
   static const String root = '/';
 
   /// Экран онбординга.
-  static const String onboarding = '/onboarding';
+  static const String onBoarding = '/onBoarding';
 
   /// Экран списка мест.
   static const String placeList = '/placeList';
@@ -44,12 +45,15 @@ abstract final class AppRouter {
   /// Экран настроек.
   static const String settings = '/settings';
 
+  /// Экран с картой.
+  static const String map = '/map';
+
   /// Коллбэк, используемый при навигации через именованный роут.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>?;
 
     switch (settings.name) {
-      case AppRouter.onboarding:
+      case AppRouter.onBoarding:
         return _getOnBoardingMaterialRoute();
       case AppRouter.placeList:
         return _getPlaceListMaterialRoute();
@@ -67,6 +71,8 @@ abstract final class AppRouter {
         return _getFavouritePlacesMaterialRoute();
       case AppRouter.settings:
         return _getSettingsMaterialRoute();
+      case AppRouter.map:
+        return _getMapMaterialRoute();
       case AppRouter.root:
       default:
         return _getSplashMaterialRoute();
@@ -146,6 +152,12 @@ abstract final class AppRouter {
   static MaterialPageRoute<Object?> _getSettingsMaterialRoute() {
     return MaterialPageRoute<Object?>(
       builder: (_) => const SettingsScreen(),
+    );
+  }
+
+  static MaterialPageRoute<Object?> _getMapMaterialRoute() {
+    return MaterialPageRoute<Object?>(
+      builder: (_) => const MapScreen(),
     );
   }
 }

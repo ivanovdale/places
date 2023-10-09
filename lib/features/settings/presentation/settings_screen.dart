@@ -128,6 +128,6 @@ class _WatchTutorialInfo extends StatelessWidget {
 
   /// Выполняет переход на страницу онбординга.
   void goToOnboardingScreen(BuildContext context) {
-    Navigator.pushNamed(context, AppRouter.onboarding);
+    Navigator.pushNamed(context, AppRouter.onBoarding);
   }
 }

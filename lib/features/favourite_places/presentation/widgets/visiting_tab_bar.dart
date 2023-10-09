@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/core/helpers/app_strings.dart';
-import 'package:places/features/favourite_places/presentation/widgets/animated_visiting_tab_switcher.dart';
 
 /// TabBar для списка посещенных/планируемых к посещению мест.
 class VisitingTabBar extends StatelessWidget {
@@ -34,22 +33,14 @@ class VisitingTabBar extends StatelessWidget {
         color: theme.colorScheme.secondaryContainer,
         borderRadius: borderRadius,
       ),
-      child: Stack(
-        children: [
-          TabBar(
-            splashBorderRadius: borderRadius,
-            controller: tabController,
-            indicator: BoxDecoration(
-              borderRadius: borderRadius,
-              color: theme.primaryColor,
-            ),
-            tabs: tabs,
-          ),
-          AnimatedVisitingTabSwitcher(
-            animationController: animationController,
-            tabs: _tabs,
-          ),
-        ],
+      child: TabBar(
+        splashBorderRadius: borderRadius,
+        controller: tabController,
+        indicator: BoxDecoration(
+          borderRadius: borderRadius,
+          color: theme.primaryColor,
+        ),
+        tabs: tabs,
       ),
     );
   }

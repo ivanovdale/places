@@ -25,7 +25,7 @@ class CreateButton extends StatelessWidget {
           bottom: 16,
         ),
         child: CustomElevatedButton(
-          AppStrings.create,
+          text: AppStrings.create,
           textStyle: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w700,
             color: theme.colorScheme.secondary.withOpacity(0.56),

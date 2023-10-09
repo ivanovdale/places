@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:places/features/add_place/domain/model/image_source.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/add_new_photo_button.dart';
 import 'package:places/features/add_place/presentation/widgets/photo_carousel/components/new_photo_card.dart';
 
@@ -6,8 +9,8 @@ import 'package:places/features/add_place/presentation/widgets/photo_carousel/co
 ///
 /// Позволяет добавить/удалить фотографии из списка.
 class PhotoCarousel extends StatelessWidget {
-  final List<String> photoList;
-  final ValueSetter<String> onAddNewPhotoPressed;
+  final List<File> photoList;
+  final ValueSetter<ImageSource> onAddNewPhotoPressed;
   final ValueSetter<int> onDeletePhotoPressed;
 
   const PhotoCarousel({
@@ -22,8 +25,8 @@ class PhotoCarousel extends StatelessWidget {
     var currentPhotoIndex = 0;
     final newPhotoCards = photoList
         .map(
-          (photoUrl) => NewPhotoCard(
-            photoUrl: photoUrl,
+          (photoFile) => NewPhotoCard(
+            photoFile: photoFile,
             index: currentPhotoIndex++,
             onDeletePhotoPressed: onDeletePhotoPressed,
           ),

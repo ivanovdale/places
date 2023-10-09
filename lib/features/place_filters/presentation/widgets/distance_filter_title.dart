@@ -14,6 +14,7 @@ class DistanceFilterTitle extends StatelessWidget {
     final radius = context.select<PlaceFiltersBloc, double>(
       (bloc) => bloc.state.radius,
     );
+    final radiusInKilometers = (radius / 1000).toStringAsFixed(1);
 
     final theme = Theme.of(context);
     final secondaryColor = theme.colorScheme.secondary;
@@ -34,7 +35,7 @@ class DistanceFilterTitle extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            'от 0 до $radius км',
+            'до $radiusInKilometers км',
             style: themeBodyText1?.copyWith(
               color: secondaryColor,
             ),

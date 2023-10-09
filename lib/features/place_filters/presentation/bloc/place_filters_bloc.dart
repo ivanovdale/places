@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/core/domain/interactor/place_interactor.dart';
-import 'package:places/core/domain/model/coordinate_point.dart';
 import 'package:places/core/domain/model/place.dart';
 import 'package:places/core/domain/model/places_filter_request.dart';
 import 'package:places/features/place_filters/domain/place_filters_interactor.dart';
@@ -18,7 +17,6 @@ EventTransformer<T> debounce<T>(Duration duration) {
 class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
   final PlaceInteractor _placeInteractor;
   final PlaceFiltersInteractor _placeFiltersInteractor;
-  final CoordinatePoint _userCoordinates;
 
   /// Время активации фильтра по расстоянию до места.
   final _applianceRadiusFilterDelay = const Duration(milliseconds: 500);
@@ -26,10 +24,8 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
   PlaceFiltersBloc({
     required PlaceInteractor placeInteractor,
     required PlaceFiltersInteractor placeFiltersInteractor,
-    required CoordinatePoint userCoordinates,
   })  : _placeInteractor = placeInteractor,
         _placeFiltersInteractor = placeFiltersInteractor,
-        _userCoordinates = userCoordinates,
         super(PlaceFiltersState.initial()) {
     on(_onPlaceFiltersStarted);
     on(_onPlaceFiltersTypeFilterSelected);
@@ -162,12 +158,11 @@ class PlaceFiltersBloc extends Bloc<PlaceFiltersEvent, PlaceFiltersState> {
     required Set<PlaceTypes> selectedPlaceTypeFilters,
   }) async {
     final placeFilterRequest = PlacesFilterRequest(
-      coordinatePoint: _userCoordinates,
       radius: radius,
       typeFilter: selectedPlaceTypeFilters.toList(),
     );
 
-    final places = await _placeInteractor.getFilteredPlaces(placeFilterRequest);
+    final places = await _placeInteractor.getFilteredPlaces(placesFilterRequest: placeFilterRequest);
 
     return places.length;
   }
