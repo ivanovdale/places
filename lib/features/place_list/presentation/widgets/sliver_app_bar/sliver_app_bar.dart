@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/app/environment/environment.dart';
 import 'package:places/core/helpers/app_router.dart';
-import 'package:places/core/helpers/app_strings.dart';
 import 'package:places/core/presentation/widgets/custom_app_bar.dart';
 import 'package:places/core/presentation/widgets/search_bar.dart'
     as custom_search_bar;
@@ -50,12 +50,13 @@ class _CustomAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final buildConfig = Environment.instance.buildConfig;
     // Вычисление значений параметров аппбара в зависимости от того, начал ли аппбар сужаться.
     final isScrollStarted = shrinkOffset > 0;
     final theme = Theme.of(context);
     final title = isScrollStarted
-        ? AppStrings.placeListAppBarTitle
-        : AppStrings.placeListAppBarTitleWithLineBreak;
+        ? buildConfig.placeListAppBarTitle
+        : buildConfig.placeListAppBarTitleWithLineBreak;
     final titleTextStyle = isScrollStarted
         ? theme.textTheme.titleMedium
         : theme.textTheme.headlineMedium;
