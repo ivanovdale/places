@@ -30,6 +30,8 @@ import 'package:places/features/settings/domain/settings_interactor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final class AppDependencies {
+  static late AppDependencies _appDependencies;
+
   final Database database;
 
   final FavouritePlaceRepository favouritePlaceRepository;
@@ -45,6 +47,8 @@ final class AppDependencies {
   final PhotoInteractor photoInteractor;
   final GeolocationInteractor geolocationInteractor;
   final MapLauncherInteractor mapLauncherInteractor;
+
+  static AppDependencies get instance => _appDependencies;
 
   AppDependencies._({
     required this.database,
@@ -62,7 +66,7 @@ final class AppDependencies {
     required this.mapLauncherInteractor,
   });
 
-  static Future<AppDependencies> getDependencies() async {
+  static Future<void> initDependencies() async {
     // Http-клиент.
     final dioApi = DioApi();
 
@@ -133,7 +137,7 @@ final class AppDependencies {
       mapLauncherRepository: mapLauncherRepository,
     );
 
-    return AppDependencies._(
+    _appDependencies = AppDependencies._(
       database: database,
       favouritePlaceRepository: favouritePlaceRepository,
       favouritePlaceInteractor: favouritePlaceInteractor,

@@ -7,12 +7,9 @@ import 'package:places/core/presentation/res/themes.dart';
 import 'package:places/features/settings/presentation/cubit/settings_cubit.dart';
 
 class App extends StatefulWidget {
-  final AppDependencies _appDependencies;
+  AppDependencies get _appDependencies => AppDependencies.instance;
 
-  const App({
-    super.key,
-    required AppDependencies appDependencies,
-  }) : _appDependencies = appDependencies;
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();

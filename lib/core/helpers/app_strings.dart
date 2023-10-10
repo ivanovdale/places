@@ -2,7 +2,9 @@
 abstract final class AppStrings {
   // PlaceListScreen. Список мест.
   static const placeListAppBarTitle = 'Список интересных мест';
+  static const placeListAppBarDebugTitle = 'Debug сборка приложения';
   static const placeListAppBarTitleWithLineBreak = 'Список\nинтересных мест';
+  static const placeListAppBarDebugTitleWithLineBreak = 'Debug\nсборка приложения';
 
   // PlaceDetails. Детальная информация о месте.
   static const buildRouteText = 'построить маршрут';

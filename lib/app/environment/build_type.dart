@@ -1,0 +1,1 @@
+enum BuildType { debug, release }
