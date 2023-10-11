@@ -1,4 +1,7 @@
+# Для генерации запустить: flutter pub run flutter_launcher_icons
+
 flutter_launcher_icons:
   image_path: "assets/icons/app_icon/prod.png"
   android: true
-  ios: false
+  ios: true
+  remove_alpha_ios: true
