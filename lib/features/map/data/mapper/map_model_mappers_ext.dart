@@ -47,9 +47,10 @@ extension AvailableMapExt on AvailableMap {
 }
 
 extension CoordinatePointExt on CoordinatePoint {
-  map_launcher.Coords toDto() => map_launcher.Coords(lat, lon);
+  map_launcher.Coords toCoords() => map_launcher.Coords(lat, lon);
+  map_launcher.Waypoint toWaypoint() => map_launcher.Waypoint(lat, lon);
 }
 
 extension ListCoordinatePointExt on List<CoordinatePoint> {
-  List<map_launcher.Coords> toDtoList() => map((e) => e.toDto()).toList();
+  List<map_launcher.Waypoint> toWaypointList() => map((e) => e.toWaypoint()).toList();
 }

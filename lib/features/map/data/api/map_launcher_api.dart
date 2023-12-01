@@ -39,11 +39,11 @@ final class MapLauncherApiImpl implements MapLauncherApi {
   }) =>
       map_launcher.MapLauncher.showDirections(
         mapType: mapType.toDto(),
-        destination: destination.toDto(),
+        destination: destination.toCoords(),
         destinationTitle: destinationTitle,
-        origin: origin?.toDto(),
+        origin: origin?.toCoords(),
         originTitle: originTitle,
-        waypoints: waypoints?.toDtoList(),
+        waypoints: waypoints?.toWaypointList(),
         directionsMode: directionsMode?.toDto(),
         extraParams: extraParams,
       );

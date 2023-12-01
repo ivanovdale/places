@@ -11,6 +11,7 @@ const _charadeColor = AppColors.charade;
 
 /// Настройки для светлой темы.
 final lightTheme = ThemeData(
+  useMaterial3: false,
   tabBarTheme: _lightTabBarTheme,
   bottomNavigationBarTheme: _lightBottomNavigationBarTheme,
   primaryColor: _oxfordBlueColor,
@@ -42,6 +43,7 @@ final lightTheme = ThemeData(
 
 /// Настройки для тёмной темы.
 final darkTheme = ThemeData(
+  useMaterial3: false,
   tabBarTheme: _darkTabBarTheme,
   bottomNavigationBarTheme: _darkBottomNavigationBarTheme,
   scaffoldBackgroundColor: _charadeColor,
